@@ -440,6 +440,28 @@ html[data-vt="close"]::view-transition-old(ex-media),html[data-vt="close"]::view
 .dp-d.on{background:var(--ink);color:#111}
 .dp-quick{display:flex;gap:8px;margin:12px 4px 0}
 .dp-quick button{flex:1;border:1px solid var(--line);background:var(--card2);border-radius:12px;padding:11px;font-size:13.5px;font-weight:800}
+
+/* ---- performance: no backdrop blur, GPU-only animations ---- */
+html{touch-action:manipulation;scroll-behavior:auto!important}
+.top{background:#0b0b0c!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important}
+.tabs{background:#121214!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important}
+#rest{background:#1d1d20!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important}
+.sheet{will-change:transform;transition:transform .3s cubic-bezier(.2,.8,.2,1)!important;contain:layout paint}
+.sheet.open{transform:translate3d(0,0,0)!important}
+.sh-body{contain:content}
+/* whole-container animations (no per-row stagger) */
+.anim-fade>*,.anim-l>*,.anim-r>*{animation:none!important}
+.anim-fade{animation:pfade .22s ease-out both}
+.anim-l{animation:pslideL .24s cubic-bezier(.2,.8,.2,1) both}
+.anim-r{animation:pslideR .24s cubic-bezier(.2,.8,.2,1) both}
+@keyframes pfade{from{opacity:.0;transform:translate3d(0,6px,0)}to{opacity:1;transform:none}}
+@keyframes pslideL{from{opacity:.0;transform:translate3d(24px,0,0)}to{opacity:1;transform:none}}
+@keyframes pslideR{from{opacity:.0;transform:translate3d(-24px,0,0)}to{opacity:1;transform:none}}
+.sh-body .anim-l{animation:pslideL .22s cubic-bezier(.2,.8,.2,1) both}
+.sh-body .anim-r{animation:pslideR .22s cubic-bezier(.2,.8,.2,1) both}
+.row,.day,.chk,.setrow{will-change:auto}
+#menu .mn{will-change:transform}
+@media (prefers-reduced-motion:reduce){ .anim-fade,.anim-l,.anim-r,.sh-body .anim-l,.sh-body .anim-r{animation:none!important} .sheet{transition:none!important} }
 </style>
 </head>
 <body>
@@ -695,7 +717,7 @@ function renderProgs(){
 /* ---------- SHEET (exercise focus) ---------- */
 let CUR = 0, SWV = null;
 function openSheet(i){
-  if(VT){
+  if(false){
     const th = main.querySelector(`.row[data-i="${i}"] .th`);
     if(th) th.style.viewTransitionName = 'ex-media';
     document.documentElement.dataset.vt = 'open';
@@ -709,7 +731,7 @@ function openSheet(i){
   }
   CUR = i; SWV = null; sheet.hidden = false; document.body.style.overflow = 'hidden'; renderSheet(); preloadNear(); requestAnimationFrame(() => requestAnimationFrame(() => sheet.classList.add('open'))); history.pushState({sheet:1}, ''); }
 function closeSheet(fromPop){ if(sheet.hidden) return;
-  if(VT){
+  if(false){
     const i = CUR; document.documentElement.dataset.vt = 'close';
     const t = document.startViewTransition(() => {
       sheet.classList.add('instant'); sheet.classList.remove('open'); sheet.hidden = true; sheet.innerHTML = '';
@@ -835,7 +857,7 @@ function renderSheet(){
   }
   const dots = w.items.length <= 14 ? `<span class="dots">${w.items.map((_,k)=>`<i class="${k===CUR?'c':done.has(k)?'d':''}"></i>`).join('')}</span>` : '';
   const html = `<div class="sh-top"><button class="x" id="shx" aria-label="Đóng">✕</button><span class="pos">${esc(it.s)} · Bài ${CUR+1}/${w.items.length}</span>${dots}</div>
-    <div class="sh-body" id="shb"><div class="wrap${SDIR && !RM && !VT ? ' anim-'+SDIR : ''}">${body}</div></div>
+    <div class="sh-body" id="shb"><div class="wrap${SDIR && !RM && !(VT && SDIR==='fade') ? ' anim-'+SDIR : ''}">${body}</div></div>
     <div class="sh-foot"><button id="prv" ${CUR<=0?'disabled':''}>‹ Trước</button><button class="done" id="dn" aria-pressed="${done.has(CUR)}">${done.has(CUR)?'✓ Đã xong':'Xong bài'}</button><button id="nxt" ${CUR>=w.items.length-1?'disabled':''}>${!SWV && it.k && w.items[CUR+1] && w.items[CUR+1].s[0]===it.s[0] ? 'Tiếp: '+esc(w.items[CUR+1].s)+' ›' : 'Tiếp ›'}</button></div>`;
   const bind = () => {
   document.getElementById('shx').onclick = () => closeSheet();
@@ -889,7 +911,7 @@ function renderSheet(){
     if(token !== SWAPTOK || sheet.hidden) return;
     const keep = anim === 'fade' ? (document.getElementById('shb') || {}).scrollTop || 0 : 0;
     const doSwap = () => { sheet.replaceChildren(...tmp.childNodes); bind(); if(keep) document.getElementById('shb').scrollTop = keep; };
-    if(VT){ document.documentElement.dataset.vt = anim === 'fade' ? 'morph' : (anim || 'morph'); const t = document.startViewTransition(doSwap); t.finished.finally(() => { delete document.documentElement.dataset.vt; }); }
+    if(VT && anim === 'fade'){ document.documentElement.dataset.vt = 'morph'; const t = document.startViewTransition(doSwap); t.finished.finally(() => { delete document.documentElement.dataset.vt; }); }
     else doSwap();
     preloadNear();
   });
@@ -912,7 +934,7 @@ document.getElementById('lbn').onclick = e => { e.stopPropagation(); I=(I+1)%L.l
 lb.onclick = e => { if(e.target===lb) lb.hidden = true; };
 
 function setAnim(){
-  main.className = 'wrap' + (RM || !ANIM || (VT && !FIRST) ? '' : ' anim-' + ANIM);
+  main.className = 'wrap' + (RM || !ANIM ? '' : ' anim-' + ANIM);
   ANIM = '';
 }
 
@@ -1077,7 +1099,7 @@ function openDatePicker(p){
 
 let INVT = false, FIRST = true;
 function render(){
-  if(VT && ANIM && !INVT && !FIRST){
+  if(false && VT && ANIM && !INVT && !FIRST){
     const d = ANIM; INVT = true; document.documentElement.dataset.vt = d;
     const t = document.startViewTransition(() => renderNow());
     t.finished.finally(() => { INVT = false; delete document.documentElement.dataset.vt; });
