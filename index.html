@@ -52,7 +52,7 @@ button{font:inherit;color:inherit;cursor:pointer}
 .arw:disabled{opacity:.25;cursor:default}
 .day{min-width:0;border:1px solid var(--line);background:var(--card);border-radius:12px;padding:7px 2px 6px;display:grid;justify-items:center;align-content:start;gap:3px;min-height:60px;position:relative}
 .day .n{font-size:11px;color:var(--sub);font-weight:700;font-variant-numeric:tabular-nums}
-.day .l{font-size:11px;font-weight:800;line-height:1.15;text-align:center;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;word-break:break-word}
+.day .l{font-size:11px;font-weight:800;line-height:1.15;text-align:center;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;word-break:normal;overflow-wrap:normal;hyphens:none;max-width:100%;padding:0 2px}
 .day .dot{width:6px;height:6px;border-radius:50%;background:var(--cat)}
 .day.rest{background:transparent;border-style:dashed}
 .day.rest .l{color:var(--faint);font-weight:600}
@@ -473,7 +473,7 @@ function cat(t){ t = t.toLowerCase(); let best='arms', pos=1e9; for(const [k,ws]
 const VN = {Chest:'Ngực',Back:'Lưng',Legs:'Chân',Arms:'Tay',Shoulders:'Vai',Shoulder:'Vai',Quads:'Đùi trước',Hamstrings:'Đùi sau'};
 function lab(t){
   if(/^(Push|Pull|Legs)$/.test(t)) return t;
-  const m = t.match(/^(Upper|Lower)\s*(\d?)$/); if(m) return (m[1]==='Upper'?'Upper':'Lower') + (m[2]?' '+m[2]:'');
+  const m = t.match(/^(Upper|Lower)\s*(\d?)$/); if(m) return (m[1]==='Upper'?'Up':'Low') + (m[2]?' '+m[2]:'');
   if(t==='Arms/Delts') return 'Tay · Vai';
   if(/^(Lower Anterior|Anterior Lower)/.test(t)) return 'Chân trước';
   if(/^Posterior/.test(t)) return 'Chân sau';
@@ -553,7 +553,7 @@ function stripHtml(p, n){
   }
   const curW = Math.floor((ws-(pa-1))/7)+1, curL = weekLabel(p, ws);
   const pickers = `<div class="pickers">
-    ${multi ? `<label class="pk"><small>Phase</small><span>${esc((p.phases[ph][2]||'').replace(/ · .*/,''))}</span><select id="phsel" aria-label="Chọn phase">${p.phases.map(([a2,b2,nm],i)=>`<option value="${i}" ${i===ph?'selected':''}>${esc(nm)}</option>`).join('')}</select></label>` : ''}
+    ${multi ? `<label class="pk"><span>${esc((p.phases[ph][2]||'').replace(/ · .*/,''))}</span><select id="phsel" aria-label="Chọn phase">${p.phases.map(([a2,b2,nm],i)=>`<option value="${i}" ${i===ph?'selected':''}>${esc(nm)}</option>`).join('')}</select></label>` : ''}
     <label class="pk"><small>Tuần</small><span>${curW}${curL?' · '+esc(curL):''}</span><select id="wksel" aria-label="Chọn tuần">${wopts}</select></label>
     ${ti && ti!==n && ti>=1 && ti<=p.sched.length ? '<button class="pk today" id="totoday">Về hôm nay</button>' : ''}
   </div>`;
@@ -932,7 +932,7 @@ const EN = {
   'Bài chính nặng, phần sau nhẹ':'Heavy main lift, lighter accessories','Siết nhưng giữ sức mạnh':'Cut while keeping strength',
   'Lịch tập':'Schedule','Ngày bắt đầu':'Start date','Đặt ngày bắt đầu':'Set start date','để tự mở buổi hôm nay':"to auto-open today's workout",
   'Về hôm nay':'Back to today','Nghỉ':'Rest','Ngày nghỉ':'Rest day','Ngủ đủ, ăn đủ, đi bộ nhẹ để hồi phục.':'Sleep well, eat enough, take an easy walk to recover.',
-  'Ngực':'Chest','Lưng':'Back','Chân':'Legs','Vai':'Shoulders','Tay':'Arms','Tay · Vai':'Arms · Delts','Đùi trước':'Quads','Đùi sau':'Hams','Chân trước':'Quads','Chân sau':'Posterior',
+  'Ngực':'Chest','Lưng':'Back','Chân':'Legs','Vai':'Delts','Tay':'Arms','Tay · Vai':'Arms · Delts','Đùi trước':'Quads','Đùi sau':'Hams','Chân trước':'Quads','Chân sau':'Posterior',
   'Set làm việc':'Working sets','Khởi động':'Warm-up','Tới thất bại':'To failure','Hướng dẫn':'Instructions','Bài thay thế':'Alternatives',
   'Chưa có hướng dẫn cho bài này.':'No instructions for this exercise yet.','Bài thay thế · dùng cùng số set/rep':'Alternative · use the same sets/reps',
   'Xong bài':'Done','✓ Đã xong':'✓ Done','‹ Trước':'‹ Prev','Tiếp ›':'Next ›','Đang xem':'Viewing','Đang xem · ✓':'Viewing · ✓','Xong':'Done','Tiếp theo':'Up next',
@@ -1025,7 +1025,7 @@ document.addEventListener('click', e => {
   const host = e.target.closest('.pk, .field'); if(!host) return;
   const sel = host.querySelector('select'); if(!sel) return;
   e.preventDefault();
-  const title = (host.querySelector('small') || host.firstChild || {}).textContent || sel.getAttribute('aria-label') || '';
+  const title = (host.querySelector('small') || (host.classList.contains('pk') ? null : host.firstChild) || {}).textContent || (sel.getAttribute('aria-label')||'').replace('Chọn ','') || '';
   openMenu(sel, title.trim());
 });
 
