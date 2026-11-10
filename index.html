@@ -471,6 +471,20 @@ html{touch-action:manipulation;scroll-behavior:auto!important}
 .tabs button svg,.tabs button span{transition:color .25s, transform .25s}
 .tabs button[aria-current="page"] svg{transform:translateY(-1px) scale(1.06)}
 @media (prefers-reduced-motion:reduce){ .tab-ind{transition:none} }
+
+/* ---- morph helpers ---- */
+.flyer{position:fixed;z-index:60;pointer-events:none;object-fit:cover;background:var(--card2);box-shadow:0 18px 40px -12px rgba(0,0,0,.6);will-change:left,top,width,height}
+.sheet.fadein{animation:shFadeIn .3s cubic-bezier(.2,.8,.2,1) both}
+.sheet.fadeout{animation:shFadeOut .24s ease-in both}
+@keyframes shFadeIn{from{opacity:0}to{opacity:1}}
+@keyframes shFadeOut{from{opacity:1}to{opacity:0}}
+.sheet.fadein .sh-body .wrap>*:not(.media){animation:shRise .34s cubic-bezier(.2,.8,.2,1) both}
+@keyframes shRise{from{opacity:0;transform:translate3d(0,14px,0)}to{opacity:1;transform:none}}
+.sheet.fadein .sh-foot{animation:shRise .34s cubic-bezier(.2,.8,.2,1) .06s both}
+.pcard{transition:transform .15s}
+.pcard:active{transform:scale(.98)}
+.row{transition:background-color .2s,transform .12s}
+.row:active{transform:scale(.985)}
 </style>
 </head>
 <body>
@@ -730,7 +744,18 @@ function renderProgs(){
     <div class="tbl"><table><thead><tr><th>Program</th><th>Tuần</th><th>Buổi/tuần</th><th>Phút</th><th>Phong cách</th><th>Hợp với</th></tr></thead><tbody>${
       COMPARE.map(r => `<tr><th>${esc(r[1])}</th><td>${r[2]}</td><td>${r[3]}</td><td>${r[4]}</td><td>${esc(r[5])}</td><td>${esc(r[6])}</td></tr>`).join('')}</tbody></table></div></div>`;
   main.innerHTML = h; setAnim();
-  main.querySelectorAll('[data-p]').forEach(b => b.onclick = () => { PID = b.dataset.p; store.set('prog', PID); go('today'); });
+  main.querySelectorAll('[data-p]').forEach(b => b.onclick = () => {
+    const card = b.classList.contains('pcard') ? b : main.querySelector(`.pcard[data-p="${b.dataset.p}"]`);
+    const r = card && card.getBoundingClientRect(); const imgEl = card && card.querySelector('.img');
+    const bg = imgEl ? getComputedStyle(imgEl).backgroundImage : '';
+    const m = bg && bg.match(/url\("?(.*?)"?\)/);
+    const topH = document.querySelector('.top').getBoundingClientRect().bottom;
+    PID = b.dataset.p; store.set('prog', PID);
+    if(r && b === card){
+      fly(m ? m[1] : null, r, {left: 0, top: topH, width: innerWidth, height: innerHeight - topH}, {r0: 18, r1: 0, dur: 420, fade: true});
+    }
+    go('today');
+  });
 }
 
 /* ---------- SHEET (exercise focus) ---------- */
@@ -748,8 +773,35 @@ function openSheet(i){
     t.finished.finally(() => { sheet.classList.remove('instant'); delete document.documentElement.dataset.vt; posRest(); });
     preloadNear(); history.pushState({sheet:1}, ''); return;
   }
-  CUR = i; SWV = null; sheet.hidden = false; document.body.style.overflow = 'hidden'; renderSheet(); preloadNear(); requestAnimationFrame(() => requestAnimationFrame(() => sheet.classList.add('open'))); history.pushState({sheet:1}, ''); }
+  const thImg = main.querySelector(`.row[data-i="${i}"] .th img`);
+  const fromR = thImg && thImg.getBoundingClientRect();
+  CUR = i; SWV = null; sheet.hidden = false; document.body.style.overflow = 'hidden';
+  if(!RM){
+    sheet.innerHTML = ''; renderSheet(); preloadNear();
+    sheet.classList.add('instant', 'open', 'fadein');
+    const tgt = sheet.querySelector('.media img');
+    if(fromR && tgt){
+      const toR = tgt.getBoundingClientRect(); tgt.style.visibility = 'hidden';
+      fly(tgt.currentSrc || tgt.src, fromR, toR, {r0: 14, r1: 18, dur: 380}).then(() => { tgt.style.visibility = ''; });
+    }
+    setTimeout(() => sheet.classList.remove('instant', 'fadein'), 400);
+    history.pushState({sheet:1}, ''); return;
+  }
+  renderSheet(); preloadNear(); requestAnimationFrame(() => requestAnimationFrame(() => sheet.classList.add('open'))); history.pushState({sheet:1}, ''); }
 function closeSheet(fromPop){ if(sheet.hidden) return;
+  if(!RM){
+    const big = sheet.querySelector('.media img'); const fromR = big && big.getBoundingClientRect();
+    const src = big && (big.currentSrc || big.src); const i = CUR;
+    sheet.classList.add('instant', 'fadeout'); document.body.style.overflow = ''; refreshDone();
+    const thImg = main.querySelector(`.row[data-i="${i}"] .th img`);
+    if(fromR && thImg){
+      const r = thImg.getBoundingClientRect();
+      if(r.bottom > 0 && r.top < innerHeight){ thImg.style.visibility = 'hidden'; fly(src, fromR, r, {r0: 18, r1: 14, dur: 340}).then(() => { thImg.style.visibility = ''; }); }
+    }
+    setTimeout(() => { sheet.classList.remove('open', 'fadeout'); sheet.hidden = true; sheet.innerHTML = ''; sheet.classList.remove('instant'); posRest(); }, 260);
+    if(!fromPop && history.state && history.state.sheet) history.back();
+    return;
+  }
   if(false){
     const i = CUR; document.documentElement.dataset.vt = 'close';
     const t = document.startViewTransition(() => {
@@ -1114,6 +1166,22 @@ function openDatePicker(p){
     const cl = menuEl.querySelector('[data-clear]'); if(cl) cl.onclick = () => setStart(null);
   }
   draw(); menuEl.hidden = false; requestAnimationFrame(() => menuEl.classList.add('open'));
+}
+
+/* ---------- morph nhẹ: bay 1 phần tử giữa 2 vị trí ---------- */
+const EASE = 'cubic-bezier(.2,.8,.2,1)';
+function fly(src, from, to, {r0 = 14, r1 = 14, dur = 360, fit = 'cover', fade = false} = {}){
+  if(RM || !from || !to || !from.width || !to.width) return Promise.resolve();
+  const el = document.createElement(src ? 'img' : 'div');
+  if(src){ el.src = src; el.decoding = 'sync'; }
+  el.className = 'flyer';
+  Object.assign(el.style, {left: from.left+'px', top: from.top+'px', width: from.width+'px', height: from.height+'px', borderRadius: r0+'px', objectFit: fit});
+  document.body.appendChild(el);
+  const a = el.animate([
+    {left: from.left+'px', top: from.top+'px', width: from.width+'px', height: from.height+'px', borderRadius: r0+'px', opacity: 1},
+    {left: to.left+'px', top: to.top+'px', width: to.width+'px', height: to.height+'px', borderRadius: r1+'px', opacity: fade ? 0 : 1}
+  ], {duration: dur, easing: EASE, fill: 'forwards'});
+  return new Promise(res => { let done = false; const fin = () => { if(done) return; done = true; el.remove(); res(); }; a.finished.then(fin, fin); setTimeout(fin, dur + 120); });
 }
 
 let INVT = false, FIRST = true;
