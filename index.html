@@ -1019,7 +1019,7 @@ function openSettings(){
         ${WLOK ? tg(`<label class="lwt"><input type="checkbox" id="swk" ${WAKE ? 'checked' : ''}><span></span></label>`, 0, 'Giữ màn hình sáng', 'Khi đang ở trang Hôm nay') : ''}
       </div></div>`;
     ov.querySelector('[data-x]').onclick = () => ov.remove();
-    bindAcct();
+    bindAcct(ov);
     ov.querySelectorAll('[data-sl]').forEach(b => b.onclick = () => { LANG = b.dataset.sl; store.set('lang', LANG); document.documentElement.lang = LANG; tabs.innerHTML = ''; renderNow(); if(!sheet.hidden){ sheet.innerHTML = ''; renderSheet(); } draw(); trTree(ov); });
     ov.querySelectorAll('[data-sm]').forEach(b => b.onclick = () => { store.set('logw', b.dataset.sm); sbFlush(); draw(); trTree(ov); });
     const wk = ov.querySelector('#swk'); if(wk) wk.onchange = () => { WAKE = wk.checked; store.set('wake', WAKE ? '1' : '0'); WAKE ? wakeOn() : wakeOff(); };
@@ -1034,10 +1034,10 @@ function acctHtml(){
   if(a && a.user) return `<div class="acct on"><div class="at"><b>${esc(a.user)}</b><span id="sbst" class="${SBST.startsWith('err') ? 'err' : ''}">${esc(sbText())}</span></div><button class="ib" id="sbnow" aria-label="Đồng bộ ngay" title="Đồng bộ ngay"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 11a8 8 0 0 0-14.3-4.9L4 8"/><path d="M4 4v4h4"/><path d="M4 13a8 8 0 0 0 14.3 4.9L20 16"/><path d="M20 20v-4h-4"/></svg></button><button class="lk" id="sbout">Đăng xuất</button></div>`;
   return `<div class="acct"><div class="at"><b>Đang lưu trên máy này</b><span>${a ? 'Đang đồng bộ ẩn danh. ' : ''}Đăng nhập để lưu lên cloud, dùng trên nhiều máy.</span></div><div class="ab"><button class="btn sm" data-acc="in">Đăng nhập</button><button class="btn ghost sm" data-acc="up">Tạo tài khoản</button></div></div>`;
 }
-function bindAcct(){
-  document.querySelectorAll('[data-acc]').forEach(b => b.onclick = () => openAccount(b.dataset.acc));
-  const nw = document.getElementById('sbnow'); if(nw) nw.onclick = async () => { nw.disabled = true; nw.classList.add('spin'); try{ await sbPull(); store.set('sbinit', null); sbInitial(); await sbFlush(); }catch(e){} location.reload(); };
-  const out = document.getElementById('sbout'); if(out) out.onclick = () => { if(confirm('Đăng xuất? Dữ liệu vẫn giữ trên máy này, chỉ ngừng đồng bộ.')){ sbLogout(); render(); } };
+function bindAcct(root = document){
+  root.querySelectorAll('[data-acc]').forEach(b => b.onclick = () => { if(root !== document) root.remove(); openAccount(b.dataset.acc); });
+  const nw = root.querySelector('#sbnow'); if(nw) nw.onclick = async () => { nw.disabled = true; nw.classList.add('spin'); try{ await sbPull(); store.set('sbinit', null); sbInitial(); await sbFlush(); }catch(e){} location.reload(); };
+  const out = root.querySelector('#sbout'); if(out) out.onclick = () => { if(confirm('Đăng xuất? Dữ liệu vẫn giữ trên máy này, chỉ ngừng đồng bộ.')){ sbLogout(); if(root !== document) root.remove(); render(); } };
 }
 function openAccount(mode){
   const ov = document.createElement('div'); ov.className = 'cele acc';
