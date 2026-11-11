@@ -828,6 +828,45 @@ function applyHome(){
   })));
 }
 applyHome();
+/* thư viện bài: mọi bài trong các chương trình cũng tra được như bài thay thế */
+P.forEach(p => Object.values(p.workouts).forEach(w => w.items.forEach(it0 => { const it = it0._g || it0;
+  if(it.name && !it.jk && !SWL[it.name]) SWL[it.name] = Object.assign({n: it.name, fe: it.fe, v: it.v, q: it.q}, it.det || {}, {sw: undefined}); })));
+const SWC = {};
+/* tên bài bị app gốc cắt cụt -> tên đầy đủ (chỉ những tên chắc chắn) */
+const SWFULL = {'45° Incline Barbell Be…':'45° Incline Barbell Bench Press','65° Incline Barbell Be…':'65° Incline Barbell Bench Press',
+  'Barbell Concentratio…':'Barbell Concentration Curl','Barbell Curl Medium …':'Barbell Curl Medium Grip','Barbell Flat Bench Pre…':'Barbell Flat Bench Press',
+  'Barbell Stiff Leg Deadl…':'Barbell Stiff Leg Deadlift','Cable Rope Upright R…':'Cable Rope Upright Row','Decline Dumbbell Pull…':'Decline Dumbbell Pullover',
+  'Decline Fat Barbell Be…':'Decline Fat Barbell Bench Press','Flat Bench Pronated D…':'Flat Bench Pronated DB Press','Ground DB Skull Crus…':'Ground DB Skull Crusher',
+  'Horizontal Back Exten…':'Horizontal Back Extension','Leg Press Medium Sta…':'Leg Press Medium Stance','Lying DB Hamstring C…':'Lying DB Hamstring Curl',
+  'Seated Barbell Shoul…':'Seated Barbell Shoulder Press','Seated Crunch Machi…':'Seated Crunch Machine','Single Arm DB Tricep …':'Single Arm DB Tricep Extension',
+  'Smith Machine Bulgar…':'Smith Machine Bulgarian Split Squat','Smith Machine Overh…':'Smith Machine Overhead Press','Smith Machine Sissy …':'Smith Machine Sissy Squat',
+  'Standing DB Hammer …':'Standing DB Hammer Curl','Standing Neutral DB F…':'Standing Neutral DB Front Raise','Straight Bar Reverse …':'Straight Bar Reverse Curl',
+  'Supinated DB Scott C…':'Supinated DB Scott Curl','Alternating DB Drop L…':'Alternating DB Drop Lunge','Neutral Rear Delt Fly …':'Neutral Rear Delt Fly',
+  'Lying Leg Curl Neutral…':'Lying Leg Curl Neutral'};
+const swNorm = x => String(x).toLowerCase().replace(/…|\.\.\.$/g, '').replace(/[^a-z0-9° ]/g, '').replace(/\s+/g, ' ').trim();
+function swFix(x){
+  x = String(x || '').trim(); if(!x || /^see notes?$|^xem ghi chú$/i.test(x)) return '';
+  if(/…$|\.\.\.$/.test(x)){
+    const pre = swNorm(x), hit = Object.keys(SWL).filter(k => !/…$/.test(k) && swNorm(k).startsWith(pre)).sort((a, b) => a.length - b.length)[0];
+    if(hit) return hit;
+    const full = SWFULL[x]; if(full){ if(!SWL[full]) SWL[full] = Object.assign({}, SWL[x] || {}, {n: full}); return full; }
+    return x; }
+  return x;
+}
+/* danh sách bài thay thế đã làm sạch; trống thì lấy bài cùng nhóm cơ chính có ảnh/video */
+function swList(it){
+  if(!it || it.jk) return [];
+  const key = it.name + '|' + ((it.det && it.det.sw) || []).join('|'); if(SWC[key]) return SWC[key];
+  let out = [...new Set(((it.det && it.det.sw) || []).map(swFix).filter(x => x && x !== it.name))];
+  if(!out.length && it.det && it.det.vi){   // ghi chú kiểu "Có thể là A, B hoặc C"
+    const keys = Object.keys(SWL);
+    out = [...new Set(it.det.vi.join(' ').replace(/^.*?(có thể là|can be|options?:)/i, '').split(/,|\bhoặc\b|\bor\b|\.|;/i).map(c => c.trim().toLowerCase()).filter(c => c.length > 4)
+      .map(c => keys.find(k => k.toLowerCase() === c) || keys.filter(k => !/…$/.test(k) && k.toLowerCase().startsWith(c)).sort((a, b) => a.length - b.length)[0]).filter(x => x && x !== it.name))]; }
+  if(!out.length){ const pm = ((it.det && it.det.pm) || [])[0];
+    if(pm) out = Object.keys(SWL).filter(k => k !== it.name && SWL[k].pm && SWL[k].pm[0] === pm && (SWL[k].fe || SWL[k].v))
+      .sort((a, b) => (SWL[b].fe ? 1 : 0) - (SWL[a].fe ? 1 : 0) || a.length - b.length).slice(0, 5); }
+  return (SWC[key] = out);
+}
 setTimeout(() => { sbAutoPull(true); }, 1200);
 const HASHOME = {};
 const hasHome = p => p && (HASHOME[p.id] ??= Object.values(p.workouts).some(w => w.items.some(it => it.h)));
@@ -1859,14 +1898,14 @@ function exIt(p, n, i){
   const nm = getJ(swpKey(p, n), {})[i]; if(!nm || nm === it.name) return it;
   const e = SWL[nm] || {n: nm};
   return Object.assign({}, it, {name: nm, fe: e.fe, v: e.v, q: e.q || nm, sw0: it.name, tech: '', hn: '',
-    det: Object.assign({}, e, {sw: [it.name, ...((it.det && it.det.sw) || []).filter(x => x !== nm)]})});
+    det: Object.assign({}, e, {sw: [it.name, ...swList(it).filter(x => x !== nm)]})});
 }
 function swPic(e){ return e.fe ? `<span class="pi"><img src="img/ex/${esc(e.fe)}_0.webp" alt="" loading="lazy"><img src="img/ex/${esc(e.fe)}_1.webp" alt="" loading="lazy"></span>`
   : e.v ? `<span class="pi one"><img src="https://i.ytimg.com/vi/${esc(e.v[0])}/mqdefault.jpg" alt="" loading="lazy"></span>` : `<span class="pi empty"></span>`; }
 function setSwap(p, n, i, nm){ const m = getJ(swpKey(p, n), {}), base = p.workouts[p.sched[n-1].w].items[i];
   if(!nm || nm === base.name) delete m[i]; else m[i] = nm; store.set(swpKey(p, n), JSON.stringify(m)); }
 function openSwap(p, n, i){
-  const base = p.workouts[p.sched[n-1].w].items[i], cur = getJ(swpKey(p, n), {})[i] || base.name, list = (base.det && base.det.sw) || [];
+  const base = p.workouts[p.sched[n-1].w].items[i], cur = getJ(swpKey(p, n), {})[i] || base.name, list = swList(base);
   const ov = document.createElement('div'); ov.className = 'cele acc';
   const card = (x, lab) => { const e = x === base.name ? {fe: base.fe, v: base.v} : (SWL[x] || {n: x}); return `<button class="swo ${x === cur ? 'on' : ''}" data-pick="${esc(x)}">${swPic(e)}<span><b>${esc(x)}</b>${lab ? `<small>${lab}</small>` : ''}</span></button>`; };
   ov.innerHTML = `<div class="cbox" role="dialog" aria-label="Đổi bài"><button class="x" data-x aria-label="Đóng">✕</button>
@@ -1895,7 +1934,7 @@ function histIdx(){
 function startGuess(it, reps){
   const me = eqOf(it.name); if(me === 'bw') return null;
   const H = histIdx(), pm = String(((it.det && it.det.pm) || [])[0] || '');
-  let src = ((it.det && it.det.sw) || []).find(x => H[x] && eqOf(x) !== 'bw');
+  let src = swList(it).find(x => H[x] && eqOf(x) !== 'bw');
   if(!src && pm) src = Object.keys(H).filter(x => H[x].pm === pm && eqOf(x) !== 'bw').sort((a, b) => (H[b].d || '').localeCompare(H[a].d || ''))[0];
   if(!src) return null;
   const st = wStep(it), est = H[src].e * EQF[me] / EQF[eqOf(src)] / (1 + (reps || 8) / 30);
@@ -2171,7 +2210,7 @@ function endWorkout(){
 }
 function renderSheet(){
   const p = prog(), n = curDay(p), w = p.workouts[p.sched[n-1].w], it = exIt(p, n, CUR), done = getDone(p,n);
-  const base = w.items[CUR], canSw = !it.jk && base.det && base.det.sw && base.det.sw.length;
+  const base = w.items[CUR], canSw = !it.jk && swList(base).length;
   let body;
   if(SWV){
     const e = SWL[SWV] || {n:SWV};
@@ -2184,7 +2223,7 @@ function renderSheet(){
       ${groupPanel(w, CUR, done)}
       <div id="setp">${setTable(p, it, getSets(p,n,CUR))}</div>
       ${it.tech ? `<div class="note">Set cuối: ${esc(it.tech)}</div>` : ''}${it.hn && !it.orig ? `<div class="note hn">Ở nhà: ${esc(it.hn)}</div>` : ''}
-      ${videoHtml(e, it.q || it.name)}${insHtml(it.det)}${swapsHtml(it.det && it.det.sw)}${w.imgs && w.imgs.length ? `<details class="shots"><summary>Ảnh gốc từ app (${w.imgs.length})</summary><div class="shotrow">${w.imgs.map((src,k)=>`<button data-shot="${k}"><img src="${src}" alt="" loading="lazy"></button>`).join('')}</div></details>` : ''}`;
+      ${videoHtml(e, it.q || it.name)}${insHtml(it.det)}${swapsHtml(it.sw0 ? it.det.sw : swList(it))}${w.imgs && w.imgs.length ? `<details class="shots"><summary>Ảnh gốc từ app (${w.imgs.length})</summary><div class="shotrow">${w.imgs.map((src,k)=>`<button data-shot="${k}"><img src="${src}" alt="" loading="lazy"></button>`).join('')}</div></details>` : ''}`;
   }
   const dots = w.items.length <= 14 ? `<span class="dots">${w.items.map((_,k)=>`<i class="${k===CUR?'c':done.has(k)?'d':''}"></i>`).join('')}</span>` : '';
   const wc = wkSets(p, n, w), wt = wkElapsed(p, n);
