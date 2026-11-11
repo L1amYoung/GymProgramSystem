@@ -589,6 +589,27 @@ html{touch-action:manipulation;scroll-behavior:auto!important}
 .aerr{color:#ff7a7f;font-size:13px;min-height:1em;margin:8px 0 0}
 .anote{color:var(--faint);font-size:12px;margin:10px 0 0}
 .acct.on .at span.err{color:var(--ss)}
+
+/* ---- lịch tháng gọn + tài khoản gọn ---- */
+.md:disabled{opacity:1}
+.md.pick{box-shadow:0 0 0 2px var(--ink) inset}
+.md.done.pick{box-shadow:0 0 0 2px #06281a inset}
+.mday,.mtype{margin-top:14px}
+.mdh{font-size:12px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;color:var(--sub);margin:0 2px 8px}
+.mday .mli{grid-template-columns:1fr auto;padding:12px 14px;width:100%}
+.mday .mli+.mli{margin-top:6px}
+.mli.plan{border-style:dashed} .mli .go{font-weight:800;color:var(--acc2);font-size:13px}
+.mchips{display:flex;flex-wrap:wrap;gap:6px}
+.mchips span{display:inline-flex;align-items:center;gap:6px;padding:6px 10px;border:1px solid var(--line);border-radius:999px;background:var(--card);font-size:13px;font-weight:700}
+.mchips i{width:8px;height:8px;border-radius:50%;background:var(--cat)} .mchips b{color:var(--sub)}
+.acct{margin:16px 0 0;padding:10px 12px;gap:8px}
+.acct.on{grid-template-columns:1fr auto auto;gap:6px}
+.acct .at b{font-size:14px} .acct .at span{font-size:12px}
+.acct .ib{width:38px;height:38px;border-radius:50%;border:1px solid var(--line);background:var(--card2);color:var(--ink);display:grid;place-items:center;padding:0}
+.acct .ib svg{width:18px;height:18px} .acct .ib.spin svg{animation:sbspin 1s linear infinite}
+@keyframes sbspin{to{transform:rotate(360deg)}}
+.acct .lk{border:0;background:none;color:var(--sub);font-weight:700;font-size:13px;padding:8px 4px}
+.acct .btn.sm{padding:9px 12px;font-size:14px}
 </style>
 </head>
 <body>
@@ -675,9 +696,9 @@ async function sbFlush(){
 function sbText(){
   if(!SBON || !store.get('sbauth')) return 'Chỉ lưu trên máy này';
   const n = Object.keys(SBQ).length;
-  if(SBST.startsWith('err')) return `Chưa đồng bộ được (${n} mục chờ) · sẽ thử lại khi có mạng`;
-  if(n) return `Đang chờ đồng bộ ${n} mục…`;
-  if(SBST.startsWith('ok')){ const t = new Date(+SBST.slice(3)); return `Đã đồng bộ cloud · ${t.getHours()}:${String(t.getMinutes()).padStart(2,'0')} ${t.getDate()}/${t.getMonth()+1}`; }
+  if(SBST.startsWith('err')) return `Chưa đồng bộ · ${n} mục chờ`;
+  if(n) return `Đang đồng bộ ${n} mục…`;
+  if(SBST.startsWith('ok')){ const t = new Date(+SBST.slice(3)); return `Đã đồng bộ · ${t.getHours()}:${String(t.getMinutes()).padStart(2,'0')} ${t.getDate()}/${t.getMonth()+1}`; }
   return 'Đồng bộ cloud đang bật';
 }
 function sbLogRow(k, e){ const [pid, n] = k.split('|'); sbQueue('w|' + k, 'workout_logs', e ? {program_id: pid, day_n: +n, date: e.d, program_name: e.pn || null, title: e.w || null, phase: e.ph || null, done: e.k || 0, total: e.of || 0, started_at: e.t0 ? new Date(e.t0).toISOString() : null, finished_at: e.t1 ? new Date(e.t1).toISOString() : null} : {program_id: pid, day_n: +n, _del: 1}); }
@@ -740,12 +761,12 @@ function sbLogout(){ ['sbauth','sbq','sbinit','sbst'].forEach(k => store.set(k, 
 function acctHtml(){
   if(!SBON) return '';
   const a = getJ('sbauth', null);
-  if(a && a.user) return `<div class="acct on"><div class="ai">${esc(a.user.slice(0,1).toUpperCase())}</div><div class="at"><b>${esc(a.user)}</b><span id="sbst" class="${SBST.startsWith('err') ? 'err' : ''}">${esc(sbText())}</span></div><div class="ab"><button class="btn ghost" id="sbnow">Đồng bộ</button><button class="btn ghost" id="sbout">Đăng xuất</button></div></div>`;
-  return `<div class="acct"><div class="at"><b>Đang lưu trên máy này</b><span>${a ? 'Đang đồng bộ ẩn danh. ' : ''}Đăng nhập để lưu lên cloud và dùng trên nhiều máy. Dữ liệu đang có sẽ được đẩy lên.</span></div><div class="ab"><button class="btn" data-acc="in">Đăng nhập</button><button class="btn ghost" data-acc="up">Tạo tài khoản</button></div></div>`;
+  if(a && a.user) return `<div class="acct on"><div class="at"><b>${esc(a.user)}</b><span id="sbst" class="${SBST.startsWith('err') ? 'err' : ''}">${esc(sbText())}</span></div><button class="ib" id="sbnow" aria-label="Đồng bộ ngay" title="Đồng bộ ngay"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 11a8 8 0 0 0-14.3-4.9L4 8"/><path d="M4 4v4h4"/><path d="M4 13a8 8 0 0 0 14.3 4.9L20 16"/><path d="M20 20v-4h-4"/></svg></button><button class="lk" id="sbout">Đăng xuất</button></div>`;
+  return `<div class="acct"><div class="at"><b>Đang lưu trên máy này</b><span>${a ? 'Đang đồng bộ ẩn danh. ' : ''}Đăng nhập để lưu lên cloud, dùng trên nhiều máy.</span></div><div class="ab"><button class="btn sm" data-acc="in">Đăng nhập</button><button class="btn ghost sm" data-acc="up">Tạo tài khoản</button></div></div>`;
 }
 function bindAcct(){
   document.querySelectorAll('[data-acc]').forEach(b => b.onclick = () => openAccount(b.dataset.acc));
-  const nw = document.getElementById('sbnow'); if(nw) nw.onclick = async () => { nw.disabled = true; nw.textContent = 'Đang đồng bộ…'; try{ await sbPull(); store.set('sbinit', null); sbInitial(); await sbFlush(); }catch(e){} location.reload(); };
+  const nw = document.getElementById('sbnow'); if(nw) nw.onclick = async () => { nw.disabled = true; nw.classList.add('spin'); try{ await sbPull(); store.set('sbinit', null); sbInitial(); await sbFlush(); }catch(e){} location.reload(); };
   const out = document.getElementById('sbout'); if(out) out.onclick = () => { if(confirm('Đăng xuất? Dữ liệu vẫn giữ trên máy này, chỉ ngừng đồng bộ.')){ sbLogout(); render(); } };
 }
 function openAccount(mode){
@@ -1035,7 +1056,7 @@ function restFor(p, it){
 function toggleDone(i){ const p = prog(), n = curDay(p), s = getDone(p,n); const it = p.workouts[p.sched[n-1].w].items[i]; if(it.jk){ s.has(i) ? s.delete(i) : s.add(i); setDone(p,n,s); return; } if(s.has(i)){ s.delete(i); putSets(p,n,i,[]); } else { s.add(i); putSets(p,n,i, setVals(p,it).map(() => true)); } setDone(p,n,s); }
 
 /* ---------- CALENDAR ---------- */
-let CALM = null;
+let CALM = null, CALD = null;
 function renderMonth(){
   const p = prog(), L = getLog(), now = new Date();
   if(!CALM) CALM = isoDay(now).slice(0,7);
@@ -1050,32 +1071,37 @@ function renderMonth(){
     const ds = `${CALM}-${String(i).padStart(2,'0')}`, es = by[ds] || [], full = es.some(e => e.k >= e.of), part = es.length && !full;
     const pl = !es.length && ds >= today ? plan[ds] : null;
     const lb = es.length ? lab(es[0].w) : pl ? lab(pl.w) : '';
-    cells += `<button class="md ${full?'done':''} ${part?'part':''} ${ds===today?'today':''} ${pl?'plan':''}" data-md="${ds}" ${es.length||pl?'':'disabled'} style="--cat:var(--c-${cat(es.length?es[0].w:pl?pl.w:'arms')})"><span class="n">${i}</span>${lb?`<span class="l">${esc(lb)}</span>`:''}</button>`;
+    cells += `<button class="md ${full?'done':''} ${part?'part':''} ${ds===today?'today':''} ${pl?'plan':''} ${ds===CALD?'pick':''}" data-md="${ds}" style="--cat:var(--c-${cat(es.length?es[0].w:pl?pl.w:'arms')})"><span class="n">${i}</span>${lb?`<span class="l">${esc(lb)}</span>`:''}</button>`;
   }
   const list = Object.values(L).filter(e => e.d.slice(0,7) === CALM).sort((a,b) => b.d.localeCompare(a.d) || b.n - a.n);
+  if(!CALD || CALD.slice(0,7) !== CALM) CALD = today.slice(0,7) === CALM ? today : (list[0] ? list[0].d : `${CALM}-01`);
   const fullN = list.filter(e => e.k >= e.of).length;
   const mname = `Tháng ${M}, ${Y}`;
   let h = `<div class="mnav"><button class="arw" data-mm="-1" aria-label="Tháng trước">‹</button><b>${mname}</b><button class="arw" data-mm="1" aria-label="Tháng sau" ${CALM >= today.slice(0,7) ? 'disabled' : ''}>›</button></div>
     <div class="mstat"><div><b>${fullN}</b><span>buổi xong</span></div><div><b>${list.reduce((a,e)=>a+e.k,0)}</b><span>bài đã tập</span></div><div><b>${new Set(list.map(e=>e.d)).size}</b><span>ngày có tập</span></div></div>
     <div class="mcal">${cells}</div>
     <div class="mleg"><span><i class="lg done"></i>Đã tập</span><span><i class="lg part"></i>Tập dở</span><span><i class="lg plan"></i>Dự kiến</span></div>`;
-  h += list.length ? `<div class="mlist">${list.map(e => `<button class="mli ${e.k>=e.of?'done':''}" data-lp="${esc(e.p)}" data-ln="${e.n}" style="--cat:var(--c-${cat(e.w)})"><span class="dt"><b>${+e.d.slice(8)}</b><small>${['CN','T2','T3','T4','T5','T6','T7'][new Date(e.d+'T00:00:00').getDay()]}</small></span><span class="tx"><b>${esc(e.w)}</b><small>${esc(e.pn || e.p)} · ngày ${e.n}${e.ph ? ' · ' + esc(e.ph) : ''}</small></span><span class="ck">${e.k>=e.of ? '✓' : `${e.k}/${e.of}`}</span></button>`).join('')}</div>`
-    : `<p class="none" style="margin-top:14px">Tháng này chưa có buổi nào. Tick xong các bài trong buổi để ghi vào sổ.</p>`;
-  h += `<div class="bk">${acctHtml()}<p>Hoặc sao lưu ra file để chuyển máy mà không cần tài khoản.</p><div><button class="btn ghost" id="bkx">Sao lưu dữ liệu</button><label class="btn ghost">Khôi phục<input type="file" id="bki" accept=".json,application/json" hidden></label></div></div>`;
+  // chi tiết ngày đang chọn
+  const dsel = CALD, es = (by[dsel] || []), pl = !es.length ? plan[dsel] : null;
+  const [yy, mm2, dd] = dsel.split('-').map(Number), wd = ['Chủ nhật','Thứ 2','Thứ 3','Thứ 4','Thứ 5','Thứ 6','Thứ 7'][new Date(yy, mm2-1, dd).getDay()];
+  h += `<div class="mday"><div class="mdh">${wd}, ${dd}/${mm2}${dsel===today ? ' · hôm nay' : ''}</div>${
+    es.length ? es.map(e => `<button class="mli ${e.k>=e.of?'done':''}" data-lp="${esc(e.p)}" data-ln="${e.n}" style="--cat:var(--c-${cat(e.w)})"><span class="tx"><b>${esc(e.w)}</b><small>${esc(e.pn || e.p)} · ngày ${e.n}${e.ph ? ' · ' + esc(e.ph) : ''}</small></span><span class="ck">${e.k>=e.of ? '✓' : `${e.k}/${e.of}`}</span></button>`).join('')
+    : pl ? `<button class="mli plan" data-lp="${esc(p.id)}" data-ln="${pl.n}" style="--cat:var(--c-${cat(pl.w)})"><span class="tx"><b>${esc(pl.w)}</b><small>Dự kiến · ${esc(p.name)} · ngày ${pl.n}</small></span><span class="go">Mở ›</span></button>`
+    : `<p class="none">${dsel > today ? 'Không có buổi dự kiến.' : 'Không tập ngày này.'}</p>`}</div>`;
+  // tổng kết theo loại buổi (gọn, không phụ thuộc số ngày tập)
+  const cnt = {}; list.filter(e => e.k >= e.of).forEach(e => { const k = e.w; cnt[k] = (cnt[k]||0) + 1; });
+  const ks = Object.keys(cnt).sort((x,y) => cnt[y] - cnt[x]);
+  if(ks.length) h += `<div class="mtype"><div class="mdh">Theo buổi trong tháng</div><div class="mchips">${ks.map(k => `<span style="--cat:var(--c-${cat(k)})"><i></i>${esc(k)}<b>×${cnt[k]}</b></span>`).join('')}</div></div>`;
+  else if(!list.length) h += `<p class="none" style="margin-top:14px">Tháng này chưa có buổi nào. Tick xong các bài trong buổi để ghi vào sổ.</p>`;
+  h += acctHtml();
   return h;
 }
 function bindMonth(){
   bindAcct();
-  const bx = document.getElementById('bkx'); if(bx) bx.onclick = () => { const o = {}; try{ for(let i=0;i<localStorage.length;i++){ const k = localStorage.key(i); o[k] = localStorage.getItem(k); } }catch(e){}
-    const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([JSON.stringify({app:'liam-training-log', at: new Date().toISOString(), data: o})], {type:'application/json'})); a.download = `liam-training-${isoDay()}.json`; document.body.appendChild(a); a.click(); a.remove(); };
-  const bi = document.getElementById('bki'); if(bi) bi.onchange = async () => { const f = bi.files[0]; if(!f) return;
-    try{ const j = JSON.parse(await f.text()); const d = j.data || j; if(!confirm('Khôi phục sẽ thay dữ liệu trên máy này bằng bản sao lưu. Tiếp tục?')) return; localStorage.clear(); Object.entries(d).forEach(([k,v]) => localStorage.setItem(k, v)); location.reload(); }
-    catch(e){ alert('File sao lưu không hợp lệ.'); } };
+
   main.querySelectorAll('[data-mm]').forEach(b => b.onclick = () => { const [y,m] = CALM.split('-').map(Number); const d = new Date(y, m-1 + +b.dataset.mm, 1); CALM = isoDay(d).slice(0,7); ANIM = +b.dataset.mm > 0 ? 'l' : 'r'; render(); });
   main.querySelectorAll('[data-lp]').forEach(b => b.onclick = () => { const pid = b.dataset.lp, n = +b.dataset.ln, p = P.find(x => x.id === pid); if(!p) return; PID = pid; store.set('prog', pid); setDay(p, n); go('today'); });
-  main.querySelectorAll('[data-md]').forEach(b => b.onclick = () => { const ds = b.dataset.md, e = Object.values(getLog()).find(x => x.d === ds);
-    if(e){ const p = P.find(x => x.id === e.p); if(p){ PID = e.p; store.set('prog', e.p); setDay(p, e.n); go('today'); } return; }
-    const p = prog(), st = store.get('start-'+p.id); if(!st) return; const n = Math.round((new Date(ds+'T00:00:00') - new Date(st+'T00:00:00'))/864e5)+1; if(p.sched[n-1]){ setDay(p, n); go('today'); } });
+  main.querySelectorAll('[data-md]').forEach(b => b.onclick = () => { if(CALD === b.dataset.md) return; CALD = b.dataset.md; ANIM = ''; const y = scrollY; render(); scrollTo(0, y); });
 }
 function renderCal(){
   const p = prog(), n = curDay(p), ti = dayIdx(p);
@@ -1511,7 +1537,7 @@ const EN = {
   '∞ = tập tới thất bại. Tempo 3/0/1/0 = hạ 3s · dừng 0 · đẩy 1s · dừng 0. Bấm vào bài để xem hướng dẫn, video và bài thay thế.':'∞ = to failure. Tempo 3/0/1/0 = 3s down · 0 pause · 1s up · 0 pause. Tap an exercise for instructions, video and alternatives.',
   'Phase':'Phase','rep':'rep','Chưa đặt':'Not set','Hôm nay tập buổi…':'Today is…','Chọn ngày':'Pick a date','Xoá ngày bắt đầu':'Clear start date',
   'Hôm nay bạn tập buổi nào? Trang sẽ tự tính ngày bắt đầu.':"Which workout are you doing today? We'll work out the start date.",'T2':'Mo','T3':'Tu','T4':'We','T5':'Th','T6':'Fr','T7':'Sa','CN':'Su','Upper':'Upper','Lower':'Lower','Nghỉ giữa set':'Rest between sets','Bấm vào set khi tập xong để tick và tự đếm giờ nghỉ.':'Tap a set when you finish it to tick it and start the rest timer.',
-  '+ tới thất bại':'+ to failure','Tháng này':'This month','buổi xong':'workouts done','bài đã tập':'exercises','ngày có tập':'training days','Đã tập':'Done','Tập dở':'Partial','Dự kiến':'Planned','Tuyệt!':'Awesome!','bài':'exercises','set':'sets','phút':'min','buổi tháng này':'this month','tuần liên tiếp':'week streak','Quá đỉnh!':'Crushed it!','Làm tốt lắm!':'Great job!','Thêm một buổi vào sổ!':'Another one in the books!','Kỷ luật là sức mạnh!':'Discipline wins!','Cơ bắp đang lớn lên!':'Muscles are growing!','Tháng này chưa có buổi nào. Tick xong các bài trong buổi để ghi vào sổ.':'No workouts this month yet. Finish all exercises in a workout to log it.','Sao lưu dữ liệu':'Back up data','Khôi phục':'Restore','Đăng nhập':'Log in','Tạo tài khoản':'Sign up','Đăng xuất':'Log out','Đồng bộ':'Sync','Tên đăng nhập':'Username','Mật khẩu':'Password','Nhập lại mật khẩu':'Confirm password','Đang lưu trên máy này':'Saved on this device only','Chỉ lưu trên máy này':'Saved on this device only','Tạo tài khoản & đồng bộ':'Sign up & sync','Đăng nhập & đồng bộ':'Log in & sync','Hoặc sao lưu ra file để chuyển máy mà không cần tài khoản.':'Or back up to a file to move devices without an account.','Chưa bật đồng bộ cloud':'Cloud sync off','Đồng bộ cloud đang bật':'Cloud sync on','Dữ liệu tập lưu riêng trên máy này. Đổi máy hoặc xoá trình duyệt thì sao lưu trước.':'Your training data is stored on this device only. Back it up before switching devices or clearing the browser.','Làm tối đa':'Max reps','Bước 3 · Tập cho đủ':'Step 3 · Finish the target','Set thử':'Test set','Bạn làm được bao nhiêu rep?':'How many reps did you get?','Xem bảng đầy đủ trong PDF':'See the full PDF table','Bài phụ (corrective)':'Corrective','Set này làm được:':'Reps this set:','Set này làm được (tới thất bại):':'Reps this set (to failure):','Tổng rep trong Stop Ladder':'Total Stop Ladder reps','Tập ở nhà':'Home mode','Set Ignitor':'Ignitor set','Tới thất bại':'To failure','Chưa nhập':'Not entered','Box Score':'Box Score','Corrective':'Corrective','Set tiếp theo (tới thất bại):':'Next set (to failure):','Set tiếp theo:':'Next set:','Stop Ladder: tổng số rep đã làm':'Stop Ladder: total reps done','✓ Đạt Box Score. Nghỉ 90 giây – 2 phút rồi sang bài tiếp theo.':'✓ Box Score reached. Rest 90 s – 2 min, then move on.','Buổi này không cần đổi bài':'No swaps needed today','Jacked Up · tạ quá nhẹ':'Jacked Up · too light','Just Right · vừa':'Just Right','Jacked Down · tạ quá nặng':'Jacked Down · too heavy','Hết giờ nghỉ!':'Rest over!','Vào set':'Go!','Không nghỉ':'No rest','Giữ màn hình sáng':'Keep screen on','Dừng':'Stop'
+  '+ tới thất bại':'+ to failure','Tháng này':'This month','buổi xong':'workouts done','bài đã tập':'exercises','ngày có tập':'training days','Đã tập':'Done','Tập dở':'Partial','Dự kiến':'Planned','Tuyệt!':'Awesome!','bài':'exercises','set':'sets','phút':'min','buổi tháng này':'this month','tuần liên tiếp':'week streak','Quá đỉnh!':'Crushed it!','Làm tốt lắm!':'Great job!','Thêm một buổi vào sổ!':'Another one in the books!','Kỷ luật là sức mạnh!':'Discipline wins!','Cơ bắp đang lớn lên!':'Muscles are growing!','Tháng này chưa có buổi nào. Tick xong các bài trong buổi để ghi vào sổ.':'No workouts this month yet. Finish all exercises in a workout to log it.','Sao lưu dữ liệu':'Back up data','Khôi phục':'Restore','Theo buổi trong tháng':'By workout this month','Không tập ngày này.':'No workout this day.','Không có buổi dự kiến.':'Nothing planned.','Mở ›':'Open ›','Đăng nhập để lưu lên cloud, dùng trên nhiều máy.':'Log in to save to the cloud and use on multiple devices.','Đăng nhập':'Log in','Tạo tài khoản':'Sign up','Đăng xuất':'Log out','Đồng bộ':'Sync','Tên đăng nhập':'Username','Mật khẩu':'Password','Nhập lại mật khẩu':'Confirm password','Đang lưu trên máy này':'Saved on this device only','Chỉ lưu trên máy này':'Saved on this device only','Tạo tài khoản & đồng bộ':'Sign up & sync','Đăng nhập & đồng bộ':'Log in & sync','Hoặc sao lưu ra file để chuyển máy mà không cần tài khoản.':'Or back up to a file to move devices without an account.','Chưa bật đồng bộ cloud':'Cloud sync off','Đồng bộ cloud đang bật':'Cloud sync on','Dữ liệu tập lưu riêng trên máy này. Đổi máy hoặc xoá trình duyệt thì sao lưu trước.':'Your training data is stored on this device only. Back it up before switching devices or clearing the browser.','Làm tối đa':'Max reps','Bước 3 · Tập cho đủ':'Step 3 · Finish the target','Set thử':'Test set','Bạn làm được bao nhiêu rep?':'How many reps did you get?','Xem bảng đầy đủ trong PDF':'See the full PDF table','Bài phụ (corrective)':'Corrective','Set này làm được:':'Reps this set:','Set này làm được (tới thất bại):':'Reps this set (to failure):','Tổng rep trong Stop Ladder':'Total Stop Ladder reps','Tập ở nhà':'Home mode','Set Ignitor':'Ignitor set','Tới thất bại':'To failure','Chưa nhập':'Not entered','Box Score':'Box Score','Corrective':'Corrective','Set tiếp theo (tới thất bại):':'Next set (to failure):','Set tiếp theo:':'Next set:','Stop Ladder: tổng số rep đã làm':'Stop Ladder: total reps done','✓ Đạt Box Score. Nghỉ 90 giây – 2 phút rồi sang bài tiếp theo.':'✓ Box Score reached. Rest 90 s – 2 min, then move on.','Buổi này không cần đổi bài':'No swaps needed today','Jacked Up · tạ quá nhẹ':'Jacked Up · too light','Just Right · vừa':'Just Right','Jacked Down · tạ quá nặng':'Jacked Down · too heavy','Hết giờ nghỉ!':'Rest over!','Vào set':'Go!','Không nghỉ':'No rest','Giữ màn hình sáng':'Keep screen on','Dừng':'Stop'
 };
 const ENRX = [
   [/^Hôm nay · Ngày (\d+)$/, 'Today · Day $1'], [/^Ngày (\d+)$/, 'Day $1'], [/^TUẦN (\d+)$/, 'WEEK $1'],
@@ -1525,7 +1551,7 @@ const ENRX = [
   [/^Buổi tiếp theo: (.+) · ngày (\d+)$/, 'Next workout: $1 · day $2'], [/^‹ Quay lại (.+)$/, '‹ Back to $1'],
   [/^Nghỉ (.+)$/, 'Rest $1'], [/^(\d+) set$/, '$1 sets'], [/^(.+) set · tạ nặng thì làm đủ$/, '$1 sets · do all when lifting heavy'],
   [/^(.+) set$/, '$1 sets'], [/^tạ · (.+)$/, 'of working weight · $1'], [/^W(\d+) \(tuỳ\)$/, 'W$1 (optional)'],
-  [/^Set cuối: (.+)$/, 'Last set: $1'], [/^Xong buổi · Ngày (\d+)$/, 'Workout done · Day $1'], [/^Lịch (.+)$/, '$1 schedule'], [/^(.+) · ngày (\d+)(.*)$/, '$1 · day $2$3'], [/^Chừa (.+) rep$/, 'Leave $1 in reserve'], [/^Set thử · (\d+)$/, 'Test set · $1'], [/^Set (\d+) · (\d+) ✕$/, 'Set $1 · $2 ✕'], [/^Thay cho (.+)$/, 'Replaces $1'], [/^Tập ở nhà · thay cho (.+)$/, 'Home · replaces $1'], [/^Ở nhà: (.+)$/, 'At home: $1'], [/^(\d+) bài đã đổi sang tạ đơn \/ không dụng cụ$/, '$1 exercises swapped to dumbbell / bodyweight'], [/^Ghi set(.*)$/, 'Log set$1'], [/^(\d+) điểm$/, '$1 pts'], [/^(\d+) rep$/, '$1 reps'], [/^(.+) rep$/, '$1 reps'], [/^Tháng (\d+), (\d+)$/, '$1/$2'], [/^Ngày bắt đầu · hiện tại (.+)$/, 'Start date · now $1'], [/^Tiếp (.+)$/, 'Next $1'], [/^(\d+) phút$/, '$1 min'], [/^SET (\d+)$/, 'SET $1'], [/^(\d+) bài$/, '$1 exercises'], [/^(\d+) ảnh$/, '$1 photos']
+  [/^Set cuối: (.+)$/, 'Last set: $1'], [/^Dự kiến · (.+)$/, 'Planned · $1'], [/^(Chủ nhật|Thứ \d), (\d+)\/(\d+)(.*)$/, '$2/$3$4'], [/^Xong buổi · Ngày (\d+)$/, 'Workout done · Day $1'], [/^Lịch (.+)$/, '$1 schedule'], [/^(.+) · ngày (\d+)(.*)$/, '$1 · day $2$3'], [/^Chừa (.+) rep$/, 'Leave $1 in reserve'], [/^Set thử · (\d+)$/, 'Test set · $1'], [/^Set (\d+) · (\d+) ✕$/, 'Set $1 · $2 ✕'], [/^Thay cho (.+)$/, 'Replaces $1'], [/^Tập ở nhà · thay cho (.+)$/, 'Home · replaces $1'], [/^Ở nhà: (.+)$/, 'At home: $1'], [/^(\d+) bài đã đổi sang tạ đơn \/ không dụng cụ$/, '$1 exercises swapped to dumbbell / bodyweight'], [/^Ghi set(.*)$/, 'Log set$1'], [/^(\d+) điểm$/, '$1 pts'], [/^(\d+) rep$/, '$1 reps'], [/^(.+) rep$/, '$1 reps'], [/^Tháng (\d+), (\d+)$/, '$1/$2'], [/^Ngày bắt đầu · hiện tại (.+)$/, 'Start date · now $1'], [/^Tiếp (.+)$/, 'Next $1'], [/^(\d+) phút$/, '$1 min'], [/^SET (\d+)$/, 'SET $1'], [/^(\d+) bài$/, '$1 exercises'], [/^(\d+) ảnh$/, '$1 photos']
 ];
 function trNode(n){
   const t = n.nodeValue, k = t.trim(); if(!k || k.length > 400) return;
