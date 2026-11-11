@@ -1150,7 +1150,7 @@ function setsDone(p, n, w){
     if(Array.isArray(st)) c += st.filter(Boolean).length; else if(st) c += (st.s||[]).length + (st.ig ? 1 : 0); });
   return c;
 }
-function celebrate(p, n, w, e){
+function celebrate(p, n, w, e, part){
   const L = getLog(), now = new Date(), ym = isoDay(now).slice(0,7);
   const month = Object.values(L).filter(x => x.d.slice(0,7) === ym && x.k >= x.of).length;
   const days = new Set(Object.values(L).filter(x => x.k >= x.of).map(x => x.d)); let streakW = 0;
@@ -1160,8 +1160,8 @@ function celebrate(p, n, w, e){
   const msgs = ['Quá đỉnh!','Làm tốt lắm!','Thêm một buổi vào sổ!','Kỷ luật là sức mạnh!','Cơ bắp đang lớn lên!'];
   const ov = document.createElement('div'); ov.className = 'cele';
   ov.innerHTML = `<canvas></canvas><div class="cbox" role="dialog" aria-label="Xong buổi tập">
-    <div class="cbadge">✓</div><div class="eyebrow">Xong buổi · Ngày ${n}</div><h2>${esc(w.title)}</h2><p class="cmsg">${msgs[Math.floor(Math.random()*msgs.length)]}</p>
-    <div class="cstats"><div><b>${w.items.length}</b><span>bài</span></div>${sets ? `<div><b>${sets}</b><span>set</span></div>` : ''}${mins > 0 && mins < 240 ? `<div><b>${mins}</b><span>phút</span></div>` : ''}<div><b>${month}</b><span>buổi tháng này</span></div>${streakW > 1 ? `<div><b>${streakW}</b><span>tuần liên tiếp</span></div>` : ''}</div>
+    <div class="cbadge">✓</div><div class="eyebrow">${part ? 'Kết thúc buổi' : 'Xong buổi'} · Ngày ${n}</div><h2>${esc(w.title)}</h2><p class="cmsg">${msgs[Math.floor(Math.random()*msgs.length)]}</p>
+    <div class="cstats"><div><b>${part ? part : w.items.length}</b><span>bài</span></div>${sets ? `<div><b>${sets}</b><span>set</span></div>` : ''}${mins > 0 && mins < 240 ? `<div><b>${mins}</b><span>phút</span></div>` : ''}<div><b>${month}</b><span>buổi tháng này</span></div>${streakW > 1 ? `<div><b>${streakW}</b><span>tuần liên tiếp</span></div>` : ''}</div>
     ${(() => { const nb = newBadges(); return nb.length ? `<div class="cnew"><div class="mdh">Huy hiệu mới</div>${nb.map(id => { const b = BADGES.find(x => x[0]===id); return `<span class="bdg on"><span class="bi">${b[1]}</span><b>${esc(b[2])}</b></span>`; }).join('')}</div>` : ''; })()}
     <button class="btn" id="cok">Tuyệt!</button></div>`;
   document.body.appendChild(ov);
@@ -2008,7 +2008,10 @@ function endWorkout(){
   const c = wkSets(p, n, w), t = wkElapsed(p, n), L = getLog(), k = p.id+'|'+n;
   if(L[k] && !L[k].t1){ L[k].t1 = Date.now(); store.set('log', JSON.stringify(L)); sbLogRow(k, L[k]); }
   if(RT) stopRest(); closeSheet();
-  if(c.d) toast(`<b>Kết thúc buổi tập</b><span>${t ? t + ' · ' : ''}${c.d}/${c.t} set</span>`);
+  const nd = getDone(p, n).size;
+  if(c.d && nd < w.items.length){ const t0 = (L[k] && L[k].t0) || +(store.get('wst-'+p.id+'-'+n)) || 0;
+    setTimeout(() => celebrate(p, n, w, {t0, t1: Date.now()}, `${nd}/${w.items.length}`), 380); }
+  else if(c.d) toast(`<b>Kết thúc buổi tập</b><span>${t ? t + ' · ' : ''}${c.d}/${c.t} set</span>`);
 }
 function renderSheet(){
   const p = prog(), n = curDay(p), w = p.workouts[p.sched[n-1].w], it = w.items[CUR], done = getDone(p,n);
@@ -2104,7 +2107,7 @@ function setAnim(){
 /* ---------- EN mode: dịch toàn bộ chữ giao diện (tên bài giữ nguyên) ---------- */
 const EN = {
   'Kết thúc':'End','Bắt đầu buổi tập':'Start workout','Tiếp tục':'Continue','Kết thúc buổi tập':'Workout ended',
-  'Tiến bộ':'Progress','Tài khoản & cài đặt':'Account & settings','Ngôn ngữ':'Language','Nhập set':'Set entry','Chi tiết = ghi tạ và rep từng set':'Detail = log weight and reps per set','Giữ màn hình sáng':'Keep screen on','Khi đang ở trang Hôm nay':'While on the Today page','Bảng xếp hạng tháng':'Monthly leaderboard','Huy hiệu':'Badges','Chỉ số cơ thể':'Body metrics','+ Nhập':'+ Add','Ghi cân nặng & mỡ cơ thể':'Log weight & body fat','Cân nặng và % mỡ. Lâu lâu đo thì nhập, web vẽ biểu đồ.':'Weight and body fat %. Add whenever you measure; the app draws the chart.','Mỡ cơ thể':'Body fat','Cân nặng (kg)':'Weight (kg)','Nhập cân nặng hoặc mỡ cơ thể.':'Enter weight or body fat.','Nhập cân nặng để đổi kg mỡ ra %.':'Enter weight to convert fat kg to %.','Cân nặng, % mỡ, cơ xương, mỡ nội tạng. Lâu lâu đo thì nhập, web vẽ biểu đồ.':'Weight, body fat %, muscle mass, visceral fat. Add whenever you measure; the app draws the chart.','Cân nặng':'Weight','Mỡ':'Body fat','Cơ xương':'Muscle','Mỡ nội tạng':'Visceral fat','Ngày đo':'Date','Chỉ cần nhập ô nào có số, ô khác để trống.':'Fill only the values you have.','Xoá lần đo này':'Delete this entry','Nhập ít nhất một chỉ số.':'Enter at least one value.','Đã lưu chỉ số':'Saved','đến lúc đo lại':'time to measure again','Chỉ xem huy hiệu đã có':'Show earned only','Chưa có huy hiệu nào. Xong buổi đầu tiên để nhận huy hiệu đầu.':'No badges yet. Finish your first workout to earn one.','buổi xong ·':'workouts ·','ngày có tập':'training days',
+  'Tiến bộ':'Progress','Tài khoản & cài đặt':'Account & settings','Ngôn ngữ':'Language','Nhập set':'Set entry','Chi tiết = ghi tạ và rep từng set':'Detail = log weight and reps per set','Giữ màn hình sáng':'Keep screen on','Khi đang ở trang Hôm nay':'While on the Today page','Bảng xếp hạng tháng':'Monthly leaderboard','Huy hiệu':'Badges','Kết thúc buổi':'Workout ended','Chỉ số cơ thể':'Body metrics','+ Nhập':'+ Add','Ghi cân nặng & mỡ cơ thể':'Log weight & body fat','Cân nặng và % mỡ. Lâu lâu đo thì nhập, web vẽ biểu đồ.':'Weight and body fat %. Add whenever you measure; the app draws the chart.','Mỡ cơ thể':'Body fat','Cân nặng (kg)':'Weight (kg)','Nhập cân nặng hoặc mỡ cơ thể.':'Enter weight or body fat.','Nhập cân nặng để đổi kg mỡ ra %.':'Enter weight to convert fat kg to %.','Cân nặng, % mỡ, cơ xương, mỡ nội tạng. Lâu lâu đo thì nhập, web vẽ biểu đồ.':'Weight, body fat %, muscle mass, visceral fat. Add whenever you measure; the app draws the chart.','Cân nặng':'Weight','Mỡ':'Body fat','Cơ xương':'Muscle','Mỡ nội tạng':'Visceral fat','Ngày đo':'Date','Chỉ cần nhập ô nào có số, ô khác để trống.':'Fill only the values you have.','Xoá lần đo này':'Delete this entry','Nhập ít nhất một chỉ số.':'Enter at least one value.','Đã lưu chỉ số':'Saved','đến lúc đo lại':'time to measure again','Chỉ xem huy hiệu đã có':'Show earned only','Chưa có huy hiệu nào. Xong buổi đầu tiên để nhận huy hiệu đầu.':'No badges yet. Finish your first workout to earn one.','buổi xong ·':'workouts ·','ngày có tập':'training days',
   'Đơn giản':'Simple','Chi tiết':'Detail',
   'Mục tiêu':'Target','Kg':'Kg','Rep':'Reps','Set':'Set','TB':'FAIL','tăng tạ':'add weight','Hết giờ nghỉ!':'Rest over!','Vào set':'Go','Số mờ là gợi ý. Tập đúng thì bấm':'Grey numbers are suggestions. Matched them? Tap','Tập xong set nào bấm':'After each set tap','set đó, web tự đếm giờ nghỉ.':'for it, the rest timer starts.',', khác thì sửa số rồi bấm ✓.':', otherwise edit the numbers then tap ✓.','tối đa':'max',
   'Đồng bộ cloud đang bật':'Cloud sync on','Chỉ lưu trên máy này':'Saved on this device only','Khởi động':'Warm-up','Tạ thêm (kg)':'Added weight (kg)','Tạ (kg)':'Weight (kg)','Lưu':'Save','Bỏ tick set này':'Untick this set','Đang sửa set đã xong':'Editing a finished set','xong':'done',
