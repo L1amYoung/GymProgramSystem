@@ -1143,7 +1143,6 @@ function openSettings(){
       <div class="sgrp">
         ${tg(`<div class="lmode"><button data-sl="vi" aria-selected="${LANG==='vi'}">Tiếng Việt</button><button data-sl="en" aria-selected="${LANG==='en'}">English</button></div>`, 0, 'Ngôn ngữ')}
         ${tg(`<div class="lmode"><button data-sm="0" aria-selected="${!LOGW()}">Đơn giản</button><button data-sm="1" aria-selected="${LOGW()}">Chi tiết</button></div>`, 0, 'Nhập set', 'Chi tiết = ghi tạ và rep từng set')}
-        ${tg(`<div class="lmode"><button data-ks="0" aria-selected="${store.get('kgside') !== '1'}">Tổng</button><button data-ks="1" aria-selected="${store.get('kgside') === '1'}">Mỗi bên</button></div>`, 0, 'Tạ đòn ghi theo', 'Mỗi bên = số bánh 1 bên, web tự cộng đòn 20kg')}
         ${tg('<span class="gch">›</span>', 0, '<a class="gdl" href="guide.html">📖 Hướng dẫn sử dụng</a>', 'Cách dùng toàn bộ app, có ảnh minh hoạ')}
         ${WLOK ? tg(`<label class="lwt"><input type="checkbox" id="swk" ${WAKE ? 'checked' : ''}><span></span></label>`, 0, 'Giữ màn hình sáng', 'Khi đang ở trang Hôm nay') : ''}
       </div></div>`;
