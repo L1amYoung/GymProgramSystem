@@ -682,6 +682,13 @@ html{touch-action:manipulation;scroll-behavior:auto!important}
 .pcap{margin:6px 0 0;font-size:12.5px;color:var(--sub);font-weight:600}
 .wkp{margin-top:0}
 /* ---- huy hiệu ---- */
+.bnext{display:grid;gap:6px;margin:4px 0 10px;padding:10px 12px;border:1px solid var(--line);border-radius:14px;background:var(--card)}
+.bnh{font-size:11.5px;font-weight:800;color:var(--sub);text-transform:uppercase;letter-spacing:.04em}
+.bnx{display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:10px}
+.bnx .bi{font-size:22px} .bnt{display:grid;gap:5px;min-width:0} .bnt b{font-size:13.5px}
+.bnx em{font-style:normal;font-size:12px;font-weight:800;color:var(--acc2);white-space:nowrap}
+.bpb{display:block;width:100%;height:5px;border-radius:9px;background:var(--line);overflow:hidden} .bpb u{display:block;height:100%;border-radius:9px;background:linear-gradient(90deg,var(--acc),var(--acc2))}
+.bdg .bpb{width:80%;height:4px;margin-top:4px}
 .bgrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
 .bdg{display:grid;justify-items:center;gap:2px;text-align:center;padding:10px 6px;border:1px solid var(--line);border-radius:12px;background:var(--card);opacity:.45;filter:grayscale(1)}
 .bdg.on{opacity:1;filter:none;border-color:rgba(245,165,36,.5)}
@@ -915,32 +922,55 @@ function openBulk(p){
 }
 
 /* ---------- huy hiệu ---------- */
-const BADGES = [
-  ['b1','🎯','Buổi đầu tiên','Xong 1 buổi', s => s.total >= 1],
-  ['b10','💪','10 buổi','Xong 10 buổi', s => s.total >= 10],
-  ['b25','🔥','25 buổi','Xong 25 buổi', s => s.total >= 25],
-  ['b50','⚡','50 buổi','Xong 50 buổi', s => s.total >= 50],
-  ['b100','🏅','100 buổi','Xong 100 buổi', s => s.total >= 100],
-  ['b200','👑','200 buổi','Xong 200 buổi', s => s.total >= 200],
-  ['w2','📅','2 tuần liền','Tuần nào cũng tập, 2 tuần liên tiếp', s => s.streak >= 2],
-  ['w4','🗓️','4 tuần liền','Tập đều 4 tuần liên tiếp', s => s.streak >= 4],
-  ['w8','🚀','8 tuần liền','Tập đều 8 tuần liên tiếp', s => s.streak >= 8],
-  ['w12','💎','12 tuần liền','Tập đều 12 tuần liên tiếp', s => s.streak >= 12],
-  ['m12','📈','Tháng chăm','12 buổi trong 1 tháng', s => s.maxMonth >= 12],
-  ['m20','🏆','Tháng thép','20 buổi trong 1 tháng', s => s.maxMonth >= 20],
-  ['pr1','🥇','Kỷ lục đầu tiên','Phá kỷ lục 1 bài', s => s.prs >= 1],
-  ['pr10','🎖️','10 kỷ lục','Phá kỷ lục 10 lần', s => s.prs >= 10],
-  ['kg100','🏋️','Ghi chép chăm','Ghi tạ cho 100 set', s => s.logged >= 100],
+const BADGES = [  // [id, icon, tên, mô tả, s => giá trị hiện tại, mục tiêu, đơn vị]
+  ['b1','🎯','Buổi đầu tiên','Xong 1 buổi', s => s.total, 1, 'buổi'],
+  ['b10','💪','10 buổi','Xong 10 buổi', s => s.total, 10, 'buổi'],
+  ['b25','🔥','25 buổi','Xong 25 buổi', s => s.total, 25, 'buổi'],
+  ['b50','⚡','50 buổi','Xong 50 buổi', s => s.total, 50, 'buổi'],
+  ['b100','🏅','100 buổi','Xong 100 buổi', s => s.total, 100, 'buổi'],
+  ['b200','👑','200 buổi','Xong 200 buổi', s => s.total, 200, 'buổi'],
+  ['w2','📅','2 tuần liền','Tuần nào cũng tập, 2 tuần liên tiếp', s => s.streak, 2, 'tuần'],
+  ['w4','🗓️','4 tuần liền','Tập đều 4 tuần liên tiếp', s => s.streak, 4, 'tuần'],
+  ['w8','🚀','8 tuần liền','Tập đều 8 tuần liên tiếp', s => s.streak, 8, 'tuần'],
+  ['w12','💎','12 tuần liền','Tập đều 12 tuần liên tiếp', s => s.streak, 12, 'tuần'],
+  ['m12','📈','Tháng chăm','12 buổi trong 1 tháng', s => s.maxMonth, 12, 'buổi trong tháng'],
+  ['m20','🏆','Tháng thép','20 buổi trong 1 tháng', s => s.maxMonth, 20, 'buổi trong tháng'],
+  ['pr1','🥇','Kỷ lục đầu tiên','Phá kỷ lục 1 bài', s => s.prs, 1, 'kỷ lục'],
+  ['pr10','🎖️','10 kỷ lục','Phá kỷ lục 10 lần', s => s.prs, 10, 'kỷ lục'],
+  ['kg100','🏋️','Ghi chép chăm','Ghi tạ cho 100 set', s => s.logged, 100, 'set'],
+  ['bp100','🛋️','Bench 100kg','Đẩy ngực tạ đòn 100kg', s => s.bench, 100, 'kg'],
+  ['sq140','🦵','Squat 140kg','Squat 140kg', s => s.squat, 140, 'kg'],
+  ['dl180','⛓️','Deadlift 180kg','Deadlift 180kg', s => s.dead, 180, 'kg'],
+  ['v10','📦','10 tấn','Tổng khối lượng 10 tấn (kg × rep)', s => s.vol, 10, 'tấn'],
+  ['v100','🚛','100 tấn','Tổng khối lượng 100 tấn', s => s.vol, 100, 'tấn'],
+  ['v1000','🏗️','1.000 tấn','Tổng khối lượng 1.000 tấn', s => s.vol, 1000, 'tấn'],
+  ['bd1','⚖️','Lần đo đầu tiên','Ghi chỉ số cơ thể lần đầu', s => s.bodyN, 1, 'lần đo'],
+  ['bf2','🔻','Giảm 2% mỡ','Mỡ cơ thể giảm 2% so với lần đo đầu', s => s.fatDrop, 2, '%'],
 ];
+const BXRE = {bench: [/bench press|incline press/i, /\bdb\b|dumbbell/i], squat: [/squat/i, /\bdb\b|goblet|split|bulgarian|sissy|pistol|reach|bodyweight|sumo/i], dead: [/deadlift|\brdl\b/i, /\bdb\b|dumbbell/i]};
 function badgeStats(){
   const L = Object.values(getLog()).filter(e => e.k >= e.of && e.of > 0), days = new Set(L.map(e => e.d));
   const mon = {}; L.forEach(e => { const m = e.d.slice(0,7); mon[m] = (mon[m]||0) + 1; });
   const wk = new Set([...days].map(d => { const t = new Date(d+'T00:00:00'); t.setDate(t.getDate() - (t.getDay()+6)%7); return isoDay(t); }));
   let streak = 0, run = 0; [...wk].sort().forEach((w, i, a) => { if(i && (new Date(w) - new Date(a[i-1]))/864e5 === 7) run++; else run = 1; streak = Math.max(streak, run); });
-  let logged = 0; try{ for(let i=0;i<localStorage.length;i++){ const k = localStorage.key(i); if(!/^sets-/.test(k)) continue; Object.entries(getJ(k, {})).forEach(([ix, arr]) => { if(+ix < 1000 && Array.isArray(arr)) logged += arr.filter(x => setObj(x) && setObj(x).r).length; }); } }catch(e){}
-  return {total: L.length, streak, maxMonth: Math.max(0, ...Object.values(mon)), prs: getJ('prlog', []).length, logged};
+  let logged = 0, vol = 0; const top = {bench: 0, squat: 0, dead: 0};
+  try{ for(let i=0;i<localStorage.length;i++){ const k = localStorage.key(i), m = k && k.match(/^sets-(.+)-(\d+)$/); if(!m) continue;
+    const pg = P.find(x => x.id === m[1]), d = pg && pg.sched[+m[2]-1], w = d && d.w && pg.workouts[d.w];
+    Object.entries(getJ(k, {})).forEach(([ix, arr]) => { if(+ix >= 1000 || !Array.isArray(arr)) return; const nm = w && w.items[+ix] ? w.items[+ix].name : '';
+      arr.forEach(x => { const o = setObj(x); if(!o || !o.r) return; logged++; if(o.w > 0){ vol += o.w * o.r;
+        for(const g in BXRE) if(BXRE[g][0].test(nm) && !BXRE[g][1].test(nm)) top[g] = Math.max(top[g], o.w); } }); }); } }catch(e){}
+  const B = bodyList().filter(e => e.pbf != null), f0 = B.length ? B[0].pbf : 0;
+  return {total: L.length, streak, maxMonth: Math.max(0, ...Object.values(mon)), prs: getJ('prlog', []).length, logged,
+    vol: Math.floor(vol / 100) / 10, bench: top.bench, squat: top.squat, dead: top.dead,
+    bodyN: bodyList().length, fatDrop: B.length > 1 ? Math.max(0, Math.round((f0 - Math.min(...B.slice(1).map(e => e.pbf))) * 10) / 10) : 0};
 }
-const earnedBadges = () => { const st = badgeStats(); return BADGES.filter(b => b[4](st)).map(b => b[0]); };
+const earnedBadges = () => { const st = badgeStats(); return BADGES.filter(b => b[4](st) >= b[5]).map(b => b[0]); };
+/* các huy hiệu chưa có, gần đạt nhất trước */
+function badgeNext(st, nmax){
+  return BADGES.map(b => ({b, c: b[4](st) || 0})).filter(x => x.c < x.b[5]).map(x => Object.assign(x, {r: x.c / x.b[5]}))
+    .sort((a, b) => b.r - a.r || a.b[5] - b.b[5]).filter((x, i, a) => !a.slice(0, i).some(y => String(y.b[4]) === String(x.b[4]))).slice(0, nmax || 3);
+}
+const bRem = x => `còn ${nfmt(Math.round((x.b[5] - x.c) * 10) / 10)} ${x.b[6]}`;
 function newBadges(){ const seen = new Set(getJ('badges', [])), got = earnedBadges(), nw = got.filter(x => !seen.has(x)); if(nw.length) store.set('badges', JSON.stringify([...seen, ...nw])); return nw; }
 function badgesHtml(){
   const got = new Set(earnedBadges());
@@ -1510,10 +1540,12 @@ function renderStats(){
   h += `<div class="sec"><div class="mdh">Bảng xếp hạng tháng</div>${renderBoard(true)}</div>`;
   const wk = weeksHtml(); if(wk) h += `<div class="sec">${wk}</div>`;
   h += bodyHtml();
-  const got = new Set(earnedBadges());
+  const got = new Set(earnedBadges()), bst = badgeStats();
   h += `<div class="sec"><div class="bhd"><div class="mdh">Huy hiệu</div><span>${got.size}/${BADGES.length}</span></div>`;
+  const nx = badgeNext(bst, 3);
+  if(nx.length) h += `<div class="bnext"><div class="bnh">Sắp đạt</div>${nx.map(x => `<div class="bnx"><span class="bi">${x.b[1]}</span><div class="bnt"><b>${esc(x.b[2])}</b><span class="bpb"><u style="width:${Math.max(3, Math.round(x.r * 100))}%"></u></span></div><em>${esc(bRem(x))}</em></div>`).join('')}</div>`;
   const shown = BADGEALL ? BADGES : BADGES.filter(b => got.has(b[0]));
-  h += shown.length ? `<div class="bgrid">${shown.map(([id, ic, nm, ds]) => `<div class="bdg ${got.has(id) ? 'on' : ''}" title="${esc(ds)}"><span class="bi">${ic}</span><b>${esc(nm)}</b><small>${esc(ds)}</small></div>`).join('')}</div>` : '<p class="none">Chưa có huy hiệu nào. Xong buổi đầu tiên để nhận huy hiệu đầu.</p>';
+  h += shown.length ? `<div class="bgrid">${shown.map(([id, ic, nm, ds]) => `<div class="bdg ${got.has(id) ? 'on' : ''}" title="${esc(ds)}"><span class="bi">${ic}</span><b>${esc(nm)}</b><small>${esc(ds)}</small>${got.has(id) ? '' : (() => { const b = BADGES.find(x => x[0] === id), c = b[4](bst) || 0; return `<span class="bpb"><u style="width:${Math.round(Math.min(1, c / b[5]) * 100)}%"></u></span>`; })()}</div>`).join('')}</div>` : '<p class="none">Chưa có huy hiệu nào. Xong buổi đầu tiên để nhận huy hiệu đầu.</p>';
   h += `<button class="qsw" id="ball">${BADGEALL ? 'Chỉ xem huy hiệu đã có' : `Xem tất cả ${BADGES.length} huy hiệu ›`}</button></div>`;
   main.innerHTML = h; setAnim();
   bindAcct(); bindBody(main);
@@ -2110,7 +2142,7 @@ function setAnim(){
 /* ---------- EN mode: dịch toàn bộ chữ giao diện (tên bài giữ nguyên) ---------- */
 const EN = {
   'Kết thúc':'End','Bắt đầu buổi tập':'Start workout','Tiếp tục':'Continue','Kết thúc buổi tập':'Workout ended',
-  'Tiến bộ':'Progress','Tài khoản & cài đặt':'Account & settings','Ngôn ngữ':'Language','Nhập set':'Set entry','Chi tiết = ghi tạ và rep từng set':'Detail = log weight and reps per set','Giữ màn hình sáng':'Keep screen on','Khi đang ở trang Hôm nay':'While on the Today page','Bảng xếp hạng tháng':'Monthly leaderboard','Huy hiệu':'Badges','Kết thúc buổi':'Workout ended','Chỉ số cơ thể':'Body metrics','+ Nhập':'+ Add','Ghi cân nặng & mỡ cơ thể':'Log weight & body fat','Cân nặng và % mỡ. Lâu lâu đo thì nhập, web vẽ biểu đồ.':'Weight and body fat %. Add whenever you measure; the app draws the chart.','Mỡ cơ thể':'Body fat','Cân nặng (kg)':'Weight (kg)','Nhập cân nặng hoặc mỡ cơ thể.':'Enter weight or body fat.','Nhập cân nặng để đổi kg mỡ ra %.':'Enter weight to convert fat kg to %.','Cân nặng, % mỡ, cơ xương, mỡ nội tạng. Lâu lâu đo thì nhập, web vẽ biểu đồ.':'Weight, body fat %, muscle mass, visceral fat. Add whenever you measure; the app draws the chart.','Cân nặng':'Weight','Mỡ':'Body fat','Cơ xương':'Muscle','Mỡ nội tạng':'Visceral fat','Ngày đo':'Date','Chỉ cần nhập ô nào có số, ô khác để trống.':'Fill only the values you have.','Xoá lần đo này':'Delete this entry','Nhập ít nhất một chỉ số.':'Enter at least one value.','Đã lưu chỉ số':'Saved','đến lúc đo lại':'time to measure again','Chỉ xem huy hiệu đã có':'Show earned only','Chưa có huy hiệu nào. Xong buổi đầu tiên để nhận huy hiệu đầu.':'No badges yet. Finish your first workout to earn one.','buổi xong ·':'workouts ·','ngày có tập':'training days',
+  'Tiến bộ':'Progress','Tài khoản & cài đặt':'Account & settings','Ngôn ngữ':'Language','Nhập set':'Set entry','Chi tiết = ghi tạ và rep từng set':'Detail = log weight and reps per set','Giữ màn hình sáng':'Keep screen on','Khi đang ở trang Hôm nay':'While on the Today page','Bảng xếp hạng tháng':'Monthly leaderboard','Huy hiệu':'Badges','Sắp đạt':'Almost there','Đẩy ngực tạ đòn 100kg':'Barbell bench 100kg','Tổng khối lượng 10 tấn (kg × rep)':'Total volume 10 t (kg × reps)','Tổng khối lượng 100 tấn':'Total volume 100 t','Tổng khối lượng 1.000 tấn':'Total volume 1,000 t','Lần đo đầu tiên':'First measurement','Ghi chỉ số cơ thể lần đầu':'Log body metrics once','Giảm 2% mỡ':'Lose 2% body fat','Mỡ cơ thể giảm 2% so với lần đo đầu':'Body fat down 2% from first measurement','10 tấn':'10 tonnes','100 tấn':'100 tonnes','1.000 tấn':'1,000 tonnes','Kết thúc buổi':'Workout ended','Chỉ số cơ thể':'Body metrics','+ Nhập':'+ Add','Ghi cân nặng & mỡ cơ thể':'Log weight & body fat','Cân nặng và % mỡ. Lâu lâu đo thì nhập, web vẽ biểu đồ.':'Weight and body fat %. Add whenever you measure; the app draws the chart.','Mỡ cơ thể':'Body fat','Cân nặng (kg)':'Weight (kg)','Nhập cân nặng hoặc mỡ cơ thể.':'Enter weight or body fat.','Nhập cân nặng để đổi kg mỡ ra %.':'Enter weight to convert fat kg to %.','Cân nặng, % mỡ, cơ xương, mỡ nội tạng. Lâu lâu đo thì nhập, web vẽ biểu đồ.':'Weight, body fat %, muscle mass, visceral fat. Add whenever you measure; the app draws the chart.','Cân nặng':'Weight','Mỡ':'Body fat','Cơ xương':'Muscle','Mỡ nội tạng':'Visceral fat','Ngày đo':'Date','Chỉ cần nhập ô nào có số, ô khác để trống.':'Fill only the values you have.','Xoá lần đo này':'Delete this entry','Nhập ít nhất một chỉ số.':'Enter at least one value.','Đã lưu chỉ số':'Saved','đến lúc đo lại':'time to measure again','Chỉ xem huy hiệu đã có':'Show earned only','Chưa có huy hiệu nào. Xong buổi đầu tiên để nhận huy hiệu đầu.':'No badges yet. Finish your first workout to earn one.','buổi xong ·':'workouts ·','ngày có tập':'training days',
   'Đơn giản':'Simple','Chi tiết':'Detail',
   'Mục tiêu':'Target','Kg':'Kg','Rep':'Reps','Set':'Set','TB':'FAIL','tăng tạ':'add weight','Hết giờ nghỉ!':'Rest over!','Vào set':'Go','Số mờ là gợi ý. Tập đúng thì bấm':'Grey numbers are suggestions. Matched them? Tap','Tập xong set nào bấm':'After each set tap','set đó, web tự đếm giờ nghỉ.':'for it, the rest timer starts.',', khác thì sửa số rồi bấm ✓.':', otherwise edit the numbers then tap ✓.','tối đa':'max',
   'Đồng bộ cloud đang bật':'Cloud sync on','Chỉ lưu trên máy này':'Saved on this device only','Khởi động':'Warm-up','Tạ thêm (kg)':'Added weight (kg)','Tạ (kg)':'Weight (kg)','Lưu':'Save','Bỏ tick set này':'Untick this set','Đang sửa set đã xong':'Editing a finished set','xong':'done',
