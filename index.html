@@ -762,7 +762,7 @@ html{touch-action:manipulation;scroll-behavior:auto!important}
 .lmode button[aria-selected="true"]{background:var(--card);color:var(--ink);box-shadow:0 1px 0 var(--line)}
 .wtop{position:relative} .wtop .pos{display:flex;align-items:center;gap:8px;color:var(--ink);font-size:15px}
 .wtop #wtime{font-variant-numeric:tabular-nums;font-size:17px;font-weight:900;min-width:44px} .wtop #wtime.idle{color:var(--faint)}
-.wtop .wsep{width:1px;height:18px;background:var(--line)} .wtop #wsets{font-weight:800}
+.wtop .wsep{width:1px;height:18px;background:var(--line)} .wtop #wsets{font-weight:900;font-size:16px}
 .wtop .pos small{font-size:12px;color:var(--sub);font-weight:700;margin-left:4px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .wend{flex:none;height:36px;padding:0 14px;border-radius:999px;border:1px solid var(--line);background:var(--card);color:var(--ink);font-size:13px;font-weight:800}
 .wtrk{position:absolute;left:0;right:0;bottom:-1px;height:3px;background:var(--line)} .wtrk i{display:block;height:100%;background:var(--acc);transition:width .4s}
@@ -2000,10 +2000,8 @@ function wkElapsed(p, n){
   return (h ? h + ':' + String(m).padStart(2,'0') : m) + ':' + String(sec).padStart(2,'0');
 }
 function wkBar(){
-  if(sheet.hidden) return; const el = document.getElementById('wtime'); if(!el) return;
-  const p = prog(), n = curDay(p), d = p.sched[n-1], w = d && d.w && p.workouts[d.w]; if(!w) return;
-  const t = wkElapsed(p, n), c = wkSets(p, n, w);
-  el.textContent = t || '0:00'; el.classList.toggle('idle', !t);
+  if(sheet.hidden) return; const p = prog(), n = curDay(p), d = p.sched[n-1], w = d && d.w && p.workouts[d.w]; if(!w) return;
+  const c = wkSets(p, n, w);
   const sc = document.getElementById('wsets'); if(sc) sc.textContent = `Set ${c.d}/${c.t}`;
   const br = document.getElementById('wbar'); if(br) br.style.width = (c.t ? c.d / c.t * 100 : 0) + '%';
 }
@@ -2016,7 +2014,7 @@ function endWorkout(){
   const nd = getDone(p, n).size;
   if(c.d && nd < w.items.length){ const t0 = (L[k] && L[k].t0) || +(store.get('wst-'+p.id+'-'+n)) || 0;
     setTimeout(() => celebrate(p, n, w, {t0, t1: Date.now()}, `${nd}/${w.items.length}`), 380); }
-  else if(c.d) toast(`<b>Kết thúc buổi tập</b><span>${t ? t + ' · ' : ''}${c.d}/${c.t} set</span>`);
+  else if(c.d) toast(`<b>Kết thúc buổi tập</b><span>${c.d}/${c.t} set</span>`);
 }
 function renderSheet(){
   const p = prog(), n = curDay(p), w = p.workouts[p.sched[n-1].w], it = w.items[CUR], done = getDone(p,n);
@@ -2036,7 +2034,7 @@ function renderSheet(){
   }
   const dots = w.items.length <= 14 ? `<span class="dots">${w.items.map((_,k)=>`<i class="${k===CUR?'c':done.has(k)?'d':''}"></i>`).join('')}</span>` : '';
   const wc = wkSets(p, n, w), wt = wkElapsed(p, n);
-  const html = `<div class="sh-top wtop"><button class="x" id="shx" aria-label="Đóng">✕</button><span class="pos"><b id="wtime" class="${wt ? '' : 'idle'}">${wt || '0:00'}</b><i class="wsep"></i><span id="wsets">Set ${wc.d}/${wc.t}</span><small>${esc(it.s)} · ${CUR+1}/${w.items.length}</small></span><button class="wend" id="wend">Kết thúc</button><span class="wtrk"><i id="wbar" style="width:${wc.t ? wc.d / wc.t * 100 : 0}%"></i></span></div>
+  const html = `<div class="sh-top wtop"><button class="x" id="shx" aria-label="Đóng">✕</button><span class="pos"><span id="wsets">Set ${wc.d}/${wc.t}</span><small>${esc(it.s)} · ${CUR+1}/${w.items.length}</small></span><button class="wend" id="wend">Kết thúc</button><span class="wtrk"><i id="wbar" style="width:${wc.t ? wc.d / wc.t * 100 : 0}%"></i></span></div>
     <div class="sh-body" id="shb"><div class="wrap${SDIR && !RM && !(VT && SDIR==='fade') ? ' anim-'+SDIR : ''}">${body}</div></div>
     <div class="sh-foot"><button id="prv" ${CUR<=0?'disabled':''}>‹ Trước</button><button class="done" id="dn" aria-pressed="${done.has(CUR)}">${done.has(CUR)?'✓ Đã xong':'Xong bài'}</button><button id="nxt" ${CUR>=w.items.length-1?'disabled':''}>${!SWV && it.k && w.items[CUR+1] && w.items[CUR+1].s[0]===it.s[0] ? 'Tiếp: '+esc(w.items[CUR+1].s)+' ›' : 'Tiếp ›'}</button></div>`;
   const bind = () => {
