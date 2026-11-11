@@ -1,0 +1,300 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0b0b0c">
+<title>Hướng dẫn sử dụng · Liam Training Log</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="img/icons/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="192x192" href="img/icons/icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;600;700;800&display=swap">
+<style>
+:root{--bg:#0b0b0c;--card:#151517;--card2:#1e1e21;--line:#2a2a2f;--ink:#f4f4f6;--sub:#a3a3ab;--faint:#6c6c74;--acc:#8b5cf6;--acc2:#b9a1ff;--ok:#3ddc97;
+  --font:"Manrope",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:70px}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--font);font-size:16px;line-height:1.55;-webkit-font-smoothing:antialiased}
+.top{position:sticky;top:0;z-index:5;display:flex;align-items:center;gap:10px;padding:calc(10px + env(safe-area-inset-top,0px)) 16px 10px;background:rgba(11,11,12,.92);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+.top a{display:inline-flex;align-items:center;gap:6px;padding:8px 14px;border:1px solid var(--line);border-radius:999px;color:var(--ink);text-decoration:none;font-weight:800;font-size:14px;background:var(--card)}
+.top b{font-size:15px}
+.wrap{max-width:860px;margin:0 auto;padding:18px 16px calc(40px + env(safe-area-inset-bottom,0px))}
+h1{font-size:28px;line-height:1.2;margin:8px 0 6px}
+.lead{color:var(--sub);margin:0 0 16px}
+.toc{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 22px}
+.toc a{padding:6px 11px;border:1px solid var(--line);border-radius:999px;background:var(--card);color:var(--sub);text-decoration:none;font-size:13px;font-weight:700}
+.toc a:active{color:var(--ink);border-color:var(--acc2)}
+section{border-top:1px solid var(--line);padding:22px 0 8px}
+h2{font-size:21px;margin:0 0 10px;display:flex;align-items:center;gap:10px}
+h2 .n{display:inline-grid;place-items:center;min-width:30px;height:30px;border-radius:10px;background:var(--acc);color:#fff;font-size:15px}
+h3{font-size:15.5px;margin:16px 0 6px}
+p,li{color:#d9d9de}
+ul,ol{padding-left:20px;margin:6px 0 10px}
+li{margin:4px 0}
+b,strong{color:var(--ink)}
+.row{display:grid;grid-template-columns:1fr;gap:14px;align-items:start}
+@media (min-width:720px){.row{grid-template-columns:300px 1fr}.row.rev{grid-template-columns:1fr 300px}.row.rev figure{order:2}}
+figure{margin:4px 0}
+figure img{display:block;width:100%;max-width:320px;height:auto;border-radius:18px;border:1px solid var(--line);background:#000}
+figcaption{font-size:12.5px;color:var(--faint);margin-top:6px;max-width:320px}
+.pair{display:grid;grid-template-columns:1fr 1fr;gap:10px;max-width:640px}
+.pair img{max-width:100%}
+.tip{margin:12px 0;padding:12px 14px;border:1px solid var(--line);border-left:3px solid var(--ok);border-radius:12px;background:var(--card)}
+.tip.warn{border-left-color:#f5a524}
+.k{display:inline-block;padding:1px 8px;border:1px solid var(--line);border-radius:7px;background:var(--card2);font-size:13.5px;font-weight:800;color:var(--ink);white-space:nowrap}
+table{width:100%;border-collapse:collapse;font-size:14px;margin:8px 0 12px}
+th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+th{color:var(--sub);font-size:12.5px;font-weight:800}
+.end{margin-top:26px;text-align:center}
+.end a{display:inline-block;padding:13px 22px;border-radius:14px;background:var(--ink);color:#111;font-weight:800;text-decoration:none}
+</style>
+</head>
+<body>
+<header class="top"><a href="./">‹ Về app</a><b>Hướng dẫn sử dụng</b></header>
+<main class="wrap">
+<h1>Hướng dẫn dùng Liam Training Log</h1>
+<p class="lead">Sổ tập gym: chạy theo chương trình có sẵn, ghi set/rep/kg, đếm giờ nghỉ, theo dõi tiến bộ, cân nặng và huy hiệu. Đọc lướt theo mục, ảnh là màn hình thật của app.</p>
+
+<nav class="toc">
+  <a href="#cai">Cài lên điện thoại</a><a href="#chon">Chọn chương trình</a><a href="#homnay">Hôm nay</a><a href="#tap">Tập một bài</a>
+  <a href="#nghi">Nghỉ giữa set</a><a href="#kg">Ghi kg</a><a href="#doi">Máy bận</a><a href="#ketthuc">Kết thúc buổi</a>
+  <a href="#lich">Lịch</a><a href="#tienbo">Tiến bộ</a><a href="#coth">Cơ thể & huy hiệu</a><a href="#caidat">Tài khoản & cài đặt</a><a href="#hoi">Hỏi nhanh</a>
+</nav>
+
+<section id="cai">
+  <h2><span class="n">1</span>Cài lên điện thoại</h2>
+  <p>App là web nhưng cài được như app thật, mở toàn màn hình và chạy được khi mất mạng.</p>
+  <ul>
+    <li><b>iPhone:</b> mở trang bằng <b>Safari</b> → nút <span class="k">Chia sẻ</span> → <span class="k">Thêm vào MH chính</span>.</li>
+    <li><b>Android:</b> mở bằng Chrome → menu <span class="k">⋮</span> → <span class="k">Cài đặt ứng dụng</span> / <span class="k">Thêm vào màn hình chính</span>.</li>
+  </ul>
+  <div class="tip">Khi có bản mới mà chưa thấy thay đổi: vuốt <b>tắt hẳn app</b> rồi mở lại 1–2 lần.</div>
+</section>
+
+<section id="chon">
+  <h2><span class="n">2</span>Chọn chương trình</h2>
+  <div class="row">
+    <figure><img src="img/guide/01-chon-chuong-trinh.webp" alt="Danh sách chương trình" loading="lazy"><figcaption>Danh sách chương trình</figcaption></figure>
+    <div>
+      <p>Lần đầu mở app, chọn một chương trình (Min-Max, Legacy, PPL…). Sau này đổi bằng cách bấm tên chương trình ở góc trên trái, hoặc tab <b>Chương trình</b>.</p>
+      <ul>
+        <li>Mỗi chương trình có số tuần, số buổi, ảnh bìa riêng.</li>
+        <li>Đổi chương trình không mất dữ liệu: mỗi chương trình lưu tiến độ riêng.</li>
+        <li>Nút <span class="k">⌂</span> <b>Tập ở nhà</b> (chương trình nào có): tự đổi bài máy / cáp / ghế sang tạ đơn hoặc không dụng cụ. Bấm lần nữa để về bài gốc.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section id="homnay">
+  <h2><span class="n">3</span>Trang Hôm nay</h2>
+  <div class="row">
+    <figure><img src="img/guide/02-hom-nay.webp" alt="Trang Hôm nay" loading="lazy"><figcaption>Buổi của hôm nay và dải ngày trong tuần</figcaption></figure>
+    <div>
+      <ul>
+        <li><b>Phase / Tuần</b>: chọn nhanh giai đoạn và tuần. Dải ngày bên dưới: bấm để xem buổi khác. Chấm màu = loại buổi (mỗi nhóm cơ một màu), ô xanh có ✓ = đã tập xong, viền đứt = ngày nghỉ.</li>
+        <li><b>Đặt ngày bắt đầu</b>: chọn ngày bạn bắt đầu chương trình, từ đó app tự mở đúng buổi của hôm nay. Bấm <span class="k">Về hôm nay</span> khi đang xem ngày khác.</li>
+        <li>Nút <span class="k">Bắt đầu buổi tập</span> mở bài đầu tiên chưa xong (đang tập dở thì thành <b>Tiếp tục · bài…</b>).</li>
+        <li>Mỗi bài có ảnh, số set × rep và dòng <b>Lần trước</b> (kg × rep buổi trước).</li>
+        <li>Nút tròn <span class="k">✓</span> bên phải: đánh dấu xong cả bài nhanh, không cần mở.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section id="tap">
+  <h2><span class="n">4</span>Tập một bài</h2>
+  <div class="row">
+    <figure><img src="img/guide/03-bai-tap.webp" alt="Màn tập một bài, kiểu Chi tiết" loading="lazy"><figcaption>Kiểu <b>Chi tiết</b>: ghi rep và kg từng set</figcaption></figure>
+    <div>
+      <p>Thanh trên cùng: <b>Set đã xong / tổng set</b> cả buổi, vị trí bài (A · 1/8) và nút <span class="k">Kết thúc</span>.</p>
+      <h3>Hai kiểu nhập set</h3>
+      <table>
+        <tr><th>Kiểu</th><th>Dùng khi</th></tr>
+        <tr><td><b>Đơn giản</b></td><td>Chỉ cần tick set đã tập, không ghi số. Nhanh nhất.</td></tr>
+        <tr><td><b>Chi tiết</b></td><td>Ghi rep + kg từng set. Mở khoá gợi ý tạ, báo kỷ lục, bảng tạ, biểu đồ tiến bộ, huy hiệu sức mạnh.</td></tr>
+      </table>
+      <p>Đổi kiểu bằng nút <span class="k">Đơn giản | Chi tiết</span> ngay trên bảng set, hoặc trong cài đặt. Lựa chọn được lưu theo tài khoản.</p>
+      <h3>Ghi một set (Chi tiết)</h3>
+      <ol>
+        <li><b>Số mờ là gợi ý</b> lấy từ buổi trước. Tập đúng như vậy: bấm <span class="k">✓</span> là xong.</li>
+        <li>Khác gợi ý: gõ số mới vào ô rep / kg rồi bấm <span class="k">✓</span>.</li>
+        <li>Buổi trước đạt mức rep trên của mục tiêu thì có chữ <b>→ tăng tạ</b> và gợi ý kg tự cộng thêm 1 bước (2,5kg tạ đòn, 1kg tạ đơn).</li>
+        <li>Bài chưa tập bao giờ: app <b>gợi ý mức tạ khởi đầu</b> từ bài tương tự bạn đã tập.</li>
+        <li>Hàng <b>W1, W2…</b> là set khởi động theo % tạ làm việc. Hàng mờ là tuỳ chọn.</li>
+      </ol>
+      <div class="tip">Phá kỷ lục cũ của bài (tính theo 1RM ước tính) sẽ hiện <b>🏆 Kỷ lục mới!</b></div>
+    </div>
+  </div>
+  <div class="row rev" style="margin-top:12px">
+    <figure><img src="img/guide/12-don-gian.webp" alt="Kiểu Đơn giản" loading="lazy"><figcaption>Kiểu <b>Đơn giản</b>: chỉ tick set</figcaption></figure>
+    <div>
+      <h3>Kiểu Đơn giản</h3>
+      <p>Mỗi set chỉ có mục tiêu (ví dụ <b>6-8 rep</b>) và nút <span class="k">✓</span>. Tập xong set nào bấm set đó, app tự đếm giờ nghỉ. Hợp khi không muốn ghi số, nhưng sẽ không có kỷ lục và gợi ý tạ.</p>
+      <p>Bên dưới bảng set: video hướng dẫn, các bước thực hiện và <b>bài thay thế</b>. Nút <span class="k">Xong bài</span> / <span class="k">Tiếp ›</span> ở đáy để chuyển bài.</p>
+    </div>
+  </div>
+</section>
+
+<section id="nghi">
+  <h2><span class="n">5</span>Nghỉ giữa set</h2>
+  <div class="row">
+    <figure><img src="img/guide/04-xong-set-nghi.webp" alt="Thanh đếm giờ nghỉ" loading="lazy"><figcaption>Thanh nghỉ nổi ở đáy màn hình</figcaption></figure>
+    <div>
+      <ul>
+        <li>Bấm <span class="k">✓</span> một set là thanh <b>Nghỉ</b> hiện ở đáy và đếm ngược, đi theo mọi màn hình.</li>
+        <li>Thời gian nghỉ theo chương trình (ví dụ 3-5 phút). Set khởi động nghỉ 60 giây.</li>
+        <li><span class="k">−15s</span> / <span class="k">+15s</span> chỉnh nhanh, <span class="k">✕</span> bỏ nghỉ.</li>
+        <li>Hết giờ: có tiếng bíp và chữ <b>Vào set</b>.</li>
+      </ul>
+      <div class="tip">Bật <b>Giữ màn hình sáng</b> trong cài đặt để màn hình không tắt khi đang nghỉ.</div>
+    </div>
+  </div>
+</section>
+
+<section id="kg">
+  <h2><span class="n">6</span>Ghi kg cho đúng</h2>
+  <div class="row">
+    <figure><img src="img/guide/06-kg-tong-ben.webp" alt="Ghi kg mỗi bên và bảng tạ" loading="lazy"><figcaption>Tạ đòn ghi <b>mỗi bên</b>, kèm bảng tạ</figcaption></figure>
+    <div>
+      <p>Dưới đầu bảng set luôn có một dòng nhỏ nói ô kg hiểu thế nào:</p>
+      <table>
+        <tr><th>Loại bài</th><th>Nhập vào ô kg</th></tr>
+        <tr><td>Tạ đòn · <b>Kg tổng</b></td><td>Cả đòn 20kg + bánh 2 bên</td></tr>
+        <tr><td>Tạ đòn · <b>Kg/bên</b></td><td>Bánh lắp 1 bên (app tự cộng ×2 + đòn)</td></tr>
+        <tr><td>Tạ đơn · <b>Kg/tay</b></td><td>Kg của 1 quả tạ</td></tr>
+        <tr><td>Smith</td><td>Bánh 2 bên, không tính đòn máy</td></tr>
+        <tr><td>Máy / cáp</td><td>Số trên máy / cục tạ</td></tr>
+        <tr><td>Thân người · <b>+Kg</b></td><td>Kg đeo thêm, 0 nếu không đeo</td></tr>
+      </table>
+      <ul>
+        <li>Bài tạ đòn: bấm <span class="k">Kg tổng ⇄</span> ở đầu cột để đổi sang <b>Kg/bên</b> (và ngược lại). Cũng chỉnh được trong cài đặt.</li>
+        <li><b>Bảng tạ</b> dưới bảng set: <b>80kg · đòn 20 + mỗi bên 25 5</b>: lắp bánh nào mỗi bên.</li>
+        <li>App luôn lưu <b>tổng kg</b>, nên đổi cách nhập không ảnh hưởng kỷ lục hay huy hiệu.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section id="doi">
+  <h2><span class="n">7</span>Máy bận? Đổi bài</h2>
+  <div class="row">
+    <figure><img src="img/guide/05-doi-bai.webp" alt="Đổi bài khi máy bận" loading="lazy"><figcaption>Chọn bài cùng nhóm cơ</figcaption></figure>
+    <div>
+      <ul>
+        <li>Bấm <span class="k">⇄ Máy bận? Đổi bài</span> dưới tên bài, chọn bài khác cùng nhóm cơ. Số set/rep giữ nguyên.</li>
+        <li><b>Chỉ đổi cho buổi này</b>, lần sau vẫn là bài gốc. Trang Hôm nay ghi <b>⇄ Đổi từ …</b>.</li>
+        <li>Muốn đổi lại: bấm nút đó lần nữa → chọn <b>Bài gốc</b>.</li>
+        <li>Hoặc kéo xuống <b>Bài thay thế</b>, xem video bài đó rồi bấm <span class="k">Dùng bài này cho buổi hôm nay</span>.</li>
+        <li>Lịch sử, kỷ lục và gợi ý tạ tính theo bài bạn thật sự tập.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section id="ketthuc">
+  <h2><span class="n">8</span>Kết thúc buổi</h2>
+  <div class="row">
+    <figure><img src="img/guide/07-ket-thuc.webp" alt="Tổng kết buổi" loading="lazy"><figcaption>Pháo giấy, tổng kết và huy hiệu mới</figcaption></figure>
+    <div>
+      <ul>
+        <li>Xong hết bài, hoặc bấm <span class="k">Kết thúc</span> giữa chừng: bắn pháo giấy và hiện tổng kết (bài, set, số phút, buổi trong tháng, tuần liên tiếp).</li>
+        <li>Huy hiệu vừa mở khoá hiện ngay trong bảng tổng kết.</li>
+        <li>Thời gian buổi tính từ set ✓ đầu tiên đến lúc Kết thúc (30 phút không tick gì thì tự dừng).</li>
+      </ul>
+      <div class="tip warn">Số buổi tháng, bảng xếp hạng và chuỗi tuần chỉ tính buổi <b>xong đủ các bài</b>. Buổi dở hiện là <b>Tập dở</b> trên lịch.</div>
+    </div>
+  </div>
+</section>
+
+<section id="lich">
+  <h2><span class="n">9</span>Lịch</h2>
+  <div class="row">
+    <figure><img src="img/guide/08-lich.webp" alt="Lịch tháng" loading="lazy"><figcaption>Lịch tháng: ô xanh = đã tập</figcaption></figure>
+    <div>
+      <ul>
+        <li><b>Tháng này</b>: mỗi ô là 1 ngày. Xanh đặc = đã tập (✓ góc phải), viền xanh = tập dở, viền đứt = dự kiến theo lịch.</li>
+        <li>Bấm vào ngày để xem buổi đã tập, bấm <span class="k">Mở ›</span> để vào buổi đó.</li>
+        <li>Tab <b>Lịch &lt;chương trình&gt;</b>: toàn bộ lịch của chương trình theo tuần.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section id="tienbo">
+  <h2><span class="n">10</span>Tiến bộ</h2>
+  <div class="row">
+    <figure><img src="img/guide/09-tien-bo.webp" alt="Tab Tiến bộ" loading="lazy"><figcaption>Thống kê tháng, bảng xếp hạng, biểu đồ tuần</figcaption></figure>
+    <div>
+      <ul>
+        <li><b>Thống kê tháng</b>: số buổi xong, số bài, số ngày có tập. Bấm ‹ › để xem tháng khác.</li>
+        <li><b>Bảng xếp hạng tháng</b>: số buổi xong của mọi người và chương trình họ tập (cần đăng nhập).</li>
+        <li><b>Số buổi mỗi tuần</b> trong 8 tuần gần nhất. Bấm cột để xem số.</li>
+        <li>Trong từng bài (kiểu Chi tiết) có biểu đồ <b>Tiến bộ</b> tạ nặng nhất mỗi buổi.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section id="coth">
+  <h2><span class="n">11</span>Chỉ số cơ thể & huy hiệu</h2>
+  <div class="row">
+    <figure><img src="img/guide/09b-co-the-huy-hieu.webp" alt="Chỉ số cơ thể và huy hiệu" loading="lazy"><figcaption>Cân nặng, % mỡ, huy hiệu sắp đạt</figcaption></figure>
+    <div>
+      <h3>Chỉ số cơ thể</h3>
+      <ul>
+        <li>Bấm <span class="k">+ Nhập</span>: chọn ngày đo, nhập <b>cân nặng</b> và/hoặc <b>mỡ cơ thể</b>. Mỡ nhập theo <b>%</b> hoặc <b>kg</b> (kg tự đổi ra %).</li>
+        <li>Ô chỉ số có ▲▼ so với lần trước (xanh = tốt). Bấm ô để đổi biểu đồ.</li>
+        <li>Quá 14 ngày chưa đo sẽ nhắc <b>đến lúc đo lại</b>. <b>Lịch sử đo</b>: bấm để sửa hoặc xoá.</li>
+      </ul>
+      <h3>Huy hiệu</h3>
+      <ul>
+        <li>35 huy hiệu: số buổi, tuần liên tiếp, tháng chăm, kỷ lục, sức mạnh (Bench / Squat / Deadlift), tổng khối lượng (tấn), cơ thể, chim sớm / cú đêm…</li>
+        <li><b>Sắp đạt</b>: 3 huy hiệu gần nhất, kèm "còn 20 kg", "còn 2 tuần"…</li>
+        <li>Huy hiệu sức mạnh và khối lượng cần ghi kg (kiểu Chi tiết).</li>
+      </ul>
+    </div>
+  </div>
+  <div class="row rev" style="margin-top:12px">
+    <figure><img src="img/guide/10-chi-so.webp" alt="Nhập chỉ số cơ thể" loading="lazy"><figcaption>Bảng nhập cân nặng và mỡ</figcaption></figure>
+    <div></div>
+  </div>
+</section>
+
+<section id="caidat">
+  <h2><span class="n">12</span>Tài khoản & cài đặt</h2>
+  <div class="row">
+    <figure><img src="img/guide/11-cai-dat.webp" alt="Tài khoản và cài đặt" loading="lazy"><figcaption>Bấm avatar góc trên phải</figcaption></figure>
+    <div>
+      <ul>
+        <li><b>Đăng nhập / Tạo tài khoản</b> (chỉ cần tên + mật khẩu): dữ liệu được đồng bộ lên cloud, dùng nhiều máy, và vào được bảng xếp hạng. Nhớ kỹ mật khẩu, hiện chưa có lấy lại mật khẩu.</li>
+        <li>Chấm nhỏ trên avatar: xanh = đã đồng bộ, vàng = đang chờ, đỏ = lỗi. Nút <span class="k">⟳</span> để đồng bộ ngay.</li>
+        <li><b>Ngôn ngữ</b>: Tiếng Việt / English.</li>
+        <li><b>Nhập set</b>: Đơn giản / Chi tiết.</li>
+        <li><b>Tạ đòn ghi theo</b>: Tổng / Mỗi bên.</li>
+        <li><b>Giữ màn hình sáng</b> khi ở trang Hôm nay.</li>
+      </ul>
+      <div class="tip">Chưa đăng nhập vẫn dùng được, dữ liệu lưu trên máy. Đăng nhập sau thì dữ liệu trên máy được gộp lên tài khoản.</div>
+    </div>
+  </div>
+</section>
+
+<section id="hoi">
+  <h2><span class="n">13</span>Hỏi nhanh</h2>
+  <h3>Không thấy gợi ý tạ, bảng tạ, kỷ lục?</h3>
+  <p>Chuyển sang kiểu <b>Chi tiết</b>. Bảng tạ chỉ có ở bài tạ đòn. Gợi ý tạ khởi đầu cần một bài tương tự đã ghi kg.</p>
+  <h3>Lỡ ghi kg 1 bên vào ô tổng?</h3>
+  <p>Bấm <span class="k">Kg tổng ⇄</span> để đổi sang Kg/bên, gõ lại số rồi bấm ra ngoài ô: app lưu lại đúng tổng.</p>
+  <h3>Bấm nhầm ✓?</h3>
+  <p>Bấm lại ✓ của set đó để bỏ tick.</p>
+  <h3>Dữ liệu lưu ở đâu?</h3>
+  <p>Trên máy (trình duyệt). Nếu đăng nhập thì có thêm bản trên cloud và tự đồng bộ khi mở app.</p>
+  <h3>Đổi máy mới?</h3>
+  <p>Đăng nhập cùng tài khoản trên máy mới là dữ liệu tự về.</p>
+  <div class="end"><a href="./">Về app và tập thôi 💪</a></div>
+</section>
+</main>
+</body>
+</html>
