@@ -656,6 +656,18 @@ html{touch-action:manipulation;scroll-behavior:auto!important}
 .nbk{width:36px;height:36px;margin-right:4px;border-radius:50%;border:1px solid var(--line);background:none;color:var(--ink);display:grid;place-items:center;flex:none;padding:0}
 .nbk svg{width:18px;height:18px}
 .bulkb{width:100%;margin-top:14px}
+
+.lastc{display:flex;justify-content:space-between;align-items:baseline;gap:10px;margin-top:14px;padding:10px 14px;border-radius:12px;background:var(--card2);border:1px solid var(--line)}
+.lastc span{font-size:12px;font-weight:800;color:var(--sub);letter-spacing:.04em;text-transform:uppercase;white-space:nowrap}
+.lastc b{font-size:14px;text-align:right;font-variant-numeric:tabular-nums}
+.lwt{display:inline-flex;align-items:center;gap:6px;font-size:12.5px;font-weight:800;color:var(--sub);cursor:pointer}
+.lwt input{appearance:none;-webkit-appearance:none;width:34px;height:20px;border-radius:99px;background:var(--line);position:relative;margin:0;transition:background .2s;cursor:pointer}
+.lwt input::after{content:"";position:absolute;top:2px;left:2px;width:16px;height:16px;border-radius:50%;background:var(--ink);transition:transform .2s}
+.lwt input:checked{background:var(--ok)} .lwt input:checked::after{transform:translateX(14px)}
+.panel-h{flex-wrap:wrap;gap:8px}
+.setrow.sr .sck{position:relative} .setrow.sr .sck::before{content:"";position:absolute;inset:-12px}
+.sub.lt{color:var(--acc2)}
+.sethint b{color:var(--ink)}
 </style>
 </head>
 <body>
@@ -695,7 +707,7 @@ const store = { get(k){ try{ return localStorage.getItem(k); }catch(e){ return n
 const getJ = (k,d) => { try{ const v = JSON.parse(store.get(k)); return v ?? d; }catch(e){ return d; } };
 
 /* ---------- đồng bộ Supabase (localStorage vẫn là nguồn chính, mất mạng vẫn dùng được) ---------- */
-const STATE_KEYS = /^(prog|lang|home|restDefault|wake|start-.+|sel-.+|nosd-.+|done-.+|prlog|badges|board)$/;
+const STATE_KEYS = /^(prog|lang|home|restDefault|wake|logw|start-.+|sel-.+|nosd-.+|done-.+|prlog|badges|board)$/;
 const SB = {url: 'https://jqsynlkiuigagvpueziz.supabase.co', key: 'sb_publishable_qzCUcDHqWPJFY6LPiolsKw_C6vXAN0D'};
 const SBON = SB.key && !SB.key.startsWith('__');
 const DEV = (() => { let d = store.get('devid'); if(!d){ d = (crypto.randomUUID ? crypto.randomUUID() : Date.now().toString(36) + Math.random().toString(36).slice(2)); store.set('devid', d); } return d; })();
@@ -1147,7 +1159,7 @@ function renderToday(){
           const sub = p.weekSelect ? (/tối đa/.test(it.reps||'') ? ['Chừa 1–3 rep, set cuối tới thất bại', mm.rest?'nghỉ '+mm.rest:''].filter(Boolean).join(' · ') : [mm.rir.length?'RIR '+mm.rir.join('·'):'', mm.rest?'nghỉ '+mm.rest:''].filter(Boolean).join(' · ')) : (it.tempo && it.tempo!=='—' ? 'Tempo '+it.tempo : '');
           return `<div class="row${done.has(i)?' done':''}" data-i="${i}" role="button" tabindex="0" aria-label="${esc(it.name)}">
             <span class="th">${thumbHtml(it)}<span class="code">${esc(it.s)}</span></span>
-            <span class="info"><b>${esc(it.name)}</b><span class="sets">${setsHtml(it.reps)}</span>${sub?`<span class="sub">${esc(sub)}</span>`:''}${it.orig?`<span class="sub hm">Thay cho ${esc(it.orig)}</span>`:''}</span>
+            <span class="info"><b>${esc(it.name)}</b><span class="sets">${setsHtml(it.reps)}</span>${sub?`<span class="sub">${esc(sub)}</span>`:''}${it.orig?`<span class="sub hm">Thay cho ${esc(it.orig)}</span>`:''}${(() => { if(it.jk) return ''; const hh = exHist(it.name).filter(x => x.key !== `${p.id}|${n}|${i}`), lt = hh[hh.length-1]; return lt ? `<span class="sub lt">Lần trước: ${esc(lt.sets.filter(Boolean).map(setTxt).join(' · '))}</span>` : ''; })()}</span>
             <button class="chk" data-c="${i}" aria-pressed="${done.has(i)}" aria-label="Đánh dấu xong">✓</button></div>`;
         }).join('')}</div></div>`;
     }).join('');
@@ -1483,7 +1495,8 @@ function jkBind(p, it){
     const done = inc + st.s.reduce((a,b)=>a+b,0) >= target; save(); if(!done) startRest(path ? path.rest : 45);
   };
 }
-let SED = null;  // set đang mở trình nhập: `${CUR}|m|k` (set chính) hoặc `${CUR}|w|k` (khởi động); 'none' = đóng
+let SED = null;
+const LOGW = () => store.get('logw') !== '0';  // set đang mở trình nhập: `${CUR}|m|k` (set chính) hoặc `${CUR}|w|k` (khởi động); 'none' = đóng
 const setObj = v => (v && typeof v === 'object' && !Array.isArray(v)) ? v : null;
 const nfmt = x => (Math.round(x*100)/100).toString().replace('.', ',');
 const pnum = x => { const v = parseFloat(String(x).replace(',', '.')); return isNaN(v) ? null : v; };
@@ -1515,7 +1528,7 @@ function setTable(p, it, ticks){
   const bw = BWRE.test(it.name), st = wStep(it);
   const hasWarm = p.weekSelect && it.warm && it.warm.length, mn = hasWarm ? (+(String(it.wu||'').split('-')[0]) || it.warm.length) : 0;
   // set nào đang mở trình nhập
-  let open = SED && SED.startsWith(CUR+'|') ? SED : null;
+  let open = !LOGW() ? 'none' : SED && SED.startsWith(CUR+'|') ? SED : null;
   if(!open){ const wk = hasWarm ? it.warm.findIndex((_,k) => k < mn && !warmArr[k]) : -1; const mk = vals.findIndex((_,k) => !ticks[k]);
     open = (wk >= 0 && mk === 0) ? `${CUR}|w|${wk}` : mk >= 0 ? `${CUR}|m|${mk}` : 'none'; }
   const work = setObj(ticks[0]) || (last && last.sets.find(x => x && x.w));
@@ -1533,7 +1546,9 @@ function setTable(p, it, ticks){
     const unit = /^\d+(\s*[-–]\s*\d+)?$/.test(disp) ? '<small>rep</small>' : '';
     const o = setObj(ticks[k]), on = !!ticks[k], ls = last && (last.sets[k] || null), isOpen = open === `${CUR}|m|${k}`;
     const rp = o ? `${esc(setTxt(o))}<em>Mục tiêu ${esc(disp)}${unit ? ' rep' : ''}</em>` : `${esc(disp)}${unit}${ls ? `<em>Lần trước ${esc(setTxt(ls))}</em>` : ''}`;
-    let html = `<button class="setrow sr ${on?'on':''} ${isOpen?'open':''}" data-set="${k}" aria-pressed="${on}" aria-expanded="${isOpen}"><span class="sn">SET ${k+1}</span><span class="rp">${rp}</span>${tag || '<span></span>'}<span class="sck">✓</span></button>`;
+    const rg0 = tgtRange(v), prev0 = k > 0 ? setObj(ticks[k-1]) : null, ls0 = ls || (last && last.sets.filter(Boolean).slice(-1)[0]);
+    const qw = prev0 ? prev0.w : ls0 ? ls0.w : '', qr = rg0 ? rg0[0] : (ls0 ? ls0.r : '');
+    let html = `<button class="setrow sr ${on?'on':''} ${isOpen?'open':''}" data-set="${k}" data-qw="${qw ?? ''}" data-qr="${qr ?? ''}" aria-pressed="${on}" aria-expanded="${isOpen}"><span class="sn">SET ${k+1}</span><span class="rp">${rp}</span>${tag || '<span></span>'}<span class="sck">✓</span></button>`;
     if(isOpen){
       const rg = tgtRange(v), prev = k > 0 ? setObj(ticks[k-1]) : null, lsAny = ls || (last && last.sets.filter(Boolean).slice(-1)[0]);
       let pf = o ? {w: o.w, r: o.r} : {w: prev ? prev.w : lsAny ? lsAny.w : null, r: rg ? rg[0] : (lsAny ? lsAny.r : '')};
@@ -1558,14 +1573,17 @@ function setTable(p, it, ticks){
       const mt = x.match(/^(~?\d+%)(?: tạ làm việc)?\s*×\s*(.+)$/); const pc = mt?mt[1]:x, rp = mt?mt[2]:'';
       const o = setObj(warmArr[k]), on = !!warmArr[k], isOpen = open === `${CUR}|w|${k}`, pct = warmPct(x);
       const kg = work && work.w && pct ? Math.max(0, Math.round(work.w*pct/100/st)*st) : null;
-      let h = `<button class="setrow sr wu ${k>=mn?'opt':''} ${on?'on':''} ${isOpen?'open':''}" data-wset="${k}" aria-pressed="${on}"><span class="sn">W${k+1}${k>=mn?' (tuỳ)':''}</span><span class="rp">${o ? esc(setTxt(o)) : `${esc(pc)}<small>tạ · ${esc(rp)}</small>`}${!o && kg != null ? `<em>≈ ${nfmt(kg)}kg</em>` : ''}</span><span></span><span class="sck">✓</span></button>`;
+      const rmq = String(rp).match(/(\d+)/);
+      let h = `<button class="setrow sr wu ${k>=mn?'opt':''} ${on?'on':''} ${isOpen?'open':''}" data-wset="${k}" data-qw="${kg ?? ''}" data-qr="${rmq ? rmq[1] : ''}" aria-pressed="${on}"><span class="sn">W${k+1}${k>=mn?' (tuỳ)':''}</span><span class="rp">${o ? esc(setTxt(o)) : `${esc(pc)}<small>tạ · ${esc(rp)}</small>`}${!o && kg != null ? `<em>≈ ${nfmt(kg)}kg</em>` : ''}</span><span></span><span class="sck">✓</span></button>`;
       if(isOpen){ const rm = String(rp).match(/(\d+)/);
         h += editor('w', k, o ? {w: o.w, r: o.r} : {w: kg, r: rm ? +rm[1] : 5}, on, kg != null ? `≈ ${esc(pc)} của ${nfmt(work.w)}kg (set chính ${setObj(ticks[0]) ? 'hôm nay' : 'lần trước'})` : 'Khởi động nhẹ, chưa có tạ set chính để tính %.'); }
       return h; }).join('')}</div></div>`;
   }
-  let html = `${warmHtml}<div class="panel"><div class="panel-h">${head}</div><div class="setlist">${rows}</div>
+  const dd0 = d => d ? `${+d.slice(8)}/${+d.slice(5,7)}` : '';
+  const lastCard = last ? `<div class="lastc"><span>Lần trước${last.d ? ' · ' + dd0(last.d) : ''}</span><b>${last.sets.filter(Boolean).map(setTxt).join('  ·  ')}</b></div>` : '';
+  let html = `${lastCard}${warmHtml}<div class="panel"><div class="panel-h">${head}<label class="lwt"><input type="checkbox" id="logw" ${LOGW() ? 'checked' : ''}><span>Ghi tạ</span></label></div><div class="setlist">${rows}</div>
     <div class="restrow"><span class="rlab">Nghỉ giữa set</span>${chips}</div>
-    <p class="sethint">Nhập tạ và rep rồi bấm ✓ Xong set: web tự tick, đếm giờ nghỉ và mở set tiếp theo.</p></div>`;
+    <p class="sethint">${LOGW() ? 'Bấm <b>vòng tròn</b> để tick nhanh (lưu theo số gợi ý). Bấm <b>vào set</b> để sửa tạ / rep.' : 'Bấm vào set khi tập xong để tick và tự đếm giờ nghỉ.'}</p></div>`;
   if(AM) html = html.replace('<div class="setlist">' + rows.slice(0, 0), '<p class="amh">Không đếm rep cố định. Mỗi set làm tới khi thấy <b>chỉ còn sức thêm vài rep</b> (số trên nhãn) thì dừng. Set cuối làm tới khi không nổi nữa. Lần sau cố làm nhiều hơn lần trước.</p><div class="setlist">');
   html += progHtml(p, n, it);
   return html;
@@ -1611,7 +1629,7 @@ function saveSet(p, n, w, it, kind, k, obj){
     for(let j = k+1; j < mn; j++) if(!t[j]){ nk = j; break; }
     if(nk >= 0) next = `${CUR}|w|${nk}`; else { const ms = getSets(p, n, CUR), j = setVals(p, it).findIndex((_, q) => !(Array.isArray(ms) && ms[q])); next = j >= 0 ? `${CUR}|m|${j}` : 'none'; }
   }
-  SED = obj ? next : 'none';
+  SED = obj && LOGW() ? next : 'none';
   rerenderSets(p, n, w, it);
 }
 function checkPR(p, n, it, o, k){
@@ -1633,8 +1651,16 @@ function rerenderSets(p, n, w, it){
 }
 function bindSets(p, n, w, it){
   const box = sheet.querySelector('#setp'); if(!box) return;
-  box.querySelectorAll('[data-set],[data-wset]').forEach(b => b.onclick = () => {
+  const lw = box.querySelector('#logw'); if(lw) lw.onchange = () => { store.set('logw', lw.checked ? '1' : '0'); SED = null; rerenderSets(p, n, w, it); };
+  box.querySelectorAll('[data-set],[data-wset]').forEach(b => b.onclick = e => {
     const kind = b.dataset.set != null ? 'm' : 'w', k = +(b.dataset.set ?? b.dataset.wset), id = `${CUR}|${kind}|${k}`;
+    const arr0 = getSets(p, n, kind === 'm' ? CUR : 1000 + CUR), on0 = Array.isArray(arr0) && !!arr0[k];
+    if(!LOGW() || e.target.closest('.sck')){
+      unlockAudio(); wakeOn();
+      if(on0) return saveSet(p, n, w, it, kind, k, false);
+      const r = parseInt(b.dataset.qr), wv = pnum(b.dataset.qw);
+      saveSet(p, n, w, it, kind, k, LOGW() && r > 0 ? {w: wv || 0, r} : true); SED = 'none'; return rerenderSets(p, n, w, it);
+    }
     const cur = (SED && SED.startsWith(CUR+'|')) ? SED : (box.querySelector('.sed') ? `${CUR}|${box.querySelector('.sed').dataset.kind}|${box.querySelector('.sed').dataset.k}` : 'none');
     SED = cur === id ? 'none' : id; rerenderSets(p, n, w, it); });
   box.querySelectorAll('[data-rest]').forEach(b => b.onclick = () => { unlockAudio(); wakeOn(); const x = +b.dataset.rest; if(!p.weekSelect) store.set('restDefault', x); box.querySelectorAll('[data-rest]').forEach(c => c.classList.toggle('on', c===b)); startRest(x); });
@@ -1805,7 +1831,7 @@ const EN = {
   '∞ = tập tới thất bại. Tempo 3/0/1/0 = hạ 3s · dừng 0 · đẩy 1s · dừng 0. Bấm vào bài để xem hướng dẫn, video và bài thay thế.':'∞ = to failure. Tempo 3/0/1/0 = 3s down · 0 pause · 1s up · 0 pause. Tap an exercise for instructions, video and alternatives.',
   'Phase':'Phase','rep':'rep','Chưa đặt':'Not set','Hôm nay tập buổi…':'Today is…','Chọn ngày':'Pick a date','Xoá ngày bắt đầu':'Clear start date',
   'Hôm nay bạn tập buổi nào? Trang sẽ tự tính ngày bắt đầu.':"Which workout are you doing today? We'll work out the start date.",'T2':'Mo','T3':'Tu','T4':'We','T5':'Th','T6':'Fr','T7':'Sa','CN':'Su','Upper':'Upper','Lower':'Lower','Nghỉ giữa set':'Rest between sets','Bấm vào set khi tập xong để tick và tự đếm giờ nghỉ.':'Tap a set when you finish it to tick it and start the rest timer.',
-  '+ tới thất bại':'+ to failure','Tháng này':'This month','buổi xong':'workouts done','bài đã tập':'exercises','ngày có tập':'training days','Đã tập':'Done','Tập dở':'Partial','Dự kiến':'Planned','Tuyệt!':'Awesome!','bài':'exercises','set':'sets','phút':'min','buổi tháng này':'this month','tuần liên tiếp':'week streak','Quá đỉnh!':'Crushed it!','Làm tốt lắm!':'Great job!','Thêm một buổi vào sổ!':'Another one in the books!','Kỷ luật là sức mạnh!':'Discipline wins!','Cơ bắp đang lớn lên!':'Muscles are growing!','Tháng này chưa có buổi nào. Tick xong các bài trong buổi để ghi vào sổ.':'No workouts this month yet. Finish all exercises in a workout to log it.','Sao lưu dữ liệu':'Back up data','Khôi phục':'Restore','Đánh dấu đã tập':'Mark as done','✓ Đánh dấu đã tập đến ngày…':'✓ Mark done up to day…','✓ Xong set':'✓ Done','Lưu':'Save','Bỏ tick':'Untick','Tạ (kg)':'Weight (kg)','Tạ thêm (kg)':'Added weight (kg)','Rep':'Reps','Tiến bộ':'Progress','tạ nặng nhất mỗi buổi':'top weight per session','rep nhiều nhất mỗi buổi':'most reps per session','Huy hiệu mới':'New badges','Nhập tạ và rep rồi bấm ✓ Xong set: web tự tick, đếm giờ nghỉ và mở set tiếp theo.':'Enter weight and reps, then tap ✓ Done: it ticks the set, starts the rest timer and opens the next set.','Lần đầu tập bài này: chọn mức tạ vừa sức, lần sau web sẽ gợi ý.':'First time on this exercise: pick a working weight, next time you get a suggestion.','Theo buổi trong tháng':'By workout this month','Không tập ngày này.':'No workout this day.','Không có buổi dự kiến.':'Nothing planned.','Mở ›':'Open ›','Đăng nhập để lưu lên cloud, dùng trên nhiều máy.':'Log in to save to the cloud and use on multiple devices.','Đăng nhập':'Log in','Tạo tài khoản':'Sign up','Đăng xuất':'Log out','Đồng bộ':'Sync','Tên đăng nhập':'Username','Mật khẩu':'Password','Nhập lại mật khẩu':'Confirm password','Đang lưu trên máy này':'Saved on this device only','Chỉ lưu trên máy này':'Saved on this device only','Tạo tài khoản & đồng bộ':'Sign up & sync','Đăng nhập & đồng bộ':'Log in & sync','Hoặc sao lưu ra file để chuyển máy mà không cần tài khoản.':'Or back up to a file to move devices without an account.','Chưa bật đồng bộ cloud':'Cloud sync off','Đồng bộ cloud đang bật':'Cloud sync on','Dữ liệu tập lưu riêng trên máy này. Đổi máy hoặc xoá trình duyệt thì sao lưu trước.':'Your training data is stored on this device only. Back it up before switching devices or clearing the browser.','Làm tối đa':'Max reps','Bước 3 · Tập cho đủ':'Step 3 · Finish the target','Set thử':'Test set','Bạn làm được bao nhiêu rep?':'How many reps did you get?','Xem bảng đầy đủ trong PDF':'See the full PDF table','Bài phụ (corrective)':'Corrective','Set này làm được:':'Reps this set:','Set này làm được (tới thất bại):':'Reps this set (to failure):','Tổng rep trong Stop Ladder':'Total Stop Ladder reps','Tập ở nhà':'Home mode','Set Ignitor':'Ignitor set','Tới thất bại':'To failure','Chưa nhập':'Not entered','Box Score':'Box Score','Corrective':'Corrective','Set tiếp theo (tới thất bại):':'Next set (to failure):','Set tiếp theo:':'Next set:','Stop Ladder: tổng số rep đã làm':'Stop Ladder: total reps done','✓ Đạt Box Score. Nghỉ 90 giây – 2 phút rồi sang bài tiếp theo.':'✓ Box Score reached. Rest 90 s – 2 min, then move on.','Buổi này không cần đổi bài':'No swaps needed today','Jacked Up · tạ quá nhẹ':'Jacked Up · too light','Just Right · vừa':'Just Right','Jacked Down · tạ quá nặng':'Jacked Down · too heavy','Hết giờ nghỉ!':'Rest over!','Vào set':'Go!','Không nghỉ':'No rest','Giữ màn hình sáng':'Keep screen on','Dừng':'Stop'
+  '+ tới thất bại':'+ to failure','Tháng này':'This month','buổi xong':'workouts done','bài đã tập':'exercises','ngày có tập':'training days','Đã tập':'Done','Tập dở':'Partial','Dự kiến':'Planned','Tuyệt!':'Awesome!','bài':'exercises','set':'sets','phút':'min','buổi tháng này':'this month','tuần liên tiếp':'week streak','Quá đỉnh!':'Crushed it!','Làm tốt lắm!':'Great job!','Thêm một buổi vào sổ!':'Another one in the books!','Kỷ luật là sức mạnh!':'Discipline wins!','Cơ bắp đang lớn lên!':'Muscles are growing!','Tháng này chưa có buổi nào. Tick xong các bài trong buổi để ghi vào sổ.':'No workouts this month yet. Finish all exercises in a workout to log it.','Sao lưu dữ liệu':'Back up data','Khôi phục':'Restore','Ghi tạ':'Log weight','Đánh dấu đã tập':'Mark as done','✓ Đánh dấu đã tập đến ngày…':'✓ Mark done up to day…','✓ Xong set':'✓ Done','Lưu':'Save','Bỏ tick':'Untick','Tạ (kg)':'Weight (kg)','Tạ thêm (kg)':'Added weight (kg)','Rep':'Reps','Tiến bộ':'Progress','tạ nặng nhất mỗi buổi':'top weight per session','rep nhiều nhất mỗi buổi':'most reps per session','Huy hiệu mới':'New badges','Nhập tạ và rep rồi bấm ✓ Xong set: web tự tick, đếm giờ nghỉ và mở set tiếp theo.':'Enter weight and reps, then tap ✓ Done: it ticks the set, starts the rest timer and opens the next set.','Lần đầu tập bài này: chọn mức tạ vừa sức, lần sau web sẽ gợi ý.':'First time on this exercise: pick a working weight, next time you get a suggestion.','Theo buổi trong tháng':'By workout this month','Không tập ngày này.':'No workout this day.','Không có buổi dự kiến.':'Nothing planned.','Mở ›':'Open ›','Đăng nhập để lưu lên cloud, dùng trên nhiều máy.':'Log in to save to the cloud and use on multiple devices.','Đăng nhập':'Log in','Tạo tài khoản':'Sign up','Đăng xuất':'Log out','Đồng bộ':'Sync','Tên đăng nhập':'Username','Mật khẩu':'Password','Nhập lại mật khẩu':'Confirm password','Đang lưu trên máy này':'Saved on this device only','Chỉ lưu trên máy này':'Saved on this device only','Tạo tài khoản & đồng bộ':'Sign up & sync','Đăng nhập & đồng bộ':'Log in & sync','Hoặc sao lưu ra file để chuyển máy mà không cần tài khoản.':'Or back up to a file to move devices without an account.','Chưa bật đồng bộ cloud':'Cloud sync off','Đồng bộ cloud đang bật':'Cloud sync on','Dữ liệu tập lưu riêng trên máy này. Đổi máy hoặc xoá trình duyệt thì sao lưu trước.':'Your training data is stored on this device only. Back it up before switching devices or clearing the browser.','Làm tối đa':'Max reps','Bước 3 · Tập cho đủ':'Step 3 · Finish the target','Set thử':'Test set','Bạn làm được bao nhiêu rep?':'How many reps did you get?','Xem bảng đầy đủ trong PDF':'See the full PDF table','Bài phụ (corrective)':'Corrective','Set này làm được:':'Reps this set:','Set này làm được (tới thất bại):':'Reps this set (to failure):','Tổng rep trong Stop Ladder':'Total Stop Ladder reps','Tập ở nhà':'Home mode','Set Ignitor':'Ignitor set','Tới thất bại':'To failure','Chưa nhập':'Not entered','Box Score':'Box Score','Corrective':'Corrective','Set tiếp theo (tới thất bại):':'Next set (to failure):','Set tiếp theo:':'Next set:','Stop Ladder: tổng số rep đã làm':'Stop Ladder: total reps done','✓ Đạt Box Score. Nghỉ 90 giây – 2 phút rồi sang bài tiếp theo.':'✓ Box Score reached. Rest 90 s – 2 min, then move on.','Buổi này không cần đổi bài':'No swaps needed today','Jacked Up · tạ quá nhẹ':'Jacked Up · too light','Just Right · vừa':'Just Right','Jacked Down · tạ quá nặng':'Jacked Down · too heavy','Hết giờ nghỉ!':'Rest over!','Vào set':'Go!','Không nghỉ':'No rest','Giữ màn hình sáng':'Keep screen on','Dừng':'Stop'
 };
 const ENRX = [
   [/^Hôm nay · Ngày (\d+)$/, 'Today · Day $1'], [/^Ngày (\d+)$/, 'Day $1'], [/^TUẦN (\d+)$/, 'WEEK $1'],
@@ -1819,7 +1845,7 @@ const ENRX = [
   [/^Buổi tiếp theo: (.+) · ngày (\d+)$/, 'Next workout: $1 · day $2'], [/^‹ Quay lại (.+)$/, '‹ Back to $1'],
   [/^Nghỉ (.+)$/, 'Rest $1'], [/^(\d+) set$/, '$1 sets'], [/^(.+) set · tạ nặng thì làm đủ$/, '$1 sets · do all when lifting heavy'],
   [/^(.+) set$/, '$1 sets'], [/^tạ · (.+)$/, 'of working weight · $1'], [/^W(\d+) \(tuỳ\)$/, 'W$1 (optional)'],
-  [/^Set cuối: (.+)$/, 'Last set: $1'], [/^Lần trước (.+)$/, 'Last time $1'], [/^Mục tiêu (.+)$/, 'Target $1'], [/^Huy hiệu · (.+)$/, 'Badges · $1'], [/^Dự kiến · (.+)$/, 'Planned · $1'], [/^(Chủ nhật|Thứ \d), (\d+)\/(\d+)(.*)$/, '$2/$3$4'], [/^Xong buổi · Ngày (\d+)$/, 'Workout done · Day $1'], [/^Lịch (.+)$/, '$1 schedule'], [/^(.+) · ngày (\d+)(.*)$/, '$1 · day $2$3'], [/^Chừa (.+) rep$/, 'Leave $1 in reserve'], [/^Set thử · (\d+)$/, 'Test set · $1'], [/^Set (\d+) · (\d+) ✕$/, 'Set $1 · $2 ✕'], [/^Thay cho (.+)$/, 'Replaces $1'], [/^Tập ở nhà · thay cho (.+)$/, 'Home · replaces $1'], [/^Ở nhà: (.+)$/, 'At home: $1'], [/^(\d+) bài đã đổi sang tạ đơn \/ không dụng cụ$/, '$1 exercises swapped to dumbbell / bodyweight'], [/^Ghi set(.*)$/, 'Log set$1'], [/^(\d+) điểm$/, '$1 pts'], [/^(\d+) rep$/, '$1 reps'], [/^(.+) rep$/, '$1 reps'], [/^Tháng (\d+), (\d+)$/, '$1/$2'], [/^Ngày bắt đầu · hiện tại (.+)$/, 'Start date · now $1'], [/^Tiếp (.+)$/, 'Next $1'], [/^(\d+) phút$/, '$1 min'], [/^SET (\d+)$/, 'SET $1'], [/^(\d+) bài$/, '$1 exercises'], [/^(\d+) ảnh$/, '$1 photos']
+  [/^Set cuối: (.+)$/, 'Last set: $1'], [/^Lần trước: (.+)$/, 'Last time: $1'], [/^Lần trước · (.+)$/, 'Last time · $1'], [/^Lần trước (.+)$/, 'Last time $1'], [/^Mục tiêu (.+)$/, 'Target $1'], [/^Huy hiệu · (.+)$/, 'Badges · $1'], [/^Dự kiến · (.+)$/, 'Planned · $1'], [/^(Chủ nhật|Thứ \d), (\d+)\/(\d+)(.*)$/, '$2/$3$4'], [/^Xong buổi · Ngày (\d+)$/, 'Workout done · Day $1'], [/^Lịch (.+)$/, '$1 schedule'], [/^(.+) · ngày (\d+)(.*)$/, '$1 · day $2$3'], [/^Chừa (.+) rep$/, 'Leave $1 in reserve'], [/^Set thử · (\d+)$/, 'Test set · $1'], [/^Set (\d+) · (\d+) ✕$/, 'Set $1 · $2 ✕'], [/^Thay cho (.+)$/, 'Replaces $1'], [/^Tập ở nhà · thay cho (.+)$/, 'Home · replaces $1'], [/^Ở nhà: (.+)$/, 'At home: $1'], [/^(\d+) bài đã đổi sang tạ đơn \/ không dụng cụ$/, '$1 exercises swapped to dumbbell / bodyweight'], [/^Ghi set(.*)$/, 'Log set$1'], [/^(\d+) điểm$/, '$1 pts'], [/^(\d+) rep$/, '$1 reps'], [/^(.+) rep$/, '$1 reps'], [/^Tháng (\d+), (\d+)$/, '$1/$2'], [/^Ngày bắt đầu · hiện tại (.+)$/, 'Start date · now $1'], [/^Tiếp (.+)$/, 'Next $1'], [/^(\d+) phút$/, '$1 min'], [/^SET (\d+)$/, 'SET $1'], [/^(\d+) bài$/, '$1 exercises'], [/^(\d+) ảnh$/, '$1 photos']
 ];
 function trNode(n){
   const t = n.nodeValue, k = t.trim(); if(!k || k.length > 400) return;
