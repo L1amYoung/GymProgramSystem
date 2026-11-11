@@ -572,7 +572,7 @@ html{touch-action:manipulation;scroll-behavior:auto!important}
 .md:disabled{opacity:.55;background:transparent}
 .md .n{font-size:12px;font-weight:800;color:var(--sub)} .md .l{font-size:9.5px;font-weight:800;line-height:1.1;text-align:center;word-break:normal}
 .md.done{background:var(--ok);border-color:var(--ok);color:#06281a} .md.done .n{color:#06281a}
-.md.done::after{content:"✓";position:absolute;bottom:3px;font-size:12px;font-weight:900}
+.md.done::after{content:"✓";position:absolute;top:3px;right:3px;width:13px;height:13px;border-radius:50%;background:#06281a;color:var(--ok);font-size:8.5px;font-weight:900;display:grid;place-items:center;line-height:1}
 .md.part{background:rgba(61,220,151,.14);border-color:rgba(61,220,151,.6)} .md.part .l{color:var(--ok)}
 .md.plan{border-style:dashed} .md.plan .l{color:var(--faint)}
 .md.today{outline:2px solid var(--acc2);outline-offset:1px}
@@ -754,9 +754,9 @@ html{touch-action:manipulation;scroll-behavior:auto!important}
 .wgo{width:100%;margin:14px 0 4px;min-height:56px;display:grid;gap:2px;place-items:center;text-align:center}
 .wgo span{font-size:16.5px;font-weight:900} .wgo small{font-size:12.5px;font-weight:700;opacity:.7;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .lwt{display:inline-flex;align-items:center;gap:6px;font-size:12.5px;font-weight:800;color:var(--sub);cursor:pointer}
-.lwt input{appearance:none;-webkit-appearance:none;width:34px;height:20px;border-radius:99px;background:var(--line);position:relative;margin:0;transition:background .2s;cursor:pointer}
-.lwt input::after{content:"";position:absolute;top:2px;left:2px;width:16px;height:16px;border-radius:50%;background:var(--ink);transition:transform .2s}
-.lwt input:checked{background:var(--ok)} .lwt input:checked::after{transform:translateX(14px)}
+.lwt input{appearance:none;-webkit-appearance:none;box-sizing:border-box;flex:none;width:44px;min-width:44px;height:26px;padding:0;border:0;border-radius:99px;background:var(--line);position:relative;margin:0;overflow:hidden;transition:background .2s;cursor:pointer}
+.lwt input::after{content:"";position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:50%;background:var(--ink);transition:transform .2s}
+.lwt input:checked{background:var(--ok)} .lwt input:checked::after{transform:translateX(18px);background:#fff}
 .panel-h{flex-wrap:wrap;gap:8px}
 .setrow.sr .sck{position:relative} .setrow.sr .sck::before{content:"";position:absolute;inset:-12px}
 .sub.lt{color:var(--acc2)}
