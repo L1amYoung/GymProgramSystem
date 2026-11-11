@@ -2021,6 +2021,7 @@ function saveSet(p, n, w, it, kind, k, obj){
       if(lastG) startRest(restFor(p, it)); else showNudge(w.items[g[g.indexOf(CUR)+1]]);
       const nk = setVals(p, it).findIndex((_, j) => !t[j]); if(nk >= 0) next = `${CUR}|m|${nk}`; }
   } else if(obj){
+    startRest(60);
     const mn = +(String(it.wu||'').split('-')[0]) || (it.warm||[]).length; let nk = -1;
     for(let j = k+1; j < mn; j++) if(!t[j]){ nk = j; break; }
     if(nk >= 0) next = `${CUR}|w|${nk}`; else { const ms = getSets(p, n, CUR), j = setVals(p, it).findIndex((_, q) => !(Array.isArray(ms) && ms[q])); next = j >= 0 ? `${CUR}|m|${j}` : 'none'; }
