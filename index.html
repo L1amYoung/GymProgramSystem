@@ -1712,6 +1712,7 @@ const COMPARE = [
 ];
 /* ================= hỗ trợ người mới ================= */
 /* --- phân loại bài theo tên -> nhóm cơ + lỗi thường gặp --- */
+const EL = (vi, en) => LANG === 'en' ? en : vi;
 const EXK = [
   ['legcurl', /leg curl|hamstring curl|nordic/], ['legext', /leg extension/], ['calf', /calf/], ['backext', /back extension|hyperextension/],
   ['tricep', /tricep|skull|push ?-?down|french press|jm press|overhead.*extension/], ['hip', /hip thrust|glute|bridge|abduct/],
@@ -1730,6 +1731,8 @@ const MUSK = {pressH: [['chest'], ['fdelt', 'triceps']], pressV: [['fdelt'], ['t
 const MREG = {chest: /chest/, fdelt: /^shoulders?$|front delt|side delt/, rdelt: /rear delt|rotator|side delt/, biceps: /biceps|brachialis/, triceps: /triceps/,
   fore: /forearm/, abs: /^abs$|core/, obl: /oblique|serratus|core/, quads: /quad|hip flexor|adductor/, hams: /hamstring/, glutes: /glute|abductor|^hips$/,
   calves: /calves/, lats: /^back$|lats/, upback: /^back$|upper back|t-spine|rhomboid|mid trap/, traps: /^traps$|lower trap/, lowback: /lower back/};
+const MVN_EN = {chest: 'Chest', fdelt: 'Front/side delts', rdelt: 'Rear delts', biceps: 'Biceps', triceps: 'Triceps', fore: 'Forearms', abs: 'Abs', obl: 'Obliques',
+  quads: 'Quads', hams: 'Hamstrings', glutes: 'Glutes', calves: 'Calves', lats: 'Lats', upback: 'Upper back', traps: 'Traps', lowback: 'Lower back'};
 const MVN = {chest: 'Ngực', fdelt: 'Vai trước/giữa', rdelt: 'Vai sau', biceps: 'Tay trước', triceps: 'Tay sau', fore: 'Cẳng tay', abs: 'Bụng', obl: 'Bụng chéo',
   quads: 'Đùi trước', hams: 'Đùi sau', glutes: 'Mông', calves: 'Bắp chân', lats: 'Xô', upback: 'Lưng giữa', traps: 'Cầu vai', lowback: 'Lưng dưới'};
 function musOf(it){
@@ -1753,14 +1756,35 @@ function bodySvg(pm, sm){
     ${E('upback',150,48,7,6)}${E('lats',140,60,7,12)}${E('lats',160,60,7,12)}${E('triceps',125,53,4.5,9)}${E('triceps',175,53,4.5,9)}
     ${E('fore',124,76,4,10)}${E('fore',176,76,4,10)}${R('lowback',145,70,10,16,4)}${E('glutes',143,96,7.5,8)}${E('glutes',157,96,7.5,8)}
     ${E('hams',141,120,6,15)}${E('hams',159,120,6,15)}${E('calves',141,148,5,11)}${E('calves',159,148,5,11)}
-    <text x="50" y="176" class="bl">Trước</text><text x="150" y="176" class="bl">Sau</text></svg>`;
+    <text x="50" y="176" class="bl">${EL('Trước', 'Front')}</text><text x="150" y="176" class="bl">${EL('Sau', 'Back')}</text></svg>`;
 }
 function musHtml(it){
   if(!it || it.jk) return ''; const [pm, sm] = musOf(it); if(!pm.length) return '';
-  return `<div class="panel mus"><div class="panel-h"><h3>Nhóm cơ</h3></div><div class="musw">${bodySvg(pm, sm)}<div class="musl">
-    <p><i class="mk m1"></i><b>Chính:</b> ${pm.map(r => MVN[r]).join(', ')}</p>
-    ${sm.length ? `<p><i class="mk m2"></i><b>Phụ:</b> ${sm.map(r => MVN[r]).join(', ')}</p>` : ''}</div></div></div>`;
+  return `<div class="panel mus"><div class="panel-h"><h3>${EL('Nhóm cơ', 'Muscles')}</h3></div><div class="musw">${bodySvg(pm, sm)}<div class="musl">
+    <p><i class="mk m1"></i><b>${EL('Chính:', 'Primary:')}</b> ${pm.map(r => EL(MVN[r], MVN_EN[r])).join(', ')}</p>
+    ${sm.length ? `<p><i class="mk m2"></i><b>${EL('Phụ:', 'Secondary:')}</b> ${sm.map(r => EL(MVN[r], MVN_EN[r])).join(', ')}</p>` : ''}</div></div></div>`;
 }
+const CUES_EN = {
+  pressH: ['Pull your shoulder blades back and down into the bench, chest slightly up.', 'Elbows at about 45° to your body, not flared out at 90°.', 'Lower under control to just above the chest, no bouncing.'],
+  pressV: ['Brace your abs and glutes, don\'t arch your lower back.', 'Wrists straight, stacked over the elbows.', 'Lower to chin level, don\'t let the weight drop.'],
+  fly: ['Keep a slight bend in the elbows and hold that angle.', 'Hug the weight in; don\'t turn it into a press.', 'Don\'t open too wide and strain the shoulders.'],
+  raise: ['Go light, no swinging or momentum.', 'Raise to shoulder height, elbows leading the wrists.', 'Lower slowly over 2–3 seconds.'],
+  rear: ['Pull with the rear delts, don\'t shrug.', 'Slight bend in the arms, move out wide rather than back.', 'Light weight, pause 1 second at the end.'],
+  row: ['Keep your back flat, no jerking.', 'Drive the elbows toward your hips, squeeze the shoulder blades.', 'Fully extend at the start to stretch the lats.'],
+  pullv: ['Pull elbows down and back, chest up toward the bar.', 'Don\'t lean back too far or yank.', 'Use full range, arms nearly straight at the top.'],
+  curl: ['Keep elbows pinned to your sides.', 'No body swing.', 'Lower slowly to almost straight arms.'],
+  tricep: ['Elbows stay still, only the forearms move.', 'Fully extend and squeeze the triceps.', 'Don\'t let the shoulders or torso help.'],
+  dip: ['Lower until shoulders are level with elbows, not deeper.', 'Lean forward for chest, stay upright for triceps.', 'No bouncing at the bottom.'],
+  squat: ['Knees track over the toes, don\'t let them cave in.', 'Keep heels down on the floor or platform.', 'Neutral back; on leg press don\'t let your hips lift.'],
+  lunge: ['Torso upright, weight on the front leg.', 'Front knee follows the toes.', 'Lower under control until the back knee nearly touches.'],
+  hinge: ['Flat back, push hips back, no rounding.', 'Keep the weight close to your legs.', 'Lower until hamstrings stretch, don\'t chase the floor.'],
+  hip: ['Squeeze glutes at the top for 1 second.', 'Don\'t arch the lower back to go higher.', 'Chin slightly tucked, ribs down.'],
+  legcurl: ['Keep hips pressed into the pad.', 'Curl through full range, lower slowly.', 'Don\'t jerk the weight.'],
+  legext: ['Sit back, machine pivot in line with the knee.', 'Fully extend and squeeze the quads for 1 second.', 'Lower slowly, don\'t drop it.'],
+  calf: ['Drop the heels deep to stretch the calves.', 'Pause 1–2 seconds at the bottom, no bouncing.', 'Rise as high as you can.'],
+  abs: ['Curl the spine, don\'t just hinge at the hips.', 'Breathe out as you crunch.', 'Don\'t pull on your neck.'],
+  shrug: ['Shrug straight up, no rolling.', 'Pause 1 second at the top.', 'Arms straight, don\'t bend the elbows.'],
+  backext: ['Hinge at the hips, keep the back flat.', 'Come up to a straight line, don\'t hyperextend.', 'Squeeze glutes on the way up.']};
 const CUES = {
   pressH: ['Kẹp bả vai ra sau và ép xuống ghế, ngực ưỡn nhẹ.', 'Khuỷu tay chếch khoảng 45° so với thân, không bè ngang 90°.', 'Hạ có kiểm soát tới gần ngực, không nảy tạ.'],
   pressV: ['Siết bụng và mông, không ưỡn lưng dưới khi đẩy.', 'Cổ tay thẳng, nằm ngay trên khuỷu tay.', 'Hạ tới ngang cằm, không thả rơi tạ.'],
@@ -1784,7 +1808,8 @@ const CUES = {
   backext: ['Gập ở hông, lưng giữ thẳng.', 'Lên tới thẳng người, không ưỡn quá.', 'Siết mông khi lên.']};
 function cueHtml(it){
   const c = it && !it.jk && CUES[exKind(it.name)]; if(!c) return '';
-  return `<div class="panel cues"><div class="panel-h"><h3>Lỗi thường gặp</h3></div><ul>${c.map(x => `<li>${esc(x)}</li>`).join('')}</ul></div>`;
+  const cc = LANG === 'en' ? CUES_EN[exKind(it.name)] : c;
+  return `<div class="panel cues"><div class="panel-h"><h3>${EL('Lỗi thường gặp', 'Common mistakes')}</h3></div><ul>${cc.map(x => `<li>${esc(x)}</li>`).join('')}</ul></div>`;
 }
 /* --- thuật ngữ --- */
 const GLOSS = [
@@ -1803,11 +1828,12 @@ const GLOSS = [
   ['pr', 'Kỷ lục (PR)', 'Set tốt nhất từ trước tới giờ của một bài, so theo 1RM ước tính (tạ × rep quy đổi ra mức tạ nâng được 1 lần).'],
   ['kg', 'Ghi kg', 'Tạ đòn: chọn <b>Kg tổng</b> (cả đòn 20kg) hoặc <b>Kg/bên</b> (bánh 1 bên). Tạ đơn: kg 1 quả. Máy: số trên máy.'],
 ];
+const GLOSS_EN = {"set": ["Sets & reps", "<b>Rep</b> = one lift up and down. <b>Set</b> = a run of reps, then rest. \"2 × 6-8\" = 2 sets of 6–8 reps."], "range": ["Rep range (6-8, 8-10…)", "Pick a weight you can do within this range. Hit the top (e.g. 8) and add weight next time; below the bottom, go lighter."], "rir": ["RIR (reps in reserve)", "<b>Reps In Reserve</b>: how many more reps you could do when you stop. <b>RIR 1</b> = stop with 1 rep left. <b>RIR 0</b> = all-out."], "tb": ["F · to failure", "Go until you can\\’t do another rep with good form. Usually only on the last set."], "warm": ["W1, W2… · warm-up sets", "Light sets before the work sets to warm up muscles and joints. % is of your working weight (e.g. ~60% of 80kg ≈ 47.5kg). Faded rows are optional and don\\’t count as work sets."], "rest": ["Rest between sets", "Rest after each set. Big compound lifts (squat, bench…) 2–5 min; small exercises 1–2 min. The app starts the timer when you tap ✓."], "ss": ["Superset", "Do 2 exercises back to back with no rest, then rest after the pair. Repeat for all sets."], "ts": ["Triset", "Like a superset but 3 exercises in a row."], "gs": ["Giant set", "4 or more exercises in a row, rest after the whole group."], "inf": ["∞ · rest-pause", "After a set to failure, rest 10–15 seconds and squeeze out a few more reps with the same weight."], "tempo": ["Tempo", "Speed of each phase in seconds. E.g. <b>3-1-1</b>: 3 s down, 1 s pause, 1 s up."], "deload": ["Deload week", "An easier week (fewer sets or lighter weight) so your body recovers and comes back stronger."], "pr": ["Personal record (PR)", "Your best set ever on an exercise, compared by estimated 1RM (weight × reps converted to a one-rep max)."], "kg": ["Logging kg", "Barbell: choose <b>Kg total</b> (including the 20kg bar) or <b>Kg/side</b> (plates on one side). Dumbbell: one dumbbell. Machine: the number on the stack."]};
 function openGloss(k){
   const ov = document.createElement('div'); ov.className = 'cele acc'; const g0 = GLOSS.find(g => g[0] === k);
   const list = g0 ? [g0, ...GLOSS.filter(g => g !== g0)] : GLOSS;
   ov.innerHTML = `<div class="cbox" role="dialog" aria-label="Thuật ngữ"><button class="x" data-x aria-label="Đóng">✕</button>
-    <h2 style="font-size:19px;margin:2px 40px 10px 0">Thuật ngữ</h2><div class="gll">${list.map((g, i) => `<div class="gli ${i === 0 && g0 ? 'on' : ''}"><b>${g[1]}</b><p>${g[2]}</p></div>`).join('')}</div></div>`;
+    <h2 style="font-size:19px;margin:2px 40px 10px 0">${EL('Thuật ngữ', 'Glossary')}</h2><div class="gll">${list.map((g, i) => `<div class="gli ${i === 0 && g0 ? 'on' : ''}"><b>${LANG === 'en' && GLOSS_EN[g[0]] ? GLOSS_EN[g[0]][0] : g[1]}</b><p>${LANG === 'en' && GLOSS_EN[g[0]] ? GLOSS_EN[g[0]][1] : g[2]}</p></div>`).join('')}</div></div>`;
   ov.querySelector('[data-x]').onclick = () => ov.remove(); ov.onclick = ev => { if(ev.target === ov) ov.remove(); };
   document.body.appendChild(ov); requestAnimationFrame(() => ov.classList.add('on')); trTree(ov);
 }
@@ -1822,6 +1848,11 @@ const QP = {minmax: {pl: ['gym'], d: [4, 5], lv: [1, 2, 3], g: ['muscle', 'stren
   shift: {pl: ['gym'], d: [5], lv: [2, 3], g: ['cut', 'strength'], why: 'Siết nhưng giữ sức mạnh, bài chính nặng'},
   jacked: {pl: ['db'], d: [5, 6], lv: [1, 2, 3], g: ['muscle', 'cut'], why: 'Chỉ cần tạ đơn, tự chỉnh mức tạ theo sức'},
   nhome: {pl: ['none', 'db'], d: [3, 4], lv: [1, 2], g: ['muscle', 'cut'], why: 'Toàn thân, gần như không cần dụng cụ, hợp người mới'}};
+const QQ_EN = [['What\'s your main goal?', ['Build muscle', 'Lose fat, get lean', 'Build muscle and get stronger']], ['How many days a week can you train?', ['3 days', '4 days', '5 days', '6 days']],
+  ['How long have you been training?', ['Just starting (under 6 months)', '6 months – 2 years', 'Over 2 years']], ['Where do you train?', ['Gym', 'At home, with dumbbells', 'At home, no equipment']]];
+const QP_EN = {minmax: 'Few sets, short 45–60 min sessions, RIR guidance on every set', legacy: 'Very high volume, CBum\'s plan, ~90 min sessions', rto: 'Trisets, giant sets, high intensity',
+  ppl: 'Push · Pull · Legs, easy schedule, all-round growth', bro: 'One muscle group a day, classic style', elevate: '6-week challenge for a cut, 4 exercises per session',
+  shift: 'Cut while keeping strength, heavy main lifts', jacked: 'Dumbbells only, weight auto-adjusts to your strength', nhome: 'Full body, almost no equipment, beginner friendly'};
 const QQ = [
   ['g', 'Mục tiêu chính của bạn?', [['muscle', 'Tăng cơ'], ['cut', 'Siết mỡ, lên form'], ['strength', 'Vừa tăng cơ vừa khoẻ hơn']]],
   ['d', 'Mỗi tuần tập được mấy buổi?', [[3, '3 buổi'], [4, '4 buổi'], [5, '5 buổi'], [6, '6 buổi']]],
@@ -1844,17 +1875,18 @@ function openQuiz(){
   const draw = () => {
     let body;
     if(st < QQ.length){ const [k, q, opts] = QQ[st];
-      body = `<div class="qstep">Câu ${st + 1}/${QQ.length}</div><div class="qbar"><i style="width:${st / QQ.length * 100}%"></i></div><h2 class="qq">${q}</h2>
-        <div class="qopts">${opts.map(([v, t]) => `<button class="qo ${A[k] === v ? 'on' : ''}" data-v="${v}">${t}</button>`).join('')}</div>
-        <div class="qnav">${st ? '<button class="lk" id="qback">‹ Quay lại</button>' : '<span></span>'}<button class="lk" id="qskip">Bỏ qua</button></div>`;
+      const en = LANG === 'en' ? QQ_EN[st] : null;
+      body = `<div class="qstep">${EL('Câu', 'Question')} ${st + 1}/${QQ.length}</div><div class="qbar"><i style="width:${st / QQ.length * 100}%"></i></div><h2 class="qq">${en ? en[0] : q}</h2>
+        <div class="qopts">${opts.map(([v, t], j) => `<button class="qo ${A[k] === v ? 'on' : ''}" data-v="${v}">${en ? en[1][j] : t}</button>`).join('')}</div>
+        <div class="qnav">${st ? `<button class="lk" id="qback">${EL('‹ Quay lại', '‹ Back')}</button>` : '<span></span>'}<button class="lk" id="qskip">${EL('Bỏ qua', 'Skip')}</button></div>`;
     } else {
       const r = quizRank(A);
-      body = `<div class="qstep">Gợi ý cho bạn</div><h2 class="qq">${r.length ? 'Chương trình phù hợp' : 'Chưa có chương trình khớp hẳn'}</h2>
+      body = `<div class="qstep">${EL('Gợi ý cho bạn', 'Suggested for you')}</div><h2 class="qq">${r.length ? EL('Chương trình phù hợp', 'Programs that fit') : EL('Chưa có chương trình khớp hẳn', 'No exact match')}</h2>
         <div class="qres">${r.map((x, i) => { const p = P.find(y => y.id === x.id), cmp = COMPARE.find(c => c[0] === x.id);
-          return `<div class="qr"><div class="img" style="background-image:url(img/hero-${x.id}.webp)"></div><div class="qt">${i === 0 ? '<span class="qbest">Hợp nhất</span>' : ''}<b>${esc(p.name)}</b>
-            <span>${cmp ? `${cmp[2]} tuần · ${cmp[3]} buổi/tuần · ${cmp[4]} phút` : `${p.weeks} tuần`}</span><small>${esc(QP[x.id].why)}</small>
-            <button class="btn sm" data-qp="${x.id}">Chọn chương trình này</button></div></div>`; }).join('')}</div>
-        <p class="anote">Đây chỉ là gợi ý, bạn chọn chương trình nào cũng được.</p><button class="btn ghost" id="qall">Xem tất cả chương trình</button>`;
+          return `<div class="qr"><div class="img" style="background-image:url(img/hero-${x.id}.webp)"></div><div class="qt">${i === 0 ? `<span class="qbest">${EL('Hợp nhất', 'Best fit')}</span>` : ''}<b>${esc(p.name)}</b>
+            <span>${cmp ? EL(`${cmp[2]} tuần · ${cmp[3]} buổi/tuần · ${cmp[4]} phút`, `${cmp[2]} weeks · ${cmp[3]} days/week · ${cmp[4]} min`) : `${p.weeks} ${EL('tuần', 'weeks')}`}</span><small>${esc(EL(QP[x.id].why, QP_EN[x.id]))}</small>
+            <button class="btn sm" data-qp="${x.id}">${EL('Chọn chương trình này', 'Choose this program')}</button></div></div>`; }).join('')}</div>
+        <p class="anote">${EL('Đây chỉ là gợi ý, bạn chọn chương trình nào cũng được.', 'Just a suggestion — pick any program you like.')}</p><button class="btn ghost" id="qall">${EL('Xem tất cả chương trình', 'See all programs')}</button>`;
     }
     ov.innerHTML = `<div class="cbox" role="dialog" aria-label="Chọn chương trình"><button class="x" data-x aria-label="Đóng">✕</button>${body}</div>`;
     ov.querySelector('[data-x]').onclick = close;
@@ -2148,13 +2180,14 @@ const toSide = (it, w) => w === '' || w == null ? w : Math.max(0, (w - barKg(it.
 const fromSide = (it, v) => v == null ? v : v * 2 + barKg(it.name);
 /* nhãn cột + chú thích kg theo dụng cụ */
 function kgInfo(it, SD){
-  if(isBar(it.name)) return SD ? ['', `Kg/bên = bánh lắp <b>1 bên</b>, chưa tính đòn ${barKg(it.name)}kg`] : ['', `Kg tổng = <b>đòn ${barKg(it.name)}kg + bánh 2 bên</b>`];
+  const b = barKg(it.name);
+  if(isBar(it.name)) return SD ? ['', EL(`Kg/bên = bánh lắp <b>1 bên</b>, chưa tính đòn ${b}kg`, `Kg/side = plates on <b>one side</b>, bar (${b}kg) not included`)] : ['', EL(`Kg tổng = <b>đòn ${b}kg + bánh 2 bên</b>`, `Kg total = <b>${b}kg bar + plates on both sides</b>`)];
   const e = eqOf(it.name);
-  if(e === 'db') return ['Kg/tay', 'Kg của <b>1 quả tạ</b> (mỗi tay)'];
-  if(e === 'sm') return ['Kg', 'Kg <b>bánh 2 bên</b>, không tính đòn máy Smith'];
-  if(e === 'mc' || e === 'cb') return ['Kg', 'Kg theo <b>số trên máy</b> / cục tạ'];
-  if(e === 'bw') return ['+Kg', 'Kg <b>đeo thêm</b>, để 0 nếu chỉ tập thân người'];
-  return ['Kg', 'Kg <b>tổng</b> đang cầm'];
+  if(e === 'db') return [EL('Kg/tay', 'Kg/hand'), EL('Kg của <b>1 quả tạ</b> (mỗi tay)', 'Kg of <b>one dumbbell</b> (per hand)')];
+  if(e === 'sm') return ['Kg', EL('Kg <b>bánh 2 bên</b>, không tính đòn máy Smith', '<b>Plates on both sides</b>, not counting the Smith bar')];
+  if(e === 'mc' || e === 'cb') return ['Kg', EL('Kg theo <b>số trên máy</b> / cục tạ', 'Kg as shown <b>on the machine</b> / stack')];
+  if(e === 'bw') return ['+Kg', EL('Kg <b>đeo thêm</b>, để 0 nếu chỉ tập thân người', '<b>Added</b> weight, 0 for bodyweight only')];
+  return ['Kg', EL('Kg <b>tổng</b> đang cầm', '<b>Total</b> kg you hold')];
 }
 function plates(total, bar){ let side = (total - bar) / 2; if(!(total > 0) || side < 0) return null; const out = [];
   for(const q of [25, 20, 15, 10, 5, 2.5, 1.25]) while(side >= q - 1e-9){ out.push(q); side -= q; }
@@ -2166,7 +2199,7 @@ function updPlate(box, it){
   if(!kg){ el.innerHTML = `<span class="pl0">Nhập kg để xem cần lắp bánh tạ nào</span>`; return; }
   const ps = plates(kg, bar);
   el.innerHTML = kg <= bar ? `<b>${nfmt(kg)}kg</b><span class="pl0">chỉ đòn ${bar}kg</span>`
-    : ps ? `<b>${nfmt(kg)}kg</b><span class="pl0">đòn ${bar} + mỗi bên</span>${ps.map(q => `<i class="pq q${String(q).replace('.', '_')}">${nfmt(q)}</i>`).join('')}`
+    : ps ? `<b>${nfmt(kg)}kg</b><span class="pl0">${EL(`đòn ${bar} + mỗi bên`, `bar ${bar} + per side`)}</span>${ps.map(q => `<i class="pq q${String(q).replace('.', '_')}">${nfmt(q)}</i>`).join('')}`
     : `<b>${nfmt(kg)}kg</b><span class="pl0">không chia đều được bằng bánh tạ chuẩn</span>`;
 }
 function tblSets(p, it){
@@ -2501,8 +2534,9 @@ function setAnim(){
 
 /* ---------- EN mode: dịch toàn bộ chữ giao diện (tên bài giữ nguyên) ---------- */
 const EN = {
+  "Không cần email. Nhớ kỹ mật khẩu vì chưa có chức năng lấy lại mật khẩu.":"No email needed. Remember your password — there is no password reset yet.","Tài khoản":"Account","ít nhất 6 ký tự":"at least 6 characters","Quay lại":"Back","Tháng trước":"Previous month","Tháng sau":"Next month","Buổi đầu tiên":"First workout","Xong buổi tập":"Workout done","Thuật ngữ":"Glossary","ⓘ Thuật ngữ":"ⓘ Glossary","Dumbbell · tại nhà":"Dumbbell · at home","Jeff Nippard · tại nhà":"Jeff Nippard · at home","Ignitor: tới thất bại":"Ignitor: to failure","Quá nặng":"Too heavy","Hơi nặng":"A bit heavy","Vừa sức":"Just right","Nhẹ quá":"Too light","Quá nhẹ":"Way too light","Cách tập mỗi bài: (1) làm 1 set thử tới thất bại, (2) nhập số rep làm được, (3) web cho biết cần tập thêm bao nhiêu rep và nghỉ bao lâu. Bấm vào bài để bắt đầu.":"How each exercise works: (1) do one test set to failure, (2) enter the reps you got, (3) the app tells you how many more reps to do and how long to rest. Tap an exercise to start.","Chọn mức tạ bạn nghĩ làm được":"Pick a weight you think you can do for",", rồi làm 1 set tới khi không nâng nổi nữa.":", then do one set until you can't lift any more.","Nhập số rep xong, web sẽ cho biết bạn cần tập thêm bao nhiêu và nghỉ bao lâu.":"After you enter your reps, the app tells you how much more to do and how long to rest.","Bớt":"Less","Thêm":"More","Tập ở nhà có tạ đơn":"Home with dumbbells","Ở nhà, không dụng cụ":"Home, no equipment","Chỉ tạ đơn, Ignitor + Box Score tự chỉnh theo sức":"Dumbbells only, Ignitor + Box Score adapt to you","Tập ở nhà có vài cặp tạ đơn":"Home with a few pairs of dumbbells","Toàn thân, gần như không cần dụng cụ, tới gần thất bại":"Full body, almost no equipment, close to failure","Ở nhà, không có phòng gym":"At home, no gym","Tài khoản và cài đặt":"Account and settings","Điều hướng":"Navigation","Đóng":"Close","Ảnh trước":"Previous photo","Ảnh sau":"Next photo","Tiếng Việt":"Tiếng Việt","Kiểu nhập":"Entry mode","Đổi cách ghi tạ":"Change weight mode","Nhóm cơ":"Muscles","Lỗi thường gặp":"Common mistakes","Số buổi mỗi tuần · 8 tuần gần nhất":"Workouts per week · last 8 weeks","Số buổi mỗi tuần":"Workouts per week","Tuần này":"This week","Biểu đồ chỉ số cơ thể":"Body metrics chart","Đổi bài":"Swap exercise","Tập ở nhà":"Home mode","Tập ở nhà: đổi bài máy/cáp/ghế sang tạ đơn":"Home mode: swap machine/cable/bench exercises for dumbbells","Chọn phase":"Choose phase","Chọn tuần":"Choose week","Tuần trước":"Previous week","Tuần sau":"Next week","Đánh dấu xong":"Mark done","Xong 1 buổi":"Finish 1 workout","Xong 10 buổi":"Finish 10 workouts","Xong 25 buổi":"Finish 25 workouts","Xong 50 buổi":"Finish 50 workouts","Xong 100 buổi":"Finish 100 workouts","Xong 200 buổi":"Finish 200 workouts","Tuần nào cũng tập, 2 tuần liên tiếp":"Train every week, 2 weeks in a row","2 tuần liền":"2-week streak","4 tuần liền":"4-week streak","8 tuần liền":"8-week streak","12 tuần liền":"12-week streak","Tập đều 4 tuần liên tiếp":"Train 4 weeks in a row","Tập đều 8 tuần liên tiếp":"Train 8 weeks in a row","Tập đều 12 tuần liên tiếp":"Train 12 weeks in a row","Tháng chăm":"Busy month","12 buổi trong 1 tháng":"12 workouts in a month","Tháng thép":"Iron month","20 buổi trong 1 tháng":"20 workouts in a month","Kỷ lục đầu tiên":"First PR","Phá kỷ lục 1 bài":"Set a PR on any exercise","10 kỷ lục":"10 PRs","Phá kỷ lục 10 lần":"Set 10 PRs","25 kỷ lục":"25 PRs","Phá kỷ lục 25 lần":"Set 25 PRs","Ghi chép chăm":"Diligent logger","Ghi tạ cho 100 set":"Log weight for 100 sets","Đẩy ngực tạ đòn 60kg":"Barbell bench 60kg","Đẩy ngực tạ đòn 80kg":"Barbell bench 80kg","10 tấn trong 1 buổi":"10 tonnes in one workout","Ghi chỉ số cơ thể 4 lần":"Log body metrics 4 times","Giảm 5% mỡ":"Lose 5% body fat","Mỡ cơ thể giảm 5% so với lần đo đầu":"Body fat down 5% from first measurement","5 buổi bắt đầu trước 7h sáng":"5 workouts started before 7 am","5 buổi bắt đầu sau 21h":"5 workouts started after 9 pm","Tập lại sau 2 tuần nghỉ":"Come back after a 2-week break","Xong trọn 1 chương trình":"Finish a whole program","Gợi ý cho bạn":"Suggested for you","Chọn chương trình này":"Choose this program","Xem tất cả chương trình":"See all programs","Bỏ qua":"Skip","Hợp nhất":"Best fit","Mục tiêu chính của bạn?":"What's your main goal?","Trước":"Front","Chính:":"Primary:","Phụ:":"Secondary:","Đánh dấu đã tập đến ngày…":"Mark done up to day…","Máy bận? Đổi bài":"Machine busy? Swap","Chỉ cần nhập ô nào có số, ô khác để trống.":"Fill only the values you have.",
   'Kết thúc':'End','Bắt đầu buổi tập':'Start workout','Tiếp tục':'Continue','Kết thúc buổi tập':'Workout ended',
-  'Tiến bộ':'Progress','Tài khoản & cài đặt':'Account & settings','Ngôn ngữ':'Language','Nhập set':'Set entry','Chi tiết = ghi tạ và rep từng set':'Detail = log weight and reps per set','Giữ màn hình sáng':'Keep screen on','Khi đang ở trang Hôm nay':'While on the Today page','Bảng xếp hạng tháng':'Monthly leaderboard','Huy hiệu':'Badges','📖 Hướng dẫn sử dụng':'📖 User guide','Cách dùng toàn bộ app, có ảnh minh hoạ':'How to use the whole app, with screenshots','📖 Lần đầu dùng? Xem hướng dẫn ›':'📖 New here? Read the guide ›','Tạ đòn ghi theo':'Barbell weight','Tổng':'Total','Mỗi bên':'Per side','Mỗi bên = số bánh 1 bên, web tự cộng đòn 20kg':'Per side = plates on one side, the bar (20kg) is added for you','Kg/bên':'Kg/side','Kg tổng':'Kg total','Tạ đòn: ghi mỗi bên':'Barbell: per side','Nhập số bánh 1 bên, web tự cộng đòn':'Enter plates on one side, the bar is added','Tạ đòn: ghi tổng':'Barbell: total','Nhập tổng kg kể cả đòn':'Enter total kg including the bar','⇄ Máy bận? Đổi bài':'⇄ Machine busy? Swap','Máy bận? Đổi bài':'Machine busy? Swap','Chọn bài cùng nhóm cơ, giữ số set/rep. Chỉ đổi cho buổi này.':'Pick an exercise for the same muscle, same sets/reps. Only for this workout.','Bài gốc':'Original','Dùng bài này cho buổi hôm nay':'Use this for today','Đã đổi bài cho buổi này':'Swapped for this workout','Nhập kg để xem cần lắp bánh tạ nào':'Enter kg to see which plates to load','mỗi bên':'per side','Chim sớm':'Early bird','Cú đêm':'Night owl','Trở lại':'Comeback','Về đích':'Finisher','Buổi khủng':'Monster session','Đo đều':'Consistent tracker','Sắp đạt':'Almost there','Đẩy ngực tạ đòn 100kg':'Barbell bench 100kg','Tổng khối lượng 10 tấn (kg × rep)':'Total volume 10 t (kg × reps)','Tổng khối lượng 100 tấn':'Total volume 100 t','Tổng khối lượng 1.000 tấn':'Total volume 1,000 t','Lần đo đầu tiên':'First measurement','Ghi chỉ số cơ thể lần đầu':'Log body metrics once','Giảm 2% mỡ':'Lose 2% body fat','Mỡ cơ thể giảm 2% so với lần đo đầu':'Body fat down 2% from first measurement','10 tấn':'10 tonnes','100 tấn':'100 tonnes','1.000 tấn':'1,000 tonnes','Kết thúc buổi':'Workout ended','Chỉ số cơ thể':'Body metrics','+ Nhập':'+ Add','Ghi cân nặng & mỡ cơ thể':'Log weight & body fat','Cân nặng và % mỡ. Lâu lâu đo thì nhập, web vẽ biểu đồ.':'Weight and body fat %. Add whenever you measure; the app draws the chart.','Mỡ cơ thể':'Body fat','Cân nặng (kg)':'Weight (kg)','Nhập cân nặng hoặc mỡ cơ thể.':'Enter weight or body fat.','Nhập cân nặng để đổi kg mỡ ra %.':'Enter weight to convert fat kg to %.','Cân nặng, % mỡ, cơ xương, mỡ nội tạng. Lâu lâu đo thì nhập, web vẽ biểu đồ.':'Weight, body fat %, muscle mass, visceral fat. Add whenever you measure; the app draws the chart.','Cân nặng':'Weight','Mỡ':'Body fat','Cơ xương':'Muscle','Mỡ nội tạng':'Visceral fat','Ngày đo':'Date','Chỉ cần nhập ô nào có số, ô khác để trống.':'Fill only the values you have.','Xoá lần đo này':'Delete this entry','Nhập ít nhất một chỉ số.':'Enter at least one value.','Đã lưu chỉ số':'Saved','đến lúc đo lại':'time to measure again','Chỉ xem huy hiệu đã có':'Show earned only','Chưa có huy hiệu nào. Xong buổi đầu tiên để nhận huy hiệu đầu.':'No badges yet. Finish your first workout to earn one.','buổi xong ·':'workouts ·','ngày có tập':'training days',
+  'Tiến bộ':'Progress','Tài khoản & cài đặt':'Account & settings','Ngôn ngữ':'Language','Nhập set':'Set entry','Chi tiết = ghi tạ và rep từng set':'Detail = log weight and reps per set','Giữ màn hình sáng':'Keep screen on','Khi đang ở trang Hôm nay':'While on the Today page','Bảng xếp hạng tháng':'Monthly leaderboard','Huy hiệu':'Badges','Đẩy ngực tạ đòn 100kg':'Barbell bench 100kg','📖 Hướng dẫn sử dụng':'📖 User guide','Cách dùng toàn bộ app, có ảnh minh hoạ':'How to use the whole app, with screenshots','📖 Lần đầu dùng? Xem hướng dẫn ›':'📖 New here? Read the guide ›','Tạ đòn ghi theo':'Barbell weight','Tổng':'Total','Mỗi bên':'Per side','Mỗi bên = số bánh 1 bên, web tự cộng đòn 20kg':'Per side = plates on one side, the bar (20kg) is added for you','Kg/bên':'Kg/side','Kg tổng':'Kg total','Tạ đòn: ghi mỗi bên':'Barbell: per side','Nhập số bánh 1 bên, web tự cộng đòn':'Enter plates on one side, the bar is added','Tạ đòn: ghi tổng':'Barbell: total','Nhập tổng kg kể cả đòn':'Enter total kg including the bar','⇄ Máy bận? Đổi bài':'⇄ Machine busy? Swap','Máy bận? Đổi bài':'Machine busy? Swap','Chọn bài cùng nhóm cơ, giữ số set/rep. Chỉ đổi cho buổi này.':'Pick an exercise for the same muscle, same sets/reps. Only for this workout.','Bài gốc':'Original','Dùng bài này cho buổi hôm nay':'Use this for today','Đã đổi bài cho buổi này':'Swapped for this workout','Nhập kg để xem cần lắp bánh tạ nào':'Enter kg to see which plates to load','mỗi bên':'per side','Chim sớm':'Early bird','Cú đêm':'Night owl','Trở lại':'Comeback','Về đích':'Finisher','Buổi khủng':'Monster session','Đo đều':'Consistent tracker','Sắp đạt':'Almost there','Đẩy ngực tạ đòn 100kg':'Barbell bench 100kg','Tổng khối lượng 10 tấn (kg × rep)':'Total volume 10 t (kg × reps)','Tổng khối lượng 100 tấn':'Total volume 100 t','Tổng khối lượng 1.000 tấn':'Total volume 1,000 t','Lần đo đầu tiên':'First measurement','Ghi chỉ số cơ thể lần đầu':'Log body metrics once','Giảm 2% mỡ':'Lose 2% body fat','Mỡ cơ thể giảm 2% so với lần đo đầu':'Body fat down 2% from first measurement','10 tấn':'10 tonnes','100 tấn':'100 tonnes','1.000 tấn':'1,000 tonnes','Kết thúc buổi':'Workout ended','Chỉ số cơ thể':'Body metrics','+ Nhập':'+ Add','Ghi cân nặng & mỡ cơ thể':'Log weight & body fat','Cân nặng và % mỡ. Lâu lâu đo thì nhập, web vẽ biểu đồ.':'Weight and body fat %. Add whenever you measure; the app draws the chart.','Mỡ cơ thể':'Body fat','Cân nặng (kg)':'Weight (kg)','Nhập cân nặng hoặc mỡ cơ thể.':'Enter weight or body fat.','Nhập cân nặng để đổi kg mỡ ra %.':'Enter weight to convert fat kg to %.','Cân nặng, % mỡ, cơ xương, mỡ nội tạng. Lâu lâu đo thì nhập, web vẽ biểu đồ.':'Weight, body fat %, muscle mass, visceral fat. Add whenever you measure; the app draws the chart.','Cân nặng':'Weight','Mỡ':'Body fat','Cơ xương':'Muscle','Mỡ nội tạng':'Visceral fat','Ngày đo':'Date','Chỉ cần nhập ô nào có số, ô khác để trống.':'Fill only the values you have.','Xoá lần đo này':'Delete this entry','Nhập ít nhất một chỉ số.':'Enter at least one value.','Đã lưu chỉ số':'Saved','đến lúc đo lại':'time to measure again','Chỉ xem huy hiệu đã có':'Show earned only','Chưa có huy hiệu nào. Xong buổi đầu tiên để nhận huy hiệu đầu.':'No badges yet. Finish your first workout to earn one.','buổi xong ·':'workouts ·','ngày có tập':'training days',
   'Đơn giản':'Simple','Chi tiết':'Detail',
   'Mục tiêu':'Target','Kg':'Kg','Rep':'Reps','Set':'Set','TB':'FAIL','tăng tạ':'add weight','Hết giờ nghỉ!':'Rest over!','Vào set':'Go','Số mờ là gợi ý. Tập đúng thì bấm':'Grey numbers are suggestions. Matched them? Tap','Tập xong set nào bấm':'After each set tap','set đó, web tự đếm giờ nghỉ.':'for it, the rest timer starts.',', khác thì sửa số rồi bấm ✓.':', otherwise edit the numbers then tap ✓.','tối đa':'max',
   'Đồng bộ cloud đang bật':'Cloud sync on','Chỉ lưu trên máy này':'Saved on this device only','Khởi động':'Warm-up','Tạ thêm (kg)':'Added weight (kg)','Tạ (kg)':'Weight (kg)','Lưu':'Save','Bỏ tick set này':'Untick this set','Đang sửa set đã xong':'Editing a finished set','xong':'done',
@@ -2534,6 +2568,17 @@ const EN = {
   '+ tới thất bại':'+ to failure','Tháng này':'This month','buổi xong':'workouts done','bài đã tập':'exercises','ngày có tập':'training days','Đã tập':'Done','Tập dở':'Partial','Dự kiến':'Planned','Tuyệt!':'Awesome!','bài':'exercises','set':'sets','phút':'min','buổi tháng này':'this month','tuần liên tiếp':'week streak','Quá đỉnh!':'Crushed it!','Làm tốt lắm!':'Great job!','Thêm một buổi vào sổ!':'Another one in the books!','Kỷ luật là sức mạnh!':'Discipline wins!','Cơ bắp đang lớn lên!':'Muscles are growing!','Tháng này chưa có buổi nào. Tick xong các bài trong buổi để ghi vào sổ.':'No workouts this month yet. Finish all exercises in a workout to log it.','Sao lưu dữ liệu':'Back up data','Khôi phục':'Restore','Ghi tạ':'Log weight','Đánh dấu đã tập':'Mark as done','✓ Đánh dấu đã tập đến ngày…':'✓ Mark done up to day…','✓ Xong set':'✓ Done','Lưu':'Save','Bỏ tick':'Untick','Tạ (kg)':'Weight (kg)','Tạ thêm (kg)':'Added weight (kg)','Rep':'Reps','Tiến bộ':'Progress','tạ nặng nhất mỗi buổi':'top weight per session','rep nhiều nhất mỗi buổi':'most reps per session','Huy hiệu mới':'New badges','Nhập tạ và rep rồi bấm ✓ Xong set: web tự tick, đếm giờ nghỉ và mở set tiếp theo.':'Enter weight and reps, then tap ✓ Done: it ticks the set, starts the rest timer and opens the next set.','Lần đầu tập bài này: chọn mức tạ vừa sức, lần sau web sẽ gợi ý.':'First time on this exercise: pick a working weight, next time you get a suggestion.','Theo buổi trong tháng':'By workout this month','Không tập ngày này.':'No workout this day.','Không có buổi dự kiến.':'Nothing planned.','Mở ›':'Open ›','Đăng nhập để lưu lên cloud, dùng trên nhiều máy.':'Log in to save to the cloud and use on multiple devices.','Đăng nhập':'Log in','Tạo tài khoản':'Sign up','Đăng xuất':'Log out','Đồng bộ':'Sync','Tên đăng nhập':'Username','Mật khẩu':'Password','Nhập lại mật khẩu':'Confirm password','Đang lưu trên máy này':'Saved on this device only','Chỉ lưu trên máy này':'Saved on this device only','Tạo tài khoản & đồng bộ':'Sign up & sync','Đăng nhập & đồng bộ':'Log in & sync','Hoặc sao lưu ra file để chuyển máy mà không cần tài khoản.':'Or back up to a file to move devices without an account.','Chưa bật đồng bộ cloud':'Cloud sync off','Đồng bộ cloud đang bật':'Cloud sync on','Dữ liệu tập lưu riêng trên máy này. Đổi máy hoặc xoá trình duyệt thì sao lưu trước.':'Your training data is stored on this device only. Back it up before switching devices or clearing the browser.','Làm tối đa':'Max reps','Bước 3 · Tập cho đủ':'Step 3 · Finish the target','Set thử':'Test set','Bạn làm được bao nhiêu rep?':'How many reps did you get?','Xem bảng đầy đủ trong PDF':'See the full PDF table','Bài phụ (corrective)':'Corrective','Set này làm được:':'Reps this set:','Set này làm được (tới thất bại):':'Reps this set (to failure):','Tổng rep trong Stop Ladder':'Total Stop Ladder reps','Tập ở nhà':'Home mode','Set Ignitor':'Ignitor set','Tới thất bại':'To failure','Chưa nhập':'Not entered','Box Score':'Box Score','Corrective':'Corrective','Set tiếp theo (tới thất bại):':'Next set (to failure):','Set tiếp theo:':'Next set:','Stop Ladder: tổng số rep đã làm':'Stop Ladder: total reps done','✓ Đạt Box Score. Nghỉ 90 giây – 2 phút rồi sang bài tiếp theo.':'✓ Box Score reached. Rest 90 s – 2 min, then move on.','Buổi này không cần đổi bài':'No swaps needed today','Jacked Up · tạ quá nhẹ':'Jacked Up · too light','Just Right · vừa':'Just Right','Jacked Down · tạ quá nặng':'Jacked Down · too heavy','Hết giờ nghỉ!':'Rest over!','Vào set':'Go!','Không nghỉ':'No rest','Giữ màn hình sáng':'Keep screen on','Dừng':'Stop'
 };
 const ENRX = [
+  [/^Mục tiêu = (.+) · nghỉ (.+)$/, 'Target = $1 · rest $2'], [/^(.*) · hôm nay$/, '$1 · today'],  [/^(.*)× rep set thử(.*)$/, '$1× test-set reps$2'], [/^(.*)× rep Stop Ladder(.*)$/, '$1× Stop Ladder reps$2'],
+  [/^Lịch sử đo \((\d+)\)$/, 'Measurement history ($1)'], [/^Lần đo gần nhất (\S+) · (\d+) ngày trước$/, 'Last measured $1 · $2 days ago'], [/^Lần đo gần nhất (\S+) · hôm nay$/, 'Last measured $1 · today'],
+  [/^còn (.+) buổi trong tháng$/, '$1 more workouts in a month'], [/^còn (.+) buổi$/, '$1 more workouts'], [/^còn (.+) tuần$/, '$1 more weeks'], [/^còn (.+) kỷ lục$/, '$1 more PRs'],
+  [/^còn (.+) lần đo$/, '$1 more measurements'], [/^còn (.+) lần$/, '$1 more'], [/^còn (.+) tấn$/, '$1 t to go'], [/^còn (.+) kg$/, '$1 kg to go'], [/^còn (.+) %$/, '$1% to go'], [/^còn (.+) set$/, '$1 more sets'],
+  [/^Tuần này: (\d+) buổi · bấm cột để xem$/, 'This week: $1 workouts · tap a bar'], [/^(\S+) · hôm nay$/, '$1 · today'], [/^(.+) · ngày (\d+)$/, '$1 · day $2'],
+  [/^Kết thúc buổi · Ngày (\d+)$/, 'Workout ended · Day $1'], [/^Xong buổi · Ngày (\d+)$/, 'Workout done · Day $1'], [/^Câu (\d+)\/(\d+)$/, 'Question $1/$2'],
+  [/^Giữ mức (.+) · (\d+) buổi · bấm điểm để xem$/, 'Holding $1 · $2 workouts · tap a point'], [/^↑ tăng (.+) sau (\d+) buổi · bấm điểm để xem$/, '↑ up $1 over $2 workouts · tap a point'],
+  [/^Giảm (.+) so với (\d+) buổi trước · bấm điểm để xem$/, 'Down $1 vs $2 workouts ago · tap a point'], [/^Tiến bộ (.+)$/, 'Progress $1'],
+  [/^(.+) tuần · (.+) buổi\/tuần · (.+) phút$/, '$1 weeks · $2 days/week · $3 min'], [/^Ngày (\d+): nghỉ$/, 'Day $1: rest'], [/^Ngày (\d+): (.+)$/, 'Day $1: $2'],
+  [/^(.+) · tại nhà · (.+)$/, '$1 · at home · $2'], [/^Target = (.+) · nghỉ (.+)$/, 'Target = $1 · rest $2'], [/^Corrective: (\d+) điểm$/, 'Corrective: $1 points'],
+  [/^At home: Không có ghế: (.+)$/, 'At home: no bench: $1'],
   [/^Hôm nay · Ngày (\d+)$/, 'Today · Day $1'], [/^Ngày (\d+)$/, 'Day $1'], [/^TUẦN (\d+)$/, 'WEEK $1'],
   [/^Tuần (\d+)(.*)$/, 'Week $1$2'], [/^(.+) · ngày (\d+)–(\d+)$/, '$1 · days $2–$3'],
   [/^(\d+) phút$/, '$1 min'], [/^(\d+) bài$/, '$1 exercises'], [/^(\d+) set$/, '$1 sets'], [/^(\d+) buổi$/, '$1 sessions'],
@@ -2547,17 +2592,21 @@ const ENRX = [
   [/^(.+) set$/, '$1 sets'], [/^tạ · (.+)$/, 'of working weight · $1'], [/^W(\d+) \(tuỳ\)$/, 'W$1 (optional)'],
   [/^Set cuối: (.+)$/, 'Last set: $1'], [/^Lần trước: (.+)$/, 'Last time: $1'], [/^Lần trước · (.+)$/, 'Last time · $1'], [/^Lần trước (.+)$/, 'Last time $1'], [/^Mục tiêu (.+)$/, 'Target $1'], [/^Huy hiệu · (.+)$/, 'Badges · $1'], [/^Dự kiến · (.+)$/, 'Planned · $1'], [/^Xem tất cả (\d+) huy hiệu ›$/, 'See all $1 badges ›'], [/^Lần trước (\d+\/\d+): (.+)$/, 'Last time $1: $2'], [/^(\d+) set · nghỉ (.+)$/, '$1 sets · rest $2'], [/^(.+) rep$/, '$1 reps'], [/^Đã đồng bộ · (.+)$/, 'Synced · $1'], [/^Đang đồng bộ (\d+) mục…$/, 'Syncing $1 items…'], [/^Chưa đồng bộ · (\d+) mục chờ$/, 'Not synced · $1 pending'], [/^SET (\d+)\/(\d+)$/, 'SET $1/$2'], [/^✓ Xong set (\d+)$/, '✓ Set $1 done'], [/^Set (\d+)$/, 'Set $1'], [/^Lần trước: (.+)$/, 'Last time: $1'], [/^✓ Xong (\d+) set\. Bấm vào set ở trên nếu cần sửa\.$/, '✓ All $1 sets done. Tap a set above to edit.'], [/^Đang ẩn\. Tháng này bạn có (\d+) buổi\.$/, 'Hidden. You have $1 workouts this month.'], [/^Tháng (\d+), (\d+)$/, 'Month $1, $2'], [/^(Chủ nhật|Thứ \d), (\d+)\/(\d+)(.*)$/, '$2/$3$4'], [/^Xong buổi · Ngày (\d+)$/, 'Workout done · Day $1'], [/^Lịch (.+)$/, '$1 schedule'], [/^(.+) · ngày (\d+)(.*)$/, '$1 · day $2$3'], [/^Chừa (.+) rep$/, 'Leave $1 in reserve'], [/^Set thử · (\d+)$/, 'Test set · $1'], [/^Set (\d+) · (\d+) ✕$/, 'Set $1 · $2 ✕'], [/^Thay cho (.+)$/, 'Replaces $1'], [/^Tập ở nhà · thay cho (.+)$/, 'Home · replaces $1'], [/^Ở nhà: (.+)$/, 'At home: $1'], [/^(\d+) bài đã đổi sang tạ đơn \/ không dụng cụ$/, '$1 exercises swapped to dumbbell / bodyweight'], [/^Ghi set(.*)$/, 'Log set$1'], [/^(\d+) điểm$/, '$1 pts'], [/^(\d+) rep$/, '$1 reps'], [/^(.+) rep$/, '$1 reps'], [/^Tháng (\d+), (\d+)$/, '$1/$2'], [/^Ngày bắt đầu · hiện tại (.+)$/, 'Start date · now $1'], [/^Tiếp (.+)$/, 'Next $1'], [/^(\d+) phút$/, '$1 min'], [/^SET (\d+)$/, 'SET $1'], [/^(\d+) bài$/, '$1 exercises'], [/^(\d+) ảnh$/, '$1 photos']
 ];
+function trStr(k){
+  let r = EN[k]; if(r != null) return r;
+  r = k; for(const [re, to] of ENRX){ if(re.test(r)){ r = r.replace(re, to); const e = EN[r]; if(e != null) return e; } }
+  return r;
+}
 function trNode(n){
   const t = n.nodeValue, k = t.trim(); if(!k || k.length > 400) return;
-  let r = EN[k];
-  if(r == null) for(const [re,to] of ENRX){ if(re.test(k)){ r = k.replace(re, to); break; } }
-  if(r != null && r !== k) n.nodeValue = t.replace(k, r);
+  const r = trStr(k); if(r !== k) n.nodeValue = t.replace(k, r);
 }
 function trTree(root){
   if(LANG !== 'en' || !root) return;
   if(root.nodeType === 3){ trNode(root); return; }
   const w = document.createTreeWalker(root, NodeFilter.SHOW_TEXT); let n; while((n = w.nextNode())) trNode(n);
-  if(root.querySelectorAll) root.querySelectorAll('[aria-label]').forEach(el => { const a = el.getAttribute('aria-label'); const v = EN[a]; if(v) el.setAttribute('aria-label', v); });
+  if(root.querySelectorAll){ const els = [...root.querySelectorAll('[aria-label],[placeholder],[title]')]; if(root.matches && root.matches('[aria-label],[placeholder],[title]')) els.push(root);
+    els.forEach(el => ['aria-label', 'placeholder', 'title'].forEach(at => { const a = el.getAttribute(at); if(!a) return; const v = trStr(a); if(v !== a) el.setAttribute(at, v); })); }
 }
 new MutationObserver(ms => { if(LANG !== 'en') return; ms.forEach(m => m.addedNodes.forEach(trTree)); })
   .observe(document.body, {childList:true, subtree:true});
