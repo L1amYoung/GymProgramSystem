@@ -568,7 +568,7 @@ html{touch-action:manipulation;scroll-behavior:auto!important}
 .mstat b{display:block;font-size:20px} .mstat span{font-size:11.5px;color:var(--sub);font-weight:700}
 .mcal{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:4px}
 .mcal .mh{text-align:center;font-size:11px;font-weight:800;color:var(--faint);padding:2px 0}
-.md{position:relative;aspect-ratio:1/1.12;border:1px solid var(--line);background:var(--card);border-radius:10px;padding:4px 2px;display:flex;flex-direction:column;align-items:center;gap:2px;overflow:hidden;color:var(--ink)}
+.md{position:relative;aspect-ratio:1/.92;border:1px solid var(--line);background:var(--card);border-radius:10px;padding:4px 2px;display:flex;flex-direction:column;align-items:center;gap:2px;overflow:hidden;color:var(--ink)}
 .md:disabled{opacity:.55;background:transparent}
 .md .n{font-size:12px;font-weight:800;color:var(--sub)} .md .l{font-size:9.5px;font-weight:800;line-height:1.1;text-align:center;word-break:normal}
 .md.done{background:var(--ok);border-color:var(--ok);color:#06281a} .md.done .n{color:#06281a}
@@ -745,6 +745,14 @@ html{touch-action:manipulation;scroll-behavior:auto!important}
 .lmode{display:inline-grid;grid-template-columns:1fr 1fr;gap:2px;padding:3px;border-radius:11px;background:var(--card2)}
 .lmode button{border:0;background:none;border-radius:8px;padding:6px 10px;font-size:12.5px;font-weight:800;color:var(--sub);white-space:nowrap}
 .lmode button[aria-selected="true"]{background:var(--card);color:var(--ink);box-shadow:0 1px 0 var(--line)}
+.wtop{position:relative} .wtop .pos{display:flex;align-items:center;gap:8px;color:var(--ink);font-size:15px}
+.wtop #wtime{font-variant-numeric:tabular-nums;font-size:17px;font-weight:900;min-width:44px} .wtop #wtime.idle{color:var(--faint)}
+.wtop .wsep{width:1px;height:18px;background:var(--line)} .wtop #wsets{font-weight:800}
+.wtop .pos small{font-size:12px;color:var(--sub);font-weight:700;margin-left:4px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.wend{flex:none;height:36px;padding:0 14px;border-radius:999px;border:1px solid var(--line);background:var(--card);color:var(--ink);font-size:13px;font-weight:800}
+.wtrk{position:absolute;left:0;right:0;bottom:-1px;height:3px;background:var(--line)} .wtrk i{display:block;height:100%;background:var(--acc);transition:width .4s}
+.wgo{width:100%;margin:14px 0 4px;min-height:56px;display:grid;gap:2px;place-items:center;text-align:center}
+.wgo span{font-size:16.5px;font-weight:900} .wgo small{font-size:12.5px;font-weight:700;opacity:.7;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .lwt{display:inline-flex;align-items:center;gap:6px;font-size:12.5px;font-weight:800;color:var(--sub);cursor:pointer}
 .lwt input{appearance:none;-webkit-appearance:none;width:34px;height:20px;border-radius:99px;background:var(--line);position:relative;margin:0;transition:background .2s;cursor:pointer}
 .lwt input::after{content:"";position:absolute;top:2px;left:2px;width:16px;height:16px;border-radius:50%;background:var(--ink);transition:transform .2s}
@@ -930,7 +938,7 @@ function weeksHtml(){
   const wks = Array.from({length: 8}, (_, i) => { const a = new Date(mon0); a.setDate(mon0.getDate() - 7*(7-i)); const b = new Date(a); b.setDate(a.getDate()+7);
     return {a, c: L.filter(e => { const t = new Date(e.d+'T00:00:00'); return t >= a && t < b; }).length}; });
   if(!L.length) return '';
-  const W = 320, H = 110, pt = 18, pb = 18, mx = Math.max(1, ...wks.map(w => w.c)), bw = (W - 7*6) / 8;
+  const W = 320, H = 86, pt = 16, pb = 16, mx = Math.max(1, ...wks.map(w => w.c)), bw = (W - 7*6) / 8;
   const dd = d => `${d.getDate()}/${d.getMonth()+1}`;
   return `<div class="mtype"><div class="mdh">Số buổi mỗi tuần · 8 tuần gần nhất</div><div class="panel wkp"><svg viewBox="0 0 ${W} ${H}" class="wchart" role="img" aria-label="Số buổi mỗi tuần">
     <line x1="0" x2="${W}" y1="${H-pb}" y2="${H-pb}" class="base"/>
@@ -1101,7 +1109,7 @@ function setDone(p,n,set){
   const L = getLog(), k = p.id+'|'+n, tot = w.items.length;
   if(!set.size){ delete L[k]; }
   else {
-    const e = L[k] || {d: isoDay(), t0: Date.now(), p: p.id, n, w: w.title};
+    const e = L[k] || {d: isoDay(), t0: +(store.get('wst-'+p.id+'-'+n)) || Date.now(), p: p.id, n, w: w.title};
     e.k = set.size; e.of = tot; e.pn = p.name; e.ph = w.phase || '';
     if(set.size >= tot && prev < tot) e.t1 = Date.now();
     L[k] = e;
@@ -1273,6 +1281,8 @@ function renderToday(){
       <h1 style="view-transition-name:wo-title">${esc(w.title)}</h1>
       <div class="meta">${w.label && w.label!=='-' ? `<span class="hl">${esc(w.label)}</span>` : ''}${m.min?`<span>${m.min} phút</span>`:''}<span>${w.items.length} bài</span>${m.sets?`<span>${m.sets} set</span>`:''}</div>
       <div class="prog"><div class="bar"><i style="width:${pct}%"></i></div><span>${done.size}/${w.items.length}</span></div></div>`;
+    { const nx = w.items.findIndex((_, i) => !done.has(i)), began = done.size || store.get('wst-'+p.id+'-'+n);
+      if(nx >= 0) h += `<button class="btn wgo" id="wgo" data-nx="${nx}"><span>${began ? 'Tiếp tục' : 'Bắt đầu buổi tập'}</span>${began ? `<small>${esc(w.items[nx].s)} · ${esc(w.items[nx].name)}</small>` : ''}</button>`; }
     const nh = w.items.filter(x => x.orig).length;
     if(HOME && hasHome(p)) h += `<div class="hmbar"><b>Tập ở nhà</b><span>${nh ? `${nh} bài đã đổi sang tạ đơn / không dụng cụ` : 'Buổi này không cần đổi bài'}</span></div>`;
     h += groups(w.items).map(g => {
@@ -1283,7 +1293,7 @@ function renderToday(){
           const sub = p.weekSelect ? (/tối đa/.test(it.reps||'') ? ['Chừa 1–3 rep, set cuối tới thất bại', mm.rest?'nghỉ '+mm.rest:''].filter(Boolean).join(' · ') : [mm.rir.length?'RIR '+mm.rir.join('·'):'', mm.rest?'nghỉ '+mm.rest:''].filter(Boolean).join(' · ')) : (it.tempo && it.tempo!=='—' ? 'Tempo '+it.tempo : '');
           return `<div class="row${done.has(i)?' done':''}" data-i="${i}" role="button" tabindex="0" aria-label="${esc(it.name)}">
             <span class="th">${thumbHtml(it)}<span class="code">${esc(it.s)}</span></span>
-            <span class="info"><b>${esc(it.name)}</b><span class="sets">${setsHtml(it.reps)}</span>${sub?`<span class="sub">${esc(sub)}</span>`:''}${it.orig?`<span class="sub hm">Thay cho ${esc(it.orig)}</span>`:''}${(() => { if(it.jk) return ''; const hh = exHist(it.name).filter(x => x.key !== `${p.id}|${n}|${i}`), lt = hh[hh.length-1]; return lt ? `<span class="sub lt">Lần trước: ${esc(lt.sets.filter(Boolean).map(setTxt).join(' · '))}</span>` : ''; })()}</span>
+            <span class="info"><b>${esc(it.name)}</b><span class="sets">${setsHtml(it.reps)}</span>${it.orig?`<span class="sub hm">Thay cho ${esc(it.orig)}</span>`:''}${(() => { if(it.jk) return ''; const hh = exHist(it.name).filter(x => x.key !== `${p.id}|${n}|${i}`), lt = hh[hh.length-1]; return lt ? `<span class="sub lt">Lần trước: ${esc(lt.sets.filter(Boolean).map(setTxt).join(' · '))}</span>` : ''; })()}</span>
             <button class="chk" data-c="${i}" aria-pressed="${done.has(i)}" aria-label="Đánh dấu xong">✓</button></div>`;
         }).join('')}</div></div>`;
     }).join('');
@@ -1298,6 +1308,7 @@ function renderToday(){
   const ps = document.getElementById('phsel'); if(ps) ps.onchange = e => { ANIM = 'fade'; const [a2] = p.phases[+e.target.value]; const dd = p.sched.slice(a2-1, a2+6); setDay(p, (dd.find(x=>x.w)||dd[0]).n); render(); };
   const tt = document.getElementById('totoday'); if(tt) tt.onclick = () => { ANIM = ti>n ? 'l' : 'r'; setDay(p, ti); render(); };
   const sd = document.getElementById('sd'); if(sd) sd.onclick = () => openDatePicker(p);
+  const wg = document.getElementById('wgo'); if(wg) wg.onclick = () => { if(!store.get('wst-'+p.id+'-'+n)) store.set('wst-'+p.id+'-'+n, String(Date.now())); unlockAudio(); wakeOn(); openSheet(+wg.dataset.nx); };
   main.querySelectorAll('[data-shot]').forEach(b => b.onclick = () => lightbox(p.workouts[d.w].imgs, +b.dataset.shot));
   main.querySelectorAll('.row').forEach(r => {
     r.onclick = e => { if(e.target.closest('.chk')) return; openSheet(+r.dataset.i); };
@@ -1415,10 +1426,10 @@ function renderStats(){
     <div class="mnav"><button class="arw" data-mm="-1" aria-label="Tháng trước">‹</button><b>Tháng ${M}, ${Y}</b><button class="arw" data-mm="1" aria-label="Tháng sau" ${CALM >= today.slice(0,7) ? 'disabled' : ''}>›</button></div>
     <div class="mstat"><div><b>${done.length}</b><span>buổi xong</span></div><div><b>${list.reduce((a,e)=>a+e.k,0)}</b><span>bài đã tập</span></div><div><b>${new Set(done.map(e=>e.d)).size}</b><span>ngày có tập</span></div></div>
     ${ks.length ? `<div class="mchips">${ks.map(k => `<span>${esc(k)}<b>×${cnt[k]}</b></span>`).join('')}</div>` : ''}</div>`;
-  h += `<div class="sec"><h2 class="h2s">Bảng xếp hạng tháng</h2>${renderBoard(true)}</div>`;
+  h += `<div class="sec"><div class="mdh">Bảng xếp hạng tháng</div>${renderBoard(true)}</div>`;
   const wk = weeksHtml(); if(wk) h += `<div class="sec">${wk}</div>`;
   const got = new Set(earnedBadges());
-  h += `<div class="sec"><div class="bhd"><h2 class="h2s">Huy hiệu</h2><span>${got.size}/${BADGES.length}</span></div>`;
+  h += `<div class="sec"><div class="bhd"><div class="mdh">Huy hiệu</div><span>${got.size}/${BADGES.length}</span></div>`;
   const shown = BADGEALL ? BADGES : BADGES.filter(b => got.has(b[0]));
   h += shown.length ? `<div class="bgrid">${shown.map(([id, ic, nm, ds]) => `<div class="bdg ${got.has(id) ? 'on' : ''}" title="${esc(ds)}"><span class="bi">${ic}</span><b>${esc(nm)}</b><small>${esc(ds)}</small></div>`).join('')}</div>` : '<p class="none">Chưa có huy hiệu nào. Xong buổi đầu tiên để nhận huy hiệu đầu.</p>';
   h += `<button class="qsw" id="ball">${BADGEALL ? 'Chỉ xem huy hiệu đã có' : `Xem tất cả ${BADGES.length} huy hiệu ›`}</button></div>`;
@@ -1565,6 +1576,8 @@ function closeSheet(fromPop){ if(sheet.hidden) return;
     if(!fromPop && history.state && history.state.sheet) history.back();
     return;
   } sheet.classList.remove('open'); document.body.style.overflow = ''; const red = matchMedia('(prefers-reduced-motion: reduce)').matches; setTimeout(() => { if(sheet.classList.contains('open')) return; sheet.hidden = true; sheet.innerHTML=''; }, red ? 0 : 350); refreshDone(); if(!fromPop && history.state && history.state.sheet) history.back(); }
+{ const _cs = closeSheet; closeSheet = function(fromPop){ const was = !sheet.hidden; _cs(fromPop);
+  if(was && TAB === 'today') setTimeout(() => { if(sheet.classList.contains('open')) return; const y = scrollY; ANIM = ''; renderNow(); scrollTo(0, y); }, 420); }; }
 window.addEventListener('popstate', () => { if(!sheet.hidden) closeSheet(true); });
 function mediaHtml(e){
   const vt = ' style="view-transition-name:ex-media"';
@@ -1691,69 +1704,6 @@ function exHist(name){
   return out.sort((a,b) => (a.d||'').localeCompare(b.d||'') || a.ts - b.ts || a.n - b.n);
 }
 function warmPct(x){ const m = String(x).match(/(\d+)\s*%/); return m ? +m[1] : null; }
-const QW = {}, QSEL = {};
-const QUICK = () => LOGW() && store.get('setui') !== 'full';
-function qCtx(p, it){
-  const n = curDay(p), vals = setVals(p, it), qk = `${p.id}|${n}|${CUR}`, AM = /tối đa/.test(it.reps||'');
-  const ticks = (() => { const x = getSets(p, n, CUR); return Array.isArray(x) ? x : []; })();
-  const hist = exHist(it.name).filter(x => x.key !== qk.replace(/\|/g, '|')), last = hist.length ? hist[hist.length-1] : null;
-  const lsets = last ? last.sets.map(setObj) : [], l0 = lsets.find(x => x && x.r), rg0 = tgtRange(vals[0]), st = wStep(it), bw = BWRE.test(it.name);
-  const up = !!(l0 && l0.w && rg0 && !AM && l0.r >= rg0[1]);
-  const tw = ticks.map(setObj).filter(Boolean).slice(-1)[0];
-  if(QW[qk] == null) QW[qk] = tw ? tw.w : l0 && l0.w ? l0.w + (up ? st : 0) : (bw ? 0 : null);
-  let sel = QSEL[qk]; if(sel == null || sel >= vals.length) sel = vals.findIndex((_, k) => !ticks[k]);
-  return {n, vals, qk, AM, ticks, last, lsets, l0, up, st, bw, sel};
-}
-function quickTable(p, it){
-  const c = qCtx(p, it), {n, vals, qk, AM, ticks, last, lsets, l0, up, st, bw, sel} = c;
-  const mm = p.weekSelect ? mmParse(it.tempo) : null;
-  const dd0 = d => d ? `${+d.slice(8)}/${+d.slice(5,7)}` : '';
-  const tgt = k => { const v = vals[k]; let t = AM || v === '∞' ? 'tối đa' : String(v).replace(/\s*\+\s*∞/, '') + (/^\d+(\s*[-–]\s*\d+)?$/.test(v) ? ' rep' : '');
-    const r = mm && mm.rir[k]; if(r != null) t += r === '0' ? ' · tới thất bại' : ` · RIR ${r}`; else if(/∞/.test(v)) t += ' · tới thất bại'; return t; };
-  let h = '';
-  if(last) h += `<div class="lastc"><span>Lần trước${last.d ? ' · ' + dd0(last.d) : ''}</span><b>${last.sets.filter(Boolean).map(setTxt).join('  ·  ')}</b></div>`;
-  h += `<div class="panel qp"><div class="panel-h"><h3>${vals.length} set</h3><label class="lwt"><input type="checkbox" id="logw" checked><span>Ghi tạ</span></label></div>`;
-  // khởi động: 1 dòng nhỏ
-  if(p.weekSelect && it.warm && it.warm.length){
-    const warmArr = (() => { const x = getSets(p, n, 1000+CUR); return Array.isArray(x) ? x : []; })();
-    const mn = +(String(it.wu||'').split('-')[0]) || it.warm.length, won = it.warm.slice(0, mn).every((_, k) => warmArr[k]);
-    const ref = QW[qk] || (l0 && l0.w), kgs = it.warm.slice(0, mn).map(x => { const pc = warmPct(x); return ref && pc ? nfmt(Math.max(0, Math.round(ref*pc/100/st)*st)) : (String(x).match(/~?\d+%/) || [x])[0]; });
-    h += `<button class="qwu ${won ? 'on' : ''}" id="qwu" aria-pressed="${won}"><span class="qck">✓</span><span><b>Khởi động</b><small>${kgs.join(' → ')}${ref ? ' kg' : ''}</small></span></button>`;
-  }
-  // dải set
-  h += `<div class="qchips">${vals.map((v, k) => { const o = setObj(ticks[k]), on = !!ticks[k];
-    return `<button class="qc ${on ? 'on' : ''} ${k === sel ? 'cur' : ''}" data-qs="${k}"><b>${on ? '✓' : k+1}</b><span>${o ? esc(setTxt(o)) : on ? 'xong' : 'Set ' + (k+1)}</span></button>`; }).join('')}</div>`;
-  // thẻ set đang chọn
-  if(sel >= 0){
-    const o = setObj(ticks[sel]), on = !!ticks[sel], rg = tgtRange(vals[sel]), ls = lsets[sel];
-    const w = o ? o.w : QW[qk], r = o ? o.r : (!up && ls && ls.r) ? ls.r : rg ? rg[0] : (ls ? ls.r : '');
-    const note = on ? 'Đang sửa set đã xong' : up && sel === vals.findIndex((_, k) => !ticks[k]) && !ticks.some(Boolean) ? `Lần trước đạt mức trên → đã <b>+${nfmt(st)}kg</b>` : ls ? `Lần trước: ${esc(setTxt(ls))}` : '';
-    h += `<div class="qcard"><div class="qct"><b>SET ${sel+1}/${vals.length}</b><span>${esc(tgt(sel))}</span></div>
-      <div class="qin"><div class="qf"><small>${bw ? 'Tạ thêm' : 'Tạ'} (kg)</small><span class="stp big"><button type="button" data-qdw="-1" aria-label="Bớt tạ">−</button><input id="qwi" inputmode="decimal" autocomplete="off" value="${w != null && w !== '' ? nfmt(w) : ''}" placeholder="kg"><button type="button" data-qdw="1" aria-label="Thêm tạ">+</button></span></div>
-      <div class="qf"><small>Rep</small><span class="stp big"><button type="button" data-qdr="-1" aria-label="Bớt rep">−</button><input id="qri" inputmode="numeric" autocomplete="off" value="${r ?? ''}"><button type="button" data-qdr="1" aria-label="Thêm rep">+</button></span></div></div>
-      ${note ? `<p class="qnote">${note}</p>` : ''}
-      <button class="btn qgo" id="qgo">${on ? 'Lưu' : `✓ Xong set ${sel+1}`}</button>${on ? '<button class="qsw" id="qdel">Bỏ tick set này</button>' : ''}</div>`;
-  } else h += `<div class="qdone">✓ Xong ${vals.length} set. Bấm vào set ở trên nếu cần sửa.</div>`;
-  h += `<button class="qsw" id="qfull">Nhập chi tiết từng set ›</button></div>`;
-  if(AM) h = h.replace('<div class="qchips">', '<p class="amh">Mỗi set làm tới khi <b>chỉ còn sức thêm vài rep</b> thì dừng, set cuối làm tới khi không nổi nữa.</p><div class="qchips">');
-  return h + progHtml(p, n, it);
-}
-function bindQuick(p, n, w, it, box){
-  const c = qCtx(p, it), {qk, st, sel} = c, rd = () => rerenderSets(p, n, w, it);
-  const wi = box.querySelector('#qwi'), ri = box.querySelector('#qri');
-  [wi, ri].forEach(x => { if(x) x.onfocus = () => setTimeout(() => x.select(), 0); });
-  box.querySelectorAll('[data-qdw]').forEach(b => b.onclick = () => { const v = pnum(wi.value) || 0; wi.value = nfmt(Math.max(0, Math.round((v + st * +b.dataset.qdw)/st)*st)); });
-  box.querySelectorAll('[data-qdr]').forEach(b => b.onclick = () => { ri.value = Math.max(0, (parseInt(ri.value) || 0) + +b.dataset.qdr); });
-  box.querySelectorAll('[data-qs]').forEach(b => b.onclick = () => { const k = +b.dataset.qs; QSEL[qk] = k === sel ? null : k; rd(); });
-  const wu = box.querySelector('#qwu'); if(wu) wu.onclick = () => { const mn = +(String(it.wu||'').split('-')[0]) || it.warm.length, a = getSets(p, n, 1000+CUR), on = Array.isArray(a) && it.warm.slice(0, mn).every((_, k) => a[k]);
-    putSets(p, n, 1000+CUR, on ? [] : it.warm.slice(0, mn).map(() => true)); rd(); };
-  const go = box.querySelector('#qgo'); if(go) go.onclick = () => { unlockAudio(); wakeOn();
-    const wv = pnum(wi.value), r = parseInt(ri.value), a = getSets(p, n, CUR), was = Array.isArray(a) && !!a[sel];
-    if(!was) QW[qk] = wv;           // tạ này dùng cho các set sau
-    QSEL[qk] = null; saveSet(p, n, w, it, 'm', sel, r > 0 ? {w: wv || 0, r} : true); };
-  const del = box.querySelector('#qdel'); if(del) del.onclick = () => { QSEL[qk] = null; saveSet(p, n, w, it, 'm', sel, false); };
-  const fu = box.querySelector('#qfull'); if(fu) fu.onclick = () => { store.set('setui', 'full'); SED = null; rd(); };
-}
 const TDR = {}; let RESTAT = null;
 function tblSets(p, it){
   const n = curDay(p), vals = setVals(p, it), mm = p.weekSelect ? mmParse(it.tempo) : null, AM = /tối đa/.test(it.reps||''), LW = LOGW();
@@ -1817,72 +1767,6 @@ function bindTbl(p, n, w, it, box){
 function setTable(p, it, ticks){
   if(it.jk) return jkPanel(p, it);
   return tblSets(p, it);
-  const n = curDay(p), vals = setVals(p, it), mm = p.weekSelect ? mmParse(it.tempo) : null, AM = /tối đa/.test(it.reps||'');
-  ticks = Array.isArray(ticks) ? ticks : [];
-  const warmArr = (() => { const x = getSets(p, n, 1000+CUR); return Array.isArray(x) ? x : []; })();
-  const hist = exHist(it.name).filter(x => x.key !== `${p.id}|${n}|${CUR}`), last = hist.length ? hist[hist.length-1] : null;
-  const bw = BWRE.test(it.name), st = wStep(it);
-  const hasWarm = p.weekSelect && it.warm && it.warm.length, mn = hasWarm ? (+(String(it.wu||'').split('-')[0]) || it.warm.length) : 0;
-  // set nào đang mở trình nhập
-  let open = !LOGW() ? 'none' : SED && SED.startsWith(CUR+'|') ? SED : null;
-  if(!open){ const wk = hasWarm ? it.warm.findIndex((_,k) => k < mn && !warmArr[k]) : -1; const mk = vals.findIndex((_,k) => !ticks[k]);
-    open = (wk >= 0 && mk === 0) ? `${CUR}|w|${wk}` : mk >= 0 ? `${CUR}|m|${mk}` : 'none'; }
-  const work = setObj(ticks[0]) || (last && last.sets.find(x => x && x.w));
-  const editor = (kind, k, pf, on, hint) => `<div class="sed" data-kind="${kind}" data-k="${k}">
-      <div class="sedr"><div class="fld"><small>${bw ? 'Tạ thêm (kg)' : 'Tạ (kg)'}</small><span class="stp"><button type="button" data-dw="-1" aria-label="Bớt tạ">−</button><input id="sw" inputmode="decimal" autocomplete="off" value="${pf.w != null && pf.w !== '' ? nfmt(pf.w) : ''}" placeholder="${bw ? '0' : 'kg'}"><button type="button" data-dw="1" aria-label="Thêm tạ">+</button></span></div>
-      <div class="fld"><small>Rep</small><span class="stp"><button type="button" data-dr="-1" aria-label="Bớt rep">−</button><input id="sr" inputmode="numeric" autocomplete="off" value="${pf.r ?? ''}"><button type="button" data-dr="1" aria-label="Thêm rep">+</button></span></div></div>
-      ${hint ? `<p class="sedh">${hint}</p>` : ''}
-      <div class="sedb"><button class="btn" id="ssave">${on ? 'Lưu' : '✓ Xong set'}</button>${on ? '<button class="btn ghost" id="sdel">Bỏ tick</button>' : ''}</div></div>`;
-  const rows = vals.map((v,k) => {
-    let tag = '', disp = v;
-    if(p.weekSelect){ const r = mm.rir[k]; if(r != null) tag = r==='0' ? '<span class="tag f">Tới thất bại</span>' : AM ? `<span class="tag">Chừa ${esc(r)} rep</span>` : `<span class="tag">RIR ${esc(r)}</span>`; }
-    if(AM) disp = 'Làm tối đa';
-    if(/\+\s*∞/.test(v)){ disp = v.replace(/\s*\+\s*∞/, ''); tag = '<span class="tag f">+ tới thất bại</span>'; }
-    if(v === '∞'){ tag = '<span class="tag f">Tới thất bại</span>'; }
-    const unit = /^\d+(\s*[-–]\s*\d+)?$/.test(disp) ? '<small>rep</small>' : '';
-    const o = setObj(ticks[k]), on = !!ticks[k], ls = last && (last.sets[k] || null), isOpen = open === `${CUR}|m|${k}`;
-    const rp = o ? `${esc(setTxt(o))}<em>Mục tiêu ${esc(disp)}${unit ? ' rep' : ''}</em>` : `${esc(disp)}${unit}${ls ? `<em>Lần trước ${esc(setTxt(ls))}</em>` : ''}`;
-    const rg0 = tgtRange(v), prev0 = k > 0 ? setObj(ticks[k-1]) : null, ls0 = ls || (last && last.sets.filter(Boolean).slice(-1)[0]);
-    const qw = prev0 ? prev0.w : ls0 ? ls0.w : '', qr = rg0 ? rg0[0] : (ls0 ? ls0.r : '');
-    let html = `<button class="setrow sr ${on?'on':''} ${isOpen?'open':''}" data-set="${k}" data-qw="${qw ?? ''}" data-qr="${qr ?? ''}" aria-pressed="${on}" aria-expanded="${isOpen}"><span class="sn">SET ${k+1}</span><span class="rp">${rp}</span>${tag || '<span></span>'}<span class="sck">✓</span></button>`;
-    if(isOpen){
-      const rg = tgtRange(v), prev = k > 0 ? setObj(ticks[k-1]) : null, lsAny = ls || (last && last.sets.filter(Boolean).slice(-1)[0]);
-      let pf = o ? {w: o.w, r: o.r} : {w: prev ? prev.w : lsAny ? lsAny.w : null, r: rg ? rg[0] : (lsAny ? lsAny.r : '')};
-      let hint = '';
-      if(lsAny){
-        hint = `Lần trước: <b>${esc(setTxt(lsAny))}</b>`;
-        if(rg && lsAny.r >= rg[1] && lsAny.w){ hint += ` · đạt mức trên → <b>thử tăng tạ</b>`; if(!o && !prev) pf.w = lsAny.w + st; }
-        else if(rg && lsAny.r < rg[0]) hint += ' · chưa đạt mức dưới → giữ tạ';
-        else if(rg) hint += ' · giữ tạ, cố thêm 1 rep';
-      } else if(!o) hint = 'Lần đầu tập bài này: chọn mức tạ vừa sức, lần sau web sẽ gợi ý.';
-      html += editor('m', k, pf, on, hint);
-    }
-    return html;
-  }).join('');
-  const head = p.weekSelect ? `<h3>Set làm việc</h3>${mm.rest ? `<span>Nghỉ ${esc(mm.rest)}</span>` : ''}`
-                            : `<h3>${vals.length} set</h3>${it.tempo && it.tempo!=='—' ? `<span>Tempo ${esc(it.tempo)}</span>` : ''}`;
-  const rs = restFor(p, it);
-  const chips = (p.weekSelect ? [rs] : [60,90,120,180]).map(x => `<button class="rchip ${x===rs?'on':''}" data-rest="${x}">${x>=60 ? (x%60 ? Math.floor(x/60)+':'+String(x%60).padStart(2,'0') : x/60+' phút') : x+'s'}</button>`).join('');
-  let warmHtml = '';
-  if(hasWarm){
-    warmHtml = `<div class="panel"><div class="panel-h"><h3>Khởi động</h3><span>${esc(it.wu)} set${String(it.wu).includes('-')?' · tạ nặng thì làm đủ':''}</span></div><div class="setlist">${it.warm.map((x,k) => {
-      const mt = x.match(/^(~?\d+%)(?: tạ làm việc)?\s*×\s*(.+)$/); const pc = mt?mt[1]:x, rp = mt?mt[2]:'';
-      const o = setObj(warmArr[k]), on = !!warmArr[k], isOpen = open === `${CUR}|w|${k}`, pct = warmPct(x);
-      const kg = work && work.w && pct ? Math.max(0, Math.round(work.w*pct/100/st)*st) : null;
-      const rmq = String(rp).match(/(\d+)/);
-      let h = `<button class="setrow sr wu ${k>=mn?'opt':''} ${on?'on':''} ${isOpen?'open':''}" data-wset="${k}" data-qw="${kg ?? ''}" data-qr="${rmq ? rmq[1] : ''}" aria-pressed="${on}"><span class="sn">W${k+1}${k>=mn?' (tuỳ)':''}</span><span class="rp">${o ? esc(setTxt(o)) : `${esc(pc)}<small>tạ · ${esc(rp)}</small>`}${!o && kg != null ? `<em>≈ ${nfmt(kg)}kg</em>` : ''}</span><span></span><span class="sck">✓</span></button>`;
-      if(isOpen){ const rm = String(rp).match(/(\d+)/);
-        h += editor('w', k, o ? {w: o.w, r: o.r} : {w: kg, r: rm ? +rm[1] : 5}, on, kg != null ? `≈ ${esc(pc)} của ${nfmt(work.w)}kg (set chính ${setObj(ticks[0]) ? 'hôm nay' : 'lần trước'})` : 'Khởi động nhẹ, chưa có tạ set chính để tính %.'); }
-      return h; }).join('')}</div></div>`;
-  }
-  const dd0 = d => d ? `${+d.slice(8)}/${+d.slice(5,7)}` : '';
-  const lastCard = last ? `<div class="lastc"><span>Lần trước${last.d ? ' · ' + dd0(last.d) : ''}</span><b>${last.sets.filter(Boolean).map(setTxt).join('  ·  ')}</b></div>` : '';
-  let html = `${lastCard}${warmHtml}<div class="panel"><div class="panel-h">${head}<label class="lwt"><input type="checkbox" id="logw" ${LOGW() ? 'checked' : ''}><span>Ghi tạ</span></label></div><div class="setlist">${rows}</div>
-    <div class="restrow"><span class="rlab">Nghỉ giữa set</span>${chips}</div>
-    <p class="sethint">${LOGW() ? 'Bấm <b>vòng tròn</b> để tick nhanh (lưu theo số gợi ý). Bấm <b>vào set</b> để sửa tạ / rep.' : 'Bấm vào set khi tập xong để tick và tự đếm giờ nghỉ.'}</p>${LOGW() ? '<button class="qsw" id="qlite">‹ Kiểu gọn</button>' : ''}</div>`;
-  if(AM) html = html.replace('<div class="setlist">' + rows.slice(0, 0), '<p class="amh">Không đếm rep cố định. Mỗi set làm tới khi thấy <b>chỉ còn sức thêm vài rep</b> (số trên nhãn) thì dừng. Set cuối làm tới khi không nổi nữa. Lần sau cố làm nhiều hơn lần trước.</p><div class="setlist">');
-  html += progHtml(p, n, it);
-  return html;
 }
 /* ---------- biểu đồ tiến bộ 1 bài ---------- */
 function progHtml(p, n, it){
@@ -1908,6 +1792,7 @@ function progHtml(p, n, it){
     <p class="pcap" data-caps='${esc(JSON.stringify(pts.map(q => `${dd(q.d) || 'Buổi'} · ${q.lab}`)))}'>${diff > 0 ? `↑ tăng ${wtd ? nfmt(diff)+'kg' : diff+' rep'} sau ${pts.length} buổi` : diff < 0 ? `Giảm ${wtd ? nfmt(-diff)+'kg' : -diff+' rep'} so với ${pts.length} buổi trước` : `Giữ mức ${esc(lastP.lab)} · ${pts.length} buổi`} · bấm điểm để xem</p></div>`;
 }
 function saveSet(p, n, w, it, kind, k, obj){
+  if(obj && !store.get('wst-'+p.id+'-'+n)) store.set('wst-'+p.id+'-'+n, String(Date.now()));
   const idx = kind === 'm' ? CUR : 1000 + CUR, t0 = getSets(p, n, idx), t = (Array.isArray(t0) ? t0 : []).slice();
   t[k] = obj; putSets(p, n, idx, t);
   let next = 'none';
@@ -1925,7 +1810,7 @@ function saveSet(p, n, w, it, kind, k, obj){
     for(let j = k+1; j < mn; j++) if(!t[j]){ nk = j; break; }
     if(nk >= 0) next = `${CUR}|w|${nk}`; else { const ms = getSets(p, n, CUR), j = setVals(p, it).findIndex((_, q) => !(Array.isArray(ms) && ms[q])); next = j >= 0 ? `${CUR}|m|${j}` : 'none'; }
   }
-  SED = obj && LOGW() && !QUICK() ? next : 'none';
+  SED = 'none';
   rerenderSets(p, n, w, it);
 }
 function checkPR(p, n, it, o, k){
@@ -1942,14 +1827,12 @@ function toast(h){ let t = document.getElementById('toast'); if(!t){ t = documen
   t.innerHTML = h; t.classList.add('on'); clearTimeout(t._t); t._t = setTimeout(() => t.classList.remove('on'), 3500); }
 function rerenderSets(p, n, w, it){
   const box = sheet.querySelector('#setp'); if(!box) return;
-  box.innerHTML = setTable(p, it, getSets(p, n, CUR)); bindSets(p, n, w, it); trTree(box);
+  box.innerHTML = setTable(p, it, getSets(p, n, CUR)); bindSets(p, n, w, it); trTree(box); wkBar();
   const ed = box.querySelector('.sed'); if(ed) ed.scrollIntoView({block: 'nearest', behavior: RM ? 'auto' : 'smooth'});
 }
 function bindSets(p, n, w, it){
   const box = sheet.querySelector('#setp'); if(!box) return;
   const lw = box.querySelector('#logw'); if(lw) lw.onchange = () => { store.set('logw', lw.checked ? '1' : '0'); SED = null; rerenderSets(p, n, w, it); };
-  const ql = box.querySelector('#qlite'); if(ql) ql.onclick = () => { store.set('setui', 'quick'); SED = null; rerenderSets(p, n, w, it); };
-  if(box.querySelector('.qp')) bindQuick(p, n, w, it, box);
   if(box.querySelector('.tset')) bindTbl(p, n, w, it, box);
   box.querySelectorAll('[data-set],[data-wset]').forEach(b => b.onclick = e => {
     const kind = b.dataset.set != null ? 'm' : 'w', k = +(b.dataset.set ?? b.dataset.wset), id = `${CUR}|${kind}|${k}`;
@@ -2016,6 +1899,35 @@ function refreshGroup(){
   sheet.querySelectorAll('.dots i').forEach((d,k) => { d.className = k===CUR ? 'c' : done.has(k) ? 'd' : ''; });
 }
 let SDIR = '', SWAPTOK = 0;
+function wkSets(p, n, w){
+  const dn = getDone(p, n); let d = 0, t = 0;
+  w.items.forEach((it, i) => { if(it.jk){ t++; if(dn.has(i)) d++; return; }
+    const v = setVals(p, it).length, a = getSets(p, n, i); t += v;
+    d += dn.has(i) ? v : Math.min(v, Array.isArray(a) ? a.slice(0, v).filter(Boolean).length : 0); });
+  return {d, t};
+}
+function wkElapsed(p, n){
+  const e = getLog()[p.id+'|'+n], st = +(store.get('wst-'+p.id+'-'+n)) || (e && e.t0) || 0;
+  if(!st) return null; const end = e && e.t1 && e.k >= e.of ? e.t1 : Date.now();
+  const x = Math.max(0, Math.floor((end - st)/1000)), h = Math.floor(x/3600), m = Math.floor(x%3600/60), sec = x%60;
+  return (h ? h + ':' + String(m).padStart(2,'0') : m) + ':' + String(sec).padStart(2,'0');
+}
+function wkBar(){
+  if(sheet.hidden) return; const el = document.getElementById('wtime'); if(!el) return;
+  const p = prog(), n = curDay(p), d = p.sched[n-1], w = d && d.w && p.workouts[d.w]; if(!w) return;
+  const t = wkElapsed(p, n), c = wkSets(p, n, w);
+  el.textContent = t || '0:00'; el.classList.toggle('idle', !t);
+  const sc = document.getElementById('wsets'); if(sc) sc.textContent = `Set ${c.d}/${c.t}`;
+  const br = document.getElementById('wbar'); if(br) br.style.width = (c.t ? c.d / c.t * 100 : 0) + '%';
+}
+setInterval(wkBar, 1000);
+function endWorkout(){
+  const p = prog(), n = curDay(p), d = p.sched[n-1], w = d && d.w && p.workouts[d.w]; if(!w) return closeSheet();
+  const c = wkSets(p, n, w), t = wkElapsed(p, n), L = getLog(), k = p.id+'|'+n;
+  if(L[k] && !L[k].t1){ L[k].t1 = Date.now(); store.set('log', JSON.stringify(L)); sbLogRow(k, L[k]); }
+  if(RT) stopRest(); closeSheet();
+  if(c.d) toast(`<b>Kết thúc buổi tập</b><span>${t ? t + ' · ' : ''}${c.d}/${c.t} set</span>`);
+}
 function renderSheet(){
   const p = prog(), n = curDay(p), w = p.workouts[p.sched[n-1].w], it = w.items[CUR], done = getDone(p,n);
   let body;
@@ -2033,11 +1945,13 @@ function renderSheet(){
       ${videoHtml(e, it.q || it.name)}${insHtml(it.det)}${swapsHtml(it.det && it.det.sw)}${w.imgs && w.imgs.length ? `<details class="shots"><summary>Ảnh gốc từ app (${w.imgs.length})</summary><div class="shotrow">${w.imgs.map((src,k)=>`<button data-shot="${k}"><img src="${src}" alt="" loading="lazy"></button>`).join('')}</div></details>` : ''}`;
   }
   const dots = w.items.length <= 14 ? `<span class="dots">${w.items.map((_,k)=>`<i class="${k===CUR?'c':done.has(k)?'d':''}"></i>`).join('')}</span>` : '';
-  const html = `<div class="sh-top"><button class="x" id="shx" aria-label="Đóng">✕</button><span class="pos">${esc(it.s)} · Bài ${CUR+1}/${w.items.length}</span>${dots}</div>
+  const wc = wkSets(p, n, w), wt = wkElapsed(p, n);
+  const html = `<div class="sh-top wtop"><button class="x" id="shx" aria-label="Đóng">✕</button><span class="pos"><b id="wtime" class="${wt ? '' : 'idle'}">${wt || '0:00'}</b><i class="wsep"></i><span id="wsets">Set ${wc.d}/${wc.t}</span><small>${esc(it.s)} · ${CUR+1}/${w.items.length}</small></span><button class="wend" id="wend">Kết thúc</button><span class="wtrk"><i id="wbar" style="width:${wc.t ? wc.d / wc.t * 100 : 0}%"></i></span></div>
     <div class="sh-body" id="shb"><div class="wrap${SDIR && !RM && !(VT && SDIR==='fade') ? ' anim-'+SDIR : ''}">${body}</div></div>
     <div class="sh-foot"><button id="prv" ${CUR<=0?'disabled':''}>‹ Trước</button><button class="done" id="dn" aria-pressed="${done.has(CUR)}">${done.has(CUR)?'✓ Đã xong':'Xong bài'}</button><button id="nxt" ${CUR>=w.items.length-1?'disabled':''}>${!SWV && it.k && w.items[CUR+1] && w.items[CUR+1].s[0]===it.s[0] ? 'Tiếp: '+esc(w.items[CUR+1].s)+' ›' : 'Tiếp ›'}</button></div>`;
   const bind = () => {
   document.getElementById('shx').onclick = () => closeSheet();
+  document.getElementById('wend').onclick = endWorkout;
   document.getElementById('prv').onclick = () => { CUR--; SWV=null; SDIR='r'; renderSheet(); };
   document.getElementById('nxt').onclick = () => { CUR++; SWV=null; SDIR='l'; renderSheet(); };
   document.getElementById('dn').onclick = () => {
@@ -2107,6 +2021,7 @@ function setAnim(){
 
 /* ---------- EN mode: dịch toàn bộ chữ giao diện (tên bài giữ nguyên) ---------- */
 const EN = {
+  'Kết thúc':'End','Bắt đầu buổi tập':'Start workout','Tiếp tục':'Continue','Kết thúc buổi tập':'Workout ended',
   'Tiến bộ':'Progress','Tài khoản & cài đặt':'Account & settings','Ngôn ngữ':'Language','Nhập set':'Set entry','Chi tiết = ghi tạ và rep từng set':'Detail = log weight and reps per set','Giữ màn hình sáng':'Keep screen on','Khi đang ở trang Hôm nay':'While on the Today page','Bảng xếp hạng tháng':'Monthly leaderboard','Huy hiệu':'Badges','Chỉ xem huy hiệu đã có':'Show earned only','Chưa có huy hiệu nào. Xong buổi đầu tiên để nhận huy hiệu đầu.':'No badges yet. Finish your first workout to earn one.','buổi xong ·':'workouts ·','ngày có tập':'training days',
   'Đơn giản':'Simple','Chi tiết':'Detail',
   'Mục tiêu':'Target','Kg':'Kg','Rep':'Reps','Set':'Set','TB':'FAIL','tăng tạ':'add weight','Hết giờ nghỉ!':'Rest over!','Vào set':'Go','Số mờ là gợi ý. Tập đúng thì bấm':'Grey numbers are suggestions. Matched them? Tap','Tập xong set nào bấm':'After each set tap','set đó, web tự đếm giờ nghỉ.':'for it, the rest timer starts.',', khác thì sửa số rồi bấm ✓.':', otherwise edit the numbers then tap ✓.','tối đa':'max',
