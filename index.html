@@ -1324,7 +1324,7 @@ function renderToday(){
   const ps = document.getElementById('phsel'); if(ps) ps.onchange = e => { ANIM = 'fade'; const [a2] = p.phases[+e.target.value]; const dd = p.sched.slice(a2-1, a2+6); setDay(p, (dd.find(x=>x.w)||dd[0]).n); render(); };
   const tt = document.getElementById('totoday'); if(tt) tt.onclick = () => { ANIM = ti>n ? 'l' : 'r'; setDay(p, ti); render(); };
   const sd = document.getElementById('sd'); if(sd) sd.onclick = () => openDatePicker(p);
-  const wg = document.getElementById('wgo'); if(wg) wg.onclick = () => { if(!store.get('wst-'+p.id+'-'+n)) store.set('wst-'+p.id+'-'+n, String(Date.now())); unlockAudio(); wakeOn(); openSheet(+wg.dataset.nx); };
+  const wg = document.getElementById('wgo'); if(wg) wg.onclick = () => { unlockAudio(); wakeOn(); openSheet(+wg.dataset.nx); };
   main.querySelectorAll('[data-shot]').forEach(b => b.onclick = () => lightbox(p.workouts[d.w].imgs, +b.dataset.shot));
   main.querySelectorAll('.row').forEach(r => {
     r.onclick = e => { if(e.target.closest('.chk')) return; openSheet(+r.dataset.i); };
@@ -1875,6 +1875,7 @@ function progHtml(p, n, it){
 }
 function saveSet(p, n, w, it, kind, k, obj){
   if(obj && !store.get('wst-'+p.id+'-'+n)) store.set('wst-'+p.id+'-'+n, String(Date.now()));
+  if(obj) store.set('wlt-'+p.id+'-'+n, String(Date.now()));
   const idx = kind === 'm' ? CUR : 1000 + CUR, t0 = getSets(p, n, idx), t = (Array.isArray(t0) ? t0 : []).slice();
   t[k] = obj; putSets(p, n, idx, t);
   let next = 'none';
@@ -1990,7 +1991,11 @@ function wkSets(p, n, w){
 }
 function wkElapsed(p, n){
   const e = getLog()[p.id+'|'+n], st = +(store.get('wst-'+p.id+'-'+n)) || (e && e.t0) || 0;
-  if(!st) return null; const end = e && e.t1 && e.k >= e.of ? e.t1 : Date.now();
+  if(!st) return null; const lt = +(store.get('wlt-'+p.id+'-'+n)) || 0, now = Date.now();
+  let end;
+  if(e && e.t1 && e.t1 >= lt) end = e.t1;                 // đã Kết thúc / xong hết bài
+  else if(!lt) return null;                                // chưa tick set nào
+  else end = now - lt > 30*60000 ? lt : now;               // 30 phút không tick set nào thì dừng ở set cuối
   const x = Math.max(0, Math.floor((end - st)/1000)), h = Math.floor(x/3600), m = Math.floor(x%3600/60), sec = x%60;
   return (h ? h + ':' + String(m).padStart(2,'0') : m) + ':' + String(sec).padStart(2,'0');
 }
