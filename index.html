@@ -842,7 +842,16 @@ const SWFULL = {'45° Incline Barbell Be…':'45° Incline Barbell Bench Press',
   'Smith Machine Bulgar…':'Smith Machine Bulgarian Split Squat','Smith Machine Overh…':'Smith Machine Overhead Press','Smith Machine Sissy …':'Smith Machine Sissy Squat',
   'Standing DB Hammer …':'Standing DB Hammer Curl','Standing Neutral DB F…':'Standing Neutral DB Front Raise','Straight Bar Reverse …':'Straight Bar Reverse Curl',
   'Supinated DB Scott C…':'Supinated DB Scott Curl','Alternating DB Drop L…':'Alternating DB Drop Lunge','Neutral Rear Delt Fly …':'Neutral Rear Delt Fly',
-  'Lying Leg Curl Neutral…':'Lying Leg Curl Neutral'};
+  'Lying Leg Curl Neutral…':'Lying Leg Curl Neutral',
+  '15° Incline Neutral DB …':'15° Incline Neutral DB Press','Smith Machine Standi…':'Smith Machine Standing Calf Raise','Standing Two Arm Ca…':'Standing Two Arm Cable Curl',
+  'Decline Mid Range In…':'Decline Mid Range Cable Fly','Barbell Medium Stanc…':'Barbell Medium Stance Good Morning','Standing Close Semi …':'Standing Close Semi Supinated Overhead Extension',
+  'Single Arm Neutral La…':'Single Arm Neutral Lat Pulldown','Single Arm Bench Sup…':'Single Arm Bench Supported DB Row','Half Kneeling 35° Ben…':'Half Kneeling 35° Bent Over Cable Row',
+  'Bent Over Supported …':'Bent Over Supported Lateral Raise','Seated Medium Semi…':'Seated Medium Semi Supinated Cable Row','Decline Neutral DB C…':'Decline Neutral DB Chest Fly',
+  'Mid Semi Supinated L…':'Mid Semi Supinated Low Cable Curl','Incline Commerford …':'Incline Commerford Curl','Half Kneeling Single …':'Half Kneeling Single Arm Landmine Press',
+  'Incline Pronated Cabl…':'Incline Pronated Cable Chest Press','Seated DB Overhead …':'Seated DB Overhead Tricep Extension','High Pulley Rope Cabl…':'High Pulley Rope Cable Crunch',
+  'Hammer Strength Sea…':'Hammer Strength Seated Shoulder Press','Seated DB Shoulder P…':'Seated DB Shoulder Press','Standing DB Side Lat…':'Standing DB Side Lateral Raise',
+  'Single Arm Leaning C…':'Single Arm Leaning Cable Lateral Raise','Wide Grip Barbell Upr…':'Wide Grip Barbell Upright Row','Standing Calf Raise M…':'Standing Calf Raise Machine',
+  'Seated Calf Raise Mac…':'Seated Calf Raise Machine'};
 const swNorm = x => String(x).toLowerCase().replace(/…|\.\.\.$/g, '').replace(/[^a-z0-9° ]/g, '').replace(/\s+/g, ' ').trim();
 function swFix(x){
   x = String(x || '').trim(); if(!x || /^see notes?$|^xem ghi chú$/i.test(x)) return '';
@@ -863,7 +872,7 @@ function swList(it){
     out = [...new Set(it.det.vi.join(' ').replace(/^.*?(có thể là|can be|options?:)/i, '').split(/,|\bhoặc\b|\bor\b|\.|;/i).map(c => c.trim().toLowerCase()).filter(c => c.length > 4)
       .map(c => keys.find(k => k.toLowerCase() === c) || keys.filter(k => !/…$/.test(k) && k.toLowerCase().startsWith(c)).sort((a, b) => a.length - b.length)[0]).filter(x => x && x !== it.name))]; }
   if(!out.length){ const pm = ((it.det && it.det.pm) || [])[0];
-    if(pm) out = Object.keys(SWL).filter(k => k !== it.name && SWL[k].pm && SWL[k].pm[0] === pm && (SWL[k].fe || SWL[k].v))
+    if(pm) out = Object.keys(SWL).filter(k => k !== it.name && !/…$/.test(k) && SWL[k].pm && SWL[k].pm[0] === pm && (SWL[k].fe || SWL[k].v))
       .sort((a, b) => (SWL[b].fe ? 1 : 0) - (SWL[a].fe ? 1 : 0) || a.length - b.length).slice(0, 5); }
   return (SWC[key] = out);
 }
