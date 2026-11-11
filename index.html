@@ -691,6 +691,7 @@ html{touch-action:manipulation;scroll-behavior:auto!important}
 .swo .pi{display:flex;height:56px;border-radius:10px;overflow:hidden;background:#000} .swo .pi img{width:50%;height:100%;object-fit:cover} .swo .pi.one img{width:100%}
 .swo b{font-size:13.5px;display:block} .swo small{font-size:11.5px;color:var(--acc2);font-weight:800}
 .kgsw{justify-self:center;border:1px solid var(--line);background:var(--card2);color:var(--ink);border-radius:999px;padding:3px 10px;font:inherit;font-size:11.5px;font-weight:800;text-transform:none;letter-spacing:0} .kgsw i{font-style:normal;color:var(--acc2)}
+.kgnote{margin:-2px 2px 8px;font-size:12px;color:var(--sub);font-weight:600} .kgnote b{color:var(--ink)}
 .plt{display:flex;flex-wrap:wrap;align-items:center;gap:5px;margin:10px 2px 0;font-size:12.5px}
 .plt>b{font-size:14px;margin-right:2px} .plt .pl0{color:var(--sub);font-weight:700}
 .pq{font-style:normal;display:inline-grid;place-items:center;min-width:26px;height:26px;padding:0 5px;border-radius:7px;font-size:11.5px;font-weight:900;color:#fff;background:#555}
@@ -1909,6 +1910,16 @@ const barKg = nm => /ez-bar/i.test(nm) ? 10 : 20;
 const SIDE = it => store.get('kgside') === '1' && isBar(it.name);          // ô kg = bánh 1 bên
 const toSide = (it, w) => w === '' || w == null ? w : Math.max(0, (w - barKg(it.name)) / 2);
 const fromSide = (it, v) => v == null ? v : v * 2 + barKg(it.name);
+/* nhãn cột + chú thích kg theo dụng cụ */
+function kgInfo(it, SD){
+  if(isBar(it.name)) return SD ? ['', `Kg/bên = bánh lắp <b>1 bên</b>, chưa tính đòn ${barKg(it.name)}kg`] : ['', `Kg tổng = <b>đòn ${barKg(it.name)}kg + bánh 2 bên</b>`];
+  const e = eqOf(it.name);
+  if(e === 'db') return ['Kg/tay', 'Kg của <b>1 quả tạ</b> (mỗi tay)'];
+  if(e === 'sm') return ['Kg', 'Kg <b>bánh 2 bên</b>, không tính đòn máy Smith'];
+  if(e === 'mc' || e === 'cb') return ['Kg', 'Kg theo <b>số trên máy</b> / cục tạ'];
+  if(e === 'bw') return ['+Kg', 'Kg <b>đeo thêm</b>, để 0 nếu chỉ tập thân người'];
+  return ['Kg', 'Kg <b>tổng</b> đang cầm'];
+}
 function plates(total, bar){ let side = (total - bar) / 2; if(!(total > 0) || side < 0) return null; const out = [];
   for(const q of [25, 20, 15, 10, 5, 2.5, 1.25]) while(side >= q - 1e-9){ out.push(q); side -= q; }
   return side > 0.01 ? null : out; }
@@ -1947,7 +1958,7 @@ function tblSets(p, it){
       <button class="tck" data-tc aria-pressed="${on}" aria-label="Xong set">✓</button></div>` + restRow(id); };
   let h = `<div class="trep"><div><span>Mục tiêu</span>${vals.map(v => `<b>${esc(tgtTxt(v))}</b>`).join('')}</div>${last ? `<div class="tlast">Lần trước${last.d ? ' ' + dd0(last.d) : ''}: ${last.sets.filter(Boolean).map(setTxt).map(esc).join(' · ')}${up ? ' → <b>tăng tạ</b>' : ''}</div>` : sg ? `<div class="tlast">Lần đầu tập bài này · gợi ý ~<b>${nfmt(sg.w)}kg${eqOf(it.name) === 'db' ? ' mỗi tay' : ''}</b> theo ${esc(sg.from)}</div>` : ''}</div>`;
   h += `<div class="panel tset ${LW ? '' : 'off'}"><div class="panel-h"><h3>${vals.length} set${mm && mm.rest ? ` · nghỉ ${esc(mm.rest)}` : ''}</h3><div class="lmode" role="tablist" aria-label="Kiểu nhập"><button data-lm="0" aria-selected="${!LW}">Đơn giản</button><button data-lm="1" aria-selected="${LW}">Chi tiết</button></div></div>`;
-  h += `<div class="thd"><span>Set</span>${LW ? `<span>Rep</span>${isBar(it.name) ? `<button class="kgsw" data-kgs aria-label="Đổi cách ghi tạ">${SD ? 'Kg/bên' : 'Kg tổng'} <i>⇄</i></button>` : '<span>Kg</span>'}` : '<span>Mục tiêu</span>'}<span></span></div><div class="tlist">`;
+  h += `<div class="thd"><span>Set</span>${LW ? `<span>Rep</span>${isBar(it.name) ? `<button class="kgsw" data-kgs aria-label="Đổi cách ghi tạ">${SD ? 'Kg/bên' : 'Kg tổng'} <i>⇄</i></button>` : `<span>${kgInfo(it, SD)[0]}</span>`}` : '<span>Mục tiêu</span>'}<span></span></div>${LW ? `<p class="kgnote">${kgInfo(it, SD)[1]}</p>` : ''}<div class="tlist">`;
   if(p.weekSelect && it.warm && it.warm.length){
     const mn = +(String(it.wu||'').split('-')[0]) || it.warm.length, ref = (setObj(ticks[0]) || {}).w || sugW(0) || (l0 && l0.w);
     it.warm.forEach((x, k) => { const pc = warmPct(x), o = setObj(warmArr[k]), on = !!warmArr[k], rm = String(x).match(/×\s*(\d+)/) || String(x).match(/(\d+)\s*rep/);
