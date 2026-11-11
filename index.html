@@ -695,6 +695,30 @@ html{touch-action:manipulation;scroll-behavior:auto!important}
 .kgnote{margin:-2px 2px 8px;font-size:12px;color:var(--sub);font-weight:600} .kgnote b{color:var(--ink)}
 .gdl{color:var(--ink);text-decoration:none} .gdl::after{content:"";position:absolute;inset:0} .srow{position:relative} .gch{color:var(--sub);font-size:20px;font-weight:800}
 .gdb{display:inline-block;margin:-4px 0 12px;padding:7px 12px;border:1px solid var(--line);border-radius:999px;background:var(--card);color:var(--acc2);text-decoration:none;font-size:13px;font-weight:800}
+.tn[data-gl],.glu{cursor:help} .glu{text-decoration:underline dotted var(--faint);text-underline-offset:3px}
+.glb{border:0;background:none;padding:0 0 0 4px;color:var(--acc2);font:inherit;font-weight:800;font-size:inherit;cursor:pointer}
+.gi{font-style:normal;opacity:.7;margin-left:2px}
+.gll{display:grid;gap:8px;max-height:62vh;overflow:auto;margin-right:-4px;padding-right:4px}
+.gli{padding:10px 12px;border:1px solid var(--line);border-radius:12px;background:var(--card2)} .gli.on{border-color:var(--acc2);box-shadow:inset 0 0 0 1px var(--acc2)}
+.gli b{font-size:14px} .gli p{margin:4px 0 0;font-size:13px;color:var(--sub);line-height:1.45} .gli p b{font-size:13px;color:var(--ink)}
+.cues ul{margin:2px 0 0;padding-left:18px} .cues li{font-size:14px;margin:5px 0;color:#d9d9de}
+.musw{display:grid;grid-template-columns:minmax(0,1.15fr) 1fr;gap:12px;align-items:center}
+.bmap{width:100%;height:auto;display:block} .bmap .sk{fill:#202024} .bmap .m0{fill:#2c2c32} .bmap .m1{fill:var(--acc)} .bmap .m2{fill:rgba(185,161,255,.45)}
+.bmap .bl{fill:var(--faint);font-size:9px;font-weight:800;text-anchor:middle}
+.musl{display:grid;gap:8px} .musl p{margin:0;font-size:13.5px;color:var(--sub);font-weight:600;line-height:1.4} .musl p b{color:var(--ink);font-weight:800}
+.musl .mk{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:6px;vertical-align:0} .musl .mk.m1{background:var(--acc)} .musl .mk.m2{background:rgba(185,161,255,.45)}
+.quiz .cbox{width:min(400px,100%)}
+.qstep{font-size:11.5px;font-weight:800;color:var(--acc2);text-transform:uppercase;letter-spacing:.05em;margin:2px 40px 6px 0}
+.qbar{height:4px;border-radius:9px;background:var(--line);overflow:hidden;margin:0 40px 12px 0} .qbar i{display:block;height:100%;background:var(--acc);transition:width .3s}
+.qq{font-size:20px;margin:0 0 12px}
+.qopts{display:grid;gap:8px} .qo{padding:14px;border:1px solid var(--line);border-radius:14px;background:var(--card2);color:var(--ink);font:inherit;font-size:15px;font-weight:800;text-align:left}
+.qo.on,.qo:active{border-color:var(--acc2)}
+.qnav{display:flex;justify-content:space-between;margin-top:12px} .qnav .lk{border:0;background:none;color:var(--sub);font:inherit;font-weight:800;font-size:13.5px;padding:6px 2px}
+.qres{display:grid;gap:10px} .qr{display:grid;grid-template-columns:84px 1fr;gap:10px;padding:8px;border:1px solid var(--line);border-radius:14px;background:var(--card2)}
+.qr .img{border-radius:10px;background-size:cover;background-position:center;min-height:110px}
+.qt{display:grid;gap:3px;align-content:start} .qt b{font-size:15px} .qt span{font-size:12px;color:var(--sub);font-weight:700} .qt small{font-size:12.5px;color:#d0d0d6;line-height:1.35}
+.qt .btn{margin-top:6px} .qbest{justify-self:start;font-size:10.5px!important;font-weight:900!important;color:#06281a!important;background:var(--ok);border-radius:6px;padding:1px 6px}
+.quiz #qall{width:100%;margin-top:8px}
 .plt{display:flex;flex-wrap:wrap;align-items:center;gap:5px;margin:10px 2px 0;font-size:12.5px}
 .plt>b{font-size:14px;margin-right:2px} .plt .pl0{color:var(--sub);font-weight:700}
 .pq{font-style:normal;display:inline-grid;place-items:center;min-width:26px;height:26px;padding:0 5px;border-radius:7px;font-size:11.5px;font-weight:900;color:#fff;background:#555}
@@ -1417,7 +1441,7 @@ function renderToday(){
     if(HOME && hasHome(p)) h += `<div class="hmbar"><b>Tập ở nhà</b><span>${nh ? `${nh} bài đã đổi sang tạ đơn / không dụng cụ` : 'Buổi này không cần đổi bài'}</span></div>`;
     h += groups(w.items).map(g => {
       const k = g.items[0][0].k;
-      return `<div class="grp"><div class="grp-h"><span>${g.items.map(([it]) => esc(it.s)).join(' · ')}</span>${k?`<span class="k ${k}">${KIND[k]}</span>`:''}</div>
+      return `<div class="grp"><div class="grp-h"><span>${g.items.map(([it]) => esc(it.s)).join(' · ')}</span>${k?`<span class="k ${k}" data-gl="${k}">${KIND[k]} ⓘ</span>`:''}</div>
         <div class="grp-box ${k||''}">${g.items.map(([it0,i]) => { const it = exIt(p, n, i);
           const mm = p.weekSelect ? mmParse(it.tempo) : null;
           const sub = p.weekSelect ? (/tối đa/.test(it.reps||'') ? ['Chừa 1–3 rep, set cuối tới thất bại', mm.rest?'nghỉ '+mm.rest:''].filter(Boolean).join(' · ') : [mm.rir.length?'RIR '+mm.rir.join('·'):'', mm.rest?'nghỉ '+mm.rest:''].filter(Boolean).join(' · ')) : (it.tempo && it.tempo!=='—' ? 'Tempo '+it.tempo : '');
@@ -1683,6 +1707,163 @@ const COMPARE = [
   ['elevate','Elevate Challenge','6','5','45–60','4 bài/buổi, đơn giản','Giai đoạn siết, ít thời gian'],
   ['shift','STNDRD6: Shift','6','5','60–75','Bài chính nặng, phần sau nhẹ','Siết nhưng giữ sức mạnh'],
 ];
+/* ================= hỗ trợ người mới ================= */
+/* --- phân loại bài theo tên -> nhóm cơ + lỗi thường gặp --- */
+const EXK = [
+  ['legcurl', /leg curl|hamstring curl|nordic/], ['legext', /leg extension/], ['calf', /calf/], ['backext', /back extension|hyperextension/],
+  ['tricep', /tricep|skull|push ?-?down|french press|jm press|overhead.*extension/], ['hip', /hip thrust|glute|bridge|abduct/],
+  ['hinge', /deadlift|\brdl\b|good morning|stiff.?leg|rack pull/], ['lunge', /lunge|split squat|step.?up|bulgarian/],
+  ['squat', /squat|leg press|hack|pendulum/], ['rear', /rear delt|reverse fly|reverse pec|face pull/],
+  ['raise', /lateral|front raise|upright row|y-? ?raise/], ['fly', /fly|flye|pec deck|crossover/],
+  ['pullv', /pull ?-?down|pull.?up|chin.?up|pullover/], ['row', /row/], ['shrug', /shrug/], ['dip', /\bdips?\b/], ['curl', /curl/],
+  ['pressV', /shoulder press|overhead press|military|arnold|landmine press/], ['pressH', /press|push.?up|bench/],
+  ['abs', /crunch|plank|leg raise|knee raise|sit.?up|hollow|garhammer|ab wheel|rollout|\babs?\b|twist|woodchop|dead bug|pallof/]];
+const exKind = nm => { const x = String(nm || '').toLowerCase(); const k = EXK.find(([, re]) => re.test(x)); return k ? k[0] : ''; };
+const MUSK = {pressH: [['chest'], ['fdelt', 'triceps']], pressV: [['fdelt'], ['triceps', 'traps']], fly: [['chest'], ['fdelt']], raise: [['fdelt'], ['traps']],
+  rear: [['rdelt'], ['upback', 'traps']], row: [['lats', 'upback'], ['biceps', 'rdelt']], pullv: [['lats'], ['biceps', 'upback']], curl: [['biceps'], ['fore']],
+  tricep: [['triceps'], []], dip: [['triceps', 'chest'], ['fdelt']], squat: [['quads'], ['glutes']], lunge: [['quads', 'glutes'], ['hams']],
+  hinge: [['hams', 'glutes'], ['lowback', 'fore']], hip: [['glutes'], ['hams']], legcurl: [['hams'], ['calves']], legext: [['quads'], []],
+  calf: [['calves'], []], abs: [['abs'], ['obl']], shrug: [['traps'], ['fore']], backext: [['lowback', 'glutes'], ['hams']]};
+const MREG = {chest: /chest/, fdelt: /^shoulders?$|front delt|side delt/, rdelt: /rear delt|rotator|side delt/, biceps: /biceps|brachialis/, triceps: /triceps/,
+  fore: /forearm/, abs: /^abs$|core/, obl: /oblique|serratus|core/, quads: /quad|hip flexor|adductor/, hams: /hamstring/, glutes: /glute|abductor|^hips$/,
+  calves: /calves/, lats: /^back$|lats/, upback: /^back$|upper back|t-spine|rhomboid|mid trap/, traps: /^traps$|lower trap/, lowback: /lower back/};
+const MVN = {chest: 'Ngực', fdelt: 'Vai trước/giữa', rdelt: 'Vai sau', biceps: 'Tay trước', triceps: 'Tay sau', fore: 'Cẳng tay', abs: 'Bụng', obl: 'Bụng chéo',
+  quads: 'Đùi trước', hams: 'Đùi sau', glutes: 'Mông', calves: 'Bắp chân', lats: 'Xô', upback: 'Lưng giữa', traps: 'Cầu vai', lowback: 'Lưng dưới'};
+function musOf(it){
+  const d = it.det || {}, map = arr => [...new Set((arr || []).flatMap(m => Object.keys(MREG).filter(r => MREG[r].test(String(m).toLowerCase().trim()))))];
+  if(d.pm && d.pm.length){ const pm = map(d.pm); return [pm, map(d.sm).filter(x => !pm.includes(x))]; }
+  return MUSK[exKind(it.name)] || [[], []];
+}
+function bodySvg(pm, sm){
+  const f = r => pm.includes(r) ? 'm1' : sm.includes(r) ? 'm2' : 'm0';
+  const E = (r, cx, cy, rx, ry) => `<ellipse class="${f(r)}" cx="${cx}" cy="${cy}" rx="${rx}" ry="${ry}"/>`;
+  const R = (r, x, y, w, h, rr) => `<rect class="${f(r)}" x="${x}" y="${y}" width="${w}" height="${h}" rx="${rr}"/>`;
+  const sil = cx => `<circle class="sk" cx="${cx}" cy="16" r="10"/><rect class="sk" x="${cx-18}" y="30" width="36" height="62" rx="12"/>
+    <rect class="sk" x="${cx-29}" y="34" width="10" height="56" rx="5"/><rect class="sk" x="${cx+19}" y="34" width="10" height="56" rx="5"/>
+    <rect class="sk" x="${cx-16}" y="88" width="14" height="80" rx="7"/><rect class="sk" x="${cx+2}" y="88" width="14" height="80" rx="7"/>`;
+  return `<svg class="bmap" viewBox="14 0 172 180" role="img" aria-label="Nhóm cơ">
+    ${sil(50)}${E('fdelt',33,38,7,6)}${E('fdelt',67,38,7,6)}${E('chest',42,46,8,7)}${E('chest',58,46,8,7)}
+    ${E('biceps',25,53,4.5,9)}${E('biceps',75,53,4.5,9)}${E('fore',24,76,4,10)}${E('fore',76,76,4,10)}
+    ${R('abs',44,56,12,28,4)}${E('obl',37,70,4,9)}${E('obl',63,70,4,9)}${E('quads',41,112,6.5,19)}${E('quads',59,112,6.5,19)}
+    ${E('calves',41,148,4.5,12)}${E('calves',59,148,4.5,12)}
+    ${sil(150)}${'<path class="' + f('traps') + '" d="M140 31 L150 26 L160 31 L156 42 L144 42 Z"/>'}${E('rdelt',133,38,7,6)}${E('rdelt',167,38,7,6)}
+    ${E('upback',150,48,7,6)}${E('lats',140,60,7,12)}${E('lats',160,60,7,12)}${E('triceps',125,53,4.5,9)}${E('triceps',175,53,4.5,9)}
+    ${E('fore',124,76,4,10)}${E('fore',176,76,4,10)}${R('lowback',145,70,10,16,4)}${E('glutes',143,96,7.5,8)}${E('glutes',157,96,7.5,8)}
+    ${E('hams',141,120,6,15)}${E('hams',159,120,6,15)}${E('calves',141,148,5,11)}${E('calves',159,148,5,11)}
+    <text x="50" y="176" class="bl">Trước</text><text x="150" y="176" class="bl">Sau</text></svg>`;
+}
+function musHtml(it){
+  if(!it || it.jk) return ''; const [pm, sm] = musOf(it); if(!pm.length) return '';
+  return `<div class="panel mus"><div class="panel-h"><h3>Nhóm cơ</h3></div><div class="musw">${bodySvg(pm, sm)}<div class="musl">
+    <p><i class="mk m1"></i><b>Chính:</b> ${pm.map(r => MVN[r]).join(', ')}</p>
+    ${sm.length ? `<p><i class="mk m2"></i><b>Phụ:</b> ${sm.map(r => MVN[r]).join(', ')}</p>` : ''}</div></div></div>`;
+}
+const CUES = {
+  pressH: ['Kẹp bả vai ra sau và ép xuống ghế, ngực ưỡn nhẹ.', 'Khuỷu tay chếch khoảng 45° so với thân, không bè ngang 90°.', 'Hạ có kiểm soát tới gần ngực, không nảy tạ.'],
+  pressV: ['Siết bụng và mông, không ưỡn lưng dưới khi đẩy.', 'Cổ tay thẳng, nằm ngay trên khuỷu tay.', 'Hạ tới ngang cằm, không thả rơi tạ.'],
+  fly: ['Khuỷu hơi cong và giữ nguyên góc suốt động tác.', 'Ôm tay vào như ôm thùng, đừng biến thành động tác đẩy.', 'Không mở quá rộng gây căng khớp vai.'],
+  raise: ['Dùng tạ nhẹ, không đung đưa người lấy đà.', 'Nâng tới ngang vai, khuỷu dẫn trước cổ tay.', 'Hạ chậm 2–3 giây.'],
+  rear: ['Kéo bằng vai sau, không nhún cầu vai lên tai.', 'Tay hơi cong, đưa ra ngang thay vì kéo về sau.', 'Tạ nhẹ, dừng 1 giây ở cuối.'],
+  row: ['Giữ lưng thẳng, không giật người lấy đà.', 'Kéo khuỷu về phía hông, siết bả vai ở cuối.', 'Duỗi hết tay ở điểm đầu để cơ xô giãn.'],
+  pullv: ['Kéo khuỷu xuống và về sau, ngực hướng lên thanh.', 'Không ngả người quá nhiều hay giật.', 'Lên hết biên độ, tay gần thẳng ở trên.'],
+  curl: ['Khuỷu cố định sát thân, không đưa ra trước.', 'Không lắc người lấy đà.', 'Hạ chậm, gần duỗi thẳng tay ở dưới.'],
+  tricep: ['Khuỷu đứng yên, chỉ cẳng tay chuyển động.', 'Duỗi hết tay ở cuối và siết tay sau.', 'Không dùng vai hay thân đẩy giúp.'],
+  dip: ['Hạ tới khi vai ngang khuỷu, không sâu quá gây đau vai.', 'Nghiêng người trước để vào ngực, đứng thẳng để vào tay sau.', 'Không nảy ở điểm thấp nhất.'],
+  squat: ['Đầu gối đi cùng hướng mũi chân, không chụm vào trong.', 'Gót chân bám sàn hoặc bàn đạp suốt động tác.', 'Lưng giữ thẳng; leg press thì không để mông nhấc khỏi ghế.'],
+  lunge: ['Thân thẳng, trọng tâm dồn vào chân trước.', 'Gối trước đi theo hướng mũi chân.', 'Hạ có kiểm soát tới khi gối sau gần chạm sàn.'],
+  hinge: ['Lưng thẳng, đẩy hông ra sau, không cong lưng tròn.', 'Tạ đi sát chân suốt động tác.', 'Hạ tới khi đùi sau căng, không cố chạm sàn.'],
+  hip: ['Siết mông ở điểm cao nhất, giữ 1 giây.', 'Không ưỡn lưng dưới để lên cao hơn.', 'Cằm hơi cúi, xương sườn hạ xuống.'],
+  legcurl: ['Hông áp sát ghế, không nhấc mông.', 'Cuộn hết biên độ rồi hạ chậm.', 'Không giật tạ.'],
+  legext: ['Ngồi sát lưng ghế, trục máy ngang khớp gối.', 'Duỗi thẳng chân và siết đùi trước 1 giây.', 'Hạ chậm, không thả rơi tạ.'],
+  calf: ['Hạ gót xuống sâu để giãn bắp chân.', 'Dừng 1–2 giây ở dưới, không nảy.', 'Nhón lên cao hết mức.'],
+  abs: ['Cuộn cột sống, không chỉ gập hông.', 'Thở ra khi siết bụng.', 'Không kéo cổ bằng tay.'],
+  shrug: ['Nhún thẳng lên, không xoay vai.', 'Dừng 1 giây ở đỉnh.', 'Tay thẳng, không gập khuỷu.'],
+  backext: ['Gập ở hông, lưng giữ thẳng.', 'Lên tới thẳng người, không ưỡn quá.', 'Siết mông khi lên.']};
+function cueHtml(it){
+  const c = it && !it.jk && CUES[exKind(it.name)]; if(!c) return '';
+  return `<div class="panel cues"><div class="panel-h"><h3>Lỗi thường gặp</h3></div><ul>${c.map(x => `<li>${esc(x)}</li>`).join('')}</ul></div>`;
+}
+/* --- thuật ngữ --- */
+const GLOSS = [
+  ['set', 'Set & rep', '<b>Rep</b> là 1 lần nâng–hạ. <b>Set</b> là một loạt rep liên tục rồi nghỉ. "2 × 6-8" = 2 set, mỗi set 6–8 rep.'],
+  ['range', 'Khoảng rep (6-8, 8-10…)', 'Chọn mức tạ để làm được trong khoảng này. Làm được tới mức trên (vd 8) thì lần sau tăng tạ; chưa tới mức dưới thì giảm tạ.'],
+  ['rir', 'RIR (rep còn dư)', '<b>Reps In Reserve</b>: số rep bạn còn làm thêm được khi dừng. <b>RIR 1</b> = dừng khi còn sức thêm 1 rep. <b>RIR 0</b> = tới hết sức.'],
+  ['tb', 'TB · tới thất bại', 'Tập tới khi không làm nổi thêm 1 rep với kỹ thuật đúng. Thường chỉ dùng ở set cuối.'],
+  ['warm', 'W1, W2… · set khởi động', 'Set nhẹ trước set chính để làm nóng cơ và khớp. % là phần trăm mức tạ của set chính (vd ~60% của 80kg ≈ 47,5kg). Hàng mờ là tuỳ chọn, không tính vào set chính.'],
+  ['rest', 'Nghỉ giữa set', 'Thời gian nghỉ sau mỗi set. Bài nặng nhiều khớp (squat, bench…) nghỉ 2–5 phút; bài nhỏ nghỉ 1–2 phút. App tự đếm khi bạn bấm ✓.'],
+  ['ss', 'Superset', 'Tập 2 bài liền nhau không nghỉ, xong cả cặp mới nghỉ. Lặp lại cho đủ số set.'],
+  ['ts', 'Triset', 'Giống superset nhưng 3 bài liền nhau.'],
+  ['gs', 'Giant set', '4 bài trở lên liền nhau, nghỉ sau cả cụm.'],
+  ['inf', '∞ · rest-pause', 'Sau một set tới thất bại, nghỉ 10–15 giây rồi làm thêm vài rep nữa với cùng mức tạ.'],
+  ['tempo', 'Tempo', 'Tốc độ từng pha, tính bằng giây. Ví dụ <b>3-1-1</b>: hạ 3 giây, dừng 1 giây, đẩy lên 1 giây.'],
+  ['deload', 'Tuần giảm tải (deload)', 'Tuần tập nhẹ hơn (ít set hoặc tạ nhẹ) để cơ thể hồi phục, sau đó khoẻ hơn.'],
+  ['pr', 'Kỷ lục (PR)', 'Set tốt nhất từ trước tới giờ của một bài, so theo 1RM ước tính (tạ × rep quy đổi ra mức tạ nâng được 1 lần).'],
+  ['kg', 'Ghi kg', 'Tạ đòn: chọn <b>Kg tổng</b> (cả đòn 20kg) hoặc <b>Kg/bên</b> (bánh 1 bên). Tạ đơn: kg 1 quả. Máy: số trên máy.'],
+];
+function openGloss(k){
+  const ov = document.createElement('div'); ov.className = 'cele acc'; const g0 = GLOSS.find(g => g[0] === k);
+  const list = g0 ? [g0, ...GLOSS.filter(g => g !== g0)] : GLOSS;
+  ov.innerHTML = `<div class="cbox" role="dialog" aria-label="Thuật ngữ"><button class="x" data-x aria-label="Đóng">✕</button>
+    <h2 style="font-size:19px;margin:2px 40px 10px 0">Thuật ngữ</h2><div class="gll">${list.map((g, i) => `<div class="gli ${i === 0 && g0 ? 'on' : ''}"><b>${g[1]}</b><p>${g[2]}</p></div>`).join('')}</div></div>`;
+  ov.querySelector('[data-x]').onclick = () => ov.remove(); ov.onclick = ev => { if(ev.target === ov) ov.remove(); };
+  document.body.appendChild(ov); requestAnimationFrame(() => ov.classList.add('on')); trTree(ov);
+}
+document.addEventListener('click', e => { const g = e.target.closest && e.target.closest('[data-gl]'); if(!g) return; e.preventDefault(); e.stopPropagation(); openGloss(g.dataset.gl); }, true);
+/* --- quiz chọn chương trình (thiết bị mới, 1 lần) --- */
+const QP = {minmax: {pl: ['gym'], d: [4, 5], lv: [1, 2, 3], g: ['muscle', 'strength'], why: 'Ít set, buổi ngắn 45–60 phút, hướng dẫn RIR từng set'},
+  legacy: {pl: ['gym'], d: [5, 6], lv: [3], g: ['muscle'], why: 'Volume rất cao, giáo án CBum, buổi ~90 phút'},
+  rto: {pl: ['gym'], d: [5], lv: [3], g: ['muscle', 'cut'], why: 'Triset, giant set, cường độ cao'},
+  ppl: {pl: ['gym'], d: [5, 6], lv: [2, 3], g: ['muscle', 'strength'], why: 'Push · Pull · Legs, lịch dễ nhớ, tăng cơ toàn diện'},
+  bro: {pl: ['gym'], d: [5], lv: [2, 3], g: ['muscle'], why: 'Mỗi ngày một nhóm cơ, kiểu cổ điển'},
+  elevate: {pl: ['gym'], d: [5], lv: [2, 3], g: ['cut'], why: 'Thử thách 6 tuần cho giai đoạn siết, 4 bài/buổi'},
+  shift: {pl: ['gym'], d: [5], lv: [2, 3], g: ['cut', 'strength'], why: 'Siết nhưng giữ sức mạnh, bài chính nặng'},
+  jacked: {pl: ['db'], d: [5, 6], lv: [1, 2, 3], g: ['muscle', 'cut'], why: 'Chỉ cần tạ đơn, tự chỉnh mức tạ theo sức'},
+  nhome: {pl: ['none', 'db'], d: [3, 4], lv: [1, 2], g: ['muscle', 'cut'], why: 'Toàn thân, gần như không cần dụng cụ, hợp người mới'}};
+const QQ = [
+  ['g', 'Mục tiêu chính của bạn?', [['muscle', 'Tăng cơ'], ['cut', 'Siết mỡ, lên form'], ['strength', 'Vừa tăng cơ vừa khoẻ hơn']]],
+  ['d', 'Mỗi tuần tập được mấy buổi?', [[3, '3 buổi'], [4, '4 buổi'], [5, '5 buổi'], [6, '6 buổi']]],
+  ['lv', 'Bạn tập được bao lâu rồi?', [[1, 'Mới bắt đầu (dưới 6 tháng)'], [2, '6 tháng – 2 năm'], [3, 'Trên 2 năm']]],
+  ['pl', 'Bạn tập ở đâu?', [['gym', 'Phòng gym'], ['db', 'Ở nhà, có tạ đơn'], ['none', 'Ở nhà, không dụng cụ']]]];
+function quizRank(a){
+  return Object.entries(QP).map(([id, q]) => {
+    let sc = 0;
+    if(q.pl.includes(a.pl)) sc += 10; else if(a.pl === 'gym') sc += 1; else sc -= 50;
+    sc += q.d.includes(a.d) ? 4 : q.d.some(x => Math.abs(x - a.d) === 1) ? 2 : 0;
+    sc += q.lv.includes(a.lv) ? 4 : -4; sc += q.g.includes(a.g) ? 3 : 0;
+    return {id, sc};
+  }).filter(x => x.sc > 0 && P.some(p => p.id === x.id)).sort((x, y) => y.sc - x.sc).slice(0, 2);
+}
+function quizFresh(){ return !store.get('quizdone') && !store.get('prog') && !store.get('log') && !store.get('sbauth'); }
+function openQuiz(){
+  store.set('quizdone', '1');
+  const ov = document.createElement('div'); ov.className = 'cele acc quiz'; const A = {}; let st = 0;
+  const close = () => ov.remove();
+  const draw = () => {
+    let body;
+    if(st < QQ.length){ const [k, q, opts] = QQ[st];
+      body = `<div class="qstep">Câu ${st + 1}/${QQ.length}</div><div class="qbar"><i style="width:${st / QQ.length * 100}%"></i></div><h2 class="qq">${q}</h2>
+        <div class="qopts">${opts.map(([v, t]) => `<button class="qo ${A[k] === v ? 'on' : ''}" data-v="${v}">${t}</button>`).join('')}</div>
+        <div class="qnav">${st ? '<button class="lk" id="qback">‹ Quay lại</button>' : '<span></span>'}<button class="lk" id="qskip">Bỏ qua</button></div>`;
+    } else {
+      const r = quizRank(A);
+      body = `<div class="qstep">Gợi ý cho bạn</div><h2 class="qq">${r.length ? 'Chương trình phù hợp' : 'Chưa có chương trình khớp hẳn'}</h2>
+        <div class="qres">${r.map((x, i) => { const p = P.find(y => y.id === x.id), cmp = COMPARE.find(c => c[0] === x.id);
+          return `<div class="qr"><div class="img" style="background-image:url(img/hero-${x.id}.webp)"></div><div class="qt">${i === 0 ? '<span class="qbest">Hợp nhất</span>' : ''}<b>${esc(p.name)}</b>
+            <span>${cmp ? `${cmp[2]} tuần · ${cmp[3]} buổi/tuần · ${cmp[4]} phút` : `${p.weeks} tuần`}</span><small>${esc(QP[x.id].why)}</small>
+            <button class="btn sm" data-qp="${x.id}">Chọn chương trình này</button></div></div>`; }).join('')}</div>
+        <p class="anote">Đây chỉ là gợi ý, bạn chọn chương trình nào cũng được.</p><button class="btn ghost" id="qall">Xem tất cả chương trình</button>`;
+    }
+    ov.innerHTML = `<div class="cbox" role="dialog" aria-label="Chọn chương trình"><button class="x" data-x aria-label="Đóng">✕</button>${body}</div>`;
+    ov.querySelector('[data-x]').onclick = close;
+    ov.querySelectorAll('.qo').forEach(b => b.onclick = () => { const k = QQ[st][0], v = b.dataset.v; A[k] = isNaN(+v) ? v : +v; st++; draw(); });
+    const bk = ov.querySelector('#qback'); if(bk) bk.onclick = () => { st--; draw(); };
+    const sk = ov.querySelector('#qskip'); if(sk) sk.onclick = close;
+    const al = ov.querySelector('#qall'); if(al) al.onclick = close;
+    ov.querySelectorAll('[data-qp]').forEach(b => b.onclick = () => { close(); const c = main.querySelector(`.pcard[data-p="${b.dataset.qp}"]`); if(c) c.click(); });
+    trTree(ov);
+  };
+  draw(); document.body.appendChild(ov); requestAnimationFrame(() => ov.classList.add('on'));
+}
 function renderProgs(){
   const first = !PID;
   let h = `<div class="sec"><h2>${first ? 'Chọn chương trình để bắt đầu' : 'Chương trình'}</h2>${first ? '<a class="gdb" href="guide.html">📖 Lần đầu dùng? Xem hướng dẫn ›</a>' : ''}`;
@@ -1704,6 +1885,7 @@ function renderProgs(){
     <div class="tbl"><table><thead><tr><th>Program</th><th>Tuần</th><th>Buổi/tuần</th><th>Phút</th><th>Phong cách</th><th>Hợp với</th></tr></thead><tbody>${
       COMPARE.map(r => `<tr><th>${esc(r[1])}</th><td>${r[2]}</td><td>${r[3]}</td><td>${r[4]}</td><td>${esc(r[5])}</td><td>${esc(r[6])}</td></tr>`).join('')}</tbody></table></div></div>`;
   main.innerHTML = h; setAnim(); bindAcct();
+  if(first && quizFresh()) setTimeout(() => { if(!PID && TAB === 'progs' && quizFresh()) openQuiz(); }, 500);
   main.querySelectorAll('[data-p]').forEach(b => b.onclick = () => {
     const card = b.classList.contains('pcard') ? b : main.querySelector(`.pcard[data-p="${b.dataset.p}"]`);
     const r = card && card.getBoundingClientRect(); const imgEl = card && card.querySelector('.img');
@@ -2004,10 +2186,10 @@ function tblSets(p, it){
   const cell = (id, f, val, ph) => { const d = TDR[id] && TDR[id][f]; return `<input data-f="${f}" inputmode="${f === 'w' ? 'decimal' : 'numeric'}" autocomplete="off" value="${esc(d != null ? d : val)}" placeholder="${esc(ph)}">`; };
   const row = (kind, k, lab, tag, tgt, o, on, phR, phW, cls) => { const id = `${qk}|${kind}|${k}`;
     return `<div class="tr ${kind === 'w' ? 'wu' : ''} ${on ? 'on' : ''} ${cls||''}" data-id="${esc(id)}" data-kind="${kind}" data-k="${k}">
-      <span class="tn"><b>${lab}</b>${tag ? `<small>${esc(tag)}</small>` : ''}</span>
+      <span class="tn" data-gl="${kind === 'w' ? 'warm' : /RIR/.test(tag || '') ? 'rir' : tag === 'TB' ? 'tb' : 'set'}"><b>${lab}</b>${tag ? `<small>${esc(tag)}</small>` : ''}</span>
       ${LW ? cell(id, 'r', o ? o.r : '', phR) + cell(id, 'w', o && o.w != null ? nfmt(SD ? toSide(it, o.w) : o.w) : '', phW === '' || phW == null ? 'kg' : nfmt(SD ? toSide(it, phW) : phW)) : `<span class="tt">${esc(tgt)}</span>`}
       <button class="tck" data-tc aria-pressed="${on}" aria-label="Xong set">✓</button></div>` + restRow(id); };
-  let h = `<div class="trep"><div><span>Mục tiêu</span>${vals.map(v => `<b>${esc(tgtTxt(v))}</b>`).join('')}</div>${last ? `<div class="tlast">Lần trước${last.d ? ' ' + dd0(last.d) : ''}: ${last.sets.filter(Boolean).map(setTxt).map(esc).join(' · ')}${up ? ' → <b>tăng tạ</b>' : ''}</div>` : sg ? `<div class="tlast">Lần đầu tập bài này · gợi ý ~<b>${nfmt(sg.w)}kg${eqOf(it.name) === 'db' ? ' mỗi tay' : ''}</b> theo ${esc(sg.from)}</div>` : ''}</div>`;
+  let h = `<div class="trep"><div><span data-gl="range" class="glu">Mục tiêu</span>${vals.map(v => `<b>${esc(tgtTxt(v))}</b>`).join('')}</div>${last ? `<div class="tlast">Lần trước${last.d ? ' ' + dd0(last.d) : ''}: ${last.sets.filter(Boolean).map(setTxt).map(esc).join(' · ')}${up ? ' → <b>tăng tạ</b>' : ''}</div>` : sg ? `<div class="tlast">Lần đầu tập bài này · gợi ý ~<b>${nfmt(sg.w)}kg${eqOf(it.name) === 'db' ? ' mỗi tay' : ''}</b> theo ${esc(sg.from)}</div>` : ''}</div>`;
   h += `<div class="panel tset ${LW ? '' : 'off'}"><div class="panel-h"><h3>${vals.length} set${mm && mm.rest ? ` · nghỉ ${esc(mm.rest)}` : ''}</h3><div class="lmode" role="tablist" aria-label="Kiểu nhập"><button data-lm="0" aria-selected="${!LW}">Đơn giản</button><button data-lm="1" aria-selected="${LW}">Chi tiết</button></div></div>`;
   h += `<div class="thd"><span>Set</span>${LW ? `<span>Rep</span>${isBar(it.name) ? `<button class="kgsw" data-kgs aria-label="Đổi cách ghi tạ">${SD ? 'Kg/bên' : 'Kg tổng'} <i>⇄</i></button>` : `<span>${kgInfo(it, SD)[0]}</span>`}` : '<span>Mục tiêu</span>'}<span></span></div>${LW ? `<p class="kgnote">${kgInfo(it, SD)[1]}</p>` : ''}<div class="tlist">`;
   if(p.weekSelect && it.warm && it.warm.length){
@@ -2022,7 +2204,7 @@ function tblSets(p, it){
   h += `</div>`;
   if(LW && isBar(it.name)) h += `<div class="plt"></div>`;
   if(!p.weekSelect){ const rs = restFor(p, it); h += `<div class="restrow"><span class="rlab">Nghỉ giữa set</span>${[60,90,120,180].map(x => `<button class="rchip ${x===rs?'on':''}" data-rest="${x}">${x%60 ? Math.floor(x/60)+':'+String(x%60).padStart(2,'0') : x/60+' phút'}</button>`).join('')}</div>`; }
-  h += `<p class="sethint">${LW ? 'Số mờ là gợi ý. Tập đúng thì bấm <b>✓</b>, khác thì sửa số rồi bấm ✓.' : 'Tập xong set nào bấm <b>✓</b> set đó, web tự đếm giờ nghỉ.'}</p></div>`;
+  h += `<p class="sethint">${LW ? 'Số mờ là gợi ý. Tập đúng thì bấm <b>✓</b>, khác thì sửa số rồi bấm ✓.' : 'Tập xong set nào bấm <b>✓</b> set đó, web tự đếm giờ nghỉ.'} <button class="glb" data-gl="">ⓘ Thuật ngữ</button></p></div>`;
   if(AM) h = h.replace('<div class="panel tset', '<p class="amh">Mỗi set làm tới khi <b>chỉ còn sức thêm vài rep</b> thì dừng, set cuối làm tới khi không nổi nữa.</p><div class="panel tset');
   return h + progHtml(p, n, it);
 }
@@ -2231,11 +2413,11 @@ function renderSheet(){
       ${videoHtml(e, e.n)}${insHtml(e.ins ? e : null)}`;
   } else {
     const e = {n: it.name, v: it.v, fe: it.fe};
-    body = `${mediaHtml(e)}<div class="ttl" style="view-transition-name:ex-title">${esc(it.name)}</div>${canSw ? `<button class="swb" id="swb">${it.sw0 ? `⇄ Đã đổi từ <b>${esc(it.sw0)}</b> · đổi lại` : '⇄ Máy bận? Đổi bài'}</button>` : ''}${it.k?`<span class="kind ${it.k}">${KIND[it.k]} · ${esc(it.s)}</span>`:''}${it.orig?`<div class="eyebrow hm" style="margin-top:6px">Tập ở nhà · thay cho ${esc(it.orig)}</div>`:''}
+    body = `${mediaHtml(e)}<div class="ttl" style="view-transition-name:ex-title">${esc(it.name)}</div>${canSw ? `<button class="swb" id="swb">${it.sw0 ? `⇄ Đã đổi từ <b>${esc(it.sw0)}</b> · đổi lại` : '⇄ Máy bận? Đổi bài'}</button>` : ''}${it.k?`<span class="kind ${it.k}" data-gl="${it.k}">${KIND[it.k]} · ${esc(it.s)} <i class="gi">ⓘ</i></span>`:''}${it.orig?`<div class="eyebrow hm" style="margin-top:6px">Tập ở nhà · thay cho ${esc(it.orig)}</div>`:''}
       ${groupPanel(w, CUR, done)}
       <div id="setp">${setTable(p, it, getSets(p,n,CUR))}</div>
       ${it.tech ? `<div class="note">Set cuối: ${esc(it.tech)}</div>` : ''}${it.hn && !it.orig ? `<div class="note hn">Ở nhà: ${esc(it.hn)}</div>` : ''}
-      ${videoHtml(e, it.q || it.name)}${insHtml(it.det)}${swapsHtml(it.sw0 ? it.det.sw : swList(it))}${w.imgs && w.imgs.length ? `<details class="shots"><summary>Ảnh gốc từ app (${w.imgs.length})</summary><div class="shotrow">${w.imgs.map((src,k)=>`<button data-shot="${k}"><img src="${src}" alt="" loading="lazy"></button>`).join('')}</div></details>` : ''}`;
+      ${videoHtml(e, it.q || it.name)}${insHtml(it.det)}${cueHtml(it)}${musHtml(it)}${swapsHtml(it.sw0 ? it.det.sw : swList(it))}${w.imgs && w.imgs.length ? `<details class="shots"><summary>Ảnh gốc từ app (${w.imgs.length})</summary><div class="shotrow">${w.imgs.map((src,k)=>`<button data-shot="${k}"><img src="${src}" alt="" loading="lazy"></button>`).join('')}</div></details>` : ''}`;
   }
   const dots = w.items.length <= 14 ? `<span class="dots">${w.items.map((_,k)=>`<i class="${k===CUR?'c':done.has(k)?'d':''}"></i>`).join('')}</span>` : '';
   const wc = wkSets(p, n, w), wt = wkElapsed(p, n);
