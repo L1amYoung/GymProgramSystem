@@ -920,7 +920,7 @@ async function sbPull(){
   const [W, S, U] = await Promise.all(['workout_logs', 'set_logs', 'user_state'].map(get));
   U.forEach(r => { if(r.value == null) return;
     if(/^done-/.test(r.key)){ let rem = []; try{ rem = JSON.parse(r.value) || []; }catch(e){} rawSet(r.key, JSON.stringify([...new Set([...getJ(r.key, []), ...rem])])); }
-    else if(localStorage.getItem(r.key) == null) rawSet(r.key, r.value); });
+    else if(localStorage.getItem(r.key) == null || (/^(logw|setui)$/.test(r.key) && !SBQ['u|' + r.key])) rawSet(r.key, r.value); });
   const L = getLog();
   W.forEach(r => { const k = r.program_id + '|' + r.day_n, e = L[k];
     if(!e || (r.done||0) > (e.k||0)) L[k] = {d: r.date, p: r.program_id, n: r.day_n, w: r.title, pn: r.program_name, ph: r.phase, k: r.done, of: r.total,
@@ -1589,7 +1589,7 @@ function jkBind(p, it){
   };
 }
 let SED = null;
-const LOGW = () => store.get('logw') !== '0';  // set đang mở trình nhập: `${CUR}|m|k` (set chính) hoặc `${CUR}|w|k` (khởi động); 'none' = đóng
+const LOGW = () => store.get('logw') === '1';  // set đang mở trình nhập: `${CUR}|m|k` (set chính) hoặc `${CUR}|w|k` (khởi động); 'none' = đóng
 const setObj = v => (v && typeof v === 'object' && !Array.isArray(v)) ? v : null;
 const nfmt = x => (Math.round(x*100)/100).toString().replace('.', ',');
 const pnum = x => { const v = parseFloat(String(x).replace(',', '.')); return isNaN(v) ? null : v; };
