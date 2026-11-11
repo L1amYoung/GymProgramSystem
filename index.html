@@ -637,6 +637,7 @@ html{touch-action:manipulation;scroll-behavior:auto!important}
 .bdr{display:flex;justify-content:space-between;gap:10px;width:100%;padding:10px 12px;border:0;border-top:1px solid var(--line);background:none;color:var(--ink);font:inherit;font-size:13.5px;text-align:left}
 .bdr span{color:var(--sub);font-weight:700;text-align:right}
 .bdfg{display:grid;grid-template-columns:1fr 1fr;gap:0 10px}
+.bdfu{display:flex;align-items:center;justify-content:space-between;gap:6px} .bdfu .lmode{padding:2px} .bdfu .lmode button{padding:2px 9px;font-size:11.5px}
 .bdx{display:block;margin:12px auto 0;padding:8px;border:0;background:none;font:inherit;font-size:13.5px;font-weight:700;color:#ff8a7a}
 .bdadd{border:0;background:none;padding:4px 2px;font:inherit;font-size:13.5px;font-weight:800;color:var(--acc2);cursor:pointer}
 .mchips{display:flex;flex-wrap:wrap;gap:6px}
@@ -1433,7 +1434,7 @@ function bindBoard(){
 }
 let BADGEALL = false;
 /* ---------- chỉ số cơ thể (cân / InBody) ---------- */
-const BM = [['kg','Cân nặng','kg',0],['pbf','Mỡ','%',-1],['smm','Cơ xương','kg',1],['vf','Mỡ nội tạng','',-1]];
+const BM = [['kg','Cân nặng','kg',0],['pbf','Mỡ cơ thể','%',-1]];
 let BMK = 'kg';
 function bodyAll(){ const a = getJ('body', []); return Array.isArray(a) ? a : []; }
 function bodyList(){ return bodyAll().filter(e => e && e.d && !e.x).sort((a,b) => a.d.localeCompare(b.d)); }
@@ -1442,7 +1443,7 @@ function bodyPut(e){ const a = bodyAll().filter(x => x.d !== e.d); a.push(Object
 function bodyHtml(){
   const L = bodyList(), dd = d => `${+d.slice(8)}/${+d.slice(5,7)}`;
   let h = `<div class="sec"><div class="bhd"><div class="mdh">Chỉ số cơ thể</div><button class="bdadd" data-bd="">+ Nhập</button></div>`;
-  if(!L.length) return h + `<button class="bdemp" data-bd=""><b>Ghi cân nặng & InBody</b><span>Cân nặng, % mỡ, cơ xương, mỡ nội tạng. Lâu lâu đo thì nhập, web vẽ biểu đồ.</span></button></div>`;
+  if(!L.length) return h + `<button class="bdemp" data-bd=""><b>Ghi cân nặng & mỡ cơ thể</b><span>Cân nặng và % mỡ. Lâu lâu đo thì nhập, web vẽ biểu đồ.</span></button></div>`;
   const val = (i, k) => { for(let j = i; j >= 0; j--) if(L[j][k] != null) return j; return -1; };
   const has = BM.filter(([k]) => val(L.length-1, k) >= 0); if(!has.some(m => m[0] === BMK)) BMK = has[0][0];
   h += `<div class="bdt">${has.map(([k, lab, u, good]) => { const i = val(L.length-1, k), v = L[i][k], j = val(i-1, k);
@@ -1469,20 +1470,28 @@ function bindBody(root){
 }
 function openBody(d0){
   const ov = document.createElement('div'), today = isoDay(); ov.className = 'cele acc';
+  let FU = store.get('bfu') === 'kg' ? 'kg' : '%';
   const draw = d => { const e = bodyList().find(x => x.d === d) || {};
     ov.innerHTML = `<div class="cbox" role="dialog" aria-label="Chỉ số cơ thể"><button class="x" data-x aria-label="Đóng">✕</button>
-      <h2 style="font-size:19px;margin:2px 40px 6px 0">Chỉ số cơ thể</h2><p class="anote" style="margin:0 0 4px">Chỉ cần nhập ô nào có số, ô khác để trống.</p>
+      <h2 style="font-size:19px;margin:2px 40px 6px 0">Chỉ số cơ thể</h2>
       <form id="bdf"><label class="field">Ngày đo<input id="bdd" type="date" value="${d}" max="${today}" required></label>
-      <div class="bdfg">${BM.map(([k, lab, u]) => `<label class="field">${lab}${u ? ` (${u})` : ''}<input data-k="${k}" inputmode="decimal" autocomplete="off" value="${e[k] != null ? nfmt(e[k]) : ''}" placeholder="–"></label>`).join('')}</div>
+      <div class="bdfg"><label class="field">Cân nặng (kg)<input id="bdkg" inputmode="decimal" autocomplete="off" value="${e.kg != null ? nfmt(e.kg) : ''}" placeholder="–"></label>
+      <label class="field"><span class="bdfu">Mỡ cơ thể<span class="lmode"><button type="button" data-fu="%" aria-selected="${FU === '%'}">%</button><button type="button" data-fu="kg" aria-selected="${FU === 'kg'}">kg</button></span></span><input id="bdf2" inputmode="decimal" autocomplete="off" value="${e.pbf == null ? '' : FU === '%' ? nfmt(e.pbf) : e.kg ? nfmt(Math.round(e.kg * e.pbf / 10) / 10) : ''}" placeholder="–"></label></div>
       <p class="aerr" id="bde"></p><button class="btn" type="submit">Lưu</button>${e.d ? '<button class="bdx" type="button" id="bdx">Xoá lần đo này</button>' : ''}</form></div>`;
     ov.querySelector('[data-x]').onclick = () => ov.remove();
     ov.querySelector('#bdd').onchange = ev => { if(ev.target.value) draw(ev.target.value); };
+    ov.querySelectorAll('[data-fu]').forEach(b => b.onclick = () => { FU = b.dataset.fu; store.set('bfu', FU); ov.querySelectorAll('[data-fu]').forEach(x => x.setAttribute('aria-selected', x === b)); });
     const x = ov.querySelector('#bdx'); if(x) x.onclick = () => { if(confirm('Xoá lần đo ngày này?')){ bodyPut({d, x: 1}); sbFlush(); ov.remove(); ANIM = ''; render(); } };
     ov.querySelector('#bdf').onsubmit = ev => { ev.preventDefault();
       const dd = ov.querySelector('#bdd').value, o = {d: dd}; let any = false;
-      ov.querySelectorAll('[data-k]').forEach(i => { const v = pnum(i.value); if(v != null && v > 0){ o[i.dataset.k] = v; any = true; } });
+      const kg = pnum(ov.querySelector('#bdkg').value), f = pnum(ov.querySelector('#bdf2').value), er = ov.querySelector('#bde');
+      if(kg > 0){ o.kg = kg; any = true; }
+      if(f > 0){ let pc = f;
+        if(FU === 'kg'){ const ref = kg > 0 ? kg : ((bodyList().filter(x => x.kg && x.d <= dd).pop() || {}).kg);
+          if(!ref){ er.textContent = 'Nhập cân nặng để đổi kg mỡ ra %.'; return; } pc = Math.round(f / ref * 1000) / 10; }
+        if(pc >= 70){ er.textContent = '% mỡ không hợp lệ.'; return; } o.pbf = pc; any = true; }
       if(!dd || dd > today){ ov.querySelector('#bde').textContent = 'Chọn ngày đo hợp lệ.'; return; }
-      if(!any){ ov.querySelector('#bde').textContent = 'Nhập ít nhất một chỉ số.'; return; }
+      if(!any){ ov.querySelector('#bde').textContent = 'Nhập cân nặng hoặc mỡ cơ thể.'; return; }
       bodyPut(o); sbFlush(); ov.remove(); ANIM = ''; render(); toast('<b>Đã lưu chỉ số</b>'); };
     trTree(ov);
   };
@@ -2095,7 +2104,7 @@ function setAnim(){
 /* ---------- EN mode: dịch toàn bộ chữ giao diện (tên bài giữ nguyên) ---------- */
 const EN = {
   'Kết thúc':'End','Bắt đầu buổi tập':'Start workout','Tiếp tục':'Continue','Kết thúc buổi tập':'Workout ended',
-  'Tiến bộ':'Progress','Tài khoản & cài đặt':'Account & settings','Ngôn ngữ':'Language','Nhập set':'Set entry','Chi tiết = ghi tạ và rep từng set':'Detail = log weight and reps per set','Giữ màn hình sáng':'Keep screen on','Khi đang ở trang Hôm nay':'While on the Today page','Bảng xếp hạng tháng':'Monthly leaderboard','Huy hiệu':'Badges','Chỉ số cơ thể':'Body metrics','+ Nhập':'+ Add','Ghi cân nặng & InBody':'Log weight & InBody','Cân nặng, % mỡ, cơ xương, mỡ nội tạng. Lâu lâu đo thì nhập, web vẽ biểu đồ.':'Weight, body fat %, muscle mass, visceral fat. Add whenever you measure; the app draws the chart.','Cân nặng':'Weight','Mỡ':'Body fat','Cơ xương':'Muscle','Mỡ nội tạng':'Visceral fat','Ngày đo':'Date','Chỉ cần nhập ô nào có số, ô khác để trống.':'Fill only the values you have.','Xoá lần đo này':'Delete this entry','Nhập ít nhất một chỉ số.':'Enter at least one value.','Đã lưu chỉ số':'Saved','đến lúc đo lại':'time to measure again','Chỉ xem huy hiệu đã có':'Show earned only','Chưa có huy hiệu nào. Xong buổi đầu tiên để nhận huy hiệu đầu.':'No badges yet. Finish your first workout to earn one.','buổi xong ·':'workouts ·','ngày có tập':'training days',
+  'Tiến bộ':'Progress','Tài khoản & cài đặt':'Account & settings','Ngôn ngữ':'Language','Nhập set':'Set entry','Chi tiết = ghi tạ và rep từng set':'Detail = log weight and reps per set','Giữ màn hình sáng':'Keep screen on','Khi đang ở trang Hôm nay':'While on the Today page','Bảng xếp hạng tháng':'Monthly leaderboard','Huy hiệu':'Badges','Chỉ số cơ thể':'Body metrics','+ Nhập':'+ Add','Ghi cân nặng & mỡ cơ thể':'Log weight & body fat','Cân nặng và % mỡ. Lâu lâu đo thì nhập, web vẽ biểu đồ.':'Weight and body fat %. Add whenever you measure; the app draws the chart.','Mỡ cơ thể':'Body fat','Cân nặng (kg)':'Weight (kg)','Nhập cân nặng hoặc mỡ cơ thể.':'Enter weight or body fat.','Nhập cân nặng để đổi kg mỡ ra %.':'Enter weight to convert fat kg to %.','Cân nặng, % mỡ, cơ xương, mỡ nội tạng. Lâu lâu đo thì nhập, web vẽ biểu đồ.':'Weight, body fat %, muscle mass, visceral fat. Add whenever you measure; the app draws the chart.','Cân nặng':'Weight','Mỡ':'Body fat','Cơ xương':'Muscle','Mỡ nội tạng':'Visceral fat','Ngày đo':'Date','Chỉ cần nhập ô nào có số, ô khác để trống.':'Fill only the values you have.','Xoá lần đo này':'Delete this entry','Nhập ít nhất một chỉ số.':'Enter at least one value.','Đã lưu chỉ số':'Saved','đến lúc đo lại':'time to measure again','Chỉ xem huy hiệu đã có':'Show earned only','Chưa có huy hiệu nào. Xong buổi đầu tiên để nhận huy hiệu đầu.':'No badges yet. Finish your first workout to earn one.','buổi xong ·':'workouts ·','ngày có tập':'training days',
   'Đơn giản':'Simple','Chi tiết':'Detail',
   'Mục tiêu':'Target','Kg':'Kg','Rep':'Reps','Set':'Set','TB':'FAIL','tăng tạ':'add weight','Hết giờ nghỉ!':'Rest over!','Vào set':'Go','Số mờ là gợi ý. Tập đúng thì bấm':'Grey numbers are suggestions. Matched them? Tap','Tập xong set nào bấm':'After each set tap','set đó, web tự đếm giờ nghỉ.':'for it, the rest timer starts.',', khác thì sửa số rồi bấm ✓.':', otherwise edit the numbers then tap ✓.','tối đa':'max',
   'Đồng bộ cloud đang bật':'Cloud sync on','Chỉ lưu trên máy này':'Saved on this device only','Khởi động':'Warm-up','Tạ thêm (kg)':'Added weight (kg)','Tạ (kg)':'Weight (kg)','Lưu':'Save','Bỏ tick set này':'Untick this set','Đang sửa set đã xong':'Editing a finished set','xong':'done',
