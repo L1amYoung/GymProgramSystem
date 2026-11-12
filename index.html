@@ -750,6 +750,22 @@ html{touch-action:manipulation;scroll-behavior:auto!important}
 .wk2r em.up{color:var(--ok);background:rgba(61,220,151,.12)} .wk2r em.dn{color:#ff8a7a;background:rgba(255,90,95,.12)} .wk2r em.eq{color:var(--sub);background:var(--card2)}
 .wk2s{padding:10px 14px;border-top:1px solid var(--line);font-size:13.5px} .wk2s span{display:block;font-size:12px;color:var(--sub);font-weight:800;margin-bottom:4px}
 .wk2s p{margin:2px 0;color:#d9d9de} .wk2s p b{color:var(--ink)}
+.calrow{display:grid;grid-template-columns:1fr auto;gap:2px 10px;width:100%;margin:0 0 10px;padding:12px 14px;text-align:left;border:1px solid color-mix(in srgb,var(--ok) 40%,var(--line));border-radius:14px;background:linear-gradient(135deg,rgba(61,220,151,.12),var(--card));color:var(--ink);font:inherit}
+.calrow span{font-size:14px;font-weight:800} .calrow b{font-size:16px;grid-row:span 2;align-self:center} .calrow small{font-size:12px;color:var(--sub);font-weight:600}
+.calov .cbox{width:min(420px,100%);max-height:88vh;overflow:auto}
+.calf{display:grid;grid-template-columns:1fr 1fr;gap:0 10px} .calf .field{margin-top:8px}
+.cseg{display:grid!important;grid-auto-flow:column;grid-auto-columns:1fr;margin-top:2px} .cseg button{padding:9px 6px!important;font-size:13px!important}
+.calov select{width:100%;box-sizing:border-box;background:var(--card2);border:1px solid var(--line);border-radius:12px;padding:12px;color:var(--ink);font:inherit;font-size:14px;pointer-events:auto!important;cursor:pointer}
+.cpbf{display:flex;align-items:center;gap:8px;margin-top:10px;font-size:13px;color:var(--sub);font-weight:700} .calov .cpbf input{width:18px;height:18px;padding:0}
+.cres{margin-top:14px} .c3{display:grid;grid-template-columns:repeat(3,1fr);text-align:center} .c3 div+div{border-left:1px solid var(--line)}
+.c3 b{display:block;font-size:20px} .c3 span{font-size:11.5px;color:var(--sub);font-weight:700}
+.ctgt{margin-top:12px;padding:16px;border:1px solid var(--line);border-radius:16px;background:radial-gradient(120% 140% at 100% 0%,rgba(61,220,151,.55),rgba(10,40,30,.9) 45%,#0b0b0c 80%)}
+.ctgt small{font-size:11.5px;font-weight:800;letter-spacing:.06em;color:#d9f5e8} .ctgt b{display:block;font-size:44px;line-height:1.1;margin:4px 0 6px} .ctgt b i{font-style:normal;font-size:17px;font-weight:700}
+.ctgt span{font-size:13px;color:#e4efe9;line-height:1.4}
+.chow{margin-top:12px;border:1px solid var(--line);border-radius:14px;padding:4px 12px} .chow summary{padding:9px 0;font-weight:800;font-size:14px;cursor:pointer}
+.chow div{display:flex;justify-content:space-between;gap:10px;padding:7px 0;border-top:1px solid var(--line);font-size:13px} .chow div span{color:var(--sub)} .chow div b{white-space:nowrap}
+.chow p{font-size:12px;color:var(--sub);margin:8px 0 6px}
+.calov #csave{margin-top:14px}
 .plt{display:flex;flex-wrap:wrap;align-items:center;gap:5px;margin:10px 2px 0;font-size:12.5px}
 .plt>b{font-size:14px;margin-right:2px} .plt .pl0{color:var(--sub);font-weight:700}
 .pq{font-style:normal;display:inline-grid;place-items:center;min-width:26px;height:26px;padding:0 5px;border-radius:7px;font-size:11.5px;font-weight:900;color:#fff;background:#555}
@@ -947,7 +963,7 @@ const store = { get(k){ try{ return localStorage.getItem(k); }catch(e){ return n
 const getJ = (k,d) => { try{ const v = JSON.parse(store.get(k)); return v ?? d; }catch(e){ return d; } };
 
 /* ---------- đồng bộ Supabase (localStorage vẫn là nguồn chính, mất mạng vẫn dùng được) ---------- */
-const STATE_KEYS = /^(prog|lang|home|restDefault|wake|logw|setui|start-.+|sel-.+|nosd-.+|done-.+|prlog|badges|board|body|kgside|restex|wkrep|swp-.+)$/;
+const STATE_KEYS = /^(prog|lang|home|restDefault|wake|logw|setui|start-.+|sel-.+|nosd-.+|done-.+|prlog|badges|board|body|kgside|restex|wkrep|calprof|swp-.+)$/;
 const SB = {url: 'https://jqsynlkiuigagvpueziz.supabase.co', key: 'sb_publishable_qzCUcDHqWPJFY6LPiolsKw_C6vXAN0D'};
 const SBON = SB.key && !SB.key.startsWith('__');
 const DEV = (() => { let d = store.get('devid'); if(!d){ d = (crypto.randomUUID ? crypto.randomUUID() : Date.now().toString(36) + Math.random().toString(36).slice(2)); store.set('devid', d); } return d; })();
@@ -1208,7 +1224,7 @@ function openSettings(){
         ${tg(`<div class="lmode"><button data-sm="0" aria-selected="${!LOGW()}">Đơn giản</button><button data-sm="1" aria-selected="${LOGW()}">Chi tiết</button></div>`, 0, 'Nhập set', 'Chi tiết = ghi tạ và rep từng set')}
         ${tg('<span class="gch">›</span>', 0, '<a class="gdl" href="guide.html">📖 Hướng dẫn sử dụng</a>', 'Cách dùng toàn bộ app, có ảnh minh hoạ')}
         ${WLOK ? tg(`<label class="lwt"><input type="checkbox" id="swk" ${WAKE ? 'checked' : ''}><span></span></label>`, 0, 'Giữ màn hình sáng', 'Khi đang ở trang Hôm nay') : ''}
-      </div><p class="appv">${LANG === 'en' ? 'Version' : 'Phiên bản'} c8e3400331</p></div>`;
+      </div><p class="appv">${LANG === 'en' ? 'Version' : 'Phiên bản'} 2d118a323f</p></div>`;
     ov.querySelector('[data-x]').onclick = () => ov.remove();
     bindAcct(ov);
     ov.querySelectorAll('[data-sl]').forEach(b => b.onclick = () => { LANG = b.dataset.sl; store.set('lang', LANG); document.documentElement.lang = LANG; tabs.innerHTML = ''; renderNow(); if(!sheet.hidden){ sheet.innerHTML = ''; renderSheet(); } draw(); trTree(ov); });
@@ -1619,9 +1635,71 @@ function bodyAll(){ const a = getJ('body', []); return Array.isArray(a) ? a : []
 function bodyList(){ return bodyAll().filter(e => e && e.d && !e.x).sort((a,b) => a.d.localeCompare(b.d)); }
 function bodyMerge(rem){ const m = {}; [...bodyAll(), ...(Array.isArray(rem) ? rem : [])].forEach(e => { if(e && e.d && (!m[e.d] || (e.u||0) > (m[e.d].u||0))) m[e.d] = e; }); return Object.values(m); }
 function bodyPut(e){ const a = bodyAll().filter(x => x.d !== e.d); a.push(Object.assign({}, e, {u: Date.now()})); store.set('body', JSON.stringify(a)); }
+/* ---------- calo mục tiêu ---------- */
+const CACT = [[1.2, 'Ít vận động', 'Ngồi nhiều, gần như không tập'], [1.375, 'Nhẹ', 'Tập 1–3 buổi/tuần'], [1.55, 'Vừa', 'Tập 3–5 buổi/tuần'],
+  [1.725, 'Nhiều', 'Tập 6–7 buổi/tuần'], [1.9, 'Rất nhiều', 'Tập nặng mỗi ngày + công việc chân tay']];
+const CACT_EN = [['Sedentary', 'Mostly sitting, little exercise'], ['Light', 'Train 1–3 days/week'], ['Moderate', 'Train 3–5 days/week'], ['Active', 'Train 6–7 days/week'], ['Very active', 'Hard training daily + physical job']];
+const CGOAL = {cut: [-500, 'Giảm mỡ', 'Lose fat'], keep: [0, 'Giữ cân', 'Maintain'], bulk: [300, 'Tăng cơ', 'Build muscle']};
+function calCalc(c){
+  const kg = +c.kg, cm = +c.cm, age = +c.age; if(!(kg > 0)) return null;
+  const pbf = c.pbf > 0 ? +c.pbf : null; let bmr, how;
+  if(pbf){ bmr = 370 + 21.6 * kg * (1 - pbf / 100); how = 'katch'; }
+  else if(cm > 0 && age > 0){ bmr = 10 * kg + 6.25 * cm - 5 * age + (c.sex === 'f' ? -161 : 5); how = 'mifflin'; }
+  else return null;
+  const act = +c.act || 1.55, tdee = bmr * act, adj = CGOAL[c.goal || 'cut'][0], tgt = tdee + adj;
+  return {bmr: Math.round(bmr), act, tdee: Math.round(tdee / 10) * 10, adj, tgt: Math.round(tgt / 10) * 10, wk: Math.round(adj * 7 / 7700 * 100) / 100,
+    pro: Math.round(kg * (c.goal === 'bulk' ? 1.8 : 2.0)), how, pbf};
+}
+const fnum = x => Math.round(x).toLocaleString(LANG === 'en' ? 'en-US' : 'vi-VN');
+function calRowHtml(){
+  const c = getJ('calprof', null), r = c && calCalc(Object.assign({}, c, calBody()));
+  return r ? `<button class="calrow" data-cal><span>🔥 ${EL('Calo mục tiêu', 'Calorie target')}</span><b>${fnum(r.tgt)} cal</b><small>${EL(CGOAL[c.goal][1], CGOAL[c.goal][2])} · ${r.pro}g protein ›</small></button>`
+    : `<button class="calrow" data-cal><span>🔥 ${EL('Tính calo mục tiêu', 'Work out your calorie target')}</span><small>${EL('Nhập cân nặng, chọn mục tiêu tăng cơ / giảm mỡ', 'Enter weight, pick build muscle / lose fat')} ›</small></button>`;
+}
+function calBody(){ const L = bodyList(), lw = [...L].reverse().find(e => e.kg), lf = [...L].reverse().find(e => e.pbf); return {kg: lw ? lw.kg : undefined, pbf: lf ? lf.pbf : undefined}; }
+function openCal(){
+  const ov = document.createElement('div'); ov.className = 'cele acc calov';
+  const b0 = calBody(), c = Object.assign({sex: 'm', act: 1.55, goal: 'cut', usePbf: true}, getJ('calprof', {}));
+  if(c.kg == null && b0.kg) c.kg = b0.kg;
+  const draw = () => {
+    const pb = c.usePbf && b0.pbf ? b0.pbf : null, r = calCalc(Object.assign({}, c, {pbf: pb}));
+    const seg = (k, opts) => `<div class="lmode cseg">${opts.map(([v, t]) => `<button type="button" data-k="${k}" data-v="${v}" aria-selected="${String(c[k]) === String(v)}">${t}</button>`).join('')}</div>`;
+    ov.innerHTML = `<div class="cbox" role="dialog" aria-label="Calo"><button class="x" data-x aria-label="Đóng">✕</button>
+      <h2 style="font-size:19px;margin:2px 40px 10px 0">${EL('Calo mục tiêu', 'Calorie target')}</h2>
+      <div class="calf"><label class="field">${EL('Cân nặng (kg)', 'Weight (kg)')}<input data-f="kg" inputmode="decimal" value="${c.kg != null ? nfmt(c.kg) : ''}" placeholder="–"></label>
+        <label class="field">${EL('Chiều cao (cm)', 'Height (cm)')}<input data-f="cm" inputmode="numeric" value="${c.cm || ''}" placeholder="–"></label>
+        <label class="field">${EL('Tuổi', 'Age')}<input data-f="age" inputmode="numeric" value="${c.age || ''}" placeholder="–"></label>
+        <div class="field">${EL('Giới tính', 'Sex')}${seg('sex', [['m', EL('Nam', 'Male')], ['f', EL('Nữ', 'Female')]])}</div></div>
+      <div class="field">${EL('Mục tiêu', 'Goal')}${seg('goal', Object.entries(CGOAL).map(([k, g]) => [k, EL(g[1], g[2])]))}</div>
+      <label class="field">${EL('Mức vận động', 'Activity')}<select data-f="act">${CACT.map((a, i) => `<option value="${a[0]}" ${+c.act === a[0] ? 'selected' : ''}>${EL(a[1], CACT_EN[i][0])} · ${EL(a[2], CACT_EN[i][1])}</option>`).join('')}</select></label>
+      ${b0.pbf ? `<label class="cpbf"><input type="checkbox" data-f="usePbf" ${c.usePbf ? 'checked' : ''}> ${EL(`Dùng % mỡ ${nfmt(b0.pbf)}% (chính xác hơn)`, `Use body fat ${nfmt(b0.pbf)}% (more accurate)`)}</label>` : ''}
+      ${r ? `<div class="cres"><div class="c3"><div><b>${fnum(r.tdee)}</b><span>${EL('Duy trì', 'Maintenance')}</span></div><div><b>${r.adj > 0 ? '+' : ''}${fnum(r.adj)}</b><span>${EL('Điều chỉnh', 'Adjustment')}</span></div><div><b>${r.wk > 0 ? '+' : ''}${nfmt(r.wk)}kg</b><span>${EL('Dự kiến/tuần', 'Expected/week')}</span></div></div>
+        <div class="ctgt"><small>${EL('MỤC TIÊU MỖI NGÀY', 'DAILY TARGET')}</small><b>${fnum(r.tgt)}<i> cal</i></b><span>${EL('Protein', 'Protein')} ~${r.pro}g · ${EL(r.adj < 0 ? 'đủ để giảm mỡ mà vẫn giữ cơ, tốc độ dễ theo được.' : r.adj > 0 ? 'dư nhẹ để tăng cơ, hạn chế tăng mỡ.' : 'giữ nguyên cân nặng.', r.adj < 0 ? 'enough to lose fat while keeping muscle, at a pace you can keep.' : r.adj > 0 ? 'a small surplus to build muscle with minimal fat gain.' : 'to keep your weight steady.')}</span></div>
+        <details class="chow"><summary>${EL('Xem cách tính', 'See how it’s calculated')}</summary>
+          <div><span>${r.how === 'katch' ? EL(`Calo nghỉ ngơi (Katch-McArdle, từ khối nạc theo ${nfmt(r.pbf)}% mỡ)`, `Resting burn (Katch-McArdle, lean mass at ${nfmt(r.pbf)}% fat)`) : EL('Calo nghỉ ngơi (Mifflin-St Jeor: cân nặng, chiều cao, tuổi)', 'Resting burn (Mifflin-St Jeor: weight, height, age)')}</span><b>${fnum(r.bmr)} cal</b></div>
+          <div><span>${EL('Hệ số vận động', 'Activity factor')}</span><b>× ${String(r.act).replace('.', LANG === 'en' ? '.' : ',')}</b></div>
+          <div><span>${EL('Calo đốt mỗi ngày (duy trì)', 'Burned per day (maintenance)')}</span><b>${fnum(r.tdee)} cal</b></div>
+          <div><span>${EL('Điều chỉnh theo mục tiêu', 'Goal adjustment')}</span><b>${r.adj > 0 ? '+' : ''}${fnum(r.adj)} cal</b></div>
+          <div><span>${EL('Mục tiêu mỗi ngày', 'Daily target')}</span><b>${fnum(r.tgt)} cal</b></div>
+          <p>${EL('Khoảng 7.700 cal ≈ 1kg mỡ. Đây là điểm khởi đầu: theo dõi cân nặng 2–3 tuần rồi chỉnh ±100–200 cal nếu thay đổi chậm/nhanh hơn dự kiến.', 'About 7,700 cal ≈ 1 kg of fat. This is a starting point: track your weight for 2–3 weeks, then adjust ±100–200 cal if it moves slower/faster than expected.')}</p></details></div>`
+        : `<p class="anote">${EL('Nhập cân nặng, chiều cao và tuổi để tính.', 'Enter weight, height and age to calculate.')}</p>`}
+      <button class="btn" id="csave" ${r ? '' : 'disabled'}>${EL('Lưu mục tiêu', 'Save target')}</button></div>`;
+    ov.querySelector('[data-x]').onclick = () => ov.remove();
+    ov.querySelectorAll('input[data-f]').forEach(i => { if(i.type === 'checkbox'){ i.onchange = () => { c.usePbf = i.checked; draw(); }; return; }
+      i.onchange = () => { const v = pnum(i.value); c[i.dataset.f] = v > 0 ? v : null; draw(); }; });
+    ov.querySelector('select[data-f]').onchange = e => { c.act = +e.target.value; draw(); };
+    ov.querySelectorAll('[data-k]').forEach(b => b.onclick = () => { c[b.dataset.k] = b.dataset.v; draw(); });
+    ov.querySelector('#csave').onclick = () => { const sv = {cm: c.cm, age: c.age, sex: c.sex, act: c.act, goal: c.goal, usePbf: c.usePbf};
+      if(c.kg && (!b0.kg || Math.abs(c.kg - b0.kg) > 0.05)) bodyPut({d: isoDay(), kg: c.kg, ...((bodyList().find(e => e.d === isoDay()) || {}).pbf ? {pbf: bodyList().find(e => e.d === isoDay()).pbf} : {})});
+      store.set('calprof', JSON.stringify(sv)); sbFlush(); ov.remove(); ANIM = ''; const y = scrollY; render(); scrollTo(0, y); toast(`<b>${EL('Đã lưu mục tiêu calo', 'Calorie target saved')}</b>`); };
+    trTree(ov);
+  };
+  draw(); document.body.appendChild(ov); requestAnimationFrame(() => ov.classList.add('on'));
+  ov.onclick = ev => { if(ev.target === ov) ov.remove(); };
+}
 function bodyHtml(){
   const L = bodyList(), dd = d => `${+d.slice(8)}/${+d.slice(5,7)}`;
-  let h = `<div class="sec"><div class="bhd"><div class="mdh">Chỉ số cơ thể</div><button class="bdadd" data-bd="">+ Nhập</button></div>`;
+  let h = `<div class="sec"><div class="bhd"><div class="mdh">Chỉ số cơ thể</div><button class="bdadd" data-bd="">+ Nhập</button></div>${calRowHtml()}`;
   if(!L.length) return h + `<button class="bdemp" data-bd=""><b>Ghi cân nặng & mỡ cơ thể</b><span>Cân nặng và % mỡ. Lâu lâu đo thì nhập, web vẽ biểu đồ.</span></button></div>`;
   const val = (i, k) => { for(let j = i; j >= 0; j--) if(L[j][k] != null) return j; return -1; };
   const has = BM.filter(([k]) => val(L.length-1, k) >= 0); if(!has.some(m => m[0] === BMK)) BMK = has[0][0];
@@ -1646,6 +1724,7 @@ function bodyHtml(){
 function bindBody(root){
   root.querySelectorAll('[data-bk]').forEach(b => b.onclick = () => { BMK = b.dataset.bk; const y = scrollY; ANIM = ''; render(); scrollTo(0, y); });
   root.querySelectorAll('[data-bd]').forEach(b => b.onclick = () => openBody(b.dataset.bd));
+  root.querySelectorAll('[data-cal]').forEach(b => b.onclick = () => openCal());
 }
 function openBody(d0){
   const ov = document.createElement('div'), today = isoDay(); ov.className = 'cele acc';
