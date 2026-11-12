@@ -766,6 +766,8 @@ html{touch-action:manipulation;scroll-behavior:auto!important}
 .chow div{display:flex;justify-content:space-between;gap:10px;padding:7px 0;border-top:1px solid var(--line);font-size:13px} .chow div span{color:var(--sub)} .chow div b{white-space:nowrap}
 .chow p{font-size:12px;color:var(--sub);margin:8px 0 6px}
 .calov #csave{margin-top:14px}
+.tabs button.need{opacity:.45}
+.pcard.nudge{animation:pnudge .5s ease} @keyframes pnudge{0%,100%{transform:none}25%{transform:translateX(-6px)}50%{transform:translateX(6px)}75%{transform:translateX(-3px)}}
 .plt{display:flex;flex-wrap:wrap;align-items:center;gap:5px;margin:10px 2px 0;font-size:12.5px}
 .plt>b{font-size:14px;margin-right:2px} .plt .pl0{color:var(--sub);font-weight:700}
 .pq{font-style:normal;display:inline-grid;place-items:center;min-width:26px;height:26px;padding:0 5px;border-radius:7px;font-size:11.5px;font-weight:900;color:#fff;background:#555}
@@ -1224,7 +1226,7 @@ function openSettings(){
         ${tg(`<div class="lmode"><button data-sm="0" aria-selected="${!LOGW()}">Đơn giản</button><button data-sm="1" aria-selected="${LOGW()}">Chi tiết</button></div>`, 0, 'Nhập set', 'Chi tiết = ghi tạ và rep từng set')}
         ${tg('<span class="gch">›</span>', 0, '<a class="gdl" href="guide.html">📖 Hướng dẫn sử dụng</a>', 'Cách dùng toàn bộ app, có ảnh minh hoạ')}
         ${WLOK ? tg(`<label class="lwt"><input type="checkbox" id="swk" ${WAKE ? 'checked' : ''}><span></span></label>`, 0, 'Giữ màn hình sáng', 'Khi đang ở trang Hôm nay') : ''}
-      </div><p class="appv">${LANG === 'en' ? 'Version' : 'Phiên bản'} 57210e14e2</p></div>`;
+      </div><p class="appv">${LANG === 'en' ? 'Version' : 'Phiên bản'} 4150a7035a</p></div>`;
     ov.querySelector('[data-x]').onclick = () => ov.remove();
     bindAcct(ov);
     ov.querySelectorAll('[data-sl]').forEach(b => b.onclick = () => { LANG = b.dataset.sl; store.set('lang', LANG); document.documentElement.lang = LANG; tabs.innerHTML = ''; renderNow(); if(!sheet.hidden){ sheet.innerHTML = ''; renderSheet(); } draw(); trTree(ov); });
@@ -1425,12 +1427,15 @@ function renderChrome(){
   // thanh tab dựng 1 lần, sau đó chỉ cập nhật trạng thái → nền chọn trượt mượt
   if(!tabs.querySelector('.tab-ind')){
     tabs.innerHTML = '<span class="tab-ind" aria-hidden="true"></span>' + T.map(([k,n]) => `<button data-t="${k}">${ICON[k]}<span>${n}</span></button>`).join('');
-    tabs.querySelectorAll('[data-t]').forEach(b => b.onclick = () => go(b.dataset.t));
+    tabs.querySelectorAll('[data-t]').forEach(b => b.onclick = () => { if(b.classList.contains('need')){
+      toast(LANG === 'en' ? '<b>Pick a program first</b><span>Tap one of the programs below</span>' : '<b>Chọn một chương trình trước</b><span>Bấm vào một chương trình trong danh sách</span>');
+      if(TAB !== 'progs') go('progs'); const l = main.querySelector('.pcard'); if(l){ main.querySelectorAll('.pcard').forEach(c => { c.classList.remove('nudge'); void c.offsetWidth; c.classList.add('nudge'); }); }
+      return; } go(b.dataset.t); });
   }
   const ti0 = T.findIndex(([k]) => k === TAB);
   tabs.querySelectorAll('[data-t]').forEach(b => {
     const on = b.dataset.t === TAB; b.toggleAttribute('aria-current', on); if(on) b.setAttribute('aria-current','page');
-    b.disabled = !p && b.dataset.t !== 'progs';
+    b.disabled = false; b.classList.toggle('need', !p && b.dataset.t !== 'progs');
   });
   tabs.querySelector('.tab-ind').style.transform = `translate3d(${ti0 * 100}%,0,0)`;
 }
