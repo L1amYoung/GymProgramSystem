@@ -1,4 +1,4 @@
-const V = 'gym-192ac6bed3';
+const V = 'gym-d9de349617';
 self.addEventListener('install', e => self.skipWaiting());
 self.addEventListener('activate', e => e.waitUntil(caches.keys().then(ks => Promise.all(ks.filter(k => k !== V).map(k => caches.delete(k)))).then(() => self.clients.claim())));
 self.addEventListener('fetch', e => {
@@ -10,6 +10,9 @@ self.addEventListener('fetch', e => {
     return;
   }
   if(u.origin === location.origin && (r.mode === 'navigate' || u.pathname.endsWith('.html') || u.pathname.endsWith('/'))){
-    e.respondWith(fetch(r).then(res => { const cp = res.clone(); caches.open(V).then(c => c.put(r, cp)); return res; }).catch(() => caches.match(r)));
+    // mở ngay bản đã lưu (nhanh khi quay lại app), tải bản mới ngầm cho lần mở sau
+    const net = fetch(r).then(res => { if(res.ok){ const cp = res.clone(); caches.open(V).then(c => c.put(r, cp)); } return res; });
+    e.respondWith(caches.match(r, {ignoreSearch: true}).then(hit => hit || net).catch(() => net));
+    e.waitUntil(net.catch(() => {}));
   }
 });

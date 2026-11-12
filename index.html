@@ -910,7 +910,9 @@ setTimeout(() => { sbAutoPull(true); }, 1200);
 const HASHOME = {};
 const hasHome = p => p && (HASHOME[p.id] ??= Object.values(p.workouts).some(w => w.items.some(it => it.h)));
 const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
-const store = { get(k){ try{ return localStorage.getItem(k); }catch(e){ return null; } }, set(k,v){ try{ v==null ? localStorage.removeItem(k) : localStorage.setItem(k, v); }catch(e){} if(typeof STATE_KEYS !== 'undefined' && STATE_KEYS.test(k)) sbQueue('u|' + k, 'user_state', {key: k, value: v == null ? null : String(v)}); } };
+var HC = null, HGEN = 0; const HINV = /^(sets-|swp-|start-|log$|body$|prlog$)/;
+function histDirty(){ HC = null; HGEN++; }
+const store = { get(k){ try{ return localStorage.getItem(k); }catch(e){ return null; } }, set(k,v){ if(HINV.test(k)) histDirty(); try{ v==null ? localStorage.removeItem(k) : localStorage.setItem(k, v); }catch(e){} if(typeof STATE_KEYS !== 'undefined' && STATE_KEYS.test(k)) sbQueue('u|' + k, 'user_state', {key: k, value: v == null ? null : String(v)}); } };
 const getJ = (k,d) => { try{ const v = JSON.parse(store.get(k)); return v ?? d; }catch(e){ return d; } };
 
 /* ---------- đồng bộ Supabase (localStorage vẫn là nguồn chính, mất mạng vẫn dùng được) ---------- */
@@ -1052,7 +1054,9 @@ const BADGES = [  // [id, icon, tên, mô tả, s => giá trị hiện tại, m�
   ['fin','🏁','Về đích','Xong trọn 1 chương trình', s => s.fin, 100, '%'],
 ];
 const BXRE = {bench: [/bench press|incline press/i, /\bdb\b|dumbbell/i], squat: [/squat/i, /\bdb\b|goblet|split|bulgarian|sissy|pistol|reach|bodyweight|sumo/i], dead: [/deadlift|\brdl\b/i, /\bdb\b|dumbbell/i]};
-function badgeStats(){
+let BST = null;
+function badgeStats(){ const k = HGEN + '|' + (store.get('badges') || ''); if(BST && BST.k === k) return BST.v; const v = badgeStats0(); BST = {k, v}; return v; }
+function badgeStats0(){
   const L = Object.values(getLog()).filter(e => e.k >= e.of && e.of > 0), days = new Set(L.map(e => e.d));
   const mon = {}; L.forEach(e => { const m = e.d.slice(0,7); mon[m] = (mon[m]||0) + 1; });
   const wk = new Set([...days].map(d => { const t = new Date(d+'T00:00:00'); t.setDate(t.getDate() - (t.getDay()+6)%7); return isoDay(t); }));
@@ -1104,7 +1108,7 @@ function weeksHtml(){
 
 /* ---------- tài khoản: đăng ký / đăng nhập bằng tên + mật khẩu ---------- */
 const unameEmail = u => u.trim().toLowerCase() + '@liamgymprogram.indevs.in';
-const rawSet = (k, v) => { try{ localStorage.setItem(k, v); }catch(e){} };
+const rawSet = (k, v) => { if(HINV.test(k)) histDirty(); try{ localStorage.setItem(k, v); }catch(e){} };
 async function sbErr(r){
   let m = ''; try{ const j = await r.json(); m = j.msg || j.error_description || j.message || j.error || ''; }catch(e){}
   if(/invalid login/i.test(m)) return 'Sai tên đăng nhập hoặc mật khẩu.';
@@ -2106,17 +2110,19 @@ const BWRE = /push[- ]?ups?|pushups|pull[- ]?ups?|pullups|chin[- ]?ups?|chins|\b
 const wStep = it => /\bdb\b|dumbbell|tạ đơn/i.test(it.name) ? 1 : 2.5;
 function tgtRange(v){ const m = String(v).match(/(\d+)\s*[-–]\s*(\d+)/); if(m) return [+m[1], +m[2]]; const m2 = String(v).match(/^(\d+)/); return m2 ? [+m2[1], +m2[1]] : null; }
 /* lịch sử 1 bài (mọi program, mọi ngày) từ dữ liệu set đã ghi */
-function exHist(name){
-  const L = getLog(), out = [];
+function exHist(name){ return (histAll()[name] || []).slice(); }
+function histAll(){
+  if(HC) return HC; const L = getLog(), M = {};
   try{ for(let i=0;i<localStorage.length;i++){ const key = localStorage.key(i), m = key && key.match(/^sets-(.+)-(\d+)$/); if(!m) continue;
     const p = P.find(x => x.id === m[1]); if(!p) continue; const n = +m[2], d = p.sched[n-1], w = d && d.w && p.workouts[d.w]; if(!w) continue;
     const o = getJ(key, {}), swm = getJ(swpKey(p, n), {});
-    w.items.forEach((it, i2) => { if((swm[i2] || it.name) !== name) return; const arr = o[i2]; if(!Array.isArray(arr)) return; const ss = arr.map(setObj);
+    w.items.forEach((it, i2) => { const name = swm[i2] || it.name; const arr = o[i2]; if(!Array.isArray(arr)) return; const ss = arr.map(setObj);
       if(!ss.some(x => x && x.r)) return; const lg = L[p.id+'|'+n], st = store.get('start-'+p.id);
       let d0 = isoDay(); if(st){ const t = new Date(st+'T00:00:00'); t.setDate(t.getDate() + n - 1); d0 = isoDay(t); }
-      out.push({key: `${p.id}|${n}|${i2}`, d: lg ? lg.d : d0, ts: lg ? (lg.t0||0) : 0, n, sets: ss}); });
+      (M[name] = M[name] || []).push({key: `${p.id}|${n}|${i2}`, d: lg ? lg.d : d0, ts: lg ? (lg.t0||0) : 0, n, sets: ss}); });
   } }catch(e){}
-  return out.sort((a,b) => (a.d||'').localeCompare(b.d||'') || a.ts - b.ts || a.n - b.n);
+  Object.values(M).forEach(a => a.sort((a,b) => (a.d||'').localeCompare(b.d||'') || a.ts - b.ts || a.n - b.n));
+  return (HC = M);
 }
 function warmPct(x){ const m = String(x).match(/(\d+)\s*%/); return m ? +m[1] : null; }
 const TDR = {}; let RESTAT = null;
@@ -2149,7 +2155,9 @@ function openSwap(p, n, i){
 const eqOf = nm => /\bdb\b|dumbbell/i.test(nm) ? 'db' : /cable|pulley/i.test(nm) ? 'cb' : /smith/i.test(nm) ? 'sm'
   : /machine|hack|pendulum|hammer strength|leg press|pec deck|seated|lying|extension|curl machine/i.test(nm) ? 'mc' : BWRE.test(nm) ? 'bw' : 'bb';
 const EQF = {bb: 1, sm: .9, mc: 1, cb: .55, db: .4};
-function histIdx(){
+let HIX = null;
+function histIdx(){ if(HIX && HIX.g === HGEN) return HIX.v; const v = histIdx0(); HIX = {g: HGEN, v}; return v; }
+function histIdx0(){
   const out = {}, L = getLog();
   try{ for(let i = 0; i < localStorage.length; i++){ const key = localStorage.key(i), m = key && key.match(/^sets-(.+)-(\d+)$/); if(!m) continue;
     const p = P.find(x => x.id === m[1]); if(!p) continue; const n = +m[2], d = p.sched[n-1], w = d && d.w && p.workouts[d.w]; if(!w) continue;
