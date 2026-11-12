@@ -742,6 +742,14 @@ html{touch-action:manipulation;scroll-behavior:auto!important}
 .wkt{display:grid;grid-template-columns:repeat(4,1fr);gap:6px} .wkt div{text-align:center;padding:8px 2px;border-radius:12px;background:rgba(0,0,0,.25)}
 .wkt b{display:block;font-size:19px} .wkt span{font-size:11px;color:var(--sub);font-weight:700}
 .wkl{list-style:none;margin:10px 0 0;padding:0;display:grid;gap:4px;font-size:13px;color:#d9d9de} .wkl:empty{display:none}
+.wk2{border:1px solid var(--line);border-radius:16px;background:var(--card);overflow:hidden}
+.wk2h{display:grid;gap:2px;padding:12px 14px 10px} .wk2h b{font-size:15px} .wk2h span{font-size:12px;color:var(--sub);font-weight:600}
+.wk2r{display:grid;grid-template-columns:1fr auto 74px;gap:10px;align-items:center;padding:9px 14px;border-top:1px solid var(--line);font-size:14px}
+.wk2r span{color:var(--sub);font-weight:700} .wk2r b{font-size:15px;text-align:right}
+.wk2r em,.wk2r:empty{font-style:normal} .wk2r em{justify-self:end;font-size:12px;font-weight:800;padding:2px 7px;border-radius:7px}
+.wk2r em.up{color:var(--ok);background:rgba(61,220,151,.12)} .wk2r em.dn{color:#ff8a7a;background:rgba(255,90,95,.12)} .wk2r em.eq{color:var(--sub);background:var(--card2)}
+.wk2s{padding:10px 14px;border-top:1px solid var(--line);font-size:13.5px} .wk2s span{display:block;font-size:12px;color:var(--sub);font-weight:800;margin-bottom:4px}
+.wk2s p{margin:2px 0;color:#d9d9de} .wk2s p b{color:var(--ink)}
 .plt{display:flex;flex-wrap:wrap;align-items:center;gap:5px;margin:10px 2px 0;font-size:12.5px}
 .plt>b{font-size:14px;margin-right:2px} .plt .pl0{color:var(--sub);font-weight:700}
 .pq{font-style:normal;display:inline-grid;place-items:center;min-width:26px;height:26px;padding:0 5px;border-radius:7px;font-size:11.5px;font-weight:900;color:#fff;background:#555}
@@ -1200,7 +1208,7 @@ function openSettings(){
         ${tg(`<div class="lmode"><button data-sm="0" aria-selected="${!LOGW()}">Đơn giản</button><button data-sm="1" aria-selected="${LOGW()}">Chi tiết</button></div>`, 0, 'Nhập set', 'Chi tiết = ghi tạ và rep từng set')}
         ${tg('<span class="gch">›</span>', 0, '<a class="gdl" href="guide.html">📖 Hướng dẫn sử dụng</a>', 'Cách dùng toàn bộ app, có ảnh minh hoạ')}
         ${WLOK ? tg(`<label class="lwt"><input type="checkbox" id="swk" ${WAKE ? 'checked' : ''}><span></span></label>`, 0, 'Giữ màn hình sáng', 'Khi đang ở trang Hôm nay') : ''}
-      </div><p class="appv">${LANG === 'en' ? 'Version' : 'Phiên bản'} d4d3420143</p></div>`;
+      </div><p class="appv">${LANG === 'en' ? 'Version' : 'Phiên bản'} c8e3400331</p></div>`;
     ov.querySelector('[data-x]').onclick = () => ov.remove();
     bindAcct(ov);
     ov.querySelectorAll('[data-sl]').forEach(b => b.onclick = () => { LANG = b.dataset.sl; store.set('lang', LANG); document.documentElement.lang = LANG; tabs.innerHTML = ''; renderNow(); if(!sheet.hidden){ sheet.innerHTML = ''; renderSheet(); } draw(); trTree(ov); });
@@ -1454,7 +1462,6 @@ function stripHtml(p, n){
 function renderToday(){
   const p = prog(), n = curDay(p), d = p.sched[n-1], ti = dayIdx(p);
   let h = stripHtml(p, n);
-  if(store.get('wkrep') !== monOf(isoDay()) && n === ti) h += weekRepHtml(true);
   if(!store.get('start-'+p.id) && !store.get('nosd-'+p.id)) h += `<div class="sdpill"><button class="sdbtn" id="sd">Đặt ngày bắt đầu</button><span>để tự mở buổi hôm nay</span><button class="x" id="nosd" aria-label="Ẩn">✕</button></div>`;
   if(!d.w){
     const nx = p.sched.slice(n).find(x => x.w);
@@ -1695,31 +1702,37 @@ function rangeStats(a, b){
 }
 const dAdd = (iso, k) => { const t = new Date(iso + 'T00:00:00'); t.setDate(t.getDate() + k); return isoDay(t); };
 const monOf = iso => { const t = new Date(iso + 'T00:00:00'); t.setDate(t.getDate() - (t.getDay() + 6) % 7); return isoDay(t); };
+const VOLTH = {minmax: [4, 20, 'Min-Max ít set, tập sát thất bại'], nhome: [4, 20, 'Build Muscle At Home ít set, tập gần thất bại']};
+const volTh = () => { const p = prog(); return (p && VOLTH[p.id]) || [6, 20, '']; };
 const MLV = v => v <= 0 ? 'h0' : v < 6 ? 'h1' : v < 12 ? 'h2' : v <= 20 ? 'h3' : 'h4';
 function musWeekHtml(){
   const b = dAdd(isoDay(), 1), a = dAdd(b, -7), st = rangeStats(a, b), mus = st.mus;
   if(!st.sets) return `<div class="sec"><div class="mdh">Nhóm cơ · 7 ngày qua</div><p class="none">Chưa có set nào trong 7 ngày qua. Tập xong vài set là bản đồ cơ sẽ hiện ở đây.</p></div>`;
   const nm = r => EL(MVN[r], MVN_EN[r]), fx = v => nfmt(Math.round(v * 2) / 2);
   const rows = Object.keys(MVN).filter(r => mus[r] || MMAJOR.includes(r)).sort((x, y) => (mus[y] || 0) - (mus[x] || 0));
-  const mx = Math.max(10, ...Object.values(mus));
+  const mx = Math.max(10, ...Object.values(mus)), [lo0, hi0, why] = volTh();
   return `<div class="sec"><div class="bhd"><div class="mdh">Nhóm cơ · 7 ngày qua</div><span>${st.sets} set</span></div>
     <div class="panel mwk">${bodySvg([], [], r => MLV(mus[r] || 0))}
     <div class="mleg2"><span><i class="h1"></i>1–5</span><span><i class="h2"></i>6–11</span><span><i class="h3"></i>12–20</span><span><i class="h4"></i>&gt;20 set</span></div>
-    <div class="mrows">${rows.map(r => { const v = mus[r] || 0, tag = MMAJOR.includes(r) && v < 6 ? `<em class="lo">${EL('thiếu', 'low')}</em>` : v > 20 ? `<em class="hi">${EL('nhiều', 'high')}</em>` : '';
+    <div class="mrows">${rows.map(r => { const v = mus[r] || 0, tag = MMAJOR.includes(r) && v < lo0 ? `<em class="lo">${EL('thiếu', 'low')}</em>` : v > hi0 ? `<em class="hi">${EL('nhiều', 'high')}</em>` : '';
       return `<div class="mr"><b>${nm(r)}</b><span class="mb"><u class="${MLV(v)}" style="width:${Math.max(v ? 4 : 0, v / mx * 100)}%"></u></span><span class="mv">${fx(v)}</span>${tag}</div>`; }).join('')}</div>
-    <p class="pcap">${EL('Cơ chính tính 1 set, cơ phụ 0,5. Thường nên 10–20 set mỗi nhóm cơ lớn mỗi tuần.', 'Primary muscle = 1 set, secondary = 0.5. Aim for about 10–20 sets per major muscle per week.')}</p></div></div>`;
+    <p class="pcap">${EL(`Cơ chính tính 1 set, cơ phụ 0,5. Thiếu: dưới ${lo0} set · nhiều: trên ${hi0} set${why ? ` (${why})` : ''}.`, `Primary muscle = 1 set, secondary = 0.5. Low: under ${lo0} sets · high: over ${hi0} sets.`)}</p></div></div>`;
 }
-function weekRepHtml(close){
-  const m0 = monOf(isoDay()), a = dAdd(m0, -7), st = rangeStats(a, m0); if(!st.sets && !st.done) return '';
+function weekRepHtml(){
+  const m0 = monOf(isoDay()), a = dAdd(m0, -7), st = rangeStats(a, m0), pv = rangeStats(dAdd(a, -7), a); if(!st.sets && !st.done) return '';
   const dd = d => `${+d.slice(8)}/${+d.slice(5,7)}`, nm = r => EL(MVN[r], MVN_EN[r]);
-  const ms = Object.entries(st.mus).filter(([r]) => MMAJOR.includes(r)).sort((x, y) => y[1] - x[1]);
-  const lo = MMAJOR.filter(r => (st.mus[r] || 0) < 6);
-  const tiles = [[st.done, EL('buổi xong', 'workouts')], [st.sets, 'set'], [nfmt(Math.round(st.vol / 100) / 10), EL('tấn', 'tonnes')], [st.prs, EL('kỷ lục', 'PRs')]];
-  return `<div class="wkrep" ${close ? 'data-wkr' : ''}><div class="wkh"><b>${EL('Tổng kết tuần trước', 'Last week')}</b><span>${dd(a)} – ${dd(dAdd(m0, -1))}</span>${close ? `<button class="x" data-wkx="${m0}" aria-label="Đóng">✕</button>` : ''}</div>
-    <div class="wkt">${tiles.map(([v, l]) => `<div><b>${v}</b><span>${l}</span></div>`).join('')}</div>
-    <ul class="wkl">${st.kg != null ? `<li>⚖️ ${EL('Cân nặng', 'Weight')} <b>${nfmt(st.kg)}kg</b>${st.dkg ? ` (${st.dkg > 0 ? '+' : ''}${nfmt(st.dkg)})` : ''}</li>` : ''}
-      ${ms.length ? `<li>💪 ${EL('Tập nhiều nhất', 'Most trained')}: <b>${ms.slice(0, 2).map(([r]) => nm(r)).join(', ')}</b></li>` : ''}
-      ${lo.length && st.sets ? `<li>⚠️ ${EL('Còn thiếu', 'Under-trained')}: <b>${lo.slice(0, 3).map(nm).join(', ')}</b></li>` : ''}</ul></div>`;
+  const dl = (x, y, fmt, unit) => { if(!y && !x) return ''; const d = x - y; if(!y || Math.abs(d) < 1e-9) return d ? `<em class="up">mới</em>` : `<em class="eq">=</em>`;
+    return `<em class="${d > 0 ? 'up' : 'dn'}">${d > 0 ? '▲' : '▼'} ${fmt(Math.abs(d))}${unit || ''}</em>`; };
+  const t = v => nfmt(Math.round(v / 100) / 10);
+  const rows = [[EL('Buổi xong', 'Workouts'), st.done, dl(st.done, pv.done, x => x)], [EL('Số set', 'Sets'), st.sets, dl(st.sets, pv.sets, x => x)],
+    [EL('Khối lượng', 'Volume'), t(st.vol) + EL(' tấn', ' t'), dl(st.vol, pv.vol, x => t(x), EL(' tấn', ' t'))]];
+  if(st.kg != null) rows.push([EL('Cân nặng', 'Weight'), nfmt(st.kg) + 'kg', st.dkg ? `<em class="eq">${st.dkg > 0 ? '+' : ''}${nfmt(st.dkg)}kg</em>` : '']);
+  const prs = getJ('prlog', []).filter(x => x.d >= a && x.d < m0);
+  const ms = Object.entries(st.mus).filter(([r]) => MMAJOR.includes(r)).sort((x, y) => y[1] - x[1]), lo = MMAJOR.filter(r => (st.mus[r] || 0) < volTh()[0]);
+  return `<div class="wk2"><div class="wk2h"><b>${EL('Tuần trước', 'Last week')}</b><span>${dd(a)} – ${dd(dAdd(m0, -1))} · ${EL('so với tuần trước nữa', 'vs the week before')}</span></div>
+    ${rows.map(([l, v, d]) => `<div class="wk2r"><span>${l}</span><b>${v}</b>${d}</div>`).join('')}
+    ${prs.length ? `<div class="wk2s"><span>🏆 ${EL('Kỷ lục', 'PRs')} (${prs.length})</span>${prs.slice(0, 4).map(x => `<p>${esc(x.x)} <b>${esc(setTxt({w: x.w, r: x.r}))}</b></p>`).join('')}</div>` : ''}
+    ${ms.length ? `<div class="wk2s"><span>💪 ${EL('Nhóm cơ', 'Muscles')}</span><p>${EL('Nhiều nhất', 'Most')}: <b>${ms.slice(0, 2).map(([r]) => nm(r)).join(', ')}</b></p>${lo.length ? `<p>${EL('Còn thiếu', 'Low')}: <b>${lo.slice(0, 3).map(nm).join(', ')}</b></p>` : ''}</div>` : ''}</div>`;
 }
 document.addEventListener('click', e => { const b = e.target.closest && e.target.closest('[data-wkx]'); if(!b) return; store.set('wkrep', b.dataset.wkx); const c = b.closest('[data-wkr]'); if(c) c.remove(); });
 function renderStats(){
@@ -1734,7 +1747,7 @@ function renderStats(){
   h += `<div class="sec"><div class="mdh">Bảng xếp hạng tháng</div>${renderBoard(true)}</div>`;
   const wk = weeksHtml(); if(wk) h += `<div class="sec">${wk}</div>`;
   h += musWeekHtml();
-  { const wr = weekRepHtml(false); if(wr) h += `<div class="sec">${wr}</div>`; }
+  { const wr = weekRepHtml(); if(wr) h += `<div class="sec">${wr}</div>`; }
   h += bodyHtml();
   const got = new Set(earnedBadges()), bst = badgeStats();
   h += `<div class="sec"><div class="bhd"><div class="mdh">Huy hiệu</div><span>${got.size}/${BADGES.length}</span></div>`;
