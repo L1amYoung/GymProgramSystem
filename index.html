@@ -892,6 +892,11 @@ html{touch-action:manipulation;scroll-behavior:auto!important}
 .mdg i{width:auto!important;height:auto!important;min-height:36px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;border-radius:8px!important;font-style:normal}
 .mdg i b{font-size:11px;font-weight:800;color:var(--sub)} .mdg i small{font-size:9px;font-weight:800;line-height:1.1;text-align:center;color:var(--faint);white-space:nowrap;overflow:hidden;max-width:100%}
 .mdg i.d b,.mdg i.d small{color:#06281a} .mdg i.p small{color:var(--ink)}
+.rtc{margin:12px 0 0;padding:12px 16px;border:1px solid var(--line);border-radius:14px;background:var(--card)}
+.rtl{font-size:11px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:var(--sub)}
+.rtv{display:flex;align-items:baseline;flex-wrap:wrap;gap:4px 8px;margin:4px 0 6px} .rtv b{font-size:28px;line-height:1.15} .rtv b small{font-size:13px;color:var(--sub);margin-left:2px}
+.rtv em{font-style:normal;font-size:13px;font-weight:800;color:var(--sub)} .rtv i{flex-basis:100%;font-style:normal;font-size:13px;font-weight:800} .rtv i.g{color:var(--ok)} .rtv i.w{color:#f5a524}
+.rtc p{margin:0;font-size:13px;color:var(--sub);line-height:1.4} .rtc .lk{border:0;background:none;padding:0;color:var(--acc2);font:inherit;font-weight:800}
 .plt{display:flex;flex-wrap:wrap;align-items:center;gap:5px;margin:10px 2px 0;font-size:13px}
 .plt>b{font-size:15px;margin-right:2px} .plt .pl0{color:var(--sub);font-weight:700}
 .pq{font-style:normal;display:inline-grid;place-items:center;min-width:26px;height:26px;padding:0 5px;border-radius:8px;font-size:11px;font-weight:900;color:#fff;background:#555}
@@ -1359,7 +1364,7 @@ function openSettings(){
         ${tg(`<div class="lmode"><button data-sm="0" aria-selected="${!LOGW()}">Đơn giản</button><button data-sm="1" aria-selected="${LOGW()}">Chi tiết</button></div>`, 0, 'Nhập set', 'Chi tiết = ghi tạ và rep từng set')}
         ${tg('<span class="gch">›</span>', 0, `<a class="gdl" href="guide.html">${ICO.book} ${EL('Hướng dẫn sử dụng', 'User guide')}</a>`, 'Cách dùng toàn bộ app, có ảnh minh hoạ')}
         ${WLOK ? tg(`<label class="lwt"><input type="checkbox" id="swk" ${WAKE ? 'checked' : ''}><span></span></label>`, 0, 'Giữ màn hình sáng', 'Khi đang ở trang Hôm nay') : ''}
-      </div><p class="appv">${LANG === 'en' ? 'Version' : 'Phiên bản'} 75b55dffb2</p></div>`;
+      </div><p class="appv">${LANG === 'en' ? 'Version' : 'Phiên bản'} ccf0540232</p></div>`;
     ov.querySelector('[data-x]').onclick = () => ov.remove();
     bindAcct(ov);
     ov.querySelectorAll('[data-sl]').forEach(b => b.onclick = () => { LANG = b.dataset.sl; store.set('lang', LANG); document.documentElement.lang = LANG; tabs.innerHTML = ''; renderNow(); if(!sheet.hidden){ sheet.innerHTML = ''; renderSheet(); } draw(); trTree(ov); });
@@ -1618,6 +1623,8 @@ function stripHtml(p, n){
 function renderToday(){
   const p = prog(), n = curDay(p), d = p.sched[n-1], ti = dayIdx(p);
   let h = stripHtml(p, n);
+  { const L = bodyList(), lt = L.length && L[L.length-1].d, ago = lt ? Math.round((new Date(isoDay() + 'T00:00:00') - new Date(lt + 'T00:00:00')) / 864e5) : 0, sn = store.get('nowgh');
+    if(lt && ago >= 7 && !(sn && sn > dAdd(isoDay(), -7))) h += `<div class="sdpill wgh"><span>${EL(`Đã ${ago} ngày chưa cân`, `${ago} days since your last weigh-in`)}</span><button class="sdbtn" id="wgh">${EL('Nhập', 'Log')}</button><button class="x" id="nowgh" aria-label="Ẩn">✕</button></div>`; }
   if(!store.get('start-'+p.id) && !store.get('nosd-'+p.id)) h += `<div class="sdpill"><span>${EL('Đặt ngày bắt đầu để app tự mở đúng buổi hôm nay', 'Set a start date so the app opens today’s workout')}</span><button class="sdbtn" id="sd">${EL('Đặt', 'Set')}</button><button class="x" id="nosd" aria-label="Ẩn">✕</button></div>`;
   if(!d.w){
     const nx = p.sched.slice(n).find(x => x.w);
@@ -1651,6 +1658,7 @@ function renderToday(){
   main.innerHTML = h; setAnim();
   main.querySelectorAll('[data-d]').forEach(b => b.onclick = () => { const t = +b.dataset.d; if(t===n) return; ANIM = t>n ? 'l' : 'r'; setDay(p, t); render(); });
   main.querySelectorAll('[data-w]').forEach(b => b.onclick = () => { ANIM = +b.dataset.w > 0 ? 'l' : 'r'; const ws = Math.floor((n-1)/7)*7 + 7*(+b.dataset.w); const days = p.sched.slice(ws, ws+7); const pick = days.find(x => x.w) || days[0]; setDay(p, pick.n); render(); });
+  { const a = document.getElementById('wgh'); if(a) a.onclick = () => openBody(''); const x = document.getElementById('nowgh'); if(x) x.onclick = () => { store.set('nowgh', isoDay()); render(); }; }
   const ns = document.getElementById('nosd'); if(ns) ns.onclick = () => { store.set('nosd-'+p.id,'1'); render(); };
   const wk = document.getElementById('wksel'); if(wk) wk.onchange = e => { ANIM = 'fade'; const s0 = +e.target.value; const dd = p.sched.slice(s0, s0+7); setDay(p, (dd.find(x=>x.w)||dd[0]).n); render(); };
   const ps = document.getElementById('phsel'); if(ps) ps.onchange = e => { ANIM = 'fade'; const [a2] = p.phases[+e.target.value]; const dd = p.sched.slice(a2-1, a2+6); setDay(p, (dd.find(x=>x.w)||dd[0]).n); render(); };
@@ -1838,6 +1846,28 @@ function openCal(){
   draw(); document.body.appendChild(ov); requestAnimationFrame(() => ov.classList.add('on'));
   ov.onclick = ev => { if(ev.target === ov) ov.remove(); };
 }
+/* tốc độ cân nặng: hồi quy tuyến tính các lần cân trong 35 ngày gần nhất (cần cách nhau ≥ 7 ngày) */
+function wtRate(){
+  const L = bodyList().filter(e => e.kg), last = L[L.length - 1]; if(!last) return null;
+  const t = d => new Date(d + 'T00:00:00') / 864e5, t1 = t(last.d), pts = L.filter(e => t1 - t(e.d) <= 35);
+  if(pts.length < 2 || t1 - t(pts[0].d) < 7) return {need: true};
+  const xs = pts.map(e => t(e.d)), ys = pts.map(e => +e.kg), mx = xs.reduce((a, b) => a + b) / xs.length, my = ys.reduce((a, b) => a + b) / ys.length;
+  const sl = xs.reduce((a, x, i) => a + (x - mx) * (ys[i] - my), 0) / xs.reduce((a, x) => a + (x - mx) ** 2, 0);
+  const wk = sl * 7, pct = wk / last.kg * 100; return {wk: Math.round(wk * 100) / 100, pct, days: Math.round(t1 - xs[0])};
+}
+function rateHtml(){
+  const r = wtRate(); if(!r) return ''; const c = getJ('calprof', null), g = c && c.goal;
+  if(r.need) return `<div class="rtc"><span class="rtl">${EL('Tốc độ / tuần', 'Rate / week')}</span><p>${EL('Cân thêm 1 lần cách lần đầu ≥ 7 ngày để tính tốc độ tăng/giảm.', 'Weigh in again at least 7 days apart to see your weekly rate.')}</p></div>`;
+  const R = {cut: [-1, -0.5, EL('giảm 0,5–1% cân nặng/tuần', 'lose 0.5–1% bodyweight/week')], keep: [-0.25, 0.25, EL('giữ trong ±0,25%/tuần', 'stay within ±0.25%/week')], bulk: [0.25, 0.5, EL('tăng 0,25–0,5% cân nặng/tuần', 'gain 0.25–0.5% bodyweight/week')]}[g];
+  let v = '', cls = '';
+  if(R){ const [lo, hi] = R, sl = g === 'cut' ? hi + 0.2 : g === 'bulk' ? lo - 0.15 : hi, fa = g === 'cut' ? lo - 0.25 : g === 'bulk' ? hi + 0.25 : lo;
+    if(g === 'keep') { if(r.pct > hi){ v = EL('Đang tăng · thử bớt ~200 cal/ngày', 'Gaining · try ~200 cal/day less'); cls = 'w'; } else if(r.pct < lo){ v = EL('Đang giảm · thử thêm ~200 cal/ngày', 'Losing · try ~200 cal/day more'); cls = 'w'; } else { v = EL('Đúng mục tiêu', 'On track'); cls = 'g'; } }
+    else if(g === 'cut'){ if(r.pct > sl){ v = EL('Giảm chậm · thử bớt ~200 cal/ngày', 'Too slow · try ~200 cal/day less'); cls = 'w'; } else if(r.pct < fa){ v = EL('Giảm nhanh, dễ mất cơ · thử thêm ~200 cal/ngày', 'Too fast, may lose muscle · try ~200 cal/day more'); cls = 'w'; } else { v = EL('Đúng tốc độ', 'On track'); cls = 'g'; } }
+    else { if(r.pct < sl){ v = EL('Tăng chậm · thử thêm ~200 cal/ngày', 'Too slow · try ~200 cal/day more'); cls = 'w'; } else if(r.pct > fa){ v = EL('Tăng nhanh, dễ tích mỡ · thử bớt ~200 cal/ngày', 'Too fast, may add fat · try ~200 cal/day less'); cls = 'w'; } else { v = EL('Đúng tốc độ', 'On track'); cls = 'g'; } } }
+  const sg = r.wk > 0 ? '+' : r.wk < 0 ? '−' : '';
+  return `<div class="rtc"><span class="rtl">${EL('Tốc độ / tuần', 'Rate / week')}</span><div class="rtv"><b>${sg}${nfmt(Math.abs(r.wk))}<small>kg</small></b><em>${sg}${nfmt(Math.round(Math.abs(r.pct) * 100) / 100)}%</em>${v ? `<i class="${cls}">${v}</i>` : ''}</div>
+    <p>${R ? EL(`Mục tiêu ${CGOAL[g][1].toLowerCase()}: ${R[2]}`, `${CGOAL[g][2]} target: ${R[2]}`) + ' · ' : `<button class="lk" data-cal>${EL('Chọn mục tiêu calo', 'Pick a calorie goal')}</button> · `}${EL(`tính từ ${r.days} ngày gần nhất`, `from the last ${r.days} days`)}</p></div>`;
+}
 function bodyHtml(){
   const L = bodyList(), dd = d => `${+d.slice(8)}/${+d.slice(5,7)}`;
   let h = `<div class="sec"><div class="bhd"><div class="mdh">Chỉ số cơ thể</div><button class="bdadd" data-bd="">+ Nhập</button></div>${calRowHtml()}`;
@@ -1857,6 +1887,7 @@ function bodyHtml(){
       <text x="${X(0)}" y="${Y(ys[0])-9}" class="vl">${nfmt(ys[0])}</text><text x="${X(pts.length-1)}" y="${Y(ys[ys.length-1])-9}" text-anchor="end" class="vl">${nfmt(ys[ys.length-1])}${u}</text>
       <text x="${pl}" y="${H-4}" class="ax">${dd(pts[0].d)}</text><text x="${W-pr}" y="${H-4}" text-anchor="end" class="ax">${dd(pts[pts.length-1].d)}</text></svg></div>`;
   }
+  h += rateHtml();
   const last = L[L.length-1], ago = Math.round((new Date(isoDay() + 'T00:00:00') - new Date(last.d + 'T00:00:00')) / 864e5);
   h += `<p class="pcap">Lần đo gần nhất ${dd(last.d)}${ago > 0 ? ` · ${ago} ngày trước` : ' · hôm nay'}${ago >= 14 ? ' · <b>đến lúc đo lại</b>' : ''}</p>`;
   h += `<details class="bdh"><summary>Lịch sử đo (${L.length})</summary>${L.slice().reverse().map(e => `<button class="bdr" data-bd="${e.d}"><b>${dd(e.d)}/${e.d.slice(0,4)}</b><span>${BM.filter(([k]) => e[k] != null).map(([k, lab, u]) => (u ? `${nfmt(e[k])}${u}` : `${lab.toLowerCase()} ${nfmt(e[k])}`)).join(' · ')}</span></button>`).join('')}</details></div>`;
