@@ -1940,7 +1940,7 @@ function renderProgs(){
 }
 
 /* ---------- SHEET (exercise focus) ---------- */
-let CUR = 0, SWV = null;
+let CUR = 0, SWV = null, SHT = 0, SHCL = false;
 function openSheet(i){
   if(false){
     const th = main.querySelector(`.row[data-i="${i}"] .th`);
@@ -1954,6 +1954,7 @@ function openSheet(i){
     t.finished.finally(() => { sheet.classList.remove('instant'); delete document.documentElement.dataset.vt; posRest(); });
     preloadNear(); history.pushState({sheet:1}, ''); return;
   }
+  clearTimeout(SHT); SHCL = false; sheet.style.pointerEvents = ''; sheet.classList.remove('fadeout');   // huỷ hẹn ẩn của lần đóng trước
   const thImg = main.querySelector(`.row[data-i="${i}"] .th img`);
   const fromR = thImg && thImg.getBoundingClientRect();
   CUR = i; SWV = null; sheet.hidden = false; document.body.style.overflow = 'hidden';
@@ -1979,7 +1980,7 @@ function closeSheet(fromPop){ if(sheet.hidden) return;
       const r = thImg.getBoundingClientRect();
       if(r.bottom > 0 && r.top < innerHeight){ thImg.style.visibility = 'hidden'; fly(src, fromR, r, {r0: 18, r1: 14, dur: 340}).then(() => { thImg.style.visibility = ''; }); }
     }
-    setTimeout(() => { sheet.classList.remove('open', 'fadeout'); sheet.hidden = true; sheet.innerHTML = ''; sheet.classList.remove('instant'); posRest(); }, 260);
+    clearTimeout(SHT); SHT = setTimeout(() => { sheet.classList.remove('open', 'fadeout'); sheet.hidden = true; sheet.innerHTML = ''; sheet.classList.remove('instant'); sheet.style.pointerEvents = ''; SHCL = false; posRest(); }, 260);
     if(!fromPop && history.state && history.state.sheet) history.back();
     return;
   }
@@ -1995,8 +1996,9 @@ function closeSheet(fromPop){ if(sheet.hidden) return;
     if(!fromPop && history.state && history.state.sheet) history.back();
     return;
   } sheet.classList.remove('open'); document.body.style.overflow = ''; const red = matchMedia('(prefers-reduced-motion: reduce)').matches; setTimeout(() => { if(sheet.classList.contains('open')) return; sheet.hidden = true; sheet.innerHTML=''; }, red ? 0 : 350); refreshDone(); if(!fromPop && history.state && history.state.sheet) history.back(); }
-{ const _cs = closeSheet; closeSheet = function(fromPop){ const was = !sheet.hidden; _cs(fromPop);
-  if(was && TAB === 'today') setTimeout(() => { if(sheet.classList.contains('open')) return; const y = scrollY; ANIM = ''; renderNow(); scrollTo(0, y); }, 420); }; }
+{ const _cs = closeSheet; closeSheet = function(fromPop){ if(sheet.hidden || SHCL) return; SHCL = true; sheet.style.pointerEvents = 'none';
+  if(TAB === 'today'){ const y = scrollY; ANIM = ''; renderNow(); scrollTo(0, y); }   // vẽ lại ngay, trước khi người dùng kịp bấm
+  _cs(fromPop); if(RM) setTimeout(() => { SHCL = false; sheet.style.pointerEvents = ''; }, 360); }; }
 window.addEventListener('popstate', () => { if(!sheet.hidden) closeSheet(true); });
 function mediaHtml(e){
   const vt = ' style="view-transition-name:ex-media"';
