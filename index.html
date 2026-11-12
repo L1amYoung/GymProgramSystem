@@ -887,6 +887,11 @@ html{touch-action:manipulation;scroll-behavior:auto!important}
 .swin{margin:16px 0 4px!important} .swinl{display:grid!important;grid-template-columns:1fr 1fr;gap:8px!important;overflow:visible!important;margin-right:0!important;padding-bottom:0!important}
 .swic{flex:none!important;width:auto!important} .swic .pi{height:88px!important}
 .tnote{margin-top:4px;font-size:13px;font-weight:700;color:var(--ss);line-height:1.35}
+.mhero em{margin-left:auto;font-style:normal;font-size:13px;font-weight:800;color:var(--sub)}
+.mdots{max-width:none!important} .mdw,.mdg{grid-template-columns:repeat(7,1fr)!important;gap:4px!important}
+.mdg i{width:auto!important;height:auto!important;min-height:40px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;border-radius:8px!important;font-style:normal}
+.mdg i b{font-size:11px;font-weight:800;color:var(--sub)} .mdg i small{font-size:9px;font-weight:800;line-height:1.1;text-align:center;color:var(--faint);white-space:nowrap;overflow:hidden;max-width:100%}
+.mdg i.d b,.mdg i.d small{color:#06281a} .mdg i.p small{color:var(--ink)}
 .plt{display:flex;flex-wrap:wrap;align-items:center;gap:5px;margin:10px 2px 0;font-size:13px}
 .plt>b{font-size:15px;margin-right:2px} .plt .pl0{color:var(--sub);font-weight:700}
 .pq{font-style:normal;display:inline-grid;place-items:center;min-width:26px;height:26px;padding:0 5px;border-radius:8px;font-size:11px;font-weight:900;color:#fff;background:#555}
@@ -1354,7 +1359,7 @@ function openSettings(){
         ${tg(`<div class="lmode"><button data-sm="0" aria-selected="${!LOGW()}">Đơn giản</button><button data-sm="1" aria-selected="${LOGW()}">Chi tiết</button></div>`, 0, 'Nhập set', 'Chi tiết = ghi tạ và rep từng set')}
         ${tg('<span class="gch">›</span>', 0, `<a class="gdl" href="guide.html">${ICO.book} ${EL('Hướng dẫn sử dụng', 'User guide')}</a>`, 'Cách dùng toàn bộ app, có ảnh minh hoạ')}
         ${WLOK ? tg(`<label class="lwt"><input type="checkbox" id="swk" ${WAKE ? 'checked' : ''}><span></span></label>`, 0, 'Giữ màn hình sáng', 'Khi đang ở trang Hôm nay') : ''}
-      </div><p class="appv">${LANG === 'en' ? 'Version' : 'Phiên bản'} 28ae9128e6</p></div>`;
+      </div><p class="appv">${LANG === 'en' ? 'Version' : 'Phiên bản'} dce0ab896c</p></div>`;
     ov.querySelector('[data-x]').onclick = () => ov.remove();
     bindAcct(ov);
     ov.querySelectorAll('[data-sl]').forEach(b => b.onclick = () => { LANG = b.dataset.sl; store.set('lang', LANG); document.documentElement.lang = LANG; tabs.innerHTML = ''; renderNow(); if(!sheet.hidden){ sheet.innerHTML = ''; renderSheet(); } draw(); trTree(ov); });
@@ -1963,18 +1968,16 @@ function bindPseg(root){ root.querySelectorAll('[data-ps]').forEach(b => b.oncli
 /* thẻ tháng: tiến độ theo lịch + lịch chấm + tuần liên tiếp + TB/tuần */
 function monthCard(Y, M, done, list){
   const p = prog(), st = p && store.get('start-' + p.id), today = isoDay(), dim = new Date(Y, M, 0).getDate(), ym = `${Y}-${String(M).padStart(2, '0')}`;
-  const doneD = new Set(done.map(e => e.d)), partD = new Set(list.filter(e => e.k > 0 && !(e.k >= e.of)).map(e => e.d)), planD = new Set();
-  if(st){ const a = new Date(st + 'T00:00:00'); for(let i = 1; i <= dim; i++){ const dt = new Date(Y, M - 1, i), n = Math.round((dt - a) / 864e5) + 1, d = p.sched[n - 1]; if(d && d.w) planD.add(isoDay(dt)); } }
+  const doneD = new Set(done.map(e => e.d)), partD = new Set(list.filter(e => e.k > 0 && !(e.k >= e.of)).map(e => e.d)), planD = new Set(), LBL = {};
+  if(st){ const a = new Date(st + 'T00:00:00'); for(let i = 1; i <= dim; i++){ const dt = new Date(Y, M - 1, i), n = Math.round((dt - a) / 864e5) + 1, d = p.sched[n - 1]; if(d && d.w){ planD.add(isoDay(dt)); LBL[isoDay(dt)] = lab(p.workouts[d.w].title); } } }
+  list.forEach(e => { if(e.w) LBL[e.d] = lab(e.w); });
   const plan = planD.size, nd = done.length;
-  const allDone = new Set(Object.values(getLog()).filter(e => e.k >= e.of && e.of > 0).map(e => monOf(e.d)));
-  let streak = 0, w = monOf(today); if(!allDone.has(w)) w = dAdd(w, -7); while(allDone.has(w)){ streak++; w = dAdd(w, -7); }   // tuần này chưa tập thì tính từ tuần trước
-  const isCur = ym === today.slice(0, 7), daysEl = isCur ? +today.slice(8) : dim, avg = Math.round(nd / Math.max(1, daysEl / 7) * 10) / 10;
   const first = (new Date(Y, M - 1, 1).getDay() + 6) % 7;
   const cells = Array.from({length: first}, () => '<i class="e"></i>').join('') + Array.from({length: dim}, (_, k) => { const ds = `${ym}-${String(k + 1).padStart(2, '0')}`;
-    return `<i class="${doneD.has(ds) ? 'd' : partD.has(ds) ? 'p' : planD.has(ds) && ds < today ? 'm' : planD.has(ds) ? 'f' : ''} ${ds === today ? 't' : ''}"></i>`; }).join('');
-  return `<div class="mhero"><div><b>${nd}</b><span>${plan ? EL(`/ ${plan} buổi theo lịch`, `/ ${plan} planned`) : EL('buổi xong', 'workouts')}</span></div>${plan ? `<div class="mbar"><i style="width:${Math.min(100, nd / plan * 100)}%"></i></div>` : ''}</div>
+    return `<i class="${doneD.has(ds) ? 'd' : partD.has(ds) ? 'p' : planD.has(ds) && ds < today ? 'm' : planD.has(ds) ? 'f' : ''} ${ds === today ? 't' : ''}"><b>${k + 1}</b>${LBL[ds] ? `<small>${esc(LBL[ds])}</small>` : ''}</i>`; }).join('');
+  return `<div class="mhero"><div><b>${nd}</b><span>${plan ? EL(`/ ${plan} buổi theo lịch`, `/ ${plan} planned`) : EL('buổi xong', 'workouts')}</span><em>${doneD.size} ${EL('ngày có tập', 'training days')}</em></div>${plan ? `<div class="mbar"><i style="width:${Math.min(100, nd / plan * 100)}%"></i></div>` : ''}</div>
     <div class="mdots"><div class="mdw">${(LANG === 'en' ? ['M', 'T', 'W', 'T', 'F', 'S', 'S'] : ['T2', 'T3', 'T4', 'T5', 'T6', 'T7', 'CN']).map(x => `<span>${x}</span>`).join('')}</div><div class="mdg">${cells}</div><div class="mlg"><span><i class="d"></i>${EL('Đã tập', 'Done')}</span>${plan ? `<span><i class="f"></i>${EL('Có lịch', 'Planned')}</span><span><i class="m"></i>${EL('Bỏ lỡ', 'Missed')}</span>` : ''}</div></div>
-    <div class="mmini"><div><b>${streak}</b><span>${EL('tuần liên tiếp', 'week streak')}</span></div><div><b>${nfmt(avg)}</b><span>${EL('buổi / tuần', 'per week')}</span></div><div><b>${doneD.size}</b><span>${EL('ngày có tập', 'training days')}</span></div></div>`;
+`;
 }
 function renderStats(){
   const now = new Date(), today = isoDay(now); if(!CALM) CALM = today.slice(0,7);
@@ -2680,7 +2683,7 @@ function histAll(){
     w.items.forEach((it, i2) => { const name = swm[i2] || it.name; const arr = o[i2]; if(!Array.isArray(arr)) return; const ss = arr.map(setObj);
       if(!ss.some(x => x && x.r)) return; const lg = L[p.id+'|'+n], st = store.get('start-'+p.id);
       let d0 = isoDay(); if(st){ const t = new Date(st+'T00:00:00'); t.setDate(t.getDate() + n - 1); d0 = isoDay(t); }
-      (M[name] = M[name] || []).push({key: `${p.id}|${n}|${i2}`, d: lg ? lg.d : d0, ts: lg ? (lg.t0||0) : 0, n, sets: ss}); });
+      (M[name] = M[name] || []).push({key: `${p.id}|${n}|${i2}`, d: lg ? lg.d : d0, ts: lg ? (lg.t0||0) : 0, n, sets: ss, wu: Array.isArray(o[1000+i2]) ? o[1000+i2].map(setObj) : []}); });
   } }catch(e){}
   Object.values(M).forEach(a => a.sort((a,b) => (a.d||'').localeCompare(b.d||'') || a.ts - b.ts || a.n - b.n));
   return (HC = M);
@@ -2806,9 +2809,10 @@ function tblSets(p, it){
     const mn = +(String(it.wu||'').split('-')[0]) || it.warm.length, ref = (setObj(ticks[0]) || {}).w || sugW(0) || (l0 && l0.w);
     const wd = it.warm.filter((_, k) => k < mn && warmArr[k]).length, wopen = WUO[qk] != null ? WUO[qk] : (!ticks.some(Boolean) && wd < mn);
     h += `<button class="twut" data-wut="${esc(qk)}" aria-expanded="${wopen}"><span>${EL('Khởi động', 'Warm-up')}</span><b class="${wd >= mn ? 'ok' : ''}">${wd}/${mn}</b><i>›</i></button><div class="twu ${wopen ? '' : 'shut'}">`;
-    it.warm.forEach((x, k) => { const pc = warmPct(x), o = setObj(warmArr[k]), on = !!warmArr[k], rm = String(x).match(/×\s*(\d+)/) || String(x).match(/(\d+)\s*rep/);
-      const kg = ref && pc ? Math.max(0, Math.round(ref*pc/100/st)*st) : '';
-      h += row('w', k, 'W' + (k+1), LW ? (String(x).match(/~?\d+%/) || [''])[0] : '', String(x).replace(/ tạ làm việc/, ''), o, on, rm ? rm[1] : '', kg, k >= mn ? 'opt' : ''); });
+    const lwu = ((hist.slice().reverse().find(e => e.wu && e.wu.some(x => x && (x.r || x.w))) || {}).wu) || [];   // khởi động đã ghi lần gần nhất
+    it.warm.forEach((x, k) => { const pc = warmPct(x), o = setObj(warmArr[k]), on = !!warmArr[k], rm = String(x).match(/×\s*(\d+)/) || String(x).match(/(\d+)\s*rep/), lw = lwu[k];
+      const kg = lw && lw.w != null ? lw.w : ref && pc ? Math.max(0, Math.round(ref*pc/100/st)*st) : '';
+      h += row('w', k, 'W' + (k+1), LW ? (String(x).match(/~?\d+%/) || [''])[0] : '', String(x).replace(/ tạ làm việc/, ''), o, on, lw && lw.r ? lw.r : rm ? rm[1] : '', kg, k >= mn ? 'opt' : ''); });
     h += '</div>';
   }
   const firstOpen = vals.findIndex((_, k) => !ticks[k]);
