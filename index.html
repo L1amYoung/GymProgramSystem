@@ -722,6 +722,7 @@ html{touch-action:manipulation;scroll-behavior:auto!important}
 #upd{position:fixed;left:50%;top:calc(env(safe-area-inset-top,0px) + 62px);z-index:70;transform:translate(-50%,-12px);opacity:0;transition:opacity .25s,transform .25s;
   display:flex;gap:8px;align-items:baseline;padding:10px 16px;border:0;border-radius:999px;background:var(--acc);color:#fff;font:inherit;font-size:14px;box-shadow:0 10px 28px -8px rgba(0,0,0,.7);white-space:nowrap}
 #upd.on{opacity:1;transform:translate(-50%,0)} #upd span{opacity:.85;font-weight:700;font-size:13px}
+.appv{margin:10px 0 0;text-align:center;font-size:11.5px;color:var(--faint);font-weight:700;letter-spacing:.03em}
 .plt{display:flex;flex-wrap:wrap;align-items:center;gap:5px;margin:10px 2px 0;font-size:12.5px}
 .plt>b{font-size:14px;margin-right:2px} .plt .pl0{color:var(--sub);font-weight:700}
 .pq{font-style:normal;display:inline-grid;place-items:center;min-width:26px;height:26px;padding:0 5px;border-radius:7px;font-size:11.5px;font-weight:900;color:#fff;background:#555}
@@ -1180,7 +1181,7 @@ function openSettings(){
         ${tg(`<div class="lmode"><button data-sm="0" aria-selected="${!LOGW()}">Đơn giản</button><button data-sm="1" aria-selected="${LOGW()}">Chi tiết</button></div>`, 0, 'Nhập set', 'Chi tiết = ghi tạ và rep từng set')}
         ${tg('<span class="gch">›</span>', 0, '<a class="gdl" href="guide.html">📖 Hướng dẫn sử dụng</a>', 'Cách dùng toàn bộ app, có ảnh minh hoạ')}
         ${WLOK ? tg(`<label class="lwt"><input type="checkbox" id="swk" ${WAKE ? 'checked' : ''}><span></span></label>`, 0, 'Giữ màn hình sáng', 'Khi đang ở trang Hôm nay') : ''}
-      </div></div>`;
+      </div><p class="appv">${LANG === 'en' ? 'Version' : 'Phiên bản'} 6a361fb1d3</p></div>`;
     ov.querySelector('[data-x]').onclick = () => ov.remove();
     bindAcct(ov);
     ov.querySelectorAll('[data-sl]').forEach(b => b.onclick = () => { LANG = b.dataset.sl; store.set('lang', LANG); document.documentElement.lang = LANG; tabs.innerHTML = ''; renderNow(); if(!sheet.hidden){ sheet.innerHTML = ''; renderSheet(); } draw(); trTree(ov); });
