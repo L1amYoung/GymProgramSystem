@@ -886,6 +886,7 @@ html{touch-action:manipulation;scroll-behavior:auto!important}
 .exnote p{margin:2px 0 0;font-size:15px;font-weight:700;color:var(--ink);line-height:1.4} .exnote p span{color:var(--sub);font-weight:700}
 .swin{margin:16px 0 4px!important} .swinl{display:grid!important;grid-template-columns:1fr 1fr;gap:8px!important;overflow:visible!important;margin-right:0!important;padding-bottom:0!important}
 .swic{flex:none!important;width:auto!important} .swic .pi{height:88px!important}
+.tnote{margin-top:4px;font-size:13px;font-weight:700;color:var(--ss);line-height:1.35}
 .plt{display:flex;flex-wrap:wrap;align-items:center;gap:5px;margin:10px 2px 0;font-size:13px}
 .plt>b{font-size:15px;margin-right:2px} .plt .pl0{color:var(--sub);font-weight:700}
 .pq{font-style:normal;display:inline-grid;place-items:center;min-width:26px;height:26px;padding:0 5px;border-radius:8px;font-size:11px;font-weight:900;color:#fff;background:#555}
@@ -1353,7 +1354,7 @@ function openSettings(){
         ${tg(`<div class="lmode"><button data-sm="0" aria-selected="${!LOGW()}">Đơn giản</button><button data-sm="1" aria-selected="${LOGW()}">Chi tiết</button></div>`, 0, 'Nhập set', 'Chi tiết = ghi tạ và rep từng set')}
         ${tg('<span class="gch">›</span>', 0, `<a class="gdl" href="guide.html">${ICO.book} ${EL('Hướng dẫn sử dụng', 'User guide')}</a>`, 'Cách dùng toàn bộ app, có ảnh minh hoạ')}
         ${WLOK ? tg(`<label class="lwt"><input type="checkbox" id="swk" ${WAKE ? 'checked' : ''}><span></span></label>`, 0, 'Giữ màn hình sáng', 'Khi đang ở trang Hôm nay') : ''}
-      </div><p class="appv">${LANG === 'en' ? 'Version' : 'Phiên bản'} 451c426f23</p></div>`;
+      </div><p class="appv">${LANG === 'en' ? 'Version' : 'Phiên bản'} 28ae9128e6</p></div>`;
     ov.querySelector('[data-x]').onclick = () => ov.remove();
     bindAcct(ov);
     ov.querySelectorAll('[data-sl]').forEach(b => b.onclick = () => { LANG = b.dataset.sl; store.set('lang', LANG); document.documentElement.lang = LANG; tabs.innerHTML = ''; renderNow(); if(!sheet.hidden){ sheet.innerHTML = ''; renderSheet(); } draw(); trTree(ov); });
@@ -2798,7 +2799,7 @@ function tblSets(p, it){
       ${tsec ? `<span class="tt tmw ${LW ? 'w2' : ''}"><button class="tmb" data-tm="${tsec}" ${on ? 'disabled' : ''}>${on ? '✓ ' + tsec + ' giây' : '▶ Bắt đầu ' + tsec + ' giây'}</button></span>`
         : LW ? cell(id, 'r', o ? o.r : '', phR) + cell(id, 'w', o && o.w != null ? nfmt(SD ? toSide(it, o.w) : o.w) : '', phW === '' || phW == null ? 'kg' : nfmt(SD ? toSide(it, phW) : phW)) : `<span class="tt">${esc(tgt)}</span>`}
       <button class="tck" data-tc aria-pressed="${on}" aria-label="Xong set">✓</button></div>` + restRow(id); };
-  let h = `<div class="trep"><div><span data-gl="range" class="glu">Mục tiêu</span>${vals.map(v => `<b>${esc(tgtTxt(v))}</b>`).join('')}</div>${last ? `<div class="tlast">Lần trước${last.d ? ' ' + dd0(last.d) : ''}: ${last.sets.filter(Boolean).map(setTxt).map(esc).join(' · ')}${up ? ' → <b>tăng tạ</b>' : ''}</div>` : sg ? `<div class="tlast">Lần đầu tập bài này · gợi ý ~<b>${nfmt(sg.w)}kg${eqOf(it.name) === 'db' ? ' mỗi tay' : ''}</b> theo ${esc(sg.from)}</div>` : ''}</div>`;
+  let h = `<div class="trep"><div><span data-gl="range" class="glu">Mục tiêu</span>${vals.map(v => `<b>${esc(tgtTxt(v))}</b>`).join('')}</div>${last ? `<div class="tlast">Lần trước${last.d ? ' ' + dd0(last.d) : ''}: ${last.sets.filter(Boolean).map(setTxt).map(esc).join(' · ')}${up ? ' → <b>tăng tạ</b>' : ''}</div>` : sg ? `<div class="tlast">Lần đầu tập bài này · gợi ý ~<b>${nfmt(sg.w)}kg${eqOf(it.name) === 'db' ? ' mỗi tay' : ''}</b> theo ${esc(sg.from)}</div>` : ''}${it.tech || (it.hn && !it.orig) ? `<div class="tnote">${it.tech ? `${EL('Set cuối', 'Last set')}: ${esc(it.tech)}` : ''}${it.tech && it.hn && !it.orig ? ' · ' : ''}${it.hn && !it.orig ? `${EL('Ở nhà', 'At home')}: ${esc(it.hn)}` : ''}</div>` : ''}</div>`;
   h += `<div class="panel tset ${LW ? '' : 'off'}"><div class="panel-h"><h3>${vals.length} set${mm && mm.rest ? ` · nghỉ ${esc(mm.rest)}` : ''}</h3><button class="glb2" data-gl="" aria-label="Thuật ngữ">ⓘ</button></div>`;
   h += `<div class="thd"><span>Set</span>${LW ? `<span>Rep</span>${isBar(it.name) ? `<button class="kgsw" data-kgs aria-label="Đổi cách ghi tạ">${SD ? 'Kg/bên' : 'Kg tổng'} <i>⇄</i></button>` : `<span>${kgInfo(it, SD)[0]}</span>`}` : '<span>Mục tiêu</span>'}<span></span></div><div class="tlist">`;
   if(p.weekSelect && it.warm && it.warm.length){
@@ -3058,7 +3059,6 @@ function renderSheet(){
       ? seg + `${mediaHtml(e)}<div class="ttl">${esc(it.name)}</div>` + `${videoHtml(e, it.q || it.name)}${insHtml(it.det)}${cueHtml(it)}${musHtml(it)}${swapsHtml(it.sw0 ? it.det.sw : swList(it))}${w.imgs && w.imgs.length ? `<details class="shots"><summary>Ảnh gốc từ app (${w.imgs.length})</summary><div class="shotrow">${w.imgs.map((src,k)=>`<button data-shot="${k}"><img src="${src}" alt="" loading="lazy"></button>`).join('')}</div></details>` : ''}`
       : seg + head + `${it.k?`<span class="kind ${it.k}" data-gl="${it.k}">${KIND[it.k]} · ${esc(it.s)} <i class="gi">ⓘ</i></span>`:''}${it.orig?`<div class="eyebrow hm" style="margin-top:6px">Tập ở nhà · thay cho ${esc(it.orig)}</div>`:''}
       ${groupPanel(w, CUR, done)}
-      ${it.tech || (it.hn && !it.orig) ? `<div class="exnote"><b>${EL('Lưu ý', 'Note')}</b>${it.tech ? `<p><span>${EL('Set cuối', 'Last set')}:</span> ${esc(it.tech)}</p>` : ''}${it.hn && !it.orig ? `<p><span>${EL('Ở nhà', 'At home')}:</span> ${esc(it.hn)}</p>` : ''}</div>` : ''}
       <div id="setp">${setTable(p, it, getSets(p,n,CUR))}</div>
       `;
   }
