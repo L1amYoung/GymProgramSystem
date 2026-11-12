@@ -768,6 +768,9 @@ html{touch-action:manipulation;scroll-behavior:auto!important}
 .calov #csave{margin-top:14px}
 .tabs button.need{opacity:.45}
 .pcard.nudge{animation:pnudge .5s ease} @keyframes pnudge{0%,100%{transform:none}25%{transform:translateX(-6px)}50%{transform:translateX(6px)}75%{transform:translateX(-3px)}}
+.calrow.cal0{grid-template-columns:1fr auto;border-color:color-mix(in srgb,var(--ok) 60%,var(--line))}
+.calrow.cal0 em{grid-column:2;grid-row:1/span 2;align-self:center;font-style:normal;font-size:13px;font-weight:900;color:#06281a;background:var(--ok);border-radius:999px;padding:8px 12px;white-space:nowrap}
+.tabs button.dotnew svg{overflow:visible} .tabs button.dotnew{position:relative} .tabs button.dotnew::after{content:"";position:absolute;top:8px;left:calc(50% + 9px);width:8px;height:8px;border-radius:50%;background:#ff5a5f;box-shadow:0 0 0 2px #151517}
 .plt{display:flex;flex-wrap:wrap;align-items:center;gap:5px;margin:10px 2px 0;font-size:12.5px}
 .plt>b{font-size:14px;margin-right:2px} .plt .pl0{color:var(--sub);font-weight:700}
 .pq{font-style:normal;display:inline-grid;place-items:center;min-width:26px;height:26px;padding:0 5px;border-radius:7px;font-size:11.5px;font-weight:900;color:#fff;background:#555}
@@ -965,7 +968,7 @@ const store = { get(k){ try{ return localStorage.getItem(k); }catch(e){ return n
 const getJ = (k,d) => { try{ const v = JSON.parse(store.get(k)); return v ?? d; }catch(e){ return d; } };
 
 /* ---------- đồng bộ Supabase (localStorage vẫn là nguồn chính, mất mạng vẫn dùng được) ---------- */
-const STATE_KEYS = /^(prog|lang|home|restDefault|wake|logw|setui|start-.+|sel-.+|nosd-.+|done-.+|prlog|badges|board|body|kgside|restex|wkrep|calprof|swp-.+)$/;
+const STATE_KEYS = /^(prog|lang|home|restDefault|wake|logw|setui|start-.+|sel-.+|nosd-.+|done-.+|prlog|badges|board|body|kgside|restex|wkrep|calprof|calseen|swp-.+)$/;
 const SB = {url: 'https://jqsynlkiuigagvpueziz.supabase.co', key: 'sb_publishable_qzCUcDHqWPJFY6LPiolsKw_C6vXAN0D'};
 const SBON = SB.key && !SB.key.startsWith('__');
 const DEV = (() => { let d = store.get('devid'); if(!d){ d = (crypto.randomUUID ? crypto.randomUUID() : Date.now().toString(36) + Math.random().toString(36).slice(2)); store.set('devid', d); } return d; })();
@@ -1226,7 +1229,7 @@ function openSettings(){
         ${tg(`<div class="lmode"><button data-sm="0" aria-selected="${!LOGW()}">Đơn giản</button><button data-sm="1" aria-selected="${LOGW()}">Chi tiết</button></div>`, 0, 'Nhập set', 'Chi tiết = ghi tạ và rep từng set')}
         ${tg('<span class="gch">›</span>', 0, '<a class="gdl" href="guide.html">📖 Hướng dẫn sử dụng</a>', 'Cách dùng toàn bộ app, có ảnh minh hoạ')}
         ${WLOK ? tg(`<label class="lwt"><input type="checkbox" id="swk" ${WAKE ? 'checked' : ''}><span></span></label>`, 0, 'Giữ màn hình sáng', 'Khi đang ở trang Hôm nay') : ''}
-      </div><p class="appv">${LANG === 'en' ? 'Version' : 'Phiên bản'} 4150a7035a</p></div>`;
+      </div><p class="appv">${LANG === 'en' ? 'Version' : 'Phiên bản'} ea9e09cf1a</p></div>`;
     ov.querySelector('[data-x]').onclick = () => ov.remove();
     bindAcct(ov);
     ov.querySelectorAll('[data-sl]').forEach(b => b.onclick = () => { LANG = b.dataset.sl; store.set('lang', LANG); document.documentElement.lang = LANG; tabs.innerHTML = ''; renderNow(); if(!sheet.hidden){ sheet.innerHTML = ''; renderSheet(); } draw(); trTree(ov); });
@@ -1435,7 +1438,7 @@ function renderChrome(){
   const ti0 = T.findIndex(([k]) => k === TAB);
   tabs.querySelectorAll('[data-t]').forEach(b => {
     const on = b.dataset.t === TAB; b.toggleAttribute('aria-current', on); if(on) b.setAttribute('aria-current','page');
-    b.disabled = false; b.classList.toggle('need', !p && b.dataset.t !== 'progs');
+    b.disabled = false; b.classList.toggle('need', !p && b.dataset.t !== 'progs'); b.classList.toggle('dotnew', !!p && b.dataset.t === 'stats' && !store.get('calprof') && !store.get('calseen'));
   });
   tabs.querySelector('.tab-ind').style.transform = `translate3d(${ti0 * 100}%,0,0)`;
 }
@@ -1659,10 +1662,11 @@ const fnum = x => Math.round(x).toLocaleString(LANG === 'en' ? 'en-US' : 'vi-VN'
 function calRowHtml(){
   const c = getJ('calprof', null), r = c && calCalc(Object.assign({}, c, calBody()));
   return r ? `<button class="calrow" data-cal><span>🔥 ${EL('Calo mục tiêu', 'Calorie target')}</span><b>${fnum(r.tgt)} cal</b><small>${EL(CGOAL[c.goal][1], CGOAL[c.goal][2])} · ${r.pro}g protein ›</small></button>`
-    : `<button class="calrow" data-cal><span>🔥 ${EL('Tính calo mục tiêu', 'Work out your calorie target')}</span><small>${EL('Nhập cân nặng, chọn mục tiêu tăng cơ / giảm mỡ', 'Enter weight, pick build muscle / lose fat')} ›</small></button>`;
+    : `<button class="calrow cal0" data-cal><span>🔥 ${EL('Mỗi ngày bạn nên ăn bao nhiêu calo?', 'How many calories should you eat a day?')}</span><small>${EL('Nhập cân nặng, chọn tăng cơ hay giảm mỡ là có ngay con số', 'Enter your weight, pick build muscle or lose fat, get your number')}</small><em>${EL('Tính ngay', 'Calculate')} ›</em></button>`;
 }
 function calBody(){ const L = bodyList(), lw = [...L].reverse().find(e => e.kg), lf = [...L].reverse().find(e => e.pbf); return {kg: lw ? lw.kg : undefined, pbf: lf ? lf.pbf : undefined}; }
 function openCal(){
+  if(!store.get('calseen')){ store.set('calseen', '1'); document.querySelectorAll('#tabs .dotnew').forEach(b => b.classList.remove('dotnew')); }
   const ov = document.createElement('div'); ov.className = 'cele acc calov';
   const b0 = calBody(), c = Object.assign({sex: 'm', act: 1.55, goal: 'cut', usePbf: true}, getJ('calprof', {}));
   if(c.kg == null && b0.kg) c.kg = b0.kg;
@@ -1755,7 +1759,8 @@ function openBody(d0){
         if(pc >= 70){ er.textContent = '% mỡ không hợp lệ.'; return; } o.pbf = pc; any = true; }
       if(!dd || dd > today){ ov.querySelector('#bde').textContent = 'Chọn ngày đo hợp lệ.'; return; }
       if(!any){ ov.querySelector('#bde').textContent = 'Nhập cân nặng hoặc mỡ cơ thể.'; return; }
-      bodyPut(o); sbFlush(); ov.remove(); ANIM = ''; render(); toast('<b>Đã lưu chỉ số</b>'); };
+      bodyPut(o); sbFlush(); ov.remove(); ANIM = ''; render();
+      toast(store.get('calprof') || !o.kg ? '<b>Đã lưu chỉ số</b>' : `<b>${EL('Đã lưu chỉ số', 'Saved')}</b><span>${EL('Bấm 🔥 ở trên để tính calo mục tiêu từ cân nặng này', 'Tap 🔥 above to get a calorie target from this weight')}</span>`); };
     trTree(ov);
   };
   draw(d0 || today); document.body.appendChild(ov); requestAnimationFrame(() => ov.classList.add('on'));
