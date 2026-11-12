@@ -727,6 +727,21 @@ html{touch-action:manipulation;scroll-behavior:auto!important}
 .tmb{width:100%;height:100%;border:0;background:linear-gradient(90deg,color-mix(in srgb,var(--acc) 40%,transparent) var(--pg,0%),transparent var(--pg,0%));color:var(--ink);font:inherit;font-size:15px;font-weight:800;border-radius:11px}
 .tmb.run{color:#fff} .tmb:disabled{color:var(--ok)}
 .restrow small{color:var(--faint);font-weight:700} .rchip.rauto{color:var(--acc2)}
+.bmap .h0{fill:#2c2c32} .bmap .h1{fill:#4a3d78} .bmap .h2{fill:#6b4fc4} .bmap .h3{fill:#8b5cf6} .bmap .h4{fill:#f5a524}
+.mwk .bmap{max-width:260px;margin:0 auto}
+.mleg2{display:flex;justify-content:center;gap:10px;margin:6px 0 10px;font-size:11.5px;color:var(--sub);font-weight:700}
+.mleg2 i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:4px;vertical-align:-1px}
+.mleg2 .h1,.mb .h1{background:#4a3d78} .mleg2 .h2,.mb .h2{background:#6b4fc4} .mleg2 .h3,.mb .h3{background:#8b5cf6} .mleg2 .h4,.mb .h4{background:#f5a524}
+.mrows{display:grid;gap:6px} .mr{display:grid;grid-template-columns:104px 1fr 34px 44px;gap:8px;align-items:center;font-size:13px}
+.mr b{font-weight:700} .mb{height:8px;border-radius:9px;background:var(--line);overflow:hidden} .mb u{display:block;height:100%;border-radius:9px}
+.mv{text-align:right;font-weight:800;color:var(--sub)} .mr em{font-style:normal;font-size:11px;font-weight:900;border-radius:6px;padding:1px 6px;text-align:center}
+.mr em.lo{color:#f5a524;background:rgba(245,165,36,.12)} .mr em.hi{color:#ff8a7a;background:rgba(255,90,95,.12)}
+.wkrep{position:relative;margin:4px 0 14px;padding:12px 14px;border:1px solid color-mix(in srgb,var(--acc) 45%,var(--line));border-radius:16px;background:linear-gradient(135deg,color-mix(in srgb,var(--acc) 14%,var(--card)),var(--card))}
+.wkh{display:flex;align-items:baseline;gap:8px;margin-bottom:10px;padding-right:30px} .wkh b{font-size:15px} .wkh span{font-size:12px;color:var(--sub);font-weight:700}
+.wkh .x{position:absolute;top:8px;right:8px;width:30px;height:30px;border-radius:50%;border:1px solid var(--line);background:none;color:var(--sub)}
+.wkt{display:grid;grid-template-columns:repeat(4,1fr);gap:6px} .wkt div{text-align:center;padding:8px 2px;border-radius:12px;background:rgba(0,0,0,.25)}
+.wkt b{display:block;font-size:19px} .wkt span{font-size:11px;color:var(--sub);font-weight:700}
+.wkl{list-style:none;margin:10px 0 0;padding:0;display:grid;gap:4px;font-size:13px;color:#d9d9de} .wkl:empty{display:none}
 .plt{display:flex;flex-wrap:wrap;align-items:center;gap:5px;margin:10px 2px 0;font-size:12.5px}
 .plt>b{font-size:14px;margin-right:2px} .plt .pl0{color:var(--sub);font-weight:700}
 .pq{font-style:normal;display:inline-grid;place-items:center;min-width:26px;height:26px;padding:0 5px;border-radius:7px;font-size:11.5px;font-weight:900;color:#fff;background:#555}
@@ -924,7 +939,7 @@ const store = { get(k){ try{ return localStorage.getItem(k); }catch(e){ return n
 const getJ = (k,d) => { try{ const v = JSON.parse(store.get(k)); return v ?? d; }catch(e){ return d; } };
 
 /* ---------- đồng bộ Supabase (localStorage vẫn là nguồn chính, mất mạng vẫn dùng được) ---------- */
-const STATE_KEYS = /^(prog|lang|home|restDefault|wake|logw|setui|start-.+|sel-.+|nosd-.+|done-.+|prlog|badges|board|body|kgside|restex|swp-.+)$/;
+const STATE_KEYS = /^(prog|lang|home|restDefault|wake|logw|setui|start-.+|sel-.+|nosd-.+|done-.+|prlog|badges|board|body|kgside|restex|wkrep|swp-.+)$/;
 const SB = {url: 'https://jqsynlkiuigagvpueziz.supabase.co', key: 'sb_publishable_qzCUcDHqWPJFY6LPiolsKw_C6vXAN0D'};
 const SBON = SB.key && !SB.key.startsWith('__');
 const DEV = (() => { let d = store.get('devid'); if(!d){ d = (crypto.randomUUID ? crypto.randomUUID() : Date.now().toString(36) + Math.random().toString(36).slice(2)); store.set('devid', d); } return d; })();
@@ -1185,7 +1200,7 @@ function openSettings(){
         ${tg(`<div class="lmode"><button data-sm="0" aria-selected="${!LOGW()}">Đơn giản</button><button data-sm="1" aria-selected="${LOGW()}">Chi tiết</button></div>`, 0, 'Nhập set', 'Chi tiết = ghi tạ và rep từng set')}
         ${tg('<span class="gch">›</span>', 0, '<a class="gdl" href="guide.html">📖 Hướng dẫn sử dụng</a>', 'Cách dùng toàn bộ app, có ảnh minh hoạ')}
         ${WLOK ? tg(`<label class="lwt"><input type="checkbox" id="swk" ${WAKE ? 'checked' : ''}><span></span></label>`, 0, 'Giữ màn hình sáng', 'Khi đang ở trang Hôm nay') : ''}
-      </div><p class="appv">${LANG === 'en' ? 'Version' : 'Phiên bản'} e8080718f4</p></div>`;
+      </div><p class="appv">${LANG === 'en' ? 'Version' : 'Phiên bản'} d4d3420143</p></div>`;
     ov.querySelector('[data-x]').onclick = () => ov.remove();
     bindAcct(ov);
     ov.querySelectorAll('[data-sl]').forEach(b => b.onclick = () => { LANG = b.dataset.sl; store.set('lang', LANG); document.documentElement.lang = LANG; tabs.innerHTML = ''; renderNow(); if(!sheet.hidden){ sheet.innerHTML = ''; renderSheet(); } draw(); trTree(ov); });
@@ -1439,6 +1454,7 @@ function stripHtml(p, n){
 function renderToday(){
   const p = prog(), n = curDay(p), d = p.sched[n-1], ti = dayIdx(p);
   let h = stripHtml(p, n);
+  if(store.get('wkrep') !== monOf(isoDay()) && n === ti) h += weekRepHtml(true);
   if(!store.get('start-'+p.id) && !store.get('nosd-'+p.id)) h += `<div class="sdpill"><button class="sdbtn" id="sd">Đặt ngày bắt đầu</button><span>để tự mở buổi hôm nay</span><button class="x" id="nosd" aria-label="Ẩn">✕</button></div>`;
   if(!d.w){
     const nx = p.sched.slice(n).find(x => x.w);
@@ -1654,6 +1670,58 @@ function openBody(d0){
   draw(d0 || today); document.body.appendChild(ov); requestAnimationFrame(() => ov.classList.add('on'));
   ov.onclick = ev => { if(ev.target === ov) ov.remove(); };
 }
+/* ---------- volume theo nhóm cơ + tổng kết tuần ---------- */
+const MMAJOR = ['chest', 'lats', 'upback', 'fdelt', 'rdelt', 'biceps', 'triceps', 'quads', 'hams', 'glutes'];
+function setDate(p, n){ const lg = getLog()[p.id + '|' + n]; if(lg && lg.d) return lg.d;
+  const st = store.get('start-' + p.id); if(st){ const t = new Date(st + 'T00:00:00'); t.setDate(t.getDate() + n - 1); return isoDay(t); }
+  const ws = +(store.get('wst-' + p.id + '-' + n)) || 0; return ws ? isoDay(new Date(ws)) : null; }
+/* thống kê trong [a, b) (chuỗi ngày ISO) */
+const RSC = {};
+function rangeStats(a, b){
+  const ck = a + '|' + b + '|' + HGEN; if(RSC[ck]) return RSC[ck];
+  const mus = {}, out = {sets: 0, vol: 0, mus};
+  try{ for(let i = 0; i < localStorage.length; i++){ const key = localStorage.key(i), m = key && key.match(/^sets-(.+)-(\d+)$/); if(!m) continue;
+    const p = P.find(x => x.id === m[1]); if(!p) continue; const n = +m[2], d = p.sched[n-1]; if(!d || !d.w) continue;
+    const dt = setDate(p, n); if(!dt || dt < a || dt >= b) continue; const o = getJ(key, {});
+    Object.entries(o).forEach(([ix, arr]) => { if(+ix >= 1000 || !Array.isArray(arr)) return; const it = exIt(p, n, +ix); if(!it) return;
+      const cnt = arr.filter(Boolean).length; if(!cnt) return; out.sets += cnt;
+      arr.forEach(x => { const so = setObj(x); if(so && so.w > 0 && so.r) out.vol += so.w * so.r; });
+      const [pm, sm] = musOf(it); pm.forEach(r => mus[r] = (mus[r] || 0) + cnt); sm.forEach(r => mus[r] = (mus[r] || 0) + cnt * .5); }); } }catch(e){}
+  const L = Object.values(getLog()); out.done = L.filter(e => e.k >= e.of && e.of > 0 && e.d >= a && e.d < b).length;
+  out.prs = getJ('prlog', []).filter(x => x.d >= a && x.d < b).length;
+  const B = bodyList().filter(e => e.kg); const inW = B.filter(e => e.d >= a && e.d < b), before = B.filter(e => e.d < a);
+  if(inW.length){ const last = inW[inW.length - 1].kg, ref = before.length ? before[before.length - 1].kg : inW[0].kg; out.kg = last; out.dkg = Math.round((last - ref) * 10) / 10; }
+  return (RSC[ck] = out);
+}
+const dAdd = (iso, k) => { const t = new Date(iso + 'T00:00:00'); t.setDate(t.getDate() + k); return isoDay(t); };
+const monOf = iso => { const t = new Date(iso + 'T00:00:00'); t.setDate(t.getDate() - (t.getDay() + 6) % 7); return isoDay(t); };
+const MLV = v => v <= 0 ? 'h0' : v < 6 ? 'h1' : v < 12 ? 'h2' : v <= 20 ? 'h3' : 'h4';
+function musWeekHtml(){
+  const b = dAdd(isoDay(), 1), a = dAdd(b, -7), st = rangeStats(a, b), mus = st.mus;
+  if(!st.sets) return `<div class="sec"><div class="mdh">Nhóm cơ · 7 ngày qua</div><p class="none">Chưa có set nào trong 7 ngày qua. Tập xong vài set là bản đồ cơ sẽ hiện ở đây.</p></div>`;
+  const nm = r => EL(MVN[r], MVN_EN[r]), fx = v => nfmt(Math.round(v * 2) / 2);
+  const rows = Object.keys(MVN).filter(r => mus[r] || MMAJOR.includes(r)).sort((x, y) => (mus[y] || 0) - (mus[x] || 0));
+  const mx = Math.max(10, ...Object.values(mus));
+  return `<div class="sec"><div class="bhd"><div class="mdh">Nhóm cơ · 7 ngày qua</div><span>${st.sets} set</span></div>
+    <div class="panel mwk">${bodySvg([], [], r => MLV(mus[r] || 0))}
+    <div class="mleg2"><span><i class="h1"></i>1–5</span><span><i class="h2"></i>6–11</span><span><i class="h3"></i>12–20</span><span><i class="h4"></i>&gt;20 set</span></div>
+    <div class="mrows">${rows.map(r => { const v = mus[r] || 0, tag = MMAJOR.includes(r) && v < 6 ? `<em class="lo">${EL('thiếu', 'low')}</em>` : v > 20 ? `<em class="hi">${EL('nhiều', 'high')}</em>` : '';
+      return `<div class="mr"><b>${nm(r)}</b><span class="mb"><u class="${MLV(v)}" style="width:${Math.max(v ? 4 : 0, v / mx * 100)}%"></u></span><span class="mv">${fx(v)}</span>${tag}</div>`; }).join('')}</div>
+    <p class="pcap">${EL('Cơ chính tính 1 set, cơ phụ 0,5. Thường nên 10–20 set mỗi nhóm cơ lớn mỗi tuần.', 'Primary muscle = 1 set, secondary = 0.5. Aim for about 10–20 sets per major muscle per week.')}</p></div></div>`;
+}
+function weekRepHtml(close){
+  const m0 = monOf(isoDay()), a = dAdd(m0, -7), st = rangeStats(a, m0); if(!st.sets && !st.done) return '';
+  const dd = d => `${+d.slice(8)}/${+d.slice(5,7)}`, nm = r => EL(MVN[r], MVN_EN[r]);
+  const ms = Object.entries(st.mus).filter(([r]) => MMAJOR.includes(r)).sort((x, y) => y[1] - x[1]);
+  const lo = MMAJOR.filter(r => (st.mus[r] || 0) < 6);
+  const tiles = [[st.done, EL('buổi xong', 'workouts')], [st.sets, 'set'], [nfmt(Math.round(st.vol / 100) / 10), EL('tấn', 'tonnes')], [st.prs, EL('kỷ lục', 'PRs')]];
+  return `<div class="wkrep" ${close ? 'data-wkr' : ''}><div class="wkh"><b>${EL('Tổng kết tuần trước', 'Last week')}</b><span>${dd(a)} – ${dd(dAdd(m0, -1))}</span>${close ? `<button class="x" data-wkx="${m0}" aria-label="Đóng">✕</button>` : ''}</div>
+    <div class="wkt">${tiles.map(([v, l]) => `<div><b>${v}</b><span>${l}</span></div>`).join('')}</div>
+    <ul class="wkl">${st.kg != null ? `<li>⚖️ ${EL('Cân nặng', 'Weight')} <b>${nfmt(st.kg)}kg</b>${st.dkg ? ` (${st.dkg > 0 ? '+' : ''}${nfmt(st.dkg)})` : ''}</li>` : ''}
+      ${ms.length ? `<li>💪 ${EL('Tập nhiều nhất', 'Most trained')}: <b>${ms.slice(0, 2).map(([r]) => nm(r)).join(', ')}</b></li>` : ''}
+      ${lo.length && st.sets ? `<li>⚠️ ${EL('Còn thiếu', 'Under-trained')}: <b>${lo.slice(0, 3).map(nm).join(', ')}</b></li>` : ''}</ul></div>`;
+}
+document.addEventListener('click', e => { const b = e.target.closest && e.target.closest('[data-wkx]'); if(!b) return; store.set('wkrep', b.dataset.wkx); const c = b.closest('[data-wkr]'); if(c) c.remove(); });
 function renderStats(){
   const now = new Date(), today = isoDay(now); if(!CALM) CALM = today.slice(0,7);
   const [Y, M] = CALM.split('-').map(Number), L = getLog();
@@ -1665,6 +1733,8 @@ function renderStats(){
     ${ks.length ? `<div class="mchips">${ks.map(k => `<span>${esc(k)}<b>×${cnt[k]}</b></span>`).join('')}</div>` : ''}</div>`;
   h += `<div class="sec"><div class="mdh">Bảng xếp hạng tháng</div>${renderBoard(true)}</div>`;
   const wk = weeksHtml(); if(wk) h += `<div class="sec">${wk}</div>`;
+  h += musWeekHtml();
+  { const wr = weekRepHtml(false); if(wr) h += `<div class="sec">${wr}</div>`; }
   h += bodyHtml();
   const got = new Set(earnedBadges()), bst = badgeStats();
   h += `<div class="sec"><div class="bhd"><div class="mdh">Huy hiệu</div><span>${got.size}/${BADGES.length}</span></div>`;
@@ -1755,8 +1825,8 @@ function musOf(it){
   if(d.pm && d.pm.length){ const pm = map(d.pm); return [pm, map(d.sm).filter(x => !pm.includes(x))]; }
   return MUSK[exKind(it.name)] || [[], []];
 }
-function bodySvg(pm, sm){
-  const f = r => pm.includes(r) ? 'm1' : sm.includes(r) ? 'm2' : 'm0';
+function bodySvg(pm, sm, cf){
+  const f = cf || (r => pm.includes(r) ? 'm1' : sm.includes(r) ? 'm2' : 'm0');
   const E = (r, cx, cy, rx, ry) => `<ellipse class="${f(r)}" cx="${cx}" cy="${cy}" rx="${rx}" ry="${ry}"/>`;
   const R = (r, x, y, w, h, rr) => `<rect class="${f(r)}" x="${x}" y="${y}" width="${w}" height="${h}" rx="${rr}"/>`;
   const sil = cx => `<circle class="sk" cx="${cx}" cy="16" r="10"/><rect class="sk" x="${cx-18}" y="30" width="36" height="62" rx="12"/>
@@ -2573,7 +2643,7 @@ function setAnim(){
 const EN = {
   "Không cần email. Nhớ kỹ mật khẩu vì chưa có chức năng lấy lại mật khẩu.":"No email needed. Remember your password — there is no password reset yet.","Tài khoản":"Account","ít nhất 6 ký tự":"at least 6 characters","Quay lại":"Back","Tháng trước":"Previous month","Tháng sau":"Next month","Buổi đầu tiên":"First workout","Xong buổi tập":"Workout done","Thuật ngữ":"Glossary","ⓘ Thuật ngữ":"ⓘ Glossary","Dumbbell · tại nhà":"Dumbbell · at home","Jeff Nippard · tại nhà":"Jeff Nippard · at home","Ignitor: tới thất bại":"Ignitor: to failure","Quá nặng":"Too heavy","Hơi nặng":"A bit heavy","Vừa sức":"Just right","Nhẹ quá":"Too light","Quá nhẹ":"Way too light","Cách tập mỗi bài: (1) làm 1 set thử tới thất bại, (2) nhập số rep làm được, (3) web cho biết cần tập thêm bao nhiêu rep và nghỉ bao lâu. Bấm vào bài để bắt đầu.":"How each exercise works: (1) do one test set to failure, (2) enter the reps you got, (3) the app tells you how many more reps to do and how long to rest. Tap an exercise to start.","Chọn mức tạ bạn nghĩ làm được":"Pick a weight you think you can do for",", rồi làm 1 set tới khi không nâng nổi nữa.":", then do one set until you can't lift any more.","Nhập số rep xong, web sẽ cho biết bạn cần tập thêm bao nhiêu và nghỉ bao lâu.":"After you enter your reps, the app tells you how much more to do and how long to rest.","Bớt":"Less","Thêm":"More","Tập ở nhà có tạ đơn":"Home with dumbbells","Ở nhà, không dụng cụ":"Home, no equipment","Chỉ tạ đơn, Ignitor + Box Score tự chỉnh theo sức":"Dumbbells only, Ignitor + Box Score adapt to you","Tập ở nhà có vài cặp tạ đơn":"Home with a few pairs of dumbbells","Toàn thân, gần như không cần dụng cụ, tới gần thất bại":"Full body, almost no equipment, close to failure","Ở nhà, không có phòng gym":"At home, no gym","Tài khoản và cài đặt":"Account and settings","Điều hướng":"Navigation","Đóng":"Close","Ảnh trước":"Previous photo","Ảnh sau":"Next photo","Tiếng Việt":"Tiếng Việt","Kiểu nhập":"Entry mode","Đổi cách ghi tạ":"Change weight mode","Nhóm cơ":"Muscles","Lỗi thường gặp":"Common mistakes","Số buổi mỗi tuần · 8 tuần gần nhất":"Workouts per week · last 8 weeks","Số buổi mỗi tuần":"Workouts per week","Tuần này":"This week","Biểu đồ chỉ số cơ thể":"Body metrics chart","Đổi bài":"Swap exercise","Tập ở nhà":"Home mode","Tập ở nhà: đổi bài máy/cáp/ghế sang tạ đơn":"Home mode: swap machine/cable/bench exercises for dumbbells","Chọn phase":"Choose phase","Chọn tuần":"Choose week","Tuần trước":"Previous week","Tuần sau":"Next week","Đánh dấu xong":"Mark done","Xong 1 buổi":"Finish 1 workout","Xong 10 buổi":"Finish 10 workouts","Xong 25 buổi":"Finish 25 workouts","Xong 50 buổi":"Finish 50 workouts","Xong 100 buổi":"Finish 100 workouts","Xong 200 buổi":"Finish 200 workouts","Tuần nào cũng tập, 2 tuần liên tiếp":"Train every week, 2 weeks in a row","2 tuần liền":"2-week streak","4 tuần liền":"4-week streak","8 tuần liền":"8-week streak","12 tuần liền":"12-week streak","Tập đều 4 tuần liên tiếp":"Train 4 weeks in a row","Tập đều 8 tuần liên tiếp":"Train 8 weeks in a row","Tập đều 12 tuần liên tiếp":"Train 12 weeks in a row","Tháng chăm":"Busy month","12 buổi trong 1 tháng":"12 workouts in a month","Tháng thép":"Iron month","20 buổi trong 1 tháng":"20 workouts in a month","Kỷ lục đầu tiên":"First PR","Phá kỷ lục 1 bài":"Set a PR on any exercise","10 kỷ lục":"10 PRs","Phá kỷ lục 10 lần":"Set 10 PRs","25 kỷ lục":"25 PRs","Phá kỷ lục 25 lần":"Set 25 PRs","Ghi chép chăm":"Diligent logger","Ghi tạ cho 100 set":"Log weight for 100 sets","Đẩy ngực tạ đòn 60kg":"Barbell bench 60kg","Đẩy ngực tạ đòn 80kg":"Barbell bench 80kg","10 tấn trong 1 buổi":"10 tonnes in one workout","Ghi chỉ số cơ thể 4 lần":"Log body metrics 4 times","Giảm 5% mỡ":"Lose 5% body fat","Mỡ cơ thể giảm 5% so với lần đo đầu":"Body fat down 5% from first measurement","5 buổi bắt đầu trước 7h sáng":"5 workouts started before 7 am","5 buổi bắt đầu sau 21h":"5 workouts started after 9 pm","Tập lại sau 2 tuần nghỉ":"Come back after a 2-week break","Xong trọn 1 chương trình":"Finish a whole program","Gợi ý cho bạn":"Suggested for you","Chọn chương trình này":"Choose this program","Xem tất cả chương trình":"See all programs","Bỏ qua":"Skip","Hợp nhất":"Best fit","Mục tiêu chính của bạn?":"What's your main goal?","Trước":"Front","Chính:":"Primary:","Phụ:":"Secondary:","Đánh dấu đã tập đến ngày…":"Mark done up to day…","Máy bận? Đổi bài":"Machine busy? Swap","Chỉ cần nhập ô nào có số, ô khác để trống.":"Fill only the values you have.",
   'Kết thúc':'End','Bắt đầu buổi tập':'Start workout','Tiếp tục':'Continue','Kết thúc buổi tập':'Workout ended',
-  'Tiến bộ':'Progress','Tài khoản & cài đặt':'Account & settings','Ngôn ngữ':'Language','Nhập set':'Set entry','Chi tiết = ghi tạ và rep từng set':'Detail = log weight and reps per set','Giữ màn hình sáng':'Keep screen on','Khi đang ở trang Hôm nay':'While on the Today page','Bảng xếp hạng tháng':'Monthly leaderboard','Huy hiệu':'Badges','Nghỉ bài này':'Rest for this exercise','(tự động)':'(auto)','↺ Tự động':'↺ Auto','Đẩy ngực tạ đòn 100kg':'Barbell bench 100kg','📖 Hướng dẫn sử dụng':'📖 User guide','Cách dùng toàn bộ app, có ảnh minh hoạ':'How to use the whole app, with screenshots','📖 Lần đầu dùng? Xem hướng dẫn ›':'📖 New here? Read the guide ›','Tạ đòn ghi theo':'Barbell weight','Tổng':'Total','Mỗi bên':'Per side','Mỗi bên = số bánh 1 bên, web tự cộng đòn 20kg':'Per side = plates on one side, the bar (20kg) is added for you','Kg/bên':'Kg/side','Kg tổng':'Kg total','Tạ đòn: ghi mỗi bên':'Barbell: per side','Nhập số bánh 1 bên, web tự cộng đòn':'Enter plates on one side, the bar is added','Tạ đòn: ghi tổng':'Barbell: total','Nhập tổng kg kể cả đòn':'Enter total kg including the bar','⇄ Máy bận? Đổi bài':'⇄ Machine busy? Swap','Máy bận? Đổi bài':'Machine busy? Swap','Chọn bài cùng nhóm cơ, giữ số set/rep. Chỉ đổi cho buổi này.':'Pick an exercise for the same muscle, same sets/reps. Only for this workout.','Bài gốc':'Original','Dùng bài này cho buổi hôm nay':'Use this for today','Đã đổi bài cho buổi này':'Swapped for this workout','Nhập kg để xem cần lắp bánh tạ nào':'Enter kg to see which plates to load','mỗi bên':'per side','Chim sớm':'Early bird','Cú đêm':'Night owl','Trở lại':'Comeback','Về đích':'Finisher','Buổi khủng':'Monster session','Đo đều':'Consistent tracker','Sắp đạt':'Almost there','Đẩy ngực tạ đòn 100kg':'Barbell bench 100kg','Tổng khối lượng 10 tấn (kg × rep)':'Total volume 10 t (kg × reps)','Tổng khối lượng 100 tấn':'Total volume 100 t','Tổng khối lượng 1.000 tấn':'Total volume 1,000 t','Lần đo đầu tiên':'First measurement','Ghi chỉ số cơ thể lần đầu':'Log body metrics once','Giảm 2% mỡ':'Lose 2% body fat','Mỡ cơ thể giảm 2% so với lần đo đầu':'Body fat down 2% from first measurement','10 tấn':'10 tonnes','100 tấn':'100 tonnes','1.000 tấn':'1,000 tonnes','Kết thúc buổi':'Workout ended','Chỉ số cơ thể':'Body metrics','+ Nhập':'+ Add','Ghi cân nặng & mỡ cơ thể':'Log weight & body fat','Cân nặng và % mỡ. Lâu lâu đo thì nhập, web vẽ biểu đồ.':'Weight and body fat %. Add whenever you measure; the app draws the chart.','Mỡ cơ thể':'Body fat','Cân nặng (kg)':'Weight (kg)','Nhập cân nặng hoặc mỡ cơ thể.':'Enter weight or body fat.','Nhập cân nặng để đổi kg mỡ ra %.':'Enter weight to convert fat kg to %.','Cân nặng, % mỡ, cơ xương, mỡ nội tạng. Lâu lâu đo thì nhập, web vẽ biểu đồ.':'Weight, body fat %, muscle mass, visceral fat. Add whenever you measure; the app draws the chart.','Cân nặng':'Weight','Mỡ':'Body fat','Cơ xương':'Muscle','Mỡ nội tạng':'Visceral fat','Ngày đo':'Date','Chỉ cần nhập ô nào có số, ô khác để trống.':'Fill only the values you have.','Xoá lần đo này':'Delete this entry','Nhập ít nhất một chỉ số.':'Enter at least one value.','Đã lưu chỉ số':'Saved','đến lúc đo lại':'time to measure again','Chỉ xem huy hiệu đã có':'Show earned only','Chưa có huy hiệu nào. Xong buổi đầu tiên để nhận huy hiệu đầu.':'No badges yet. Finish your first workout to earn one.','buổi xong ·':'workouts ·','ngày có tập':'training days',
+  'Tiến bộ':'Progress','Tài khoản & cài đặt':'Account & settings','Ngôn ngữ':'Language','Nhập set':'Set entry','Chi tiết = ghi tạ và rep từng set':'Detail = log weight and reps per set','Giữ màn hình sáng':'Keep screen on','Khi đang ở trang Hôm nay':'While on the Today page','Bảng xếp hạng tháng':'Monthly leaderboard','Huy hiệu':'Badges','Nhóm cơ · 7 ngày qua':'Muscles · last 7 days','Chưa có set nào trong 7 ngày qua. Tập xong vài set là bản đồ cơ sẽ hiện ở đây.':'No sets in the last 7 days yet. Log a few sets and the muscle map shows up here.','Nghỉ bài này':'Rest for this exercise','(tự động)':'(auto)','↺ Tự động':'↺ Auto','Đẩy ngực tạ đòn 100kg':'Barbell bench 100kg','📖 Hướng dẫn sử dụng':'📖 User guide','Cách dùng toàn bộ app, có ảnh minh hoạ':'How to use the whole app, with screenshots','📖 Lần đầu dùng? Xem hướng dẫn ›':'📖 New here? Read the guide ›','Tạ đòn ghi theo':'Barbell weight','Tổng':'Total','Mỗi bên':'Per side','Mỗi bên = số bánh 1 bên, web tự cộng đòn 20kg':'Per side = plates on one side, the bar (20kg) is added for you','Kg/bên':'Kg/side','Kg tổng':'Kg total','Tạ đòn: ghi mỗi bên':'Barbell: per side','Nhập số bánh 1 bên, web tự cộng đòn':'Enter plates on one side, the bar is added','Tạ đòn: ghi tổng':'Barbell: total','Nhập tổng kg kể cả đòn':'Enter total kg including the bar','⇄ Máy bận? Đổi bài':'⇄ Machine busy? Swap','Máy bận? Đổi bài':'Machine busy? Swap','Chọn bài cùng nhóm cơ, giữ số set/rep. Chỉ đổi cho buổi này.':'Pick an exercise for the same muscle, same sets/reps. Only for this workout.','Bài gốc':'Original','Dùng bài này cho buổi hôm nay':'Use this for today','Đã đổi bài cho buổi này':'Swapped for this workout','Nhập kg để xem cần lắp bánh tạ nào':'Enter kg to see which plates to load','mỗi bên':'per side','Chim sớm':'Early bird','Cú đêm':'Night owl','Trở lại':'Comeback','Về đích':'Finisher','Buổi khủng':'Monster session','Đo đều':'Consistent tracker','Sắp đạt':'Almost there','Đẩy ngực tạ đòn 100kg':'Barbell bench 100kg','Tổng khối lượng 10 tấn (kg × rep)':'Total volume 10 t (kg × reps)','Tổng khối lượng 100 tấn':'Total volume 100 t','Tổng khối lượng 1.000 tấn':'Total volume 1,000 t','Lần đo đầu tiên':'First measurement','Ghi chỉ số cơ thể lần đầu':'Log body metrics once','Giảm 2% mỡ':'Lose 2% body fat','Mỡ cơ thể giảm 2% so với lần đo đầu':'Body fat down 2% from first measurement','10 tấn':'10 tonnes','100 tấn':'100 tonnes','1.000 tấn':'1,000 tonnes','Kết thúc buổi':'Workout ended','Chỉ số cơ thể':'Body metrics','+ Nhập':'+ Add','Ghi cân nặng & mỡ cơ thể':'Log weight & body fat','Cân nặng và % mỡ. Lâu lâu đo thì nhập, web vẽ biểu đồ.':'Weight and body fat %. Add whenever you measure; the app draws the chart.','Mỡ cơ thể':'Body fat','Cân nặng (kg)':'Weight (kg)','Nhập cân nặng hoặc mỡ cơ thể.':'Enter weight or body fat.','Nhập cân nặng để đổi kg mỡ ra %.':'Enter weight to convert fat kg to %.','Cân nặng, % mỡ, cơ xương, mỡ nội tạng. Lâu lâu đo thì nhập, web vẽ biểu đồ.':'Weight, body fat %, muscle mass, visceral fat. Add whenever you measure; the app draws the chart.','Cân nặng':'Weight','Mỡ':'Body fat','Cơ xương':'Muscle','Mỡ nội tạng':'Visceral fat','Ngày đo':'Date','Chỉ cần nhập ô nào có số, ô khác để trống.':'Fill only the values you have.','Xoá lần đo này':'Delete this entry','Nhập ít nhất một chỉ số.':'Enter at least one value.','Đã lưu chỉ số':'Saved','đến lúc đo lại':'time to measure again','Chỉ xem huy hiệu đã có':'Show earned only','Chưa có huy hiệu nào. Xong buổi đầu tiên để nhận huy hiệu đầu.':'No badges yet. Finish your first workout to earn one.','buổi xong ·':'workouts ·','ngày có tập':'training days',
   'Đơn giản':'Simple','Chi tiết':'Detail',
   'Mục tiêu':'Target','Kg':'Kg','Rep':'Reps','Set':'Set','TB':'FAIL','tăng tạ':'add weight','Hết giờ nghỉ!':'Rest over!','Vào set':'Go','Số mờ là gợi ý. Tập đúng thì bấm':'Grey numbers are suggestions. Matched them? Tap','Tập xong set nào bấm':'After each set tap','set đó, web tự đếm giờ nghỉ.':'for it, the rest timer starts.',', khác thì sửa số rồi bấm ✓.':', otherwise edit the numbers then tap ✓.','tối đa':'max',
   'Đồng bộ cloud đang bật':'Cloud sync on','Chỉ lưu trên máy này':'Saved on this device only','Khởi động':'Warm-up','Tạ thêm (kg)':'Added weight (kg)','Tạ (kg)':'Weight (kg)','Lưu':'Save','Bỏ tick set này':'Untick this set','Đang sửa set đã xong':'Editing a finished set','xong':'done',
