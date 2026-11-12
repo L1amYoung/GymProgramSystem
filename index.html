@@ -774,6 +774,32 @@ html{touch-action:manipulation;scroll-behavior:auto!important}
 .calrow.cal1 span{grid-column:1;grid-row:1} .calrow.cal1 b{grid-column:2;grid-row:1;text-align:right} .calrow.cal1 small{grid-column:1;grid-row:2} .calrow.cal1 em{grid-column:2;grid-row:2;justify-self:end;font-style:normal;font-size:12px;font-weight:800;color:var(--ok);border:1px solid color-mix(in srgb,var(--ok) 50%,transparent);border-radius:999px;padding:2px 9px}
 .cele.acc .x{position:sticky;top:0;float:right;z-index:3;width:40px;height:40px;margin:-10px -8px 0 8px;border:0;border-radius:50%;background:var(--ink);color:#111;font-size:17px;font-weight:900;box-shadow:0 4px 14px -4px rgba(0,0,0,.6)}
 .cele.acc .cbox{max-height:88vh;overflow:auto;overscroll-behavior:contain}
+.cedit{margin-left:auto;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:999px;padding:4px 11px;font:inherit;font-size:12.5px;font-weight:800}
+.wh .meta{display:flex;flex-wrap:wrap;align-items:center;gap:6px}
+.cask{display:grid;gap:6px;margin:4px 0 12px;padding:12px 14px;border:1px solid color-mix(in srgb,var(--acc) 50%,var(--line));border-radius:14px;background:color-mix(in srgb,var(--acc) 10%,var(--card))}
+.cask b{font-size:14px} .cask span{font-size:13px;color:var(--sub)} .cask div{display:flex;gap:8px;margin-top:2px}
+.cedv .cbox,.libv .cbox,.libd .cbox{width:min(440px,100%)}
+.cel{display:grid;gap:6px;margin-bottom:10px}
+.cer{display:grid;grid-template-columns:30px 1fr 34px 34px 34px;gap:6px;align-items:center;padding:8px;border:1px solid var(--line);border-radius:12px;background:var(--card2)}
+.cer.add{border-color:color-mix(in srgb,var(--ok) 50%,var(--line))} .cls{font-weight:900;color:var(--sub);text-align:center;font-size:13px}
+.cen{min-width:0;display:grid;gap:3px} .cen b{font-size:13.5px;line-height:1.25} .cen small{font-size:12px;color:var(--sub)}
+.cele.acc .cerp{padding:6px 8px;font-size:13px;border-radius:8px}
+.cb{height:34px;border:1px solid var(--line);border-radius:9px;background:var(--card);color:var(--ink);font-weight:900} .cb:disabled{opacity:.3} .cb.rm{color:#ff8a7a}
+.cadd{width:100%} .cft{display:flex;justify-content:space-between;align-items:center;margin-top:12px} .cft .lk{border:0;background:none;color:var(--sub);font:inherit;font-weight:800;white-space:nowrap}
+.cft .btn{width:auto;min-width:120px;margin:0}
+.libbtn{display:grid;gap:3px;width:100%;padding:14px;text-align:left;border:1px solid var(--line);border-radius:14px;background:var(--card);color:var(--ink);font:inherit;font-size:15px;font-weight:800}
+.libbtn small{font-size:12.5px;color:var(--sub);font-weight:600}
+.lbs{margin-bottom:8px} .lbg{display:flex;gap:6px;overflow-x:auto;padding-bottom:6px;margin-bottom:6px}
+.lbg button{flex:none;padding:6px 12px;border:1px solid var(--line);border-radius:999px;background:var(--card2);color:var(--sub);font:inherit;font-size:12.5px;font-weight:800}
+.lbg button.on{color:var(--ink);border-color:var(--acc2)}
+.lbnew{width:100%;margin-bottom:8px;padding:10px;border:1px dashed var(--line);border-radius:12px;background:none;color:var(--acc2);font:inherit;font-weight:800}
+.lbl{display:grid;gap:6px}
+.lbr{display:grid;grid-template-columns:72px 1fr 28px;gap:10px;align-items:center;padding:6px;border:1px solid var(--line);border-radius:12px;background:var(--card2);color:var(--ink);font:inherit;text-align:left}
+.lbr .pi{display:flex;height:46px;border-radius:9px;overflow:hidden;background:#000} .lbr .pi img{width:50%;height:100%;object-fit:cover} .lbr .pi.one img{width:100%}
+.lbr .pi.empty{background:var(--card)} .lbr b{font-size:13.5px;display:block;line-height:1.25} .lbr small{font-size:11.5px;color:var(--sub)} .lbr em{font-style:normal;font-size:20px;font-weight:900;color:var(--acc2);text-align:center}
+.lbpic .pi{display:flex;height:150px;border-radius:14px;overflow:hidden;background:#000;margin-bottom:10px} .lbpic .pi img{width:50%;height:100%;object-fit:cover} .lbpic .pi.one img{width:100%} .lbpic .pi.empty{display:none}
+.libd .btn.ghost{width:100%;margin-bottom:10px;text-decoration:none;display:block;text-align:center}
+.lbins{margin:0;padding-left:20px;font-size:13.5px} .lbins li{margin:5px 0}
 .plt{display:flex;flex-wrap:wrap;align-items:center;gap:5px;margin:10px 2px 0;font-size:12.5px}
 .plt>b{font-size:14px;margin-right:2px} .plt .pl0{color:var(--sub);font-weight:700}
 .pq{font-style:normal;display:inline-grid;place-items:center;min-width:26px;height:26px;padding:0 5px;border-radius:7px;font-size:11.5px;font-weight:900;color:#fff;background:#555}
@@ -965,13 +991,13 @@ setTimeout(() => { sbAutoPull(true); }, 1200);
 const HASHOME = {};
 const hasHome = p => p && (HASHOME[p.id] ??= Object.values(p.workouts).some(w => w.items.some(it => it.h)));
 const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
-var HC = null, HGEN = 0; const HINV = /^(sets-|swp-|start-|log$|body$|prlog$)/;
+var HC = null, HGEN = 0; const HINV = /^(sets-|swp-|start-|cust-|log$|body$|prlog$)/;
 function histDirty(){ HC = null; HGEN++; }
 const store = { get(k){ try{ return localStorage.getItem(k); }catch(e){ return null; } }, set(k,v){ if(HINV.test(k)) histDirty(); try{ v==null ? localStorage.removeItem(k) : localStorage.setItem(k, v); }catch(e){} if(typeof STATE_KEYS !== 'undefined' && STATE_KEYS.test(k)) sbQueue('u|' + k, 'user_state', {key: k, value: v == null ? null : String(v)}); } };
 const getJ = (k,d) => { try{ const v = JSON.parse(store.get(k)); return v ?? d; }catch(e){ return d; } };
 
 /* ---------- đồng bộ Supabase (localStorage vẫn là nguồn chính, mất mạng vẫn dùng được) ---------- */
-const STATE_KEYS = /^(prog|lang|home|restDefault|wake|logw|setui|start-.+|sel-.+|nosd-.+|done-.+|prlog|badges|board|body|kgside|restex|wkrep|calprof|calseen|swp-.+)$/;
+const STATE_KEYS = /^(prog|lang|home|restDefault|wake|logw|setui|start-.+|sel-.+|nosd-.+|done-.+|prlog|badges|board|body|kgside|restex|wkrep|calprof|calseen|mylib|swp-.+|cust-.+|custw-.+)$/;
 const SB = {url: 'https://jqsynlkiuigagvpueziz.supabase.co', key: 'sb_publishable_qzCUcDHqWPJFY6LPiolsKw_C6vXAN0D'};
 const SBON = SB.key && !SB.key.startsWith('__');
 const DEV = (() => { let d = store.get('devid'); if(!d){ d = (crypto.randomUUID ? crypto.randomUUID() : Date.now().toString(36) + Math.random().toString(36).slice(2)); store.set('devid', d); } return d; })();
@@ -1025,7 +1051,7 @@ function sbText(){
   return 'Đồng bộ cloud đang bật';
 }
 function sbLogRow(k, e){ const [pid, n] = k.split('|'); sbQueue('w|' + k, 'workout_logs', e ? {program_id: pid, day_n: +n, date: e.d, program_name: e.pn || null, title: e.w || null, phase: e.ph || null, done: e.k || 0, total: e.of || 0, started_at: e.t0 ? new Date(e.t0).toISOString() : null, finished_at: e.t1 ? new Date(e.t1).toISOString() : null} : {program_id: pid, day_n: +n, _del: 1}); }
-function sbSetRow(p, n, i, arr){ const d = p.sched[n-1], w = d && d.w && p.workouts[d.w], it0 = w && w.items[i % 1000], it = it0 && (i >= 1000 ? {name: it0.name + ' · khởi động'} : it0);
+function sbSetRow(p, n, i, arr){ const d = p.sched[n-1], w = d && d.w && wo(p, d.n), it0 = w && w.items[i % 1000], it = it0 && (i >= 1000 ? {name: it0.name + ' · khởi động'} : it0);
   const empty = !arr || (Array.isArray(arr) ? !arr.some(Boolean) : !(arr.ig || (arr.s||[]).length));
   sbQueue(`s|${p.id}|${n}|${i}`, 'set_logs', empty ? {program_id: p.id, day_n: n, item_idx: i, _del: 1} : {program_id: p.id, day_n: n, item_idx: i, exercise: it ? it.name : null, data: arr}); }
 function sbInitial(){
@@ -1042,7 +1068,7 @@ function sbInitial(){
 /* ---------- đánh dấu đã tập (bù những buổi tập rồi mà chưa tick) ---------- */
 function bulkDone(p, upto){
   const st = store.get('start-'+p.id), L = getLog(); let c = 0;
-  p.sched.forEach(d => { if(!d.w || d.n > upto) return; const w = p.workouts[d.w], tot = w.items.length;
+  p.sched.forEach(d => { if(!d.w || d.n > upto) return; const w = wo(p, d.n), tot = w.items.length;
     if(getDone(p, d.n).size >= tot) return;
     store.set(doneKey(p, d.n), JSON.stringify(w.items.map((_, i) => i)));
     let day = isoDay(); if(st){ const t = new Date(st+'T00:00:00'); t.setDate(t.getDate() + d.n - 1); day = isoDay(t); }
@@ -1053,8 +1079,8 @@ function bulkDone(p, upto){
 function openBulk(p){
   const ti = dayIdx(p); let n = Math.max(1, Math.min(p.sched.length, ti ? ti - 1 : curDay(p)));
   const ov = document.createElement('div'); ov.className = 'cele acc';
-  const cnt = () => p.sched.filter(d => d.w && d.n <= n && getDone(p, d.n).size < p.workouts[d.w].items.length).length;
-  const draw = () => { const d = p.sched[n-1], w = d && d.w && p.workouts[d.w];
+  const cnt = () => p.sched.filter(d => d.w && d.n <= n && getDone(p, d.n).size < wo(p, d.n).items.length).length;
+  const draw = () => { const d = p.sched[n-1], w = d && d.w && wo(p, d.n);
     ov.innerHTML = `<div class="cbox" role="dialog" aria-label="Đánh dấu đã tập"><button class="x" data-x aria-label="Đóng">✕</button>
       <h2 style="font-size:19px;margin:2px 40px 6px 0">Đánh dấu đã tập</h2>
       <p class="anote" style="margin:0 0 12px">Cho những buổi bạn đã tập nhưng chưa tick. Đánh dấu xong mọi buổi từ ngày 1 đến:</p>
@@ -1118,7 +1144,7 @@ function badgeStats0(){
   let streak = 0, run = 0; [...wk].sort().forEach((w, i, a) => { if(i && (new Date(w) - new Date(a[i-1]))/864e5 === 7) run++; else run = 1; streak = Math.max(streak, run); });
   let logged = 0, vol = 0, sess = 0; const top = {bench: 0, squat: 0, dead: 0};
   try{ for(let i=0;i<localStorage.length;i++){ const k = localStorage.key(i), m = k && k.match(/^sets-(.+)-(\d+)$/); if(!m) continue;
-    const pg = P.find(x => x.id === m[1]), d = pg && pg.sched[+m[2]-1], w = d && d.w && pg.workouts[d.w];
+    const pg = P.find(x => x.id === m[1]), d = pg && pg.sched[+m[2]-1], w = d && d.w && wo(pg, d.n);
     const swm = pg ? getJ(swpKey(pg, +m[2]), {}) : {}; let sv = 0;
     Object.entries(getJ(k, {})).forEach(([ix, arr]) => { if(+ix >= 1000 || !Array.isArray(arr)) return; const nm = swm[ix] || (w && w.items[+ix] ? w.items[+ix].name : '');
       arr.forEach(x => { const o = setObj(x); if(!o || !o.r) return; logged++; if(o.w > 0){ vol += o.w * o.r; sv += o.w * o.r;
@@ -1232,11 +1258,11 @@ function openSettings(){
         ${tg(`<div class="lmode"><button data-sm="0" aria-selected="${!LOGW()}">Đơn giản</button><button data-sm="1" aria-selected="${LOGW()}">Chi tiết</button></div>`, 0, 'Nhập set', 'Chi tiết = ghi tạ và rep từng set')}
         ${tg('<span class="gch">›</span>', 0, '<a class="gdl" href="guide.html">📖 Hướng dẫn sử dụng</a>', 'Cách dùng toàn bộ app, có ảnh minh hoạ')}
         ${WLOK ? tg(`<label class="lwt"><input type="checkbox" id="swk" ${WAKE ? 'checked' : ''}><span></span></label>`, 0, 'Giữ màn hình sáng', 'Khi đang ở trang Hôm nay') : ''}
-      </div><p class="appv">${LANG === 'en' ? 'Version' : 'Phiên bản'} 89b1cc1110</p></div>`;
+      </div><p class="appv">${LANG === 'en' ? 'Version' : 'Phiên bản'} 59ccc84433</p></div>`;
     ov.querySelector('[data-x]').onclick = () => ov.remove();
     bindAcct(ov);
     ov.querySelectorAll('[data-sl]').forEach(b => b.onclick = () => { LANG = b.dataset.sl; store.set('lang', LANG); document.documentElement.lang = LANG; tabs.innerHTML = ''; renderNow(); if(!sheet.hidden){ sheet.innerHTML = ''; renderSheet(); } draw(); trTree(ov); });
-    ov.querySelectorAll('[data-ks]').forEach(b => b.onclick = () => { store.set('kgside', b.dataset.ks); sbFlush(); draw(); trTree(ov); const sp = sheet.hidden ? null : sheet.querySelector('#setp'); if(sp){ const p = prog(), n = curDay(p), w = p.workouts[p.sched[n-1].w]; rerenderSets(p, n, w, exIt(p, n, CUR)); } });
+    ov.querySelectorAll('[data-ks]').forEach(b => b.onclick = () => { store.set('kgside', b.dataset.ks); sbFlush(); draw(); trTree(ov); const sp = sheet.hidden ? null : sheet.querySelector('#setp'); if(sp){ const p = prog(), n = curDay(p), w = wo(p, n); rerenderSets(p, n, w, exIt(p, n, CUR)); } });
     ov.querySelectorAll('[data-sm]').forEach(b => b.onclick = () => { store.set('logw', b.dataset.sm); sbFlush(); draw(); trTree(ov); });
     const wk = ov.querySelector('#swk'); if(wk) wk.onchange = () => { WAKE = wk.checked; store.set('wake', WAKE ? '1' : '0'); WAKE ? wakeOn() : wakeOff(); };
   };
@@ -1321,7 +1347,7 @@ const getLog = () => getJ('log', {});
 function setDone(p,n,set){
   const prev = getDone(p,n).size;
   store.set(doneKey(p,n), JSON.stringify([...set]));
-  const d = p.sched[n-1], w = d && d.w && p.workouts[d.w]; if(!w) return;
+  const d = p.sched[n-1], w = d && d.w && wo(p, d.n); if(!w) return;
   const L = getLog(), k = p.id+'|'+n, tot = w.items.length;
   if(!set.size){ delete L[k]; }
   else {
@@ -1338,7 +1364,7 @@ function setDone(p,n,set){
   const L = getLog(); let ch = false;
   P.forEach(p => { const st = store.get('start-'+p.id);
     p.sched.forEach(d => { if(!d.w) return; const k = p.id+'|'+d.n; if(L[k]) return;
-      const ds = getDone(p, d.n); if(!ds.size) return; const w = p.workouts[d.w];
+      const ds = getDone(p, d.n); if(!ds.size) return; const w = wo(p, d.n);
       let day = null; if(st){ const t = new Date(st+'T00:00:00'); t.setDate(t.getDate() + d.n - 1); if(t <= new Date()) day = isoDay(t); }
       if(!day) return;
       L[k] = {d: day, p: p.id, n: d.n, w: w.title, pn: p.name, ph: w.phase || '', k: ds.size, of: w.items.length}; ch = true; });
@@ -1460,7 +1486,7 @@ function go(t){ if(t === TAB){ window.scrollTo({top:0, behavior:'smooth'}); retu
 
 /* ---------- TODAY ---------- */
 function weekLabel(p, ws){
-  const days = p.sched.slice(ws, ws+7); const w = days.map(d => d.w && p.workouts[d.w]).find(Boolean);
+  const days = p.sched.slice(ws, ws+7); const w = days.map(d => d.w && wo(p, d.n)).find(Boolean);
   return w && w.label && w.label !== '-' ? w.label : '';
 }
 function stripHtml(p, n){
@@ -1479,7 +1505,7 @@ function stripHtml(p, n){
     ${ti && ti!==n && ti>=1 && ti<=p.sched.length ? '<button class="pk today" id="totoday">Về hôm nay</button>' : ''}
   </div>`;
   const cells = days.map(d => {
-    const w = d.w && p.workouts[d.w];
+    const w = d.w && wo(p, d.n);
     const fin = w && getDone(p,d.n).size >= w.items.length;
     const cls = ['day', w?'':'rest', d.n===n?'sel':'', d.n===ti?'today':'', fin?'fin':''].join(' ');
     return `<button class="${cls}" ${d.n===n?'style="view-transition-name:day-sel"':''} data-d="${d.n}" style="--cat:var(--c-${w?cat(w.title):'arms'})" aria-label="Ngày ${d.n}${w?': '+esc(w.title):': nghỉ'}"><span class="n">${d.n}</span>${w?'<span class="dot"></span>':''}<span class="l">${w ? esc(lab(w.title)) : 'Nghỉ'}</span></button>`;
@@ -1494,12 +1520,12 @@ function renderToday(){
     const nx = p.sched.slice(n).find(x => x.w);
     h += `<div class="rest-card"><h1>Ngày nghỉ</h1><p>Ngủ đủ, ăn đủ, đi bộ nhẹ để hồi phục.</p>${nx ? `<button class="btn ghost" data-d="${nx.n}">Buổi tiếp theo: ${esc(p.workouts[nx.w].title)} · ngày ${nx.n}</button>` : ''}</div>`;
   } else {
-    const w = p.workouts[d.w], m = numsOf(w.meta), done = getDone(p,n);
+    const w = wo(p, d.n), m = numsOf(w.meta), done = getDone(p,n);
     const pct = Math.round(done.size / w.items.length * 100);
     h += `<div class="wh"><div class="eyebrow">${n===ti?'Hôm nay · ':''}Ngày ${n}</div>
       <h1 style="view-transition-name:wo-title">${esc(w.title)}</h1>
-      <div class="meta">${w.label && w.label!=='-' ? `<span class="hl">${esc(w.label)}</span>` : ''}${m.min?`<span>${m.min} phút</span>`:''}<span>${w.items.length} bài</span>${m.sets?`<span>${m.sets} set</span>`:''}</div>
-      <div class="prog"><div class="bar"><i style="width:${pct}%"></i></div><span>${done.size}/${w.items.length}</span></div></div>`;
+      <div class="meta">${w.label && w.label!=='-' ? `<span class="hl">${esc(w.label)}</span>` : ''}${m.min?`<span>${m.min} phút</span>`:''}<span>${w.items.length} bài</span>${w.custom ? `<span>${w.items.reduce((a, it) => a + (it.jk ? 0 : setVals(p, it).length), 0)} set</span><span class="hl">✏️ ${EL('đã sửa', 'edited')}</span>` : m.sets?`<span>${m.sets} set</span>`:''}<button class="cedit" data-cedit>✏️ ${EL('Sửa buổi', 'Edit')}</button></div>
+      <div class="prog"><div class="bar"><i style="width:${pct}%"></i></div><span>${done.size}/${w.items.length}</span></div></div>` + custAskHtml(p, n);
     { const nx = w.items.findIndex((_, i) => !done.has(i)), began = done.size || store.get('wst-'+p.id+'-'+n);
       if(nx >= 0) h += `<button class="btn wgo" id="wgo" data-nx="${nx}"><span>${began ? 'Tiếp tục' : 'Bắt đầu buổi tập'}</span>${began ? `<small>${esc(w.items[nx].s)} · ${esc(w.items[nx].name)}</small>` : ''}</button>`; }
     const nh = w.items.filter(x => x.orig).length;
@@ -1528,7 +1554,7 @@ function renderToday(){
   const tt = document.getElementById('totoday'); if(tt) tt.onclick = () => { ANIM = ti>n ? 'l' : 'r'; setDay(p, ti); render(); };
   const sd = document.getElementById('sd'); if(sd) sd.onclick = () => openDatePicker(p);
   const wg = document.getElementById('wgo'); if(wg) wg.onclick = () => { unlockAudio(); wakeOn(); openSheet(+wg.dataset.nx); };
-  main.querySelectorAll('[data-shot]').forEach(b => b.onclick = () => lightbox(p.workouts[d.w].imgs, +b.dataset.shot));
+  main.querySelectorAll('[data-shot]').forEach(b => b.onclick = () => lightbox(wo(p, d.n).imgs, +b.dataset.shot));
   main.querySelectorAll('.row').forEach(r => {
     r.onclick = e => { if(e.target.closest('.chk')) return; openSheet(+r.dataset.i); };
     r.onkeydown = e => { if(e.key==='Enter') openSheet(+r.dataset.i); };
@@ -1537,7 +1563,7 @@ function renderToday(){
 }
 function refreshDone(){
   const p = prog(), n = curDay(p), d = p.sched[n-1]; if(!d.w) return;
-  const w = p.workouts[d.w], done = getDone(p,n);
+  const w = wo(p, d.n), done = getDone(p,n);
   main.querySelectorAll('.row').forEach(r => { const i = +r.dataset.i, on = done.has(i); r.classList.toggle('done', on); const c = r.querySelector('.chk'); if(c) c.setAttribute('aria-pressed', on); });
   const bar = main.querySelector('.bar i'); if(bar) bar.style.width = Math.round(done.size / w.items.length * 100) + '%';
   const cnt = main.querySelector('.prog span'); if(cnt) cnt.textContent = `${done.size}/${w.items.length}`;
@@ -1563,7 +1589,7 @@ function restFor(p, it){
   if(p.weekSelect){ const r = mmParse(it.tempo).rest; const m = String(r).match(/(\d+)/); if(m){ return /sec|giây|s\b/.test(r) ? +m[1] : +m[1] * 60; } }
   return restAuto(it);
 }
-function toggleDone(i){ const p = prog(), n = curDay(p), s = getDone(p,n); const it = p.workouts[p.sched[n-1].w].items[i]; if(it.jk){ s.has(i) ? s.delete(i) : s.add(i); setDone(p,n,s); return; } if(s.has(i)){ s.delete(i); putSets(p,n,i,[]); } else { s.add(i); const c = getSets(p,n,i); putSets(p,n,i, setVals(p,it).map((_,k) => (Array.isArray(c) && c[k]) || true)); } setDone(p,n,s); }
+function toggleDone(i){ const p = prog(), n = curDay(p), s = getDone(p,n); const it = wo(p, n).items[i]; if(it.jk){ s.has(i) ? s.delete(i) : s.add(i); setDone(p,n,s); return; } if(s.has(i)){ s.delete(i); putSets(p,n,i,[]); } else { s.add(i); const c = getSets(p,n,i); putSets(p,n,i, setVals(p,it).map((_,k) => (Array.isArray(c) && c[k]) || true)); } setDone(p,n,s); }
 
 /* ---------- CALENDAR ---------- */
 let CALM = null, CALD = null;
@@ -1575,7 +1601,7 @@ function renderMonth(){
   const by = {}; Object.values(L).forEach(e => { if(e.d.slice(0,7) === CALM) (by[e.d] = by[e.d] || []).push(e); });
   // lịch dự kiến của program hiện tại (ngày chưa tập)
   const st = store.get('start-'+p.id), plan = {};
-  if(st){ const a = new Date(st+'T00:00:00'); for(let i=1;i<=dim;i++){ const dt = new Date(Y, M-1, i), n = Math.round((dt-a)/864e5)+1; const d = p.sched[n-1]; if(d && d.w) plan[isoDay(dt)] = {n, w: p.workouts[d.w].title}; } }
+  if(st){ const a = new Date(st+'T00:00:00'); for(let i=1;i<=dim;i++){ const dt = new Date(Y, M-1, i), n = Math.round((dt-a)/864e5)+1; const d = p.sched[n-1]; if(d && d.w) plan[isoDay(dt)] = {n, w: wo(p, d.n).title}; } }
   let cells = ['T2','T3','T4','T5','T6','T7','CN'].map(x => `<div class="mh">${x}</div>`).join('') + '<span></span>'.repeat(lead);
   for(let i=1;i<=dim;i++){
     const ds = `${CALM}-${String(i).padStart(2,'0')}`, es = by[ds] || [], full = es.some(e => e.k >= e.of), part = es.length && !full;
@@ -1783,7 +1809,7 @@ function rangeStats(a, b){
   try{ for(let i = 0; i < localStorage.length; i++){ const m = (localStorage.key(i) || '').match(/^sets-(.+)-(\d+)$/); if(m) days.add(m[1] + '|' + m[2]); } }catch(e){}
   Object.values(getLog()).forEach(e => { if(e.p && e.n) days.add(e.p + '|' + e.n); });
   try{ days.forEach(dk => { const [pid, ns] = dk.split('|'), p = P.find(x => x.id === pid); if(!p) return; const n = +ns, d = p.sched[n-1]; if(!d || !d.w) return;
-    const dt = setDate(p, n); if(!dt || dt < a || dt >= b) return; const o = getJ('sets-' + pid + '-' + n, {}), dn = getDone(p, n), wk = p.workouts[d.w];
+    const dt = setDate(p, n); if(!dt || dt < a || dt >= b) return; const o = getJ('sets-' + pid + '-' + n, {}), dn = getDone(p, n), wk = wo(p, d.n);
     wk.items.forEach((_, ix) => { const arr = Array.isArray(o[ix]) ? o[ix] : [], it = exIt(p, n, ix); if(!it) return;
       let cnt = arr.filter(Boolean).length; if(!cnt && dn.has(ix)) cnt = it.jk ? 3 : setVals(p, it).length;   // xong cả bài mà không tick từng set
       if(!cnt) return; out.sets += cnt;
@@ -1877,7 +1903,7 @@ function renderCal(){
   let cells = '';
   p.sched.filter(d => d.n>=pa && d.n<=pb).forEach((d,i) => {
     if(i%7===0) cells += `<div class="wk">TUẦN ${p.weekSelect ? i/7+1 : Math.floor((d.n-1)/7)+1}</div>`;
-    const w = d.w && p.workouts[d.w];
+    const w = d.w && wo(p, d.n);
     const fin = w && getDone(p,d.n).size >= w.items.length;
     const cls = ['day', w?'':'rest', d.n===n?'sel':'', d.n===ti?'today':'', fin?'fin':''].join(' ');
     cells += `<button class="${cls}" data-d="${d.n}" style="--cat:var(--c-${w?cat(w.title):'arms'})"><span class="n">${d.n}</span>${w?'<span class="dot"></span>':''}<span class="l">${w ? esc(lab(w.title)) : 'Nghỉ'}</span></button>`;
@@ -2092,6 +2118,149 @@ function openQuiz(){
   };
   draw(); document.body.appendChild(ov); requestAnimationFrame(() => ov.classList.add('on'));
 }
+/* ================= tuỳ biến buổi tập ================= */
+getJ('mylib', []).forEach(x => { if(x && x.n) SWL[x.n] = Object.assign({}, x, {my: true}); });   // bài tự tạo
+var WOC = {};
+function custItem(e){ const L = SWL[e.name] || {};
+  return {s: e.s || '+', k: '', name: e.name, reps: e.reps || L.reps || '3 × 10-12', tempo: '', q: L.q || e.name, fe: L.fe, v: L.v, cu: true, cid: e.id,
+    det: Object.assign({}, L, {sw: undefined, n: undefined, reps: undefined})}; }
+function wo(p, n){ const d = p.sched[n-1], base = d && d.w && p.workouts[d.w]; if(!base) return base;
+  const raw = store.get('cust-' + p.id + '-' + n); if(!raw || raw === 'base') return base;
+  const k = p.id + '|' + n; if(WOC[k] && WOC[k].raw === raw && WOC[k].base === base) return WOC[k].w;
+  let L; try{ L = JSON.parse(raw); }catch(e){ return base; } if(!Array.isArray(L)) return base;
+  const items = L.map(e => typeof e === 'number' ? base.items[e] : custItem(e)).filter(Boolean);
+  const w = Object.assign({}, base, {items, custom: true}); WOC[k] = {raw, base, w}; return w; }
+function entriesOf(p, n){ const raw = store.get('cust-' + p.id + '-' + n), base = p.workouts[p.sched[n-1].w];
+  if(raw && raw !== 'base'){ try{ const L = JSON.parse(raw); if(Array.isArray(L)) return L; }catch(e){} } return base.items.map((_, i) => i); }
+const ekey = e => typeof e === 'number' ? 'b' + e : 'c' + e.id;
+const isBaseList = (L, base) => L.length === base.items.length && L.every((e, i) => e === i);
+/* đổi danh sách bài của ngày + chuyển set/tick/đổi bài theo bài */
+function applyCust(p, n, newL){
+  const base = p.workouts[p.sched[n-1].w], oldL = entriesOf(p, n), pos = {}; oldL.forEach((e, i) => pos[ekey(e)] = i);
+  const mp = newL.map(e => pos[ekey(e)]), sk = 'sets-' + p.id + '-' + n, so = getJ(sk, null), sw0 = getJ(swpKey(p, n), {}), dn0 = getDone(p, n);
+  const no = {}, sw = {}, dn = [];
+  mp.forEach((oi, ni) => { if(oi == null) return; if(so && so[oi] != null) no[ni] = so[oi]; if(so && so[1000 + oi] != null) no[1000 + ni] = so[1000 + oi];
+    if(sw0[oi]) sw[ni] = sw0[oi]; if(dn0.has(oi)) dn.push(ni); });
+  store.set('cust-' + p.id + '-' + n, isBaseList(newL, base) ? 'base' : JSON.stringify(newL));
+  if(so){ Object.keys(so).forEach(k => sbSetRow(p, n, +k, null)); store.set(sk, JSON.stringify(no)); Object.keys(no).forEach(k => sbSetRow(p, n, +k, no[k])); }
+  store.set(swpKey(p, n), JSON.stringify(sw)); store.set(doneKey(p, n), JSON.stringify(dn));
+  const Lg = getLog(), lk = p.id + '|' + n; if(Lg[lk]){ Lg[lk].k = dn.length; Lg[lk].of = newL.length; store.set('log', JSON.stringify(Lg)); sbLogRow(lk, Lg[lk]); }
+  sbFlush();
+}
+function custDiff(L, base){ const b = new Set(L.filter(e => typeof e === 'number')); const add = L.filter(e => typeof e !== 'number').length, rm = base.items.length - b.size; return {add, rm}; }
+const cwKey = (p, base) => 'custw-' + p.id + '-' + String(base.title || '').replace(/\s+/g, '_').slice(0, 40);
+/* bản sửa mẫu lưu bài gốc theo TÊN (mỗi tuần giáo án có thể xếp khác), áp vào ngày khác thì dò lại vị trí */
+function cwResolve(cw, base){ const used = new Set();
+  return cw.L.map(e => { if(e && e.bn != null){ const i = base.items.findIndex((it, j) => !used.has(j) && it.name === e.bn); if(i < 0) return null; used.add(i); return i; } return e; }).filter(e => e != null); }
+function saveCust(p, n, L){
+  const d = p.sched[n-1], base = p.workouts[d.w]; applyCust(p, n, L);
+  if(isBaseList(L, base)) store.set(cwKey(p, base), null);
+  else store.set(cwKey(p, base), JSON.stringify({L: L.map(e => typeof e === 'number' ? {bn: base.items[e].name} : e), t: Date.now()}));
+}
+function nextLetter(L, base){ let mx = 64; L.forEach(e => { const it = typeof e === 'number' ? base.items[e] : e; const c = String((it && it.s) || '').toUpperCase().charCodeAt(0); if(c >= 65 && c <= 90) mx = Math.max(mx, c); }); return String.fromCharCode(Math.min(90, mx + 1)); }
+function openCustEdit(p, n){
+  const d = p.sched[n-1], base = p.workouts[d.w]; let L = entriesOf(p, n).map(e => typeof e === 'number' ? e : Object.assign({}, e));
+  const ov = document.createElement('div'); ov.className = 'cele acc cedv';
+  const draw = () => {
+    ov.innerHTML = `<div class="cbox" role="dialog" aria-label="Sửa buổi"><button class="x" data-x aria-label="Đóng">✕</button>
+      <h2 style="font-size:19px;margin:2px 40px 2px 0">${EL('Sửa buổi', 'Edit workout')} · ${esc(base.title)}</h2><p class="anote" style="margin:0 0 10px">${EL('Bỏ, đổi thứ tự hoặc thêm bài. Lần sau gặp lại buổi này app sẽ hỏi có dùng bản sửa mới nhất không.', 'Remove, reorder or add exercises. Next time this workout comes up, the app asks whether to reuse your latest edit.')}</p>
+      <div class="cel">${L.map((e, i) => { const it = typeof e === 'number' ? base.items[e] : e;
+        return `<div class="cer ${typeof e === 'number' ? '' : 'add'}"><span class="cls">${esc((it.s || '+').slice(0, 2))}</span><div class="cen"><b>${esc(it.name)}</b>${typeof e === 'number' ? `<small>${esc(it.reps || '')}</small>` : `<input class="cerp" data-i="${i}" value="${esc(e.reps || '3 × 10-12')}" aria-label="Set × rep">`}</div>
+          <button class="cb" data-up="${i}" ${i ? '' : 'disabled'} aria-label="Lên">↑</button><button class="cb" data-dn="${i}" ${i < L.length - 1 ? '' : 'disabled'} aria-label="Xuống">↓</button><button class="cb rm" data-rm="${i}" aria-label="Bỏ">✕</button></div>`; }).join('') || `<p class="none">${EL('Buổi này chưa có bài nào.', 'No exercises yet.')}</p>`}</div>
+      <button class="btn ghost cadd" id="cadd">+ ${EL('Thêm bài từ thư viện', 'Add from library')}</button>
+      <div class="cft"><button class="lk" id="creset">↺ ${EL('Bài gốc', 'Original')}</button><button class="btn" id="csv">${EL('Lưu', 'Save')}</button></div></div>`;
+    ov.querySelector('[data-x]').onclick = () => ov.remove();
+    ov.querySelectorAll('.cerp').forEach(inp => inp.oninput = () => { L[+inp.dataset.i].reps = inp.value; });
+    ov.querySelectorAll('[data-up]').forEach(b => b.onclick = () => { const i = +b.dataset.up; [L[i-1], L[i]] = [L[i], L[i-1]]; draw(); });
+    ov.querySelectorAll('[data-dn]').forEach(b => b.onclick = () => { const i = +b.dataset.dn; [L[i+1], L[i]] = [L[i], L[i+1]]; draw(); });
+    ov.querySelectorAll('[data-rm]').forEach(b => b.onclick = () => { L.splice(+b.dataset.rm, 1); draw(); });
+    ov.querySelector('#creset').onclick = () => { L = base.items.map((_, i) => i); draw(); };
+    ov.querySelector('#cadd').onclick = () => openLib(nm => { const lb = SWL[nm] || {}; L.push({id: Date.now().toString(36), name: nm, reps: lb.reps || '3 × 10-12', s: nextLetter(L, base)}); draw(); });
+    ov.querySelector('#csv').onclick = () => { saveCust(p, n, L); ov.remove(); ANIM = ''; const y = scrollY; render(); scrollTo(0, y); toast(`<b>${EL('Đã lưu buổi tập', 'Workout saved')}</b>`); };
+    trTree(ov);
+  };
+  draw(); document.body.appendChild(ov); requestAnimationFrame(() => ov.classList.add('on'));
+  ov.onclick = ev => { if(ev.target === ov) ov.remove(); };
+}
+/* thẻ hỏi áp dụng lại bản sửa mới nhất */
+function custAskHtml(p, n){
+  const d = p.sched[n-1]; if(!d || !d.w || store.get('cust-' + p.id + '-' + n)) return '';
+  const base = p.workouts[d.w], cw = getJ(cwKey(p, base), null); if(!cw || !Array.isArray(cw.L)) return '';
+  const RL = cwResolve(cw, base); if(isBaseList(RL, base)) return ''; const df = custDiff(RL, base), dd = new Date(cw.t);
+  const what = [df.add ? EL(`thêm ${df.add} bài`, `+${df.add} exercises`) : '', df.rm ? EL(`bỏ ${df.rm} bài`, `−${df.rm} exercises`) : ''].filter(Boolean).join(', ') || EL('đổi thứ tự', 'reordered');
+  return `<div class="cask"><b>✏️ ${EL('Lần trước bạn đã sửa buổi này', 'You edited this workout before')}</b><span>${what} · ${dd.getDate()}/${dd.getMonth() + 1}. ${EL('Tập như bản sửa mới nhất?', 'Use your latest edit?')}</span>
+    <div><button class="btn sm" data-capply>${EL('Áp dụng', 'Apply')}</button><button class="btn ghost sm" data-cbase>${EL('Bài gốc', 'Original')}</button></div></div>`;
+}
+document.addEventListener('click', e => { if(e.target.closest && e.target.closest('[data-lib]')) return openLib(); });
+document.addEventListener('click', e => { const t = e.target.closest && e.target.closest('[data-capply],[data-cbase],[data-cedit]'); if(!t || !PID) return;
+  const p = prog(), n = curDay(p), d = p.sched[n-1];
+  if(t.hasAttribute('data-cedit')) return openCustEdit(p, n);
+  if(t.hasAttribute('data-capply')){ const base = p.workouts[d.w], cw = getJ(cwKey(p, base), null); if(cw) applyCust(p, n, cwResolve(cw, base)); toast(`<b>${EL('Đã áp dụng bản sửa', 'Edit applied')}</b>`); }
+  else store.set('cust-' + p.id + '-' + n, 'base');
+  ANIM = ''; const y = scrollY; render(); scrollTo(0, y); });
+
+/* ================= thư viện bài tập ================= */
+const LIBG = [['all', 'Tất cả', 'All', []], ['chest', 'Ngực', 'Chest', ['chest']], ['back', 'Lưng', 'Back', ['lats', 'upback', 'lowback', 'traps']],
+  ['sh', 'Vai', 'Shoulders', ['fdelt', 'rdelt']], ['arm', 'Tay', 'Arms', ['biceps', 'triceps', 'fore']], ['leg', 'Chân', 'Legs', ['quads', 'hams', 'glutes', 'calves']],
+  ['core', 'Bụng', 'Core', ['abs', 'obl']], ['my', 'Của tôi', 'Mine', []]];
+function libAll(){ return Object.keys(SWL).filter(k => !/…$/.test(k)).sort((a, b) => a.localeCompare(b)); }
+function libMus(nm){ return musOf({name: nm, det: SWL[nm] || {}}); }
+function openLib(onPick){
+  const ov = document.createElement('div'); ov.className = 'cele acc libv'; let q = '', g = 'all', lim = 60;
+  const list = () => { const G = LIBG.find(x => x[0] === g), ql = q.trim().toLowerCase();
+    return libAll().filter(nm => { if(ql && !nm.toLowerCase().includes(ql)) return false; if(g === 'my') return !!(SWL[nm] && SWL[nm].my); if(g === 'all') return true;
+      const [pm] = libMus(nm); return pm.some(r => G[3].includes(r)); }); };
+  const rows = () => { const L = list(); return L.slice(0, lim).map(nm => { const e = SWL[nm] || {n: nm}, [pm] = libMus(nm);
+      return `<button class="lbr" data-ln="${esc(nm)}">${swPic(e)}<span><b>${esc(nm)}</b><small>${pm.map(r => EL(MVN[r], MVN_EN[r])).join(', ') || '–'}${e.my ? ' · ' + EL('của tôi', 'mine') : ''}</small></span><em>${onPick ? '+' : '›'}</em></button>`; }).join('')
+      + (L.length > lim ? `<button class="btn ghost" id="lmore">${EL('Xem thêm', 'Show more')} (${L.length - lim})</button>` : '') + (L.length ? '' : `<p class="none">${EL('Không tìm thấy bài nào.', 'No exercises found.')}</p>`); };
+  const bindRows = () => { ov.querySelectorAll('[data-ln]').forEach(b => b.onclick = () => { const nm = b.dataset.ln; if(onPick){ ov.remove(); onPick(nm); } else openLibDetail(nm); });
+    const m = ov.querySelector('#lmore'); if(m) m.onclick = () => { lim += 60; ov.querySelector('.lbl').innerHTML = rows(); bindRows(); trTree(ov); }; };
+  ov.innerHTML = `<div class="cbox" role="dialog" aria-label="Thư viện bài tập"><button class="x" data-x aria-label="Đóng">✕</button>
+    <h2 style="font-size:19px;margin:2px 40px 10px 0">${onPick ? EL('Thêm bài', 'Add exercise') : EL('Thư viện bài tập', 'Exercise library')}</h2>
+    <input class="lbs" type="search" placeholder="${EL('Tìm bài (vd: curl, squat, row…)', 'Search (e.g. curl, squat, row…)')}" autocomplete="off">
+    <div class="lbg">${LIBG.map(x => `<button data-g="${x[0]}" class="${x[0] === g ? 'on' : ''}">${EL(x[1], x[2])}</button>`).join('')}</div>
+    <button class="lbnew" id="lnew">+ ${EL('Tạo bài mới', 'Create exercise')}</button><div class="lbl">${rows()}</div></div>`;
+  ov.querySelector('[data-x]').onclick = () => ov.remove();
+  const redraw = () => { lim = 60; ov.querySelector('.lbl').innerHTML = rows(); bindRows(); trTree(ov); };
+  ov.querySelector('.lbs').oninput = e => { q = e.target.value; redraw(); };
+  ov.querySelectorAll('[data-g]').forEach(b => b.onclick = () => { g = b.dataset.g; ov.querySelectorAll('[data-g]').forEach(x => x.classList.toggle('on', x === b)); redraw(); });
+  ov.querySelector('#lnew').onclick = () => openMyEx(nm => { if(onPick){ ov.remove(); onPick(nm); } else { g = 'my'; ov.querySelectorAll('[data-g]').forEach(x => x.classList.toggle('on', x.dataset.g === 'my')); redraw(); } });
+  bindRows(); document.body.appendChild(ov); requestAnimationFrame(() => ov.classList.add('on')); trTree(ov);
+  ov.onclick = ev => { if(ev.target === ov) ov.remove(); };
+}
+function openLibDetail(nm){
+  const e = SWL[nm] || {n: nm}, it = {name: nm, det: e, fe: e.fe, v: e.v};
+  const ov = document.createElement('div'); ov.className = 'cele acc libd';
+  const vid = e.v && e.v[0] ? `<a class="btn ghost" href="https://www.youtube.com/watch?v=${esc(e.v[0])}" target="_blank" rel="noopener">▶ ${EL('Video hướng dẫn', 'Tutorial video')}</a>` : `<a class="btn ghost" href="https://www.youtube.com/results?search_query=${encodeURIComponent(nm + ' exercise')}" target="_blank" rel="noopener">▶ ${EL('Tìm video', 'Find a video')}</a>`;
+  ov.innerHTML = `<div class="cbox" role="dialog" aria-label="${esc(nm)}"><button class="x" data-x aria-label="Đóng">✕</button>
+    <h2 style="font-size:19px;margin:2px 40px 10px 0">${esc(nm)}</h2><div class="lbpic">${swPic(e)}</div>${vid}
+    ${e.ins && e.ins.length ? `<div class="panel"><div class="panel-h"><h3>${EL('Hướng dẫn', 'How to')}</h3></div><ol class="lbins">${(LANG === 'vi' && e.vi ? e.vi : e.ins).map(x => `<li>${esc(x)}</li>`).join('')}</ol></div>` : ''}
+    ${cueHtml(it)}${musHtml(it)}
+    ${e.my ? `<button class="lk bdx" id="ldel">${EL('Xoá bài tự tạo này', 'Delete this custom exercise')}</button>` : ''}</div>`;
+  ov.querySelector('[data-x]').onclick = () => ov.remove();
+  const dl = ov.querySelector('#ldel'); if(dl) dl.onclick = () => { if(!confirm(EL('Xoá bài này khỏi thư viện?', 'Delete this exercise?'))) return; const m = getJ('mylib', []).filter(x => x.n !== nm); store.set('mylib', JSON.stringify(m)); delete SWL[nm]; ov.remove(); document.querySelectorAll('.libv').forEach(x => x.remove()); openLib(); };
+  document.body.appendChild(ov); requestAnimationFrame(() => ov.classList.add('on')); trTree(ov);
+  ov.onclick = ev => { if(ev.target === ov) ov.remove(); };
+}
+function openMyEx(onDone){
+  const ov = document.createElement('div'); ov.className = 'cele acc';
+  ov.innerHTML = `<div class="cbox" role="dialog" aria-label="Tạo bài"><button class="x" data-x aria-label="Đóng">✕</button>
+    <h2 style="font-size:19px;margin:2px 40px 6px 0">${EL('Tạo bài mới', 'Create exercise')}</h2>
+    <label class="field">${EL('Tên bài', 'Name')}<input id="myn" autocomplete="off" placeholder="${EL('vd: Cable Curl dây thừng', 'e.g. Rope Cable Curl')}"></label>
+    <label class="field">${EL('Nhóm cơ chính', 'Main muscle')}<select id="myg">${Object.keys(MVN).map(r => `<option value="${r}">${EL(MVN[r], MVN_EN[r])}</option>`).join('')}</select></label>
+    <label class="field">${EL('Set × rep mặc định', 'Default sets × reps')}<input id="myr" value="3 × 10-12" autocomplete="off"></label>
+    <label class="field">${EL('Link YouTube (tuỳ chọn)', 'YouTube link (optional)')}<input id="myv" autocomplete="off" placeholder="https://youtu.be/…"></label>
+    <p class="aerr" id="mye"></p><button class="btn" id="mys">${EL('Lưu vào thư viện', 'Save to library')}</button></div>`;
+  ov.querySelector('[data-x]').onclick = () => ov.remove();
+  ov.querySelector('#mys').onclick = () => { const nm = ov.querySelector('#myn').value.trim(), r = ov.querySelector('#myg').value, reps = ov.querySelector('#myr').value.trim() || '3 × 10-12';
+    const vm = ov.querySelector('#myv').value.match(/(?:youtu\.be\/|v=|shorts\/)([\w-]{11})/);
+    if(nm.length < 2){ ov.querySelector('#mye').textContent = EL('Nhập tên bài.', 'Enter a name.'); return; }
+    if(SWL[nm] && !SWL[nm].my){ ov.querySelector('#mye').textContent = EL('Bài này đã có trong thư viện.', 'This exercise already exists.'); return; }
+    const ex = {n: nm, pm: [MVN_EN[r]], reps, v: vm ? [vm[1]] : undefined}; const m = getJ('mylib', []).filter(x => x.n !== nm); m.push(ex); store.set('mylib', JSON.stringify(m));
+    SWL[nm] = Object.assign({}, ex, {my: true}); ov.remove(); toast(`<b>${EL('Đã thêm vào thư viện', 'Added to library')}</b>`); if(onDone) onDone(nm); };
+  document.body.appendChild(ov); requestAnimationFrame(() => ov.classList.add('on')); trTree(ov);
+  setTimeout(() => { const i = ov.querySelector('#myn'); if(i) i.focus(); }, 60);
+}
 function renderProgs(){
   const first = !PID;
   let h = `<div class="sec"><h2>${first ? 'Chọn chương trình để bắt đầu' : 'Chương trình'}</h2>${first ? '<a class="gdb" href="guide.html">📖 Lần đầu dùng? Xem hướng dẫn ›</a>' : ''}`;
@@ -2101,6 +2270,7 @@ function renderProgs(){
     return `<button class="pcard" data-p="${p.id}" ${p.id===PID?'aria-current="true"':''}><div class="img" style="background-image:${bg}"></div>
       <div class="tx"><b>${esc(p.name)}</b><span>${esc(p.level)} · ${p.weeks} tuần · ${train} buổi</span></div></button>`;
   }).join('') + '</div>';
+  h += `<div class="sec"><button class="libbtn" data-lib>📚 ${EL('Thư viện bài tập', 'Exercise library')}<small>${EL('Tìm bài, xem hướng dẫn, tạo bài của riêng bạn', 'Search, see how-tos, create your own')}</small></button></div>`;
   h += `<div class="sec"><h2>Nên chọn chương trình nào?</h2><div class="picks">${[
     ['Ít thời gian (≤ 60 phút)','minmax','Min-Max Phase 1'],
     ['Tập ở nhà có tạ đơn','jacked','JACKED'],
@@ -2305,7 +2475,7 @@ function exHist(name){ return (histAll()[name] || []).slice(); }
 function histAll(){
   if(HC) return HC; const L = getLog(), M = {};
   try{ for(let i=0;i<localStorage.length;i++){ const key = localStorage.key(i), m = key && key.match(/^sets-(.+)-(\d+)$/); if(!m) continue;
-    const p = P.find(x => x.id === m[1]); if(!p) continue; const n = +m[2], d = p.sched[n-1], w = d && d.w && p.workouts[d.w]; if(!w) continue;
+    const p = P.find(x => x.id === m[1]); if(!p) continue; const n = +m[2], d = p.sched[n-1], w = d && d.w && wo(p, d.n); if(!w) continue;
     const o = getJ(key, {}), swm = getJ(swpKey(p, n), {});
     w.items.forEach((it, i2) => { const name = swm[i2] || it.name; const arr = o[i2]; if(!Array.isArray(arr)) return; const ss = arr.map(setObj);
       if(!ss.some(x => x && x.r)) return; const lg = L[p.id+'|'+n], st = store.get('start-'+p.id);
@@ -2322,7 +2492,7 @@ function tdrSave(){ clearTimeout(TDRT); TDRT = setTimeout(() => { try{ localStor
 const swpKey = (p, n) => 'swp-' + p.id + '-' + n;
 /* bài thực tế của buổi (đã đổi nếu máy bận) */
 function exIt(p, n, i){
-  const w = p.workouts[p.sched[n-1].w], it = w.items[i]; if(!it || it.jk) return it;
+  const w = wo(p, n), it = w.items[i]; if(!it || it.jk) return it;
   const nm = getJ(swpKey(p, n), {})[i]; if(!nm || nm === it.name) return it;
   const e = SWL[nm] || {n: nm};
   return Object.assign({}, it, {name: nm, fe: e.fe, v: e.v, q: e.q || nm, sw0: it.name, tech: '', hn: '',
@@ -2330,10 +2500,10 @@ function exIt(p, n, i){
 }
 function swPic(e){ return e.fe ? `<span class="pi"><img src="img/ex/${esc(e.fe)}_0.webp" alt="" loading="lazy"><img src="img/ex/${esc(e.fe)}_1.webp" alt="" loading="lazy"></span>`
   : e.v ? `<span class="pi one"><img src="https://i.ytimg.com/vi/${esc(e.v[0])}/mqdefault.jpg" alt="" loading="lazy"></span>` : `<span class="pi empty"></span>`; }
-function setSwap(p, n, i, nm){ const m = getJ(swpKey(p, n), {}), base = p.workouts[p.sched[n-1].w].items[i];
+function setSwap(p, n, i, nm){ const m = getJ(swpKey(p, n), {}), base = wo(p, n).items[i];
   if(!nm || nm === base.name) delete m[i]; else m[i] = nm; store.set(swpKey(p, n), JSON.stringify(m)); }
 function openSwap(p, n, i){
-  const base = p.workouts[p.sched[n-1].w].items[i], cur = getJ(swpKey(p, n), {})[i] || base.name, list = swList(base);
+  const base = wo(p, n).items[i], cur = getJ(swpKey(p, n), {})[i] || base.name, list = swList(base);
   const ov = document.createElement('div'); ov.className = 'cele acc';
   const card = (x, lab) => { const e = x === base.name ? {fe: base.fe, v: base.v} : (SWL[x] || {n: x}); return `<button class="swo ${x === cur ? 'on' : ''}" data-pick="${esc(x)}">${swPic(e)}<span><b>${esc(x)}</b>${lab ? `<small>${lab}</small>` : ''}</span></button>`; };
   ov.innerHTML = `<div class="cbox" role="dialog" aria-label="Đổi bài"><button class="x" data-x aria-label="Đóng">✕</button>
@@ -2353,7 +2523,7 @@ function histIdx(){ if(HIX && HIX.g === HGEN) return HIX.v; const v = histIdx0()
 function histIdx0(){
   const out = {}, L = getLog();
   try{ for(let i = 0; i < localStorage.length; i++){ const key = localStorage.key(i), m = key && key.match(/^sets-(.+)-(\d+)$/); if(!m) continue;
-    const p = P.find(x => x.id === m[1]); if(!p) continue; const n = +m[2], d = p.sched[n-1], w = d && d.w && p.workouts[d.w]; if(!w) continue;
+    const p = P.find(x => x.id === m[1]); if(!p) continue; const n = +m[2], d = p.sched[n-1], w = d && d.w && wo(p, d.n); if(!w) continue;
     const o = getJ(key, {}), sw = getJ(swpKey(p, n), {}), lg = L[p.id + '|' + n], dt = lg ? lg.d : '';
     w.items.forEach((it, i2) => { const arr = o[i2]; if(!Array.isArray(arr)) return; const nm = sw[i2] || it.name;
       const ss = arr.map(setObj).filter(x => x && x.r && x.w > 0); if(!ss.length) return;
@@ -2578,7 +2748,7 @@ function bindSets(p, n, w, it){
 }
 function preloadNear(){
   try{
-    const p = prog(), n = curDay(p), w = p.workouts[p.sched[n-1].w];
+    const p = prog(), n = curDay(p), w = wo(p, n);
     const ks = new Set([CUR-1, CUR+1, ...groupIdx(w, CUR)]);
     ks.forEach(k => { const x = w.items[k]; if(!x) return;
       if(x.fe){ [0,1].forEach(j => { const im = new Image(); im.decoding = 'async'; im.src = `img/ex/${x.fe}_${j}.webp`; }); }
@@ -2610,7 +2780,7 @@ function groupPanel(w, i, done){
     <p class="ghint">Tập 1 set ${idx.map(k=>esc(w.items[k].s)).join(' → ')} liên tục, xong cả cụm mới nghỉ. Lặp lại cho đủ số set.</p></div>`;
 }
 function refreshGroup(){
-  const p = prog(), n = curDay(p), w = p.workouts[p.sched[n-1].w], done = getDone(p,n);
+  const p = prog(), n = curDay(p), w = wo(p, n), done = getDone(p,n);
   const idx = groupIdx(w, CUR); const nx = nextUndone(idx, CUR, done);
   sheet.querySelectorAll('.gm').forEach(r => { const k = +r.dataset.k; r.classList.toggle('dn', done.has(k)); r.querySelector('.gst').textContent = gStatus(k, CUR, nx, done); r.querySelector('.gchk').setAttribute('aria-pressed', done.has(k)); });
   const gc = sheet.querySelector('.gcount'); if(gc) gc.textContent = `${idx.filter(k=>done.has(k)).length}/${idx.length} xong`;
@@ -2637,14 +2807,14 @@ function wkElapsed(p, n){
   return (h ? h + ':' + String(m).padStart(2,'0') : m) + ':' + String(sec).padStart(2,'0');
 }
 function wkBar(){
-  if(sheet.hidden) return; const p = prog(), n = curDay(p), d = p.sched[n-1], w = d && d.w && p.workouts[d.w]; if(!w) return;
+  if(sheet.hidden) return; const p = prog(), n = curDay(p), d = p.sched[n-1], w = d && d.w && wo(p, d.n); if(!w) return;
   const c = wkSets(p, n, w);
   const sc = document.getElementById('wsets'); if(sc) sc.textContent = `Set ${c.d}/${c.t}`;
   const br = document.getElementById('wbar'); if(br) br.style.width = (c.t ? c.d / c.t * 100 : 0) + '%';
 }
 setInterval(wkBar, 1000);
 function endWorkout(){
-  const p = prog(), n = curDay(p), d = p.sched[n-1], w = d && d.w && p.workouts[d.w]; if(!w) return closeSheet();
+  const p = prog(), n = curDay(p), d = p.sched[n-1], w = d && d.w && wo(p, d.n); if(!w) return closeSheet();
   const c = wkSets(p, n, w), t = wkElapsed(p, n), L = getLog(), k = p.id+'|'+n;
   if(L[k] && !L[k].t1){ L[k].t1 = Date.now(); store.set('log', JSON.stringify(L)); sbLogRow(k, L[k]); }
   if(RT) stopRest(); closeSheet();
@@ -2654,7 +2824,7 @@ function endWorkout(){
   else if(c.d) toast(`<b>Kết thúc buổi tập</b><span>${c.d}/${c.t} set</span>`);
 }
 function renderSheet(){
-  const p = prog(), n = curDay(p), w = p.workouts[p.sched[n-1].w], it = exIt(p, n, CUR), done = getDone(p,n);
+  const p = prog(), n = curDay(p), w = wo(p, n), it = exIt(p, n, CUR), done = getDone(p,n);
   const base = w.items[CUR], canSw = !it.jk && swList(base).length;
   let body;
   if(SWV){
@@ -2751,7 +2921,7 @@ function setAnim(){
 const EN = {
   "Không cần email. Nhớ kỹ mật khẩu vì chưa có chức năng lấy lại mật khẩu.":"No email needed. Remember your password — there is no password reset yet.","Tài khoản":"Account","ít nhất 6 ký tự":"at least 6 characters","Quay lại":"Back","Tháng trước":"Previous month","Tháng sau":"Next month","Buổi đầu tiên":"First workout","Xong buổi tập":"Workout done","Thuật ngữ":"Glossary","ⓘ Thuật ngữ":"ⓘ Glossary","Dumbbell · tại nhà":"Dumbbell · at home","Jeff Nippard · tại nhà":"Jeff Nippard · at home","Ignitor: tới thất bại":"Ignitor: to failure","Quá nặng":"Too heavy","Hơi nặng":"A bit heavy","Vừa sức":"Just right","Nhẹ quá":"Too light","Quá nhẹ":"Way too light","Cách tập mỗi bài: (1) làm 1 set thử tới thất bại, (2) nhập số rep làm được, (3) web cho biết cần tập thêm bao nhiêu rep và nghỉ bao lâu. Bấm vào bài để bắt đầu.":"How each exercise works: (1) do one test set to failure, (2) enter the reps you got, (3) the app tells you how many more reps to do and how long to rest. Tap an exercise to start.","Chọn mức tạ bạn nghĩ làm được":"Pick a weight you think you can do for",", rồi làm 1 set tới khi không nâng nổi nữa.":", then do one set until you can't lift any more.","Nhập số rep xong, web sẽ cho biết bạn cần tập thêm bao nhiêu và nghỉ bao lâu.":"After you enter your reps, the app tells you how much more to do and how long to rest.","Bớt":"Less","Thêm":"More","Tập ở nhà có tạ đơn":"Home with dumbbells","Ở nhà, không dụng cụ":"Home, no equipment","Chỉ tạ đơn, Ignitor + Box Score tự chỉnh theo sức":"Dumbbells only, Ignitor + Box Score adapt to you","Tập ở nhà có vài cặp tạ đơn":"Home with a few pairs of dumbbells","Toàn thân, gần như không cần dụng cụ, tới gần thất bại":"Full body, almost no equipment, close to failure","Ở nhà, không có phòng gym":"At home, no gym","Tài khoản và cài đặt":"Account and settings","Điều hướng":"Navigation","Đóng":"Close","Ảnh trước":"Previous photo","Ảnh sau":"Next photo","Tiếng Việt":"Tiếng Việt","Kiểu nhập":"Entry mode","Đổi cách ghi tạ":"Change weight mode","Nhóm cơ":"Muscles","Lỗi thường gặp":"Common mistakes","Số buổi mỗi tuần · 8 tuần gần nhất":"Workouts per week · last 8 weeks","Số buổi mỗi tuần":"Workouts per week","Tuần này":"This week","Biểu đồ chỉ số cơ thể":"Body metrics chart","Đổi bài":"Swap exercise","Tập ở nhà":"Home mode","Tập ở nhà: đổi bài máy/cáp/ghế sang tạ đơn":"Home mode: swap machine/cable/bench exercises for dumbbells","Chọn phase":"Choose phase","Chọn tuần":"Choose week","Tuần trước":"Previous week","Tuần sau":"Next week","Đánh dấu xong":"Mark done","Xong 1 buổi":"Finish 1 workout","Xong 10 buổi":"Finish 10 workouts","Xong 25 buổi":"Finish 25 workouts","Xong 50 buổi":"Finish 50 workouts","Xong 100 buổi":"Finish 100 workouts","Xong 200 buổi":"Finish 200 workouts","Tuần nào cũng tập, 2 tuần liên tiếp":"Train every week, 2 weeks in a row","2 tuần liền":"2-week streak","4 tuần liền":"4-week streak","8 tuần liền":"8-week streak","12 tuần liền":"12-week streak","Tập đều 4 tuần liên tiếp":"Train 4 weeks in a row","Tập đều 8 tuần liên tiếp":"Train 8 weeks in a row","Tập đều 12 tuần liên tiếp":"Train 12 weeks in a row","Tháng chăm":"Busy month","12 buổi trong 1 tháng":"12 workouts in a month","Tháng thép":"Iron month","20 buổi trong 1 tháng":"20 workouts in a month","Kỷ lục đầu tiên":"First PR","Phá kỷ lục 1 bài":"Set a PR on any exercise","10 kỷ lục":"10 PRs","Phá kỷ lục 10 lần":"Set 10 PRs","25 kỷ lục":"25 PRs","Phá kỷ lục 25 lần":"Set 25 PRs","Ghi chép chăm":"Diligent logger","Ghi tạ cho 100 set":"Log weight for 100 sets","Đẩy ngực tạ đòn 60kg":"Barbell bench 60kg","Đẩy ngực tạ đòn 80kg":"Barbell bench 80kg","10 tấn trong 1 buổi":"10 tonnes in one workout","Ghi chỉ số cơ thể 4 lần":"Log body metrics 4 times","Giảm 5% mỡ":"Lose 5% body fat","Mỡ cơ thể giảm 5% so với lần đo đầu":"Body fat down 5% from first measurement","5 buổi bắt đầu trước 7h sáng":"5 workouts started before 7 am","5 buổi bắt đầu sau 21h":"5 workouts started after 9 pm","Tập lại sau 2 tuần nghỉ":"Come back after a 2-week break","Xong trọn 1 chương trình":"Finish a whole program","Gợi ý cho bạn":"Suggested for you","Chọn chương trình này":"Choose this program","Xem tất cả chương trình":"See all programs","Bỏ qua":"Skip","Hợp nhất":"Best fit","Mục tiêu chính của bạn?":"What's your main goal?","Trước":"Front","Chính:":"Primary:","Phụ:":"Secondary:","Đánh dấu đã tập đến ngày…":"Mark done up to day…","Máy bận? Đổi bài":"Machine busy? Swap","Chỉ cần nhập ô nào có số, ô khác để trống.":"Fill only the values you have.",
   'Kết thúc':'End','Bắt đầu buổi tập':'Start workout','Tiếp tục':'Continue','Kết thúc buổi tập':'Workout ended',
-  'Tiến bộ':'Progress','Tài khoản & cài đặt':'Account & settings','Ngôn ngữ':'Language','Nhập set':'Set entry','Chi tiết = ghi tạ và rep từng set':'Detail = log weight and reps per set','Giữ màn hình sáng':'Keep screen on','Khi đang ở trang Hôm nay':'While on the Today page','Bảng xếp hạng tháng':'Monthly leaderboard','Huy hiệu':'Badges','Nhóm cơ · tuần này':'Muscles · this week','Tuần này chưa có set nào. Tập xong vài set là bản đồ cơ sẽ hiện ở đây.':'No sets this week yet. Log a few sets and the muscle map shows up here.','Nghỉ bài này':'Rest for this exercise','(tự động)':'(auto)','↺ Tự động':'↺ Auto','Đẩy ngực tạ đòn 100kg':'Barbell bench 100kg','📖 Hướng dẫn sử dụng':'📖 User guide','Cách dùng toàn bộ app, có ảnh minh hoạ':'How to use the whole app, with screenshots','📖 Lần đầu dùng? Xem hướng dẫn ›':'📖 New here? Read the guide ›','Tạ đòn ghi theo':'Barbell weight','Tổng':'Total','Mỗi bên':'Per side','Mỗi bên = số bánh 1 bên, web tự cộng đòn 20kg':'Per side = plates on one side, the bar (20kg) is added for you','Kg/bên':'Kg/side','Kg tổng':'Kg total','Tạ đòn: ghi mỗi bên':'Barbell: per side','Nhập số bánh 1 bên, web tự cộng đòn':'Enter plates on one side, the bar is added','Tạ đòn: ghi tổng':'Barbell: total','Nhập tổng kg kể cả đòn':'Enter total kg including the bar','⇄ Máy bận? Đổi bài':'⇄ Machine busy? Swap','Máy bận? Đổi bài':'Machine busy? Swap','Chọn bài cùng nhóm cơ, giữ số set/rep. Chỉ đổi cho buổi này.':'Pick an exercise for the same muscle, same sets/reps. Only for this workout.','Bài gốc':'Original','Dùng bài này cho buổi hôm nay':'Use this for today','Đã đổi bài cho buổi này':'Swapped for this workout','Nhập kg để xem cần lắp bánh tạ nào':'Enter kg to see which plates to load','mỗi bên':'per side','Chim sớm':'Early bird','Cú đêm':'Night owl','Trở lại':'Comeback','Về đích':'Finisher','Buổi khủng':'Monster session','Đo đều':'Consistent tracker','Sắp đạt':'Almost there','Đẩy ngực tạ đòn 100kg':'Barbell bench 100kg','Tổng khối lượng 10 tấn (kg × rep)':'Total volume 10 t (kg × reps)','Tổng khối lượng 100 tấn':'Total volume 100 t','Tổng khối lượng 1.000 tấn':'Total volume 1,000 t','Lần đo đầu tiên':'First measurement','Ghi chỉ số cơ thể lần đầu':'Log body metrics once','Giảm 2% mỡ':'Lose 2% body fat','Mỡ cơ thể giảm 2% so với lần đo đầu':'Body fat down 2% from first measurement','10 tấn':'10 tonnes','100 tấn':'100 tonnes','1.000 tấn':'1,000 tonnes','Kết thúc buổi':'Workout ended','Chỉ số cơ thể':'Body metrics','+ Nhập':'+ Add','Ghi cân nặng & mỡ cơ thể':'Log weight & body fat','Cân nặng và % mỡ. Lâu lâu đo thì nhập, web vẽ biểu đồ.':'Weight and body fat %. Add whenever you measure; the app draws the chart.','Mỡ cơ thể':'Body fat','Cân nặng (kg)':'Weight (kg)','Nhập cân nặng hoặc mỡ cơ thể.':'Enter weight or body fat.','Nhập cân nặng để đổi kg mỡ ra %.':'Enter weight to convert fat kg to %.','Cân nặng, % mỡ, cơ xương, mỡ nội tạng. Lâu lâu đo thì nhập, web vẽ biểu đồ.':'Weight, body fat %, muscle mass, visceral fat. Add whenever you measure; the app draws the chart.','Cân nặng':'Weight','Mỡ':'Body fat','Cơ xương':'Muscle','Mỡ nội tạng':'Visceral fat','Ngày đo':'Date','Chỉ cần nhập ô nào có số, ô khác để trống.':'Fill only the values you have.','Xoá lần đo này':'Delete this entry','Nhập ít nhất một chỉ số.':'Enter at least one value.','Đã lưu chỉ số':'Saved','đến lúc đo lại':'time to measure again','Chỉ xem huy hiệu đã có':'Show earned only','Chưa có huy hiệu nào. Xong buổi đầu tiên để nhận huy hiệu đầu.':'No badges yet. Finish your first workout to earn one.','buổi xong ·':'workouts ·','ngày có tập':'training days',
+  'Tiến bộ':'Progress','Tài khoản & cài đặt':'Account & settings','Ngôn ngữ':'Language','Nhập set':'Set entry','Chi tiết = ghi tạ và rep từng set':'Detail = log weight and reps per set','Giữ màn hình sáng':'Keep screen on','Khi đang ở trang Hôm nay':'While on the Today page','Bảng xếp hạng tháng':'Monthly leaderboard','Huy hiệu':'Badges','📚 Thư viện bài tập':'📚 Exercise library','Nhóm cơ · tuần này':'Muscles · this week','Tuần này chưa có set nào. Tập xong vài set là bản đồ cơ sẽ hiện ở đây.':'No sets this week yet. Log a few sets and the muscle map shows up here.','Nghỉ bài này':'Rest for this exercise','(tự động)':'(auto)','↺ Tự động':'↺ Auto','Đẩy ngực tạ đòn 100kg':'Barbell bench 100kg','📖 Hướng dẫn sử dụng':'📖 User guide','Cách dùng toàn bộ app, có ảnh minh hoạ':'How to use the whole app, with screenshots','📖 Lần đầu dùng? Xem hướng dẫn ›':'📖 New here? Read the guide ›','Tạ đòn ghi theo':'Barbell weight','Tổng':'Total','Mỗi bên':'Per side','Mỗi bên = số bánh 1 bên, web tự cộng đòn 20kg':'Per side = plates on one side, the bar (20kg) is added for you','Kg/bên':'Kg/side','Kg tổng':'Kg total','Tạ đòn: ghi mỗi bên':'Barbell: per side','Nhập số bánh 1 bên, web tự cộng đòn':'Enter plates on one side, the bar is added','Tạ đòn: ghi tổng':'Barbell: total','Nhập tổng kg kể cả đòn':'Enter total kg including the bar','⇄ Máy bận? Đổi bài':'⇄ Machine busy? Swap','Máy bận? Đổi bài':'Machine busy? Swap','Chọn bài cùng nhóm cơ, giữ số set/rep. Chỉ đổi cho buổi này.':'Pick an exercise for the same muscle, same sets/reps. Only for this workout.','Bài gốc':'Original','Dùng bài này cho buổi hôm nay':'Use this for today','Đã đổi bài cho buổi này':'Swapped for this workout','Nhập kg để xem cần lắp bánh tạ nào':'Enter kg to see which plates to load','mỗi bên':'per side','Chim sớm':'Early bird','Cú đêm':'Night owl','Trở lại':'Comeback','Về đích':'Finisher','Buổi khủng':'Monster session','Đo đều':'Consistent tracker','Sắp đạt':'Almost there','Đẩy ngực tạ đòn 100kg':'Barbell bench 100kg','Tổng khối lượng 10 tấn (kg × rep)':'Total volume 10 t (kg × reps)','Tổng khối lượng 100 tấn':'Total volume 100 t','Tổng khối lượng 1.000 tấn':'Total volume 1,000 t','Lần đo đầu tiên':'First measurement','Ghi chỉ số cơ thể lần đầu':'Log body metrics once','Giảm 2% mỡ':'Lose 2% body fat','Mỡ cơ thể giảm 2% so với lần đo đầu':'Body fat down 2% from first measurement','10 tấn':'10 tonnes','100 tấn':'100 tonnes','1.000 tấn':'1,000 tonnes','Kết thúc buổi':'Workout ended','Chỉ số cơ thể':'Body metrics','+ Nhập':'+ Add','Ghi cân nặng & mỡ cơ thể':'Log weight & body fat','Cân nặng và % mỡ. Lâu lâu đo thì nhập, web vẽ biểu đồ.':'Weight and body fat %. Add whenever you measure; the app draws the chart.','Mỡ cơ thể':'Body fat','Cân nặng (kg)':'Weight (kg)','Nhập cân nặng hoặc mỡ cơ thể.':'Enter weight or body fat.','Nhập cân nặng để đổi kg mỡ ra %.':'Enter weight to convert fat kg to %.','Cân nặng, % mỡ, cơ xương, mỡ nội tạng. Lâu lâu đo thì nhập, web vẽ biểu đồ.':'Weight, body fat %, muscle mass, visceral fat. Add whenever you measure; the app draws the chart.','Cân nặng':'Weight','Mỡ':'Body fat','Cơ xương':'Muscle','Mỡ nội tạng':'Visceral fat','Ngày đo':'Date','Chỉ cần nhập ô nào có số, ô khác để trống.':'Fill only the values you have.','Xoá lần đo này':'Delete this entry','Nhập ít nhất một chỉ số.':'Enter at least one value.','Đã lưu chỉ số':'Saved','đến lúc đo lại':'time to measure again','Chỉ xem huy hiệu đã có':'Show earned only','Chưa có huy hiệu nào. Xong buổi đầu tiên để nhận huy hiệu đầu.':'No badges yet. Finish your first workout to earn one.','buổi xong ·':'workouts ·','ngày có tập':'training days',
   'Đơn giản':'Simple','Chi tiết':'Detail',
   'Mục tiêu':'Target','Kg':'Kg','Rep':'Reps','Set':'Set','TB':'FAIL','tăng tạ':'add weight','Hết giờ nghỉ!':'Rest over!','Vào set':'Go','Số mờ là gợi ý. Tập đúng thì bấm':'Grey numbers are suggestions. Matched them? Tap','Tập xong set nào bấm':'After each set tap','set đó, web tự đếm giờ nghỉ.':'for it, the rest timer starts.',', khác thì sửa số rồi bấm ✓.':', otherwise edit the numbers then tap ✓.','tối đa':'max',
   'Đồng bộ cloud đang bật':'Cloud sync on','Chỉ lưu trên máy này':'Saved on this device only','Khởi động':'Warm-up','Tạ thêm (kg)':'Added weight (kg)','Tạ (kg)':'Weight (kg)','Lưu':'Save','Bỏ tick set này':'Untick this set','Đang sửa set đã xong':'Editing a finished set','xong':'done',
@@ -2909,7 +3079,7 @@ function openDatePicker(p){
       const lb = weekLabel(p, wk*7);
       body = `<p class="dp-q">Hôm nay bạn tập buổi nào? Trang sẽ tự tính ngày bắt đầu.</p>
         <div class="dp-nav"><button data-wk="-1" ${wk<=0?'disabled':''}>‹</button><b>${esc(wl)}${lb?' · '+esc(lb):''}</b><button data-wk="1" ${wk>=NW-1?'disabled':''}>›</button></div>
-        <div class="dp-days">${days.map(d => { const w = d.w && p.workouts[d.w];
+        <div class="dp-days">${days.map(d => { const w = d.w && wo(p, d.n);
           return w ? `<button class="dp-day" data-n="${d.n}"><span>Ngày ${d.n}</span><b>${esc(w.title)}</b></button>` : `<div class="dp-day rest"><span>Ngày ${d.n}</span><b>Nghỉ</b></div>`; }).join('')}</div>`;
     } else {
       const y = view.getFullYear(), m = view.getMonth();
