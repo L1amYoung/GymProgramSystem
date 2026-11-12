@@ -889,7 +889,7 @@ html{touch-action:manipulation;scroll-behavior:auto!important}
 .tnote{margin-top:4px;font-size:13px;font-weight:700;color:var(--ss);line-height:1.35}
 .mhero em{margin-left:auto;font-style:normal;font-size:13px;font-weight:800;color:var(--sub)}
 .mdots{max-width:none!important} .mdw,.mdg{grid-template-columns:repeat(7,1fr)!important;gap:4px!important}
-.mdg i{width:auto!important;height:auto!important;min-height:40px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;border-radius:8px!important;font-style:normal}
+.mdg i{width:auto!important;height:auto!important;min-height:36px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;border-radius:8px!important;font-style:normal}
 .mdg i b{font-size:11px;font-weight:800;color:var(--sub)} .mdg i small{font-size:9px;font-weight:800;line-height:1.1;text-align:center;color:var(--faint);white-space:nowrap;overflow:hidden;max-width:100%}
 .mdg i.d b,.mdg i.d small{color:#06281a} .mdg i.p small{color:var(--ink)}
 .plt{display:flex;flex-wrap:wrap;align-items:center;gap:5px;margin:10px 2px 0;font-size:13px}
@@ -1359,7 +1359,7 @@ function openSettings(){
         ${tg(`<div class="lmode"><button data-sm="0" aria-selected="${!LOGW()}">Đơn giản</button><button data-sm="1" aria-selected="${LOGW()}">Chi tiết</button></div>`, 0, 'Nhập set', 'Chi tiết = ghi tạ và rep từng set')}
         ${tg('<span class="gch">›</span>', 0, `<a class="gdl" href="guide.html">${ICO.book} ${EL('Hướng dẫn sử dụng', 'User guide')}</a>`, 'Cách dùng toàn bộ app, có ảnh minh hoạ')}
         ${WLOK ? tg(`<label class="lwt"><input type="checkbox" id="swk" ${WAKE ? 'checked' : ''}><span></span></label>`, 0, 'Giữ màn hình sáng', 'Khi đang ở trang Hôm nay') : ''}
-      </div><p class="appv">${LANG === 'en' ? 'Version' : 'Phiên bản'} dce0ab896c</p></div>`;
+      </div><p class="appv">${LANG === 'en' ? 'Version' : 'Phiên bản'} 75b55dffb2</p></div>`;
     ov.querySelector('[data-x]').onclick = () => ov.remove();
     bindAcct(ov);
     ov.querySelectorAll('[data-sl]').forEach(b => b.onclick = () => { LANG = b.dataset.sl; store.set('lang', LANG); document.documentElement.lang = LANG; tabs.innerHTML = ''; renderNow(); if(!sheet.hidden){ sheet.innerHTML = ''; renderSheet(); } draw(); trTree(ov); });
@@ -1846,7 +1846,7 @@ function bodyHtml(){
   const has = BM.filter(([k]) => val(L.length-1, k) >= 0); if(!has.some(m => m[0] === BMK)) BMK = has[0][0];
   h += `<div class="bdt">${has.map(([k, lab, u, good]) => { const i = val(L.length-1, k), v = L[i][k], j = val(i-1, k);
     const df = j < 0 ? 0 : Math.round((v - L[j][k]) * 10) / 10, cls = !df || !good ? '' : (df * good > 0 ? 'g' : 'b');
-    return `<button class="${k === BMK ? 'on' : ''}" data-bk="${k}"><span>${lab}</span><b>${nfmt(v)}<small>${u}</small></b><i class="${cls}">${df ? (df > 0 ? '▲ ' : '▼ ') + nfmt(Math.abs(df)) : '–'}</i></button>`; }).join('')}</div>`;
+    return `<button class="${k === BMK ? 'on' : ''}" data-bk="${k}"><span>${lab}</span><b>${nfmt(v)}<small>${u}</small></b>${j < 0 ? '' : `<i class="${cls}">${df ? (df > 0 ? '▲ ' : '▼ ') + nfmt(Math.abs(df)) : EL('không đổi', 'no change')}</i>`}</button>`; }).join('')}</div>`;
   const pts = L.filter(e => e[BMK] != null).slice(-12), u = BM.find(m => m[0] === BMK)[2];
   if(pts.length >= 2){
     const W = 320, H = 110, pl = 8, pr = 8, pt = 22, pb = 18, ys = pts.map(e => e[BMK]), mn = Math.min(...ys), mx = Math.max(...ys), sp = (mx - mn) || 1;
@@ -1969,12 +1969,11 @@ function bindPseg(root){ root.querySelectorAll('[data-ps]').forEach(b => b.oncli
 function monthCard(Y, M, done, list){
   const p = prog(), st = p && store.get('start-' + p.id), today = isoDay(), dim = new Date(Y, M, 0).getDate(), ym = `${Y}-${String(M).padStart(2, '0')}`;
   const doneD = new Set(done.map(e => e.d)), partD = new Set(list.filter(e => e.k > 0 && !(e.k >= e.of)).map(e => e.d)), planD = new Set(), LBL = {};
-  if(st){ const a = new Date(st + 'T00:00:00'); for(let i = 1; i <= dim; i++){ const dt = new Date(Y, M - 1, i), n = Math.round((dt - a) / 864e5) + 1, d = p.sched[n - 1]; if(d && d.w){ planD.add(isoDay(dt)); LBL[isoDay(dt)] = lab(p.workouts[d.w].title); } } }
-  list.forEach(e => { if(e.w) LBL[e.d] = lab(e.w); });
+  if(st){ const a = new Date(st + 'T00:00:00'); for(let i = 1; i <= dim; i++){ const dt = new Date(Y, M - 1, i), n = Math.round((dt - a) / 864e5) + 1, d = p.sched[n - 1]; if(d && d.w){ planD.add(isoDay(dt)); } } }
   const plan = planD.size, nd = done.length;
   const first = (new Date(Y, M - 1, 1).getDay() + 6) % 7;
   const cells = Array.from({length: first}, () => '<i class="e"></i>').join('') + Array.from({length: dim}, (_, k) => { const ds = `${ym}-${String(k + 1).padStart(2, '0')}`;
-    return `<i class="${doneD.has(ds) ? 'd' : partD.has(ds) ? 'p' : planD.has(ds) && ds < today ? 'm' : planD.has(ds) ? 'f' : ''} ${ds === today ? 't' : ''}"><b>${k + 1}</b>${LBL[ds] ? `<small>${esc(LBL[ds])}</small>` : ''}</i>`; }).join('');
+    return `<i class="${doneD.has(ds) ? 'd' : partD.has(ds) ? 'p' : planD.has(ds) && ds < today ? 'm' : planD.has(ds) ? 'f' : ''} ${ds === today ? 't' : ''}"><b>${k + 1}</b></i>`; }).join('');
   return `<div class="mhero"><div><b>${nd}</b><span>${plan ? EL(`/ ${plan} buổi theo lịch`, `/ ${plan} planned`) : EL('buổi xong', 'workouts')}</span><em>${doneD.size} ${EL('ngày có tập', 'training days')}</em></div>${plan ? `<div class="mbar"><i style="width:${Math.min(100, nd / plan * 100)}%"></i></div>` : ''}</div>
     <div class="mdots"><div class="mdw">${(LANG === 'en' ? ['M', 'T', 'W', 'T', 'F', 'S', 'S'] : ['T2', 'T3', 'T4', 'T5', 'T6', 'T7', 'CN']).map(x => `<span>${x}</span>`).join('')}</div><div class="mdg">${cells}</div><div class="mlg"><span><i class="d"></i>${EL('Đã tập', 'Done')}</span>${plan ? `<span><i class="f"></i>${EL('Có lịch', 'Planned')}</span><span><i class="m"></i>${EL('Bỏ lỡ', 'Missed')}</span>` : ''}</div></div>
 `;
