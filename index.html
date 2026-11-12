@@ -751,7 +751,7 @@ html{touch-action:manipulation;scroll-behavior:auto!important}
 .wk2s{padding:10px 14px;border-top:1px solid var(--line);font-size:13.5px} .wk2s span{display:block;font-size:12px;color:var(--sub);font-weight:800;margin-bottom:4px}
 .wk2s p{margin:2px 0;color:#d9d9de} .wk2s p b{color:var(--ink)}
 .calrow{display:grid;grid-template-columns:1fr auto;gap:2px 10px;width:100%;margin:0 0 10px;padding:12px 14px;text-align:left;border:1px solid color-mix(in srgb,var(--ok) 40%,var(--line));border-radius:14px;background:linear-gradient(135deg,rgba(61,220,151,.12),var(--card));color:var(--ink);font:inherit}
-.calrow span{font-size:14px;font-weight:800} .calrow b{font-size:16px;grid-row:span 2;align-self:center} .calrow small{font-size:12px;color:var(--sub);font-weight:600}
+.calrow span{font-size:14px;font-weight:800} .calrow b{font-size:16px;grid-row:span 2;align-self:center} .calrow small{grid-column:1;font-size:12px;color:var(--sub);font-weight:600;line-height:1.35}
 .calov .cbox{width:min(420px,100%);max-height:88vh;overflow:auto}
 .calf{display:grid;grid-template-columns:1fr 1fr;gap:0 10px} .calf .field{margin-top:8px}
 .cseg{display:grid!important;grid-auto-flow:column;grid-auto-columns:1fr;margin-top:2px} .cseg button{padding:9px 6px!important;font-size:13px!important}
@@ -1224,7 +1224,7 @@ function openSettings(){
         ${tg(`<div class="lmode"><button data-sm="0" aria-selected="${!LOGW()}">Đơn giản</button><button data-sm="1" aria-selected="${LOGW()}">Chi tiết</button></div>`, 0, 'Nhập set', 'Chi tiết = ghi tạ và rep từng set')}
         ${tg('<span class="gch">›</span>', 0, '<a class="gdl" href="guide.html">📖 Hướng dẫn sử dụng</a>', 'Cách dùng toàn bộ app, có ảnh minh hoạ')}
         ${WLOK ? tg(`<label class="lwt"><input type="checkbox" id="swk" ${WAKE ? 'checked' : ''}><span></span></label>`, 0, 'Giữ màn hình sáng', 'Khi đang ở trang Hôm nay') : ''}
-      </div><p class="appv">${LANG === 'en' ? 'Version' : 'Phiên bản'} 2d118a323f</p></div>`;
+      </div><p class="appv">${LANG === 'en' ? 'Version' : 'Phiên bản'} 57210e14e2</p></div>`;
     ov.querySelector('[data-x]').onclick = () => ov.remove();
     bindAcct(ov);
     ov.querySelectorAll('[data-sl]').forEach(b => b.onclick = () => { LANG = b.dataset.sl; store.set('lang', LANG); document.documentElement.lang = LANG; tabs.innerHTML = ''; renderNow(); if(!sheet.hidden){ sheet.innerHTML = ''; renderSheet(); } draw(); trTree(ov); });
