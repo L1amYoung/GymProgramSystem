@@ -897,6 +897,13 @@ html{touch-action:manipulation;scroll-behavior:auto!important}
 .rtv{display:flex;align-items:baseline;flex-wrap:wrap;gap:4px 8px;margin:4px 0 6px} .rtv b{font-size:28px;line-height:1.15} .rtv b small{font-size:13px;color:var(--sub);margin-left:2px}
 .rtv em{font-style:normal;font-size:13px;font-weight:800;color:var(--sub)} .rtv i{flex-basis:100%;font-style:normal;font-size:13px;font-weight:800} .rtv i.g{color:var(--ok)} .rtv i.w{color:#f5a524}
 .rtc p{margin:0;font-size:13px;color:var(--sub);line-height:1.4} .rtc .lk{border:0;background:none;padding:0;color:var(--acc2);font:inherit;font-weight:800}
+.svseg{position:sticky}
+.svseg::before{content:'';position:absolute;top:3px;bottom:3px;left:3px;width:calc(50% - 4px);border-radius:999px;background:var(--card);box-shadow:0 1px 0 var(--line);transition:transform .24s cubic-bezier(.2,.8,.2,1)}
+.svseg[data-on="info"]::before{transform:translateX(calc(100% + 2px))}
+.svseg button{position:relative;z-index:1;transition:color .2s} .svseg button[aria-selected="true"]{background:none!important;box-shadow:none!important}
+.sh-body .wrap.svout>*:not(.svseg){opacity:0;transform:translateX(var(--svx,-12px));transition:opacity .11s ease,transform .11s ease}
+.sh-body .anim-svl>*:not(.svseg){animation:slideL .26s cubic-bezier(.2,.8,.2,1) both} .sh-body .anim-svr>*:not(.svseg){animation:slideR .26s cubic-bezier(.2,.8,.2,1) both}
+@media (prefers-reduced-motion:reduce){.svseg::before{transition:none}.sh-body .anim-svl>*,.sh-body .anim-svr>*{animation:none!important}}
 .plt{display:flex;flex-wrap:wrap;align-items:center;gap:5px;margin:10px 2px 0;font-size:13px}
 .plt>b{font-size:15px;margin-right:2px} .plt .pl0{color:var(--sub);font-weight:700}
 .pq{font-style:normal;display:inline-grid;place-items:center;min-width:26px;height:26px;padding:0 5px;border-radius:8px;font-size:11px;font-weight:900;color:#fff;background:#555}
@@ -1364,7 +1371,7 @@ function openSettings(){
         ${tg(`<div class="lmode"><button data-sm="0" aria-selected="${!LOGW()}">Đơn giản</button><button data-sm="1" aria-selected="${LOGW()}">Chi tiết</button></div>`, 0, 'Nhập set', 'Chi tiết = ghi tạ và rep từng set')}
         ${tg('<span class="gch">›</span>', 0, `<a class="gdl" href="guide.html">${ICO.book} ${EL('Hướng dẫn sử dụng', 'User guide')}</a>`, 'Cách dùng toàn bộ app, có ảnh minh hoạ')}
         ${WLOK ? tg(`<label class="lwt"><input type="checkbox" id="swk" ${WAKE ? 'checked' : ''}><span></span></label>`, 0, 'Giữ màn hình sáng', 'Khi đang ở trang Hôm nay') : ''}
-      </div><p class="appv">${LANG === 'en' ? 'Version' : 'Phiên bản'} 90586cd4ba</p></div>`;
+      </div><p class="appv">${LANG === 'en' ? 'Version' : 'Phiên bản'} bc97e34eb0</p></div>`;
     ov.querySelector('[data-x]').onclick = () => ov.remove();
     bindAcct(ov);
     ov.querySelectorAll('[data-sl]').forEach(b => b.onclick = () => { LANG = b.dataset.sl; store.set('lang', LANG); document.documentElement.lang = LANG; tabs.innerHTML = ''; renderNow(); if(!sheet.hidden){ sheet.innerHTML = ''; renderSheet(); } draw(); trTree(ov); });
@@ -3086,7 +3093,7 @@ function renderSheet(){
   } else {
     const e = {n: it.name, v: it.v, fe: it.fe};
     if(SVK !== n + '|' + CUR){ SVK = n + '|' + CUR; SVIEW = 'do'; }
-    const seg = `<div class="svseg" role="tablist"><button data-sv="do" aria-selected="${SVIEW === 'do'}">${EL('Tập', 'Workout')}</button><button data-sv="info" aria-selected="${SVIEW === 'info'}">${EL('Hướng dẫn', 'How to')}</button></div>`;
+    const seg = `<div class="svseg" role="tablist" data-on="${SVIEW}"><button data-sv="do" aria-selected="${SVIEW === 'do'}">${EL('Tập', 'Workout')}</button><button data-sv="info" aria-selected="${SVIEW === 'info'}">${EL('Hướng dẫn', 'How to')}</button></div>`;
     const thumb = e.fe ? `<img src="${esc(exImg(e.fe, 0))}" alt="">` : e.v && e.v[0] ? `<img src="https://i.ytimg.com/vi/${esc(e.v[0])}/default.jpg" alt="">` : '';
     const head = `<div class="exh"><button class="exth" data-sv="info" aria-label="${EL('Xem hướng dẫn', 'See how-to')}">${thumb || '<span>ⓘ</span>'}</button><div class="exn"><div class="ttl" style="view-transition-name:ex-title">${esc(it.name)}</div><small>${esc(it.s)} · ${esc(it.reps || '')}</small></div></div>${it.sw0 ? `<button class="swfrom" data-swfrom>${EL('Đã đổi từ', 'Swapped from')} <b>${esc(it.sw0)}</b> · ${EL('đổi lại', 'change')}</button>` : ''}`;
     body = SVIEW === 'info'
@@ -3103,7 +3110,10 @@ function renderSheet(){
     <div class="sh-foot"><button id="prv" ${CUR<=0?'disabled':''}>‹ Trước</button><button class="done" id="dn" aria-pressed="${done.has(CUR)}">${done.has(CUR)?'✓ Đã xong':'Xong bài'}</button><button id="nxt" ${CUR>=w.items.length-1?'disabled':''}>${!SWV && it.k && w.items[CUR+1] && w.items[CUR+1].s[0]===it.s[0] ? 'Tiếp: '+esc(w.items[CUR+1].s)+' ›' : 'Tiếp ›'}</button></div>`;
   const bind = () => {
   document.getElementById('shx').onclick = () => closeSheet();
-  sheet.querySelectorAll('[data-sv]').forEach(b => b.onclick = () => { if(SVIEW === b.dataset.sv) return; SVIEW = b.dataset.sv; SDIR = ''; renderSheet(); const sb = document.getElementById('shb'); if(sb) sb.scrollTop = 0; });
+  sheet.querySelectorAll('[data-sv]').forEach(b => b.onclick = () => { if(SVIEW === b.dataset.sv) return; const to = b.dataset.sv, sg = sheet.querySelector('.svseg'), wr = sheet.querySelector('.sh-body .wrap');
+    if(sg){ sg.dataset.on = to; sg.querySelectorAll('[data-sv]').forEach(x => x.setAttribute('aria-selected', x.dataset.sv === to)); }
+    SVIEW = to; SDIR = to === 'info' ? 'svl' : 'svr'; if(wr && !RM){ wr.style.setProperty('--svx', to === 'info' ? '-12px' : '12px'); wr.classList.add('svout'); }
+    renderSheet(); });
   const sf = sheet.querySelector('[data-swfrom]'); if(sf) sf.onclick = () => { const p0 = prog(); openSwap(p0, curDay(p0), CUR); };
   document.getElementById('wend').onclick = endWorkout;
   document.getElementById('prv').onclick = () => { CUR--; SWV=null; SDIR='r'; renderSheet(); };
@@ -3141,10 +3151,11 @@ function renderSheet(){
   const imgs = [...tmp.querySelectorAll('.sh-body img')];
   imgs.forEach(im => { im.loading = 'eager'; });
   const token = ++SWAPTOK;
-  Promise.race([
+  const SV = /^sv/.test(anim), wait = ms => new Promise(r => setTimeout(r, ms));
+  Promise.all([Promise.race([
     Promise.all(imgs.map(im => im.decode ? im.decode().catch(() => {}) : Promise.resolve())),
-    new Promise(r => setTimeout(r, 350))
-  ]).then(() => {
+    wait(SV ? 60 : 350)
+  ]), SV ? wait(110) : 0]).then(() => {
     if(token !== SWAPTOK || sheet.hidden) return;
     const keep = anim === 'fade' ? (document.getElementById('shb') || {}).scrollTop || 0 : 0;
     const doSwap = () => { sheet.replaceChildren(...tmp.childNodes); bind(); if(keep) document.getElementById('shb').scrollTop = keep; };
