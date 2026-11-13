@@ -111,6 +111,9 @@ button{font:inherit;color:inherit;cursor:pointer}
 .sub{font-size:13px;color:var(--faint);font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .chk{width:40px;height:40px;border-radius:50%;border:2px solid var(--line);background:none;display:grid;place-items:center;font-size:17px;font-weight:800;color:transparent}
 .chk[aria-pressed="true"]{background:var(--ok);border-color:var(--ok);color:#06331f}
+.chk,.tck{position:relative;font-size:0!important;line-height:0}
+.chk::after,.tck::after{content:'';position:absolute;left:50%;top:50%;width:7px;height:13px;border:solid currentColor;border-width:0 2.5px 2.5px 0;border-radius:1px;transform:translate(-50%,-62%) rotate(45deg)}
+.gchk::after{width:6px;height:11px}
 .row.done .info b{color:var(--sub)}
 .row.done .th img{opacity:.55}
 .foot{color:var(--faint);font-size:13px;margin:22px 2px 8px;line-height:1.5}
@@ -161,7 +164,7 @@ html[lang=en] .pcard[aria-current="true"] .tx b::after{content:"  Current"}
 /* focus sheet */
 .sheet{position:fixed;inset:0;z-index:20;background:var(--bg);display:flex;flex-direction:column}
 .sh-top{flex:none;display:flex;align-items:center;gap:10px;padding:calc(8px + env(safe-area-inset-top,0px)) var(--sr) 8px var(--sl);border-bottom:1px solid var(--line)}
-.sh-top .x{width:40px;height:40px;border-radius:50%;border:1px solid var(--line);background:var(--card);font-size:17px}
+.sh-top .x{width:40px;height:40px;border-radius:50%;border:1px solid var(--line);background:var(--card);color:var(--ink)}
 .sh-top .pos{flex:1;font-size:13px;font-weight:800;color:var(--sub)}
 .sh-body{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch}
 .sh-body .wrap{padding-bottom:24px}
@@ -788,7 +791,12 @@ html{touch-action:manipulation;scroll-behavior:auto!important}
 .calrow.cal0 em{grid-column:2;grid-row:1/span 2;align-self:center;font-style:normal;font-size:13px;font-weight:900;color:#06281a;background:var(--ok);border-radius:999px;padding:8px 12px;white-space:nowrap}
 .tabs button.dotnew svg{overflow:visible} .tabs button.dotnew{position:relative} .tabs button.dotnew::after{content:"";position:absolute;top:8px;left:calc(50% + 9px);width:8px;height:8px;border-radius:50%;background:#ff5a5f;box-shadow:0 0 0 2px #151517}
 .calrow.cal1 span{grid-column:1;grid-row:1} .calrow.cal1 b{grid-column:2;grid-row:1;text-align:right} .calrow.cal1 small{grid-column:1;grid-row:2} .calrow.cal1 em{grid-column:2;grid-row:2;justify-self:end;font-style:normal;font-size:13px;font-weight:800;color:var(--ok);border:1px solid color-mix(in srgb,var(--ok) 50%,transparent);border-radius:999px;padding:2px 9px}
-.cele.acc .x{position:sticky;top:0;float:right;z-index:3;width:40px;height:40px;margin:-10px -8px 0 8px;border:0;border-radius:50%;background:var(--ink);color:#111;font-size:17px;font-weight:900;box-shadow:0 4px 14px -4px rgba(0,0,0,.6)}
+.cele.acc .x{position:sticky;top:0;float:right;z-index:3;width:36px;height:36px;margin:-8px -6px 0 8px;border:1px solid var(--line);border-radius:50%;background:var(--card2);color:var(--ink);box-shadow:0 4px 14px -6px rgba(0,0,0,.6)}
+button.x{padding:0!important;font-size:0!important;line-height:0;color:var(--ink)} .sh-top .x,.sdpill .x{position:relative}
+button.x::before,button.x::after{content:'';position:absolute;inset:0;margin:auto;width:14px;height:2px;border-radius:2px;background:currentColor;transform:rotate(45deg)}
+button.x::after{transform:rotate(-45deg)}
+.sdpill .x::before,.sdpill .x::after{width:12px}
+button.x:active{transform:scale(.92)}
 .cele.acc .cbox{max-height:88vh;overflow:auto;overscroll-behavior:contain}
 .cedit{position:relative;margin-left:auto;width:34px;height:34px;padding:0;border:1px solid var(--line);background:var(--card);border-radius:50%;font-size:15px;line-height:1}
 .cedit.on{border-color:var(--acc2);box-shadow:inset 0 0 0 1px var(--acc2)} .cedit.on::after{content:'';position:absolute;top:-1px;right:-1px;width:9px;height:9px;border-radius:50%;background:var(--acc2);box-shadow:0 0 0 2px var(--bg)}
@@ -1392,7 +1400,7 @@ function openSettings(){
         ${tg(`<div class="lmode"><button data-sm="0" aria-selected="${!LOGW()}">Đơn giản</button><button data-sm="1" aria-selected="${LOGW()}">Chi tiết</button></div>`, 0, 'Nhập set', 'Chi tiết = ghi tạ và rep từng set')}
         ${tg('<span class="gch">›</span>', 0, `<a class="gdl" href="guide.html">${ICO.book} ${EL('Hướng dẫn sử dụng', 'User guide')}</a>`, 'Cách dùng toàn bộ app, có ảnh minh hoạ')}
         ${WLOK ? tg(`<label class="lwt"><input type="checkbox" id="swk" ${WAKE ? 'checked' : ''}><span></span></label>`, 0, 'Giữ màn hình sáng', 'Khi đang ở trang Hôm nay') : ''}
-      </div><p class="appv">${LANG === 'en' ? 'Version' : 'Phiên bản'} 0bc44bd2bc</p></div>`;
+      </div><p class="appv">${LANG === 'en' ? 'Version' : 'Phiên bản'} bce29e0ec9</p></div>`;
     ov.querySelector('[data-x]').onclick = () => ov.remove();
     bindAcct(ov);
     ov.querySelectorAll('[data-sl]').forEach(b => b.onclick = () => { LANG = b.dataset.sl; store.set('lang', LANG); document.documentElement.lang = LANG; tabs.innerHTML = ''; renderNow(); if(!sheet.hidden){ sheet.innerHTML = ''; renderSheet(); } draw(); trTree(ov); });
@@ -2581,7 +2589,7 @@ function openLib(onPick){
 function openLibDetail(nm){
   const e = SWL[nm] || {n: nm}, it = {name: nm, det: e, fe: e.fe, v: e.v};
   const ov = document.createElement('div'); ov.className = 'cele acc libd';
-  const vid = e.v && e.v[0] ? `<a class="btn ghost" href="https://www.youtube.com/watch?v=${esc(e.v[0])}" target="_blank" rel="noopener">▶ ${EL('Video hướng dẫn', 'Tutorial video')}</a>` : `<a class="btn ghost" href="https://www.youtube.com/results?search_query=${encodeURIComponent(nm + ' exercise')}" target="_blank" rel="noopener">▶ ${EL('Tìm video', 'Find a video')}</a>`;
+  const vid = e.v && e.v[0] ? `<a class="btn ghost" href="https://www.youtube.com/watch?v=${esc(e.v[0])}" target="_blank" rel="noopener">▶︎ ${EL('Video hướng dẫn', 'Tutorial video')}</a>` : `<a class="btn ghost" href="https://www.youtube.com/results?search_query=${encodeURIComponent(nm + ' exercise')}" target="_blank" rel="noopener">▶︎ ${EL('Tìm video', 'Find a video')}</a>`;
   ov.innerHTML = `<div class="cbox" role="dialog" aria-label="${esc(nm)}"><button class="x" data-x aria-label="Đóng">✕</button>
     <h2 style="font-size:20px;margin:2px 40px 10px 0">${esc(nm)}</h2><div class="lbpic">${swPic(e)}</div>${e.ap ? `<p class="lbap">${EL('Ảnh & hướng dẫn minh hoạ theo bài gần giống', 'Images & steps from a similar exercise')}: <b>${esc(e.ap)}</b></p>` : ''}${vid}
     ${insHtml(Object.assign({}, e, {pm: [], sm: []}))}
@@ -2713,13 +2721,13 @@ window.addEventListener('popstate', () => { if(!sheet.hidden) closeSheet(true); 
 function mediaHtml(e){
   const vt = ' style="view-transition-name:ex-media"';
   if(e.fe) return `<div class="media"${vt}><div class="lab"><img src="${esc(exImg(e.fe, '0'))}" alt="Tư thế bắt đầu"><span>Bắt đầu</span></div><div class="lab"><img src="${esc(exImg(e.fe, '1'))}" alt="Tư thế kết thúc"><span>Kết thúc</span></div></div>`;
-  if(e.v) return `<div class="media one poster" data-play="1"${vt}><img src="https://i.ytimg.com/vi/${esc(e.v[0])}/hqdefault.jpg" alt=""><span class="pl"><i>▶</i></span></div>`;
+  if(e.v) return `<div class="media one poster" data-play="1"${vt}><img src="https://i.ytimg.com/vi/${esc(e.v[0])}/hqdefault.jpg" alt=""><span class="pl"><i>▶︎</i></span></div>`;
   return '';
 }
 function videoHtml(e, q){
   const yt = 'https://www.youtube.com/results?search_query=' + encodeURIComponent((q||e.n||'').replace('…','') + ' how to');
   if(!e.v) return `<a class="vidbtn" href="${yt}" target="_blank" rel="noopener" style="text-decoration:none;color:inherit">Tìm video trên YouTube ↗</a>`;
-  return `<button class="vidbtn" data-play="1">▶ Video hướng dẫn${e.v[3]?' · '+esc(e.v[3]):''}</button><div id="vbox"></div>`;
+  return `<button class="vidbtn" data-play="1">▶︎ Video hướng dẫn${e.v[3]?' · '+esc(e.v[3]):''}</button><div id="vbox"></div>`;
 }
 function insHtml(d){
   const ins = d && d.ins ? insOf(d) : [];
@@ -2957,7 +2965,7 @@ function tblSets(p, it){
   const row = (kind, k, lab, tag, tgt, o, on, phR, phW, cls) => { const id = `${qk}|${kind}|${k}`, tsec = kind === 'm' ? (String(tgt).match(/^(\d+)\s*s$/) || [])[1] : null;
     return `<div class="tr ${kind === 'w' ? 'wu' : ''} ${on ? 'on' : ''} ${cls||''}" data-id="${esc(id)}" data-kind="${kind}" data-k="${k}">
       <span class="tn" data-gl="${kind === 'w' ? 'warm' : /RIR/.test(tag || '') ? 'rir' : tag === 'TB' ? 'tb' : 'set'}"><b>${lab}</b>${tag ? `<small>${esc(tag)}</small>` : ''}</span>
-      ${tsec ? `<span class="tt tmw ${LW ? 'w2' : ''}"><button class="tmb" data-tm="${tsec}" ${on ? 'disabled' : ''}>${on ? '✓ ' + tsec + ' giây' : '▶ Bắt đầu ' + tsec + ' giây'}</button></span>`
+      ${tsec ? `<span class="tt tmw ${LW ? 'w2' : ''}"><button class="tmb" data-tm="${tsec}" ${on ? 'disabled' : ''}>${on ? '✓ ' + tsec + ' giây' : '▶︎ Bắt đầu ' + tsec + ' giây'}</button></span>`
         : LW ? cell(id, 'r', o ? o.r : '', phR) + cell(id, 'w', o && o.w != null ? nfmt(SD ? toSide(it, o.w) : o.w) : '', phW === '' || phW == null ? 'kg' : nfmt(SD ? toSide(it, phW) : phW)) : `<span class="tt">${esc(tgt)}</span>`}
       <button class="tck" data-tc aria-pressed="${on}" aria-label="Xong set">✓</button></div>` + restRow(id); };
   let h = `<div class="trep"><div><span data-gl="range" class="glu">Mục tiêu</span>${vals.map(v => `<b>${esc(tgtTxt(v))}</b>`).join('')}</div>${last ? `<div class="tlast">Lần trước${last.d ? ' ' + dd0(last.d) : ''}: ${last.sets.filter(Boolean).map(setTxt).map(esc).join(' · ')}${up ? ' → <b>tăng tạ</b>' : ''}</div>` : sg ? `<div class="tlast">Lần đầu tập bài này · gợi ý ~<b>${nfmt(sg.w)}kg${eqOf(it.name) === 'db' ? ' mỗi tay' : ''}</b> theo ${esc(sg.from)}</div>` : ''}${it.tech || (it.hn && !it.orig) ? `<div class="tnote">${it.tech ? `${EL('Set cuối', 'Last set')}: ${esc(it.tech)}` : ''}${it.tech && it.hn && !it.orig ? ' · ' : ''}${it.hn && !it.orig ? `${EL('Ở nhà', 'At home')}: ${esc(it.hn)}` : ''}</div>` : ''}</div>`;
@@ -3016,11 +3024,11 @@ function bindTbl(p, n, w, it, box){
     delete TDR[row.dataset.id]; tdrSave(); RESTAT = row.dataset.id; saveSet(p, n, w, it, kind, k, obj); RESTAT = null; });
   box.querySelectorAll('.trest [data-r]').forEach(b => b.onclick = () => adjRest(b.dataset.r));
   box.querySelectorAll('[data-tm]').forEach(b => b.onclick = () => { unlockAudio(); wakeOn();
-    if(b._t){ clearInterval(b._t); b._t = 0; b.classList.remove('run'); b.style.removeProperty('--pg'); b.textContent = (LANG === 'en' ? '▶ Start ' : '▶ Bắt đầu ') + b.dataset.tm + (LANG === 'en' ? ' s' : ' giây'); return; }
+    if(b._t){ clearInterval(b._t); b._t = 0; b.classList.remove('run'); b.style.removeProperty('--pg'); b.textContent = (LANG === 'en' ? '▶︎ Start ' : '▶︎ Bắt đầu ') + b.dataset.tm + (LANG === 'en' ? ' s' : ' giây'); return; }
     const row = b.closest('.tr'), sec = +b.dataset.tm, end = Date.now() + sec * 1000; b.classList.add('run'); if(RT) stopRest();
     const tick = () => { if(!b.isConnected){ clearInterval(b._t); return; } const l = Math.ceil((end - Date.now()) / 1000);
       if(l <= 0){ clearInterval(b._t); b._t = 0; beep(); try{ navigator.vibrate && navigator.vibrate([200, 100, 200]); }catch(e){} const tc = row.querySelector('[data-tc]'); if(tc) tc.click(); return; }
-      b.textContent = (l <= 3 ? '' : '⏸ ') + l + (LANG === 'en' ? ' s' : ' giây'); b.style.setProperty('--pg', ((1 - l / sec) * 100).toFixed(1) + '%'); };
+      b.textContent = (l <= 3 ? '' : '⏸︎ ') + l + (LANG === 'en' ? ' s' : ' giây'); b.style.setProperty('--pg', ((1 - l / sec) * 100).toFixed(1) + '%'); };
     tick(); b._t = setInterval(tick, 200); });
   box.querySelectorAll('[data-wut]').forEach(b => b.onclick = () => { const op = b.getAttribute('aria-expanded') !== 'true'; WUO[b.dataset.wut] = op; b.setAttribute('aria-expanded', op); const c = b.nextElementSibling; if(c) c.classList.toggle('shut', !op); });
   box.querySelectorAll('[data-rsttg]').forEach(b => b.onclick = () => { RSO = !RSO; b.setAttribute('aria-expanded', RSO); const c = b.nextElementSibling; if(c) c.classList.toggle('shut', !RSO); });
@@ -3336,7 +3344,7 @@ const EN = {'10.000 bước':'10,000 steps','Đi 10.000 bước trong 1 ngày':'
   'Set làm việc':'Working sets','Khởi động':'Warm-up','Tới thất bại':'To failure','Hướng dẫn':'Instructions','Bài thay thế':'Alternatives',
   'Chưa có hướng dẫn cho bài này.':'No instructions for this exercise yet.','Bài thay thế · dùng cùng số set/rep':'Alternative · use the same sets/reps',
   'Xong bài':'Done','✓ Đã xong':'✓ Done','‹ Trước':'‹ Prev','Tiếp ›':'Next ›','Đang xem':'Viewing','Đang xem · ✓':'Viewing · ✓','Xong':'Done','Tiếp theo':'Up next',
-  'Tìm video trên YouTube ↗':'Search YouTube ↗','▶ Video hướng dẫn':'▶ Tutorial video','Bắt đầu':'Start','Kết thúc':'End','Set cuối:':'Last set:',
+  'Tìm video trên YouTube ↗':'Search YouTube ↗','▶︎ Video hướng dẫn':'▶︎ Tutorial video','Bắt đầu':'Start','Kết thúc':'End','Set cuối:':'Last set:',
   'RIR = số rep còn dư trước khi thất bại. Bấm vào bài để xem khởi động, hướng dẫn, video và bài thay thế.':'RIR = reps left in the tank before failure. Tap an exercise for warm-up, instructions, video and alternatives.',
   '∞ = tập tới thất bại. Tempo 3/0/1/0 = hạ 3s · dừng 0 · đẩy 1s · dừng 0. Bấm vào bài để xem hướng dẫn, video và bài thay thế.':'∞ = to failure. Tempo 3/0/1/0 = 3s down · 0 pause · 1s up · 0 pause. Tap an exercise for instructions, video and alternatives.',
   'Phase':'Phase','rep':'rep','Chưa đặt':'Not set','Hôm nay tập buổi…':'Today is…','Chọn ngày':'Pick a date','Xoá ngày bắt đầu':'Clear start date',
@@ -3344,7 +3352,7 @@ const EN = {'10.000 bước':'10,000 steps','Đi 10.000 bước trong 1 ngày':'
   '+ tới thất bại':'+ to failure','Tháng này':'This month','buổi xong':'workouts done','bài đã tập':'exercises','ngày có tập':'training days','Đã tập':'Done','Tập dở':'Partial','Dự kiến':'Planned','Tuyệt!':'Awesome!','bài':'exercises','set':'sets','phút':'min','buổi tháng này':'this month','tuần liên tiếp':'week streak','Quá đỉnh!':'Crushed it!','Làm tốt lắm!':'Great job!','Thêm một buổi vào sổ!':'Another one in the books!','Kỷ luật là sức mạnh!':'Discipline wins!','Cơ bắp đang lớn lên!':'Muscles are growing!','Tháng này chưa có buổi nào. Tick xong các bài trong buổi để ghi vào sổ.':'No workouts this month yet. Finish all exercises in a workout to log it.','Sao lưu dữ liệu':'Back up data','Khôi phục':'Restore','Ghi tạ':'Log weight','Đánh dấu đã tập':'Mark as done','✓ Đánh dấu đã tập đến ngày…':'✓ Mark done up to day…','✓ Xong set':'✓ Done','Lưu':'Save','Bỏ tick':'Untick','Tạ (kg)':'Weight (kg)','Tạ thêm (kg)':'Added weight (kg)','Rep':'Reps','Tiến bộ':'Progress','tạ nặng nhất mỗi buổi':'top weight per session','rep nhiều nhất mỗi buổi':'most reps per session','Huy hiệu mới':'New badges','Nhập tạ và rep rồi bấm ✓ Xong set: web tự tick, đếm giờ nghỉ và mở set tiếp theo.':'Enter weight and reps, then tap ✓ Done: it ticks the set, starts the rest timer and opens the next set.','Lần đầu tập bài này: chọn mức tạ vừa sức, lần sau web sẽ gợi ý.':'First time on this exercise: pick a working weight, next time you get a suggestion.','Theo buổi trong tháng':'By workout this month','Không tập ngày này.':'No workout this day.','Không có buổi dự kiến.':'Nothing planned.','Mở ›':'Open ›','Đăng nhập để lưu lên cloud, dùng trên nhiều máy.':'Log in to save to the cloud and use on multiple devices.','Đăng nhập':'Log in','Tạo tài khoản':'Sign up','Đăng xuất':'Log out','Đồng bộ':'Sync','Tên đăng nhập':'Username','Mật khẩu':'Password','Nhập lại mật khẩu':'Confirm password','Đang lưu trên máy này':'Saved on this device only','Chỉ lưu trên máy này':'Saved on this device only','Tạo tài khoản & đồng bộ':'Sign up & sync','Đăng nhập & đồng bộ':'Log in & sync','Hoặc sao lưu ra file để chuyển máy mà không cần tài khoản.':'Or back up to a file to move devices without an account.','Chưa bật đồng bộ cloud':'Cloud sync off','Đồng bộ cloud đang bật':'Cloud sync on','Dữ liệu tập lưu riêng trên máy này. Đổi máy hoặc xoá trình duyệt thì sao lưu trước.':'Your training data is stored on this device only. Back it up before switching devices or clearing the browser.','Làm tối đa':'Max reps','Bước 3 · Tập cho đủ':'Step 3 · Finish the target','Set thử':'Test set','Bạn làm được bao nhiêu rep?':'How many reps did you get?','Xem bảng đầy đủ trong PDF':'See the full PDF table','Bài phụ (corrective)':'Corrective','Set này làm được:':'Reps this set:','Set này làm được (tới thất bại):':'Reps this set (to failure):','Tổng rep trong Stop Ladder':'Total Stop Ladder reps','Tập ở nhà':'Home mode','Set Ignitor':'Ignitor set','Tới thất bại':'To failure','Chưa nhập':'Not entered','Box Score':'Box Score','Corrective':'Corrective','Set tiếp theo (tới thất bại):':'Next set (to failure):','Set tiếp theo:':'Next set:','Stop Ladder: tổng số rep đã làm':'Stop Ladder: total reps done','✓ Đạt Box Score. Nghỉ 90 giây – 2 phút rồi sang bài tiếp theo.':'✓ Box Score reached. Rest 90 s – 2 min, then move on.','Buổi này không cần đổi bài':'No swaps needed today','Jacked Up · tạ quá nhẹ':'Jacked Up · too light','Just Right · vừa':'Just Right','Jacked Down · tạ quá nặng':'Jacked Down · too heavy','Hết giờ nghỉ!':'Rest over!','Vào set':'Go!','Không nghỉ':'No rest','Giữ màn hình sáng':'Keep screen on','Dừng':'Stop'
 };
 const ENRX = [
-  [/^▶ Bắt đầu (\d+) giây$/, '▶ Start $1 s'], [/^✓ (\d+) giây$/, '✓ $1 s'], [/^⏸ (\d+) giây$/, '⏸ $1 s'], [/^(\d+) giây$/, '$1 s'],
+  [/^▶︎ Bắt đầu (\d+) giây$/, '▶︎ Start $1 s'], [/^✓ (\d+) giây$/, '✓ $1 s'], [/^⏸︎ (\d+) giây$/, '⏸︎ $1 s'], [/^(\d+) giây$/, '$1 s'],
   [/^Mục tiêu = (.+) · nghỉ (.+)$/, 'Target = $1 · rest $2'], [/^(.*) · hôm nay$/, '$1 · today'],  [/^(.*)× rep set thử(.*)$/, '$1× test-set reps$2'], [/^(.*)× rep Stop Ladder(.*)$/, '$1× Stop Ladder reps$2'],
   [/^Lịch sử đo \((\d+)\)$/, 'Measurement history ($1)'], [/^Lần đo gần nhất (\S+) · (\d+) ngày trước$/, 'Last measured $1 · $2 days ago'], [/^Lần đo gần nhất (\S+) · hôm nay$/, 'Last measured $1 · today'],
   [/^còn (.+) buổi trong tháng$/, '$1 more workouts in a month'], [/^còn (.+) buổi$/, '$1 more workouts'], [/^còn (.+) tuần$/, '$1 more weeks'], [/^còn (.+) kỷ lục$/, '$1 more PRs'],
@@ -3363,7 +3371,7 @@ const ENRX = [
   [/^(\d+)\/(\d+) xong$/, '$1/$2 done'], [/^(.+) · (\d+) bài liền nhau$/, '$1 · $2 exercises back to back'], [/^Bài (\d+)\/(\d+)$/, '$1 of $2'],
   [/^(.+) · Bài (\d+)\/(\d+)$/, '$1 · Exercise $2/$3'],
   [/^Tập 1 set (.+) liên tục, xong cả cụm mới nghỉ\. Lặp lại cho đủ số set\.$/, 'Do 1 set of $1 back to back, rest only after the whole group. Repeat for all sets.'],
-  [/^Tiếp: (.+) ›$/, 'Next: $1 ›'], [/^▶ Video hướng dẫn · (.+)$/, '▶ Tutorial video · $1'], [/^Ảnh gốc từ app \((\d+)\)$/, 'Original app screenshots ($1)'],
+  [/^Tiếp: (.+) ›$/, 'Next: $1 ›'], [/^▶︎ Video hướng dẫn · (.+)$/, '▶︎ Tutorial video · $1'], [/^Ảnh gốc từ app \((\d+)\)$/, 'Original app screenshots ($1)'],
   [/^Buổi tiếp theo: (.+) · ngày (\d+)$/, 'Next workout: $1 · day $2'], [/^‹ Quay lại (.+)$/, '‹ Back to $1'],
   [/^Nghỉ (.+)$/, 'Rest $1'], [/^(\d+) set$/, '$1 sets'], [/^(.+) set · tạ nặng thì làm đủ$/, '$1 sets · do all when lifting heavy'],
   [/^(.+) set$/, '$1 sets'], [/^tạ · (.+)$/, 'of working weight · $1'], [/^W(\d+) \(tuỳ\)$/, 'W$1 (optional)'],

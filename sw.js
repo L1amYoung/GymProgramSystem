@@ -1,4 +1,4 @@
-const V = 'gym-0bc44bd2bc';
+const V = 'gym-bce29e0ec9';
 self.addEventListener('install', e => self.skipWaiting());
 self.addEventListener('activate', e => e.waitUntil(caches.keys().then(ks => Promise.all(ks.filter(k => k !== V).map(k => caches.delete(k)))).then(() => self.clients.claim())));
 self.addEventListener('fetch', e => {
