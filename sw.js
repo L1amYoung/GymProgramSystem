@@ -1,4 +1,4 @@
-const V = 'gym-625dd2a857', IMG = 'gym-img';
+const V = 'gym-a5b0f673e3', IMG = 'gym-img';
 const isImgReq = u => (u.origin === location.origin && u.pathname.includes('/img/')) || u.hostname === 'i.ytimg.com' || u.hostname === 'static.exercisedb.dev' || u.hostname === 'fonts.gstatic.com' || u.hostname === 'fonts.googleapis.com' || u.pathname.endsWith('manifest.webmanifest');
 self.addEventListener('install', e => e.waitUntil(caches.open(V).then(c => c.add(new Request('./', {cache: 'reload'}))).catch(() => {}).then(() => self.skipWaiting())));
 self.addEventListener('activate', e => e.waitUntil((async () => {
