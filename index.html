@@ -664,6 +664,94 @@ html{touch-action:manipulation;scroll-behavior:auto!important}
 .bgr2{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:10px}
 .bd2{display:grid;justify-items:center;align-content:start;gap:5px;padding:10px 4px;border:1px solid var(--line);border-radius:12px;background:var(--card);color:var(--sub);font:inherit;opacity:.4}
 .bd2.on{opacity:1;color:var(--ink);border-color:rgba(245,165,36,.35)} .bd2 span{font-size:24px;line-height:1} .bd2 b{font-size:11px;font-weight:700;text-align:center;line-height:1.25}
+.pgr{display:flex;align-items:center;gap:6px} .pgr>span{font-size:13px;font-weight:800;color:var(--sub)}
+.bt4g{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.bt4{display:grid;gap:3px;justify-items:start;padding:12px 14px;border:1px solid var(--line);border-radius:14px;background:var(--card);color:var(--ink);font:inherit;text-align:left;min-width:0}
+.bt4.on{border-color:var(--acc2);box-shadow:inset 0 0 0 1px var(--acc2)}
+.bt4 span{font-size:11px;font-weight:800;color:var(--sub);text-transform:uppercase;letter-spacing:.04em;white-space:nowrap}
+.bt4 b{font-size:26px;line-height:1.15} .bt4 b small{font-size:13px;color:var(--sub);margin-left:3px}
+.bt4 em{font-style:normal;font-size:12px;font-weight:800;color:var(--faint)} .bt4 em.g{color:var(--ok)} .bt4 em.b{color:#ff8a7a}
+.bt4b{display:block;width:100%;height:5px;margin-top:5px;border-radius:99px;background:var(--card2);overflow:hidden} .bt4b i{display:block;height:100%;background:var(--acc2);border-radius:99px}
+.bchart{margin-top:10px;padding:12px 14px} .bch{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px} .bch b{font-size:15px} .bch>span{display:flex;gap:6px}
+.bic{width:34px;height:34px;display:grid;place-items:center;border:1px solid var(--line);border-radius:50%;background:var(--card2);color:var(--ink);padding:0} .bic .ico{width:17px;height:17px}
+.bemp{width:100%;padding:26px 10px;border:1px dashed var(--line);border-radius:12px;background:none;color:var(--sub);font:inherit;font-size:13px;font-weight:700}
+.hlist{border:1px solid var(--line);border-radius:14px;overflow:hidden;max-height:60vh;overflow-y:auto} .hlist .bdr:first-child{border-top:0}
+.pgx{--pxb:rgba(255,255,255,.07)}
+.pgx .sec{margin-top:22px}
+.pxh{display:flex;justify-content:space-between;align-items:center;gap:8px;margin:0 2px 10px} .pxh>b{font-size:19px;font-weight:800;letter-spacing:-.01em} .pxh>span{display:flex;gap:6px}
+.pxr{font-size:13px;font-weight:700;color:var(--sub)}
+.pgx .mdh{text-transform:none;letter-spacing:-.01em;font-size:19px;font-weight:800;color:var(--ink)}
+.pxc,.pxm,.pxbl,.pgx .panel,.pgx .strl,.pgx .pgrow,.pgx .bnext{background:linear-gradient(180deg,#1c1c1f,#141416)!important;border:1px solid var(--pxb)!important;border-radius:18px!important}
+.pxg{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.pxc{display:grid;gap:2px;padding:14px 16px;align-content:start;min-width:0}
+.pxv{font-size:32px;font-weight:800;line-height:1.05;letter-spacing:-.02em} .pxv small{font-size:14px;color:var(--sub);margin-left:3px;font-weight:700;letter-spacing:0}
+.pxl{font-size:14px;font-weight:600;color:#e6e6e9;margin-top:6px} .pxs{font-size:12.5px;color:#7d7d84;font-weight:600} .pxs i.up{font-style:normal;color:var(--ok)}
+.pxwk{display:grid;grid-template-columns:repeat(7,1fr);padding:14px 8px}
+.pxd{display:grid;justify-items:center;gap:7px} .pxd span{font-size:11px;font-weight:700;color:#7d7d84} .pxd span.td{color:var(--ink)}
+.pxd i{width:32px;height:32px;box-sizing:border-box;border-radius:50%;border:1.5px solid #3a3a40;position:relative} .pxd i.fu{border-style:dashed;border-color:#2e2e33} .pxd i.td{border:2px solid var(--ink)}
+.pxd i.on{background:#f2f2f4;border-color:#f2f2f4} .pxd i.on::after{content:'';position:absolute;left:50%;top:50%;width:6px;height:11px;border:solid #111;border-width:0 2.2px 2.2px 0;transform:translate(-50%,-62%) rotate(45deg)}
+.pgx .bmap .h0{fill:#26262b} .pgx .bmap .h1{fill:#55555c} .pgx .bmap .h2{fill:#8e8e96} .pgx .bmap .h3{fill:#d4d4d8} .pgx .bmap .h4{fill:#fff}
+.pgx .mleg2 .h1{background:#55555c} .pgx .mleg2 .h2{background:#8e8e96} .pgx .mleg2 .h3{background:#d4d4d8} .pgx .mleg2 .h4{background:#fff}
+.pgx .mtop span{color:var(--ink)} .pgx .mlow span{background:#25252a;color:#d4d4d8}
+.pgx .strsp path{stroke:#e6e6e9} .pgx .pchart .ln{stroke:#f2f2f4} .pgx .pchart .dot{fill:#f2f2f4;stroke:#151517} .pgx .strr.on{background:#202024} .pgx .strx{background:#19191c}
+.pgx .bpb u{background:#f2f2f4} .pgx .bnx em{color:var(--sub)} .pgx .bnext{padding:12px 14px;margin-bottom:10px}
+.pgx .actc .acb{fill:#3a3a40} .pgx .actc .acb.ok{fill:#f2f2f4} .pgx .actc .gl{stroke:#7d7d84}
+.pgx .bic{background:#232327}
+.pxm{display:grid;gap:2px;padding:14px 14px 12px;text-align:left;color:var(--ink);font:inherit;min-width:0}
+.pxl2{font-size:15px;font-weight:700} .pxmini{width:100%;height:50px;margin:10px 0 8px;display:block}
+.pxmini path{fill:none;stroke:#f2f2f4;stroke-width:2;stroke-linejoin:round;stroke-linecap:round} .pxmini circle{fill:#f2f2f4}
+.pxmini rect{fill:#4a4a51} .pxmini rect.ok{fill:#f2f2f4} .pxmini rect.z{fill:#2a2a2f}
+div.pxmini.none{display:grid;place-items:center;font-size:12px;color:#7d7d84;font-weight:600;border:1px dashed #2e2e33;border-radius:10px}
+.pxf{display:flex;justify-content:space-between;align-items:center;border-top:1px solid var(--pxb);padding-top:9px;margin-top:2px} .pxf b{font-size:15px;white-space:nowrap} .pxf em{font-style:normal;color:#7d7d84;font-size:18px;line-height:1}
+.pxadd{border:1px solid var(--pxb);background:#1c1c1f;color:var(--ink);border-radius:999px;padding:7px 12px;font:inherit;font-size:13px;font-weight:800}
+.pxbl{display:grid;overflow:hidden}
+.pxb{display:flex;gap:12px;align-items:center;width:100%;padding:12px 14px;border:0;border-top:1px solid var(--pxb);background:none;color:var(--ink);font:inherit;text-align:left} .pxb:first-child{border-top:0} .pxb.off{opacity:.38}
+.pxbi{width:44px;height:44px;border-radius:12px;background:#25252a;display:grid;place-items:center;font-size:24px;flex:none} .pxb b{display:block;font-size:15px} .pxb small{display:block;font-size:12.5px;color:#7d7d84;font-weight:600;margin-top:2px}
+.pxbig{margin:0 0 6px} .pxbig b{font-size:34px;font-weight:800;letter-spacing:-.02em} .pxbig small{font-size:15px;color:var(--sub);margin-left:5px;font-weight:700;letter-spacing:0}
+.pxov .bch{justify-content:flex-end;margin-bottom:0} .pxov .bch b{display:none} .pxov .bchart{margin-top:6px}
+.px2 .pxc,.px2 .pxm,.px2 .pxbl,.px2 .strl,.px2 .pgrow,.px2 .pxmus,.px2 .bnext,.px2 .panel{background:#1e1e21!important;border:0!important;border-radius:16px!important;box-shadow:none}
+.px2 .sec{margin-top:26px} .px2>.sec:first-child{margin-top:4px}
+.px2 .pxh{margin:0 2px 12px} .px2 .pxh>b{font-size:20px;font-weight:700;letter-spacing:-.01em}
+.pxsee{border:0;background:none;color:#8b8b90;font:inherit;font-size:14px;font-weight:500;padding:0}
+.px2 .pxg{gap:10px}
+.px2 .pxc{padding:16px 16px 15px;gap:4px}
+.px2 .pxv{font-size:34px;font-weight:700} .px2 .pxv small{font-size:15px;font-weight:500;color:#8b8b90}
+.px2 .pxl{font-size:16px;font-weight:500;color:#f2f2f2;margin-top:8px;line-height:1.25} .px2 .pxs{font-size:14px;font-weight:400;color:#86868b}
+.px2 .pxm{padding:14px 14px 12px;gap:3px} .px2 .pxl2{font-size:16px;font-weight:600} .px2 .pxmini{height:54px;margin:12px 0 10px}
+.px2 .pxf{border-top:1px solid rgba(255,255,255,.08);padding-top:11px} .px2 .pxf b{font-size:16px;font-weight:600} .px2 .pxf small{font-size:14px;font-weight:400;color:#a1a1a6}
+.pxmini path.ar{fill:url(#pxga);stroke:none}
+.pxmini circle.ho{fill:#1e1e21;stroke:#f2f2f4;stroke-width:1.8}
+.pxdots{display:grid;grid-template-columns:repeat(10,1fr);gap:6px 5px;margin:14px 0 12px;height:auto} .pxdots i{display:block;aspect-ratio:1;max-width:11px;border-radius:2.5px;background:#38383d} .pxdots i.on{background:#fff}
+.px2 .strr{padding:13px 16px} .px2 .strn b{font-size:15px;font-weight:600} .px2 .strn small{font-size:13px;font-weight:400;color:#86868b} .px2 .strr em{font-weight:600}
+.pxmus{display:flex;align-items:center;gap:12px;width:100%;padding:12px 16px 12px 10px;color:var(--ink);font:inherit;text-align:left}
+.pxmm{width:42%;flex:none} .pxmm .bmap{width:100%;display:block} .pxmt{flex:1;display:grid;gap:2px;min-width:0} .pxmt b{font-size:15px;font-weight:600;margin-bottom:8px} .pxmt b:last-child{margin-bottom:0}
+:root{--cb-bg:#0b0b0c;--cb-card:#1e1e21;--cb-card2:#2a2a2e;--cb-line:rgba(255,255,255,.08);--cb-text:#f2f2f2;--cb-sub:#86868b;--cb-accent:#b9a1ff;--cb-on:#1a1033;--cb-good:#34c759;--cb-bad:#ff453a;--cb-warn:#ff9f0a}
+.pgx .bmap .mok{fill:var(--cb-accent)} .pgx .bmap .mlo{fill:var(--cb-accent);fill-opacity:.3}
+.pxleg{display:flex;justify-content:center;gap:12px;margin-top:6px;font-size:12px;font-weight:600;color:#a1a1a6}
+.pxleg i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:5px;vertical-align:-1px} .pxleg i.mok{background:var(--cb-accent)} .pxleg i.mlo{background:var(--cb-accent);opacity:.3}
+.pxmt b.ok{color:var(--cb-text)}
+.px2 .pxd i.on{background:var(--cb-accent);border-color:var(--cb-accent)} .px2 .pxd i.on::after{border-color:var(--cb-on)}
+.px2 .pxs i.up,.px2 .strr em.g,.px2 .strh .g{color:var(--cb-good)} .px2 .strr em.b,.px2 .strh .b{color:var(--cb-bad)}
+.px2 .pxs,.px2 .pxsub,.pxsee{color:var(--cb-sub)} .px2 .pxc,.px2 .pxm,.px2 .pxbl,.px2 .strl,.px2 .pgrow,.px2 .pxmus,.px2 .bnext,.px2 .panel{background:var(--cb-card)!important}
+.px2 .pxadd{background:var(--cb-accent);border-color:var(--cb-accent);color:var(--cb-on)}
+.addopt{display:grid;grid-template-columns:1fr auto;gap:2px 10px;width:100%;margin-top:8px;padding:14px 16px;border:0;border-radius:14px;background:var(--cb-card2);color:var(--ink);font:inherit;text-align:left}
+.addopt b{font-size:16px;font-weight:600} .addopt span{grid-column:1;font-size:13px;color:var(--cb-sub)} .addopt em{grid-column:2;grid-row:1/3;align-self:center;font-style:normal;color:var(--cb-sub);font-size:20px}
+.addseg{display:grid!important;grid-template-columns:1fr 1fr;width:100%;box-sizing:border-box;margin:0 0 12px} .addseg button{padding:9px 6px;font-size:13px}
+.ctg2{display:grid;grid-template-columns:1fr auto;align-items:baseline;gap:2px 10px;width:100%;padding:16px;border:0;border-radius:16px;background:var(--cb-card);color:var(--cb-text);font:inherit;text-align:left}
+.ctl{font-size:16px;font-weight:600} .cted{font-style:normal;font-size:14px;color:var(--cb-sub)}
+.ctv{grid-column:1;font-size:40px;font-weight:700;letter-spacing:-.02em;line-height:1.1;margin-top:6px} .ctv small{font-size:16px;font-weight:500;color:var(--cb-sub);margin-left:5px;letter-spacing:0}
+.ctg{grid-column:2;align-self:center;margin-top:6px;padding:5px 11px;border-radius:999px;background:var(--cb-accent);color:var(--cb-on);font-size:13px;font-weight:700}
+.cts{grid-column:1/-1;font-size:14px;color:var(--cb-sub);margin-top:2px}
+.calhint{margin:8px 2px 2px;font-size:12.5px;color:var(--cb-sub);line-height:1.4}
+.cnew{margin:12px 0 0;padding:12px 14px;border-radius:14px;background:var(--cb-card2);font-size:14px;color:var(--cb-sub)} .cnew b{color:var(--cb-text);font-size:16px}
+.calov .cpbf input{accent-color:var(--cb-accent)}
+.lgsec{margin:14px 0 6px;font-size:12px;font-weight:800;color:var(--sub);text-transform:uppercase;letter-spacing:.04em}
+.pxmus>em{font-style:normal;color:#86868b;font-size:20px}
+.px2 .pxb{padding:13px 16px} .px2 .pxbi{background:#2a2a2e} .px2 .pxb b{font-weight:600} .px2 .pxb small{font-weight:400;color:#86868b;font-size:13.5px}
+.pxov #ball{display:none}
+.px2>.sec:first-child{margin-top:20px!important}
+.pxsub{margin:-6px 2px 10px;font-size:13px;color:#86868b;line-height:1.4}
+.px2 .pgrow{padding:14px 16px} .px2 .pgl{font-weight:600;font-size:16px} .px2 .pgrow p{font-weight:400;color:#86868b}
 .bdemp b{font-size:15px} .bdemp span{font-size:13px;color:var(--sub);font-weight:600}
 .bdt{display:grid;grid-template-columns:repeat(auto-fit,minmax(72px,1fr));gap:6px;margin-bottom:8px}
 .bdt button{display:grid;gap:2px;justify-items:center;padding:9px 4px;border:1px solid var(--line);border-radius:14px;background:var(--card);color:var(--ink);font:inherit}
@@ -1418,7 +1506,7 @@ function openSettings(){
         ${tg(`<div class="lmode"><button data-sm="0" aria-selected="${!LOGW()}">Đơn giản</button><button data-sm="1" aria-selected="${LOGW()}">Chi tiết</button></div>`, 0, 'Nhập set', 'Chi tiết = ghi tạ và rep từng set')}
         ${tg('<span class="gch">›</span>', 0, `<a class="gdl" href="guide.html">${ICO.book} ${EL('Hướng dẫn sử dụng', 'User guide')}</a>`, 'Cách dùng toàn bộ app, có ảnh minh hoạ')}
         ${WLOK ? tg(`<label class="lwt"><input type="checkbox" id="swk" ${WAKE ? 'checked' : ''}><span></span></label>`, 0, 'Giữ màn hình sáng', 'Khi đang ở trang Hôm nay') : ''}
-      </div><p class="appv">${LANG === 'en' ? 'Version' : 'Phiên bản'} ac2c3412cd</p></div>`;
+      </div><p class="appv">${LANG === 'en' ? 'Version' : 'Phiên bản'} 81ec3876b2</p></div>`;
     ov.querySelector('[data-x]').onclick = () => ov.remove();
     bindAcct(ov);
     ov.querySelectorAll('[data-sl]').forEach(b => b.onclick = () => { LANG = b.dataset.sl; store.set('lang', LANG); document.documentElement.lang = LANG; tabs.innerHTML = ''; renderNow(); if(!sheet.hidden){ sheet.innerHTML = ''; renderSheet(); } draw(); trTree(ov); });
@@ -1926,7 +2014,7 @@ function openCal(){
   if(!store.get('calseen')){ store.set('calseen', '1'); document.querySelectorAll('#tabs .dotnew').forEach(b => b.classList.remove('dotnew')); }
   const ov = document.createElement('div'); ov.className = 'cele acc calov';
   const b0 = calBody(), c = Object.assign({sex: 'm', act: 1.55, goal: 'cut', usePbf: true}, getJ('calprof', {}));
-  if(c.kg == null && b0.kg) c.kg = b0.kg;
+  if(b0.kg) c.kg = b0.kg;   // luôn theo lần cân mới nhất
   const draw = () => {
     const pb = c.usePbf && b0.pbf ? b0.pbf : null, r = calCalc(Object.assign({}, c, {pbf: pb}));
     const seg = (k, opts) => `<div class="lmode cseg">${opts.map(([v, t]) => `<button type="button" data-k="${k}" data-v="${v}" aria-selected="${String(c[k]) === String(v)}">${t}</button>`).join('')}</div>`;
@@ -1936,11 +2024,12 @@ function openCal(){
         <label class="field">${EL('Chiều cao (cm)', 'Height (cm)')}<input data-f="cm" inputmode="numeric" value="${c.cm || ''}" placeholder="–"></label>
         <label class="field">${EL('Tuổi', 'Age')}<input data-f="age" inputmode="numeric" value="${c.age || ''}" placeholder="–"></label>
         <div class="field">${EL('Giới tính', 'Sex')}${seg('sex', [['m', EL('Nam', 'Male')], ['f', EL('Nữ', 'Female')]])}</div></div>
+      <p class="calhint">${b0.kg ? EL('Cân nặng lấy từ lần cân gần nhất. Sửa ở đây sẽ ghi thành lần cân hôm nay.', 'Weight comes from your latest weigh-in. Changing it here logs a weigh-in for today.') : EL('Chưa có lần cân nào. Nhập ở đây sẽ ghi thành lần cân hôm nay.', 'No weigh-ins yet. Entering it here logs one for today.')}</p>
       <div class="field">${EL('Mục tiêu', 'Goal')}${seg('goal', Object.entries(CGOAL).map(([k, g]) => [k, EL(g[1], g[2])]))}</div>
       <label class="field">${EL('Mức vận động', 'Activity')}<select data-f="act">${CACT.map((a, i) => `<option value="${a[0]}" ${+c.act === a[0] ? 'selected' : ''}>${EL(a[1], CACT_EN[i][0])} · ${EL(a[2], CACT_EN[i][1])}</option>`).join('')}</select></label>
       ${b0.pbf ? `<label class="cpbf"><input type="checkbox" data-f="usePbf" ${c.usePbf ? 'checked' : ''}> ${EL(`Dùng % mỡ ${nfmt(b0.pbf)}% (chính xác hơn)`, `Use body fat ${nfmt(b0.pbf)}% (more accurate)`)}</label>` : ''}
       ${r ? `<div class="cres"><div class="c3"><div><b>${fnum(r.tdee)}</b><span>${EL('Duy trì', 'Maintenance')}</span></div><div><b>${r.adj > 0 ? '+' : ''}${fnum(r.adj)}</b><span>${EL('Điều chỉnh', 'Adjustment')}</span></div><div><b>${r.wk > 0 ? '+' : ''}${nfmt(r.wk)}kg</b><span>${EL('Dự kiến/tuần', 'Expected/week')}</span></div></div>
-        <div class="ctgt"><small>${EL('MỤC TIÊU MỖI NGÀY', 'DAILY TARGET')}</small><b>${fnum(r.tgt)}<i> cal</i></b><span>${EL('Protein', 'Protein')} ~${r.pro}g · ${EL(r.adj < 0 ? 'đủ để giảm mỡ mà vẫn giữ cơ, tốc độ dễ theo được.' : r.adj > 0 ? 'dư nhẹ để tăng cơ, hạn chế tăng mỡ.' : 'giữ nguyên cân nặng.', r.adj < 0 ? 'enough to lose fat while keeping muscle, at a pace you can keep.' : r.adj > 0 ? 'a small surplus to build muscle with minimal fat gain.' : 'to keep your weight steady.')}</span></div>
+        <p class="cnew">${EL('Mục tiêu mỗi ngày', 'Daily target')}: <b>${fnum(r.tgt)} cal</b> · protein ~${r.pro}g</p>
         <details class="chow"><summary>${EL('Xem cách tính', 'See how it’s calculated')}</summary>
           <div><span>${r.how === 'katch' ? EL(`Calo nghỉ ngơi (Katch-McArdle, từ khối nạc theo ${nfmt(r.pbf)}% mỡ)`, `Resting burn (Katch-McArdle, lean mass at ${nfmt(r.pbf)}% fat)`) : EL('Calo nghỉ ngơi (Mifflin-St Jeor: cân nặng, chiều cao, tuổi)', 'Resting burn (Mifflin-St Jeor: weight, height, age)')}</span><b>${fnum(r.bmr)} cal</b></div>
           <div><span>${EL('Hệ số vận động', 'Activity factor')}</span><b>× ${String(r.act).replace('.', LANG === 'en' ? '.' : ',')}</b></div>
@@ -2163,8 +2252,9 @@ function strHtml(){
 }
 /* ---------- Tiến bộ gọn (patch8v) ---------- */
 const PGINFO = () => ({
-  wk: [EL('Tuần này', 'This week'), EL('Tính từ thứ 2 đến hôm nay. ▲▼ so với cùng số ngày của tuần trước. Cột nhỏ: số buổi xong của 8 tuần gần nhất.', 'Monday to today. ▲▼ vs the same days last week. Small bars: workouts in the last 8 weeks.')],
-  str: [EL('Sức mạnh', 'Strength'), EL('1RM ước tính = mức tạ tối đa cho 1 rep, tính từ set tốt nhất mỗi buổi. % so với khoảng 4 tuần trước. Bấm 1 bài để xem biểu đồ.', 'Est. 1RM = max weight for 1 rep, from the best set each session. % vs about 4 weeks ago. Tap a lift for its chart.')]
+  wk: [EL('Tuần này', 'This week'), EL('Tính từ thứ 2 đến hôm nay. ▲▼ so với cùng số ngày của tuần trước.', 'Monday to today. ▲▼ vs the same days last week.')],
+  str: [EL('Sức mạnh', 'Strength'), EL('1RM ước tính = mức tạ tối đa cho 1 rep, tính từ set tốt nhất mỗi buổi. % so với khoảng 4 tuần trước. Bấm 1 bài để xem biểu đồ.', 'Est. 1RM = max weight for 1 rep, from the best set each session. % vs about 4 weeks ago. Tap a lift for its chart.')],
+  mus: [EL('Nhóm cơ tuần này', 'Muscles this week'), EL(`Cơ chính của bài tính 1 set, cơ phụ 0,5. Thiếu: dưới ${volTh()[0]} set/tuần · nhiều: trên ${volTh()[1]} set.`, `Primary muscle = 1 set, secondary = 0.5. Low: under ${volTh()[0]} sets/week · high: over ${volTh()[1]}.`)]
 });
 function strChart(S){
   const pts = S.pts.slice(-12), dd = d => `${+d.slice(8)}/${+d.slice(5,7)}`, r1 = v => Math.round(v * 2) / 2;
@@ -2183,12 +2273,8 @@ function ovHtml(){
   const dl = (x, y, f) => { const d = x - y; if(!x && !y) return '<em>&nbsp;</em>'; if(Math.abs(d) < 1e-9) return `<em>= ${EL('tuần trước', 'last wk')}</em>`; return `<em class="${d > 0 ? 'up' : 'dn'}">${d > 0 ? '▲' : '▼'} ${f(Math.abs(d))}</em>`; };
   const L = Object.values(getLog()).filter(e => e.k >= e.of && e.of > 0);
   const wk = Array.from({length: 8}, (_, i) => { const a = dAdd(m0, -7 * (7 - i)), b = dAdd(a, 7); return L.filter(e => e.d >= a && e.d < b).length; }), mx = Math.max(1, ...wk);
-  let h = `<div class="sec"><div class="bhd"><div class="mdh">${EL('Tuần này', 'This week')}</div><button class="pgi" data-info="wk" aria-label="${EL('Giải thích', 'Info')}">ⓘ</button></div>
-    <div class="pgc"><div class="pgt"><div><span>${EL('Buổi', 'Workouts')}</span><b>${st.done}</b>${dl(st.done, pv.done, x => x)}</div>
-      <div><span>Set</span><b>${st.sets}</b>${dl(st.sets, pv.sets, x => x)}</div>
-      <div><span>${EL('Khối lượng', 'Volume')}</span><b>${t(st.vol)}<small>${EL('tấn', 't')}</small></b>${dl(st.vol, pv.vol, x => t(x))}</div></div>
-    <div class="pgw" aria-label="${EL('Số buổi 8 tuần gần nhất', 'Workouts, last 8 weeks')}">${wk.map((c, i) => `<i class="${i === 7 ? 'cur' : ''}" style="height:${c ? Math.max(12, c / mx * 100) : 6}%"><u>${c || ''}</u></i>`).join('')}</div>
-    <p class="pgcap"><span>${EL('8 tuần trước', '8 weeks ago')}</span><span>${EL('Tuần này', 'This week')}</span></p></div></div>`;
+  let h = pxTop();
+  h += balHtml(musInline());
   const A = strData();
   h += `<div class="sec"><div class="bhd"><div class="mdh">${EL('Sức mạnh', 'Strength')}</div><button class="pgi" data-info="str" aria-label="${EL('Giải thích', 'Info')}">ⓘ</button></div>`;
   if(!A.length) h += `<p class="pgmeta">${EL('Chọn kiểu nhập set "Chi tiết" và ghi kg. Bài có từ 2 buổi trở lên sẽ hiện ở đây kèm mức tăng.', 'Use "Detailed" set entry and log kg. Lifts with 2+ sessions show up here.')}</p>`;
@@ -2201,16 +2287,266 @@ function ovHtml(){
     if(A.length > 5) h += `<button class="qsw" id="strall">${STRALL ? EL('Thu gọn', 'Show less') : EL(`Xem tất cả ${A.length} bài ›`, `See all ${A.length} lifts ›`)}</button>`;
   }
   h += '</div>';
-  const top = Object.entries(st.mus).filter(([r]) => MMAJOR.includes(r)).sort((x, y) => y[1] - x[1]).slice(0, 3).map(([r]) => nm(r)), lo0 = volTh()[0], low = MMAJOR.filter(r => (st.mus[r] || 0) < lo0).map(nm);
-  h += `<div class="sec"><button class="pgrow" data-mus><div><span class="pgl">${EL('Nhóm cơ tuần này', 'Muscles this week')}</span>${st.sets
-    ? `<p>${EL('Nhiều nhất', 'Most')}: <b>${top.join(', ') || '–'}</b></p>${low.length ? `<p class="lo">${EL('Còn thiếu', 'Low')}: <b>${low.slice(0, 4).join(', ')}${low.length > 4 ? '…' : ''}</b></p>` : `<p class="ok">${EL('Không nhóm nào thiếu', 'Nothing under-trained')}</p>`}`
-    : `<p>${EL('Tuần này chưa có set nào', 'No sets yet this week')}</p>`}</div><em>›</em></button></div>`;
   return h;
+}
+function musInline(){
+  let x = musWeekHtml().replace(/<details class="mall">[\s\S]*?<\/details>/, '').replace(/<p class="pcap">[\s\S]*?<\/p>/, '');
+  return x.replace(/(<div class="mdh">[^<]*<\/div>)(<span>[^<]*<\/span>)?<\/div>/, (m, a, b) => `${a}<span class="pgr">${b || ''}<button class="pgi" data-info="mus" aria-label="Info">ⓘ</button></span></div>`);
+}
+/* ---------- Tiến bộ kiểu STNDRD (patch8x) ---------- */
+const balHtml = x => { const tp = document.createElement('template'); tp.innerHTML = x; return tp.innerHTML; };
+const pxHead = (t, right) => `<div class="pxh"><b>${t}</b>${right || ''}</div>`;
+const pxCard = (v, lab, sub) => `<div class="pxc"><b class="pxv">${v}</b><span class="pxl">${lab}</span>${sub ? `<span class="pxs">${sub}</span>` : ''}</div>`;
+const pxUp = (n, txt, u) => `${txt}: ${n > 0 ? `<i class="up">+${n}${u || ''}</i>` : `${n}${u || ''}`}`;
+function pxTop(){
+  const today = isoDay(), m0 = monOf(today), ym = today.slice(0, 7), L = Object.values(getLog()).filter(e => e.k >= e.of && e.of > 0), ds = new Set(L.map(e => e.d));
+  const wd = EL(['T2','T3','T4','T5','T6','T7','CN'], ['M','T','W','T','F','S','S']), days = Array.from({length: 7}, (_, i) => dAdd(m0, i)), nw = days.filter(d => ds.has(d)).length;
+  let h = `<div class="sec">${pxHead(EL('Tuần này', 'This week'), `<span class="pxr">${nw} ${EL('buổi', nw === 1 ? 'workout' : 'workouts')}</span>`)}
+    <div class="pxc pxwk">${days.map((d, i) => `<div class="pxd"><i class="${ds.has(d) ? 'on' : d === today ? 'td' : d > today ? 'fu' : ''}"></i><span class="${d === today ? 'td' : ''}">${wd[i]}</span></div>`).join('')}</div></div>`;
+  const mon = L.filter(e => e.d.slice(0, 7) === ym).length, n30 = L.filter(e => e.d >= dAdd(today, -29)).length;
+  const dur = L.map(e => e.t0 && e.t1 ? (e.t1 - e.t0) / 60000 : 0).filter(m => m >= 5 && m <= 240), mins = dur.reduce((a, b) => a + b, 0);
+  const all = rangeStats('0000-01-01', '9999-12-31'), wk = rangeStats(m0, dAdd(today, 1)), prl = getJ('prlog', []), prm = prl.filter(x => (x.d || '').slice(0, 7) === ym).length;
+  const hasW = a => { for(let i = 0; i < 7; i++) if(ds.has(dAdd(a, i))) return true; return false; };
+  let ws = 0, w = hasW(m0) ? m0 : dAdd(m0, -7); while(hasW(w)){ ws++; w = dAdd(w, -7); }
+  const tn = v => nfmt(Math.round(v / 100) / 10);
+  h += `<div class="sec">${pxHead(EL('Tổng cộng', 'All time'))}<div class="pxg">
+    ${pxCard(L.length, EL('Buổi đã tập', 'Workouts done'), pxUp(mon, EL('Tháng này', 'This month')))}
+    ${pxCard('≈' + nfmt(Math.round(n30 / 30 * 7 * 10) / 10), EL('Buổi / tuần', 'Per week'), EL('30 ngày qua', 'Last 30 days'))}
+    ${pxCard(Math.round(mins / 60) + `<small>${EL('giờ', 'h')}</small>`, EL('Thời gian tập', 'Time trained'), dur.length ? EL(`≈ ${Math.round(mins / dur.length)} phút / buổi`, `≈ ${Math.round(mins / dur.length)} min / workout`) : '')}
+    ${pxCard(tn(all.vol) + `<small>${EL('tấn', 't')}</small>`, EL('Tổng khối lượng', 'Total volume'), `${EL('Tuần này', 'This week')}: ${wk.vol >= 50 ? `<i class="up">+${tn(wk.vol)}${EL(' tấn', ' t')}</i>` : '0'}`)}
+    ${pxCard(prl.length, EL('Kỷ lục', 'PRs'), pxUp(prm, EL('Tháng này', 'This month')))}
+    ${pxCard(ws + `<small>${EL('tuần', 'wk')}</small>`, EL('Chuỗi tuần', 'Week streak'), EL('Tuần nào cũng tập', 'Trained every week'))}</div></div>`;
+  return h;
+}
+function pxMiniLine(v){
+  if(v.length < 2) return `<div class="pxmini none">${EL('Cần ≥ 2 lần đo', 'Need 2+ entries')}</div>`;
+  const W = 150, H = 50, p = 5, mn = Math.min(...v), mx = Math.max(...v), sp = (mx - mn) || 1, X = i => p + (W - 2 * p) * i / (v.length - 1), Y = x => p + (H - 2 * p) * (1 - (x - mn) / sp);
+  return `<svg viewBox="0 0 ${W} ${H}" class="pxmini" aria-hidden="true"><path d="${v.map((x, i) => `${i ? 'L' : 'M'}${X(i).toFixed(1)},${Y(x).toFixed(1)}`).join('')}"/>${v.map((x, i) => `<circle cx="${X(i).toFixed(1)}" cy="${Y(x).toFixed(1)}" r="3"/>`).join('')}</svg>`;
+}
+function pxMiniBars(v, goal){
+  if(!v.some(Boolean)) return `<div class="pxmini none">${EL('7 ngày qua chưa có', 'Nothing in 7 days')}</div>`;
+  const W = 150, H = 50, gap = 5, bw = (W - gap * (v.length - 1)) / v.length, mx = Math.max(goal || 0, ...v);
+  return `<svg viewBox="0 0 ${W} ${H}" class="pxmini" aria-hidden="true">${v.map((x, i) => { const h = x ? Math.max(4, (H - 2) * x / mx) : 3;
+    return `<rect x="${(i * (bw + gap)).toFixed(1)}" y="${(H - h).toFixed(1)}" width="${bw.toFixed(1)}" height="${h.toFixed(1)}" rx="3" class="${x ? (!goal || x >= goal ? 'ok' : '') : 'z'}"/>`; }).join('')}</svg>`;
+}
+function bodyTab2(){
+  const B = bodyList(), M = {}; actList().forEach(e => M[e.d] = e); const today = isoDay(), g = actGoal(), t = M[today] || {};
+  const bv = k => B.filter(e => e[k] != null).map(e => +e[k]), days = Array.from({length: 7}, (_, i) => dAdd(today, i - 6)), av = k => days.map(d => M[d] && M[d][k] != null ? +M[d][k] : 0);
+  const card = (k, lab, sub, mini, foot) => `<button class="pxm" data-met="${k}"><span class="pxl2">${lab}</span><span class="pxs">${sub}</span>${mini}<span class="pxf"><b>${foot}</b><em>›</em></span></button>`;
+  const kg = bv('kg'), pf = bv('pbf');
+  let h = `<div class="sec">${pxHead(EL('Cơ thể', 'Body'), `<span><button class="pxadd" data-badd="kg">+ ${EL('Cân', 'Weigh')}</button><button class="pxadd" data-badd="st">+ ${EL('Bước', 'Steps')}</button></span>`)}<div class="pxg">
+    ${card('kg', EL('Cân nặng', 'Weight'), EL('7 lần đo gần nhất', 'Last 7 entries'), pxMiniLine(kg.slice(-7)), kg.length ? nfmt(kg[kg.length - 1]) + ' kg' : '–')}
+    ${card('pbf', EL('Mỡ cơ thể', 'Body fat'), EL('7 lần đo gần nhất', 'Last 7 entries'), pxMiniLine(pf.slice(-7)), pf.length ? nfmt(pf[pf.length - 1]) + ' %' : '–')}
+    ${card('st', EL('Số bước', 'Steps'), EL(`7 ngày · mục tiêu ${kfmt(g)}`, `7 days · goal ${kfmt(g)}`), pxMiniBars(av('st'), g), t.st != null ? kfmt(t.st) + EL(' hôm nay', ' today') : EL('– hôm nay', '– today'))}
+    ${card('kc', EL('Calo vận động', 'Active calories'), EL('7 ngày qua', 'Last 7 days'), pxMiniBars(av('kc'), 0), t.kc != null ? kfmt(t.kc) + ' cal' : EL('– hôm nay', '– today'))}</div></div>`;
+  return h + calLine();
+}
+function openMetric(k){
+  const save = BMK; BMK = k; const s0 = bodyTab(); BMK = save;
+  const a = s0.indexOf('<div class="panel pgp bchart">'), c = s0.lastIndexOf(calLine()), panel = a >= 0 && c > a ? s0.slice(a, c - 6) : '';
+  const B = bodyList(), M = {}; actList().forEach(e => { M[e.d] = e; });
+  const t = M[isoDay()] || {}, last = q => { const x = B.filter(e => e[q] != null).pop(); return x ? x[q] : null; };
+  const TT = {kg: EL('Cân nặng', 'Weight'), pbf: EL('Mỡ cơ thể', 'Body fat'), st: EL('Số bước', 'Steps'), kc: EL('Calo vận động', 'Active calories')};
+  const big = k === 'kg' ? (last('kg') != null ? `${nfmt(last('kg'))}<small>kg</small>` : '–') : k === 'pbf' ? (last('pbf') != null ? `${nfmt(last('pbf'))}<small>%</small>` : '–')
+    : k === 'st' ? (t.st != null ? `${kfmt(t.st)}<small>${EL('bước hôm nay', 'steps today')}</small>` : '–') : (t.kc != null ? `${kfmt(t.kc)}<small>${EL('cal hôm nay', 'cal today')}</small>` : '–');
+  const ov = document.createElement('div'); ov.className = 'cele acc pxov';
+  ov.innerHTML = `<div class="cbox pgx" role="dialog" aria-label="${TT[k]}"><button class="x" data-x aria-label="${EL('Đóng', 'Close')}">✕</button>
+    <h2 style="font-size:20px;margin:2px 40px 2px 0">${TT[k]}</h2><div class="pxbig"><b>${big}</b></div>${panel}</div>`;
+  const close = () => ov.remove();
+  ov.querySelector('[data-x]').onclick = close; ov.onclick = e => { if(e.target === ov) close(); };
+  ov.querySelectorAll('[data-bh]').forEach(b => b.onclick = () => { close(); openHist(b.dataset.bh); });
+  ov.querySelectorAll('[data-badd]').forEach(b => b.onclick = () => { close(); const q = b.dataset.badd; q === 'st' || q === 'kc' ? openAct() : openBody(); });
+  ov.querySelectorAll('[data-act]').forEach(b => b.onclick = () => { close(); openAct(b.dataset.act); });
+  trTree(ov); document.body.appendChild(ov); requestAnimationFrame(() => ov.classList.add('on'));
+}
+/* ---------- Tiến bộ 1 trang (patch8y) ---------- */
+function pxArea(v){
+  if(v.length < 2) return `<div class="pxmini none">${EL('Cần ≥ 2 lần đo', 'Need 2+ entries')}</div>`;
+  const W = 150, H = 54, p = 5, mn = Math.min(...v), mx = Math.max(...v), sp = (mx - mn) || 1, X = i => p + (W - 2 * p) * i / (v.length - 1), Y = x => p + (H - 14) * (1 - (x - mn) / sp);
+  const ln = v.map((x, i) => `${i ? 'L' : 'M'}${X(i).toFixed(1)},${Y(x).toFixed(1)}`).join('');
+  return `<svg viewBox="0 0 ${W} ${H}" class="pxmini" aria-hidden="true"><defs><linearGradient id="pxga" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".22"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient></defs>
+    <path d="${ln}L${X(v.length - 1).toFixed(1)},${H}L${X(0).toFixed(1)},${H}Z" class="ar"/><path d="${ln}"/>${v.map((x, i) => `<circle cx="${X(i).toFixed(1)}" cy="${Y(x).toFixed(1)}" r="3.4" class="ho"/>`).join('')}</svg>`;
+}
+function pxDots(set){ const today = isoDay(); let h = '';
+  for(let i = 29; i >= 0; i--){ const d = dAdd(today, -i); h += `<i class="${set.has(d) ? 'on' : ''}"></i>`; }
+  return `<div class="pxdots" aria-hidden="true">${h}</div>`; }
+function progPage(V){
+  const today = isoDay(), m0 = monOf(today), ym = today.slice(0, 7);
+  if(V === 'body'){
+    const B = bodyList(), M = {}; actList().forEach(e => { M[e.d] = e; });
+    const t = M[today] || {}, g = actGoal(), days7 = Array.from({length: 7}, (_, i) => dAdd(today, i - 6)), av = k => days7.map(d => M[d] && M[d][k] != null ? +M[d][k] : 0);
+    const kg = B.filter(e => e.kg != null).map(e => +e.kg), bd = new Set(B.map(e => e.d)), wkIn = Array.from({length: 7}, (_, i) => dAdd(m0, i)).filter(d => bd.has(d)).length;
+    const card = (k, lab, sub, mini, foot) => `<button class="pxm" data-${k === 'in' ? 'badd="kg"' : 'met="' + k + '"'}><span class="pxl2">${lab}</span><span class="pxs">${sub}</span>${mini}<span class="pxf"><b>${foot}</b><em>›</em></span></button>`;
+    return `<div class="sec">${pxHead(EL('Cơ thể', 'Body'), `<button class="pxadd" data-add2>+ ${EL('Thêm', 'Add')}</button>`)}<div class="pxg">
+      ${card('kg', EL('Cân nặng', 'Weight'), EL('7 lần gần nhất', 'Last 7 entries'), pxArea(kg.slice(-7)), kg.length ? `${nfmt(kg[kg.length - 1])} <small>kg</small>` : '–')}
+      ${card('pbf', EL('Mỡ cơ thể', 'Body fat'), EL('7 lần gần nhất', 'Last 7 entries'), pxArea(B.filter(e => e.pbf != null).map(e => +e.pbf).slice(-7)), (x => x ? `${nfmt(x.pbf)} <small>%</small>` : '–')(B.filter(e => e.pbf != null).pop()))}
+      ${card('st', EL('Số bước', 'Steps'), EL('7 ngày qua', 'Last 7 days'), pxMiniBars(av('st'), g), t.st != null ? `${kfmt(t.st)} <small>${EL('hôm nay', 'today')}</small>` : `– <small>${EL('hôm nay', 'today')}</small>`)}
+      ${card('kc', EL('Calo vận động', 'Active calories'), EL('7 ngày qua', 'Last 7 days'), pxMiniBars(av('kc'), 0), t.kc != null ? `${kfmt(t.kc)} <small>cal</small>` : `– <small>${EL('hôm nay', 'today')}</small>`)}</div></div>` + calLine();
+  }
+  // ---- Tổng quan ----
+  const L = Object.values(getLog()).filter(e => e.k >= e.of && e.of > 0), ds = new Set(L.map(e => e.d));
+  const wd = EL(['T2','T3','T4','T5','T6','T7','CN'], ['M','T','W','T','F','S','S']), days = Array.from({length: 7}, (_, i) => dAdd(m0, i)), nw = days.filter(d => ds.has(d)).length;
+  const mon = L.filter(e => e.d.slice(0, 7) === ym).length;
+  const hasW = a => { for(let i = 0; i < 7; i++) if(ds.has(dAdd(a, i))) return true; return false; };
+  let ws = 0, w = hasW(m0) ? m0 : dAdd(m0, -7); while(hasW(w)){ ws++; w = dAdd(w, -7); }
+  let h = `<div class="sec">${pxHead(EL('Tuần này', 'This week'), `<span class="pxr">${nw} ${EL('buổi', nw === 1 ? 'workout' : 'workouts')}</span>`)}
+    <div class="pxc pxwk">${days.map((d, i) => `<div class="pxd"><i class="${ds.has(d) ? 'on' : d === today ? 'td' : d > today ? 'fu' : ''}"></i><span class="${d === today ? 'td' : ''}">${wd[i]}</span></div>`).join('')}</div>
+    <div class="pxg" style="margin-top:10px">${pxCard(L.length, EL('Buổi đã tập', 'Workouts completed'), `${EL('Tháng này', 'This month')}: ${mon > 0 ? `<i class="up">+${mon}</i>` : 0}`)}
+    ${pxCard(ws + `<small>${EL('tuần', 'wk')}</small>`, EL('Chuỗi tuần', 'Week streak'), EL('Tuần nào cũng tập', 'Trained every week'))}</div></div>`;
+  // Nhóm cơ
+  const st = rangeStats(m0, dAdd(today, 1)), nm = r => EL(MVN[r], MVN_EN[r]), lo0 = volTh()[0];
+  const top = Object.entries(st.mus).filter(([r]) => MMAJOR.includes(r)).sort((x, y) => y[1] - x[1]).slice(0, 2).map(([r]) => nm(r)), low = MMAJOR.filter(r => (st.mus[r] || 0) < lo0).map(nm);
+  h += `<div class="sec">${pxHead(EL('Nhóm cơ tuần này', 'Muscles this week'), `<span class="pxr">${st.sets} set</span>`)}<button class="pxmus" data-mus>
+    <span class="pxmm">${bodySvg([], [], r => { const v = st.mus[r] || 0; return v >= lo0 ? 'mok' : (v > 0 || MMAJOR.includes(r)) ? 'mlo' : 'h0'; })}<span class="pxleg"><span><i class="mok"></i>${EL('Đủ', 'Enough')}</span><span><i class="mlo"></i>${EL('Thiếu', 'Low')}</span></span></span><span class="pxmt">${st.sets
+      ? `<span class="pxs">${EL('Đủ', 'Enough')} (≥ ${lo0} set)</span><b class="ok">${(oks => oks.length ? oks.slice(0, 3).join(', ') + (oks.length > 3 ? ` +${oks.length - 3}` : '') : EL('Chưa có', 'None yet'))(MMAJOR.filter(r => (st.mus[r] || 0) >= lo0).map(nm))}</b><span class="pxs">${EL('Thiếu', 'Low')}</span><b>${low.length ? low.slice(0, 3).join(', ') + (low.length > 3 ? ` +${low.length - 3}` : '') : EL('Không có', 'None')}</b>`
+      : `<span class="pxs">${EL('Tuần này chưa có set nào', 'No sets yet this week')}</span>`}</span><em>›</em></button></div>`;
+  return h;
+}
+function openAdd(){
+  const ov = document.createElement('div'); ov.className = 'cele acc';
+  ov.innerHTML = `<div class="cbox addbox" role="dialog" aria-label="${EL('Nhập', 'Log')}"><button class="x" data-x aria-label="${EL('Đóng', 'Close')}">✕</button>
+    <h2 style="font-size:20px;margin:2px 40px 12px 0">${EL('Nhập gì?', 'Log what?')}</h2>
+    <button class="addopt" data-a="b"><b>${EL('Cân nặng & mỡ cơ thể', 'Weight & body fat')}</b><span>${EL('Lâu lâu đo 1 lần', 'Whenever you measure')}</span><em>›</em></button>
+    <button class="addopt" data-a="a"><b>${EL('Bước & calo', 'Steps & calories')}</b><span>${EL('Chép từ đồng hồ mỗi ngày', 'Copy from your watch daily')}</span><em>›</em></button></div>`;
+  ov.querySelector('[data-x]').onclick = () => ov.remove(); ov.onclick = e => { if(e.target === ov) ov.remove(); };
+  ov.querySelectorAll('[data-a]').forEach(b => b.onclick = () => { ov.remove(); b.dataset.a === 'b' ? openBody() : openAct(); });
+  trTree(ov); document.body.appendChild(ov); requestAnimationFrame(() => ov.classList.add('on'));
+}
+function openAdd2(mode){
+  const ov = document.createElement('div'), today = isoDay(); ov.className = 'cele acc'; let M0 = mode === 'b' ? 'b' : 'a', D0 = today;
+  const draw = () => { const d = D0, isA = M0 === 'a', b = bodyList().find(x => x.d === d) || {}, a = actList().find(x => x.d === d) || {};
+    const f = (id, lab, v, dec) => `<label class="field">${lab}<input id="${id}" inputmode="${dec ? 'decimal' : 'numeric'}" autocomplete="off" value="${v != null ? (dec ? nfmt(v) : v) : ''}" placeholder="–"></label>`;
+    ov.innerHTML = `<div class="cbox" role="dialog" aria-label="${EL('Thêm số liệu', 'Add data')}"><button class="x" data-x aria-label="${EL('Đóng', 'Close')}">✕</button>
+      <h2 style="font-size:20px;margin:2px 40px 12px 0">${EL('Thêm số liệu', 'Add data')}</h2>
+      <div class="lmode addseg" role="tablist"><button type="button" data-m="a" aria-selected="${isA}">${EL('Số bước & calo', 'Steps & calories')}</button><button type="button" data-m="b" aria-selected="${!isA}">${EL('Cân nặng & mỡ', 'Weight & body fat')}</button></div>
+      <form id="a2f"><label class="field">${EL('Ngày', 'Date')}<input id="a2d" type="date" value="${d}" max="${today}" required></label>
+      <div class="bdfg">${isA ? f('a2x', EL('Số bước', 'Steps'), a.st, 0) + f('a2y', EL('Calo vận động', 'Active cal'), a.kc, 0) : f('a2x', EL('Cân nặng (kg)', 'Weight (kg)'), b.kg, 1) + f('a2y', EL('Mỡ cơ thể (%)', 'Body fat (%)'), b.pbf, 1)}</div>
+      <p class="aerr" id="a2e"></p><button class="btn" type="submit">${EL('Lưu', 'Save')}</button></form></div>`;
+    ov.querySelector('[data-x]').onclick = () => ov.remove();
+    ov.querySelectorAll('[data-m]').forEach(x => x.onclick = () => { if(x.dataset.m !== M0){ M0 = x.dataset.m; draw(); } });
+    ov.querySelector('#a2d').onchange = ev => { if(ev.target.value){ D0 = ev.target.value; draw(); } };
+    ov.querySelector('#a2f').onsubmit = ev => { ev.preventDefault();
+      const er = ov.querySelector('#a2e'), raw = id => ov.querySelector(id).value.trim();
+      const x = raw('#a2x') === '' ? null : (isA ? +raw('#a2x').replace(/[.,\s]/g, '') : pnum(raw('#a2x'))), y = raw('#a2y') === '' ? null : (isA ? +raw('#a2y').replace(/[.,\s]/g, '') : pnum(raw('#a2y')));
+      if(!d || d > today){ er.textContent = EL('Chọn ngày hợp lệ.', 'Pick a valid date.'); return; }
+      if(x == null && y == null){ er.textContent = EL('Điền ít nhất 1 ô.', 'Fill in at least one field.'); return; }
+      if(isA){ if([x, y].some(v => v != null && !(v >= 0 && v < 200000))){ er.textContent = EL('Số không hợp lệ.', 'Invalid number.'); return; }
+        const o = {d}, s2 = x != null ? x : a.st, c2 = y != null ? y : a.kc; if(s2 != null) o.st = s2; if(c2 != null) o.kc = c2; actPut(o); }
+      else { if(x != null && !(x >= 20 && x <= 300)){ er.textContent = EL('Cân nặng không hợp lệ.', 'Invalid weight.'); return; }
+        if(y != null && !(y >= 2 && y < 70)){ er.textContent = EL('% mỡ không hợp lệ.', 'Invalid body fat.'); return; }
+        const o = {d}, k2 = x != null ? x : b.kg, p2 = y != null ? y : b.pbf; if(k2 != null) o.kg = k2; if(p2 != null) o.pbf = p2; bodyPut(o); }
+      sbFlush(); ov.remove(); ANIM = ''; const sy = scrollY; render(); scrollTo(0, sy);
+      const nb = newBadges(), bx = nb.length && BADGES.find(z => z[0] === nb[0]);
+      toast(bx ? `<b>${bx[1]} ${EL('Huy hiệu mới', 'New badge')}: ${esc(bx[2])}</b><span>${esc(bx[3])}</span>` : `<b>${EL('Đã lưu', 'Saved')}</b>`); };
+    trTree(ov);
+  };
+  draw(); document.body.appendChild(ov); requestAnimationFrame(() => ov.classList.add('on'));
+  ov.onclick = ev => { if(ev.target === ov) ov.remove(); };
+}
+function openLog(d0){
+  const ov = document.createElement('div'), today = isoDay(); ov.className = 'cele acc';
+  const draw = d => { const b = bodyList().find(x => x.d === d) || {}, a = actList().find(x => x.d === d) || {};
+    const f = (id, lab, v, dec) => `<label class="field">${lab}<input id="${id}" inputmode="${dec ? 'decimal' : 'numeric'}" autocomplete="off" value="${v != null ? (dec ? nfmt(v) : v) : ''}" placeholder="–"></label>`;
+    ov.innerHTML = `<div class="cbox" role="dialog" aria-label="${EL('Nhập số liệu', 'Log data')}"><button class="x" data-x aria-label="${EL('Đóng', 'Close')}">✕</button>
+      <h2 style="font-size:20px;margin:2px 40px 4px 0">${EL('Nhập số liệu', 'Log data')}</h2>
+      <p class="pcap" style="margin:0 0 10px">${EL('Có số nào điền số đó, ô khác bỏ trống.', 'Fill in what you have, leave the rest empty.')}</p>
+      <form id="lgf"><label class="field">${EL('Ngày', 'Date')}<input id="lgd" type="date" value="${d}" max="${today}" required></label>
+      <div class="lgsec">${EL('Cơ thể', 'Body')}</div>
+      <div class="bdfg">${f('lgkg', EL('Cân nặng (kg)', 'Weight (kg)'), b.kg, 1)}${f('lgpf', EL('Mỡ cơ thể (%)', 'Body fat (%)'), b.pbf, 1)}</div>
+      <div class="lgsec">${EL('Hoạt động · từ đồng hồ', 'Activity · from your watch')}</div>
+      <div class="bdfg">${f('lgst', EL('Số bước', 'Steps'), a.st, 0)}${f('lgkc', EL('Calo vận động', 'Active cal'), a.kc, 0)}</div>
+      <p class="aerr" id="lge"></p><button class="btn" type="submit">${EL('Lưu', 'Save')}</button></form></div>`;
+    ov.querySelector('[data-x]').onclick = () => ov.remove();
+    ov.querySelector('#lgd').onchange = ev => { if(ev.target.value) draw(ev.target.value); };
+    ov.querySelector('#lgf').onsubmit = ev => { ev.preventDefault();
+      const dd = ov.querySelector('#lgd').value, er = ov.querySelector('#lge'), raw = id => ov.querySelector(id).value.trim();
+      const dec = id => raw(id) === '' ? null : pnum(raw(id)), int = id => raw(id) === '' ? null : +raw(id).replace(/[.,\s]/g, '');
+      const kg = dec('#lgkg'), pf = dec('#lgpf'), st = int('#lgst'), kc = int('#lgkc');
+      if(!dd || dd > today){ er.textContent = EL('Chọn ngày hợp lệ.', 'Pick a valid date.'); return; }
+      if(kg == null && pf == null && st == null && kc == null){ er.textContent = EL('Điền ít nhất 1 ô.', 'Fill in at least one field.'); return; }
+      if(kg != null && !(kg >= 20 && kg <= 300)){ er.textContent = EL('Cân nặng không hợp lệ.', 'Invalid weight.'); return; }
+      if(pf != null && !(pf >= 2 && pf < 70)){ er.textContent = EL('% mỡ không hợp lệ.', 'Invalid body fat.'); return; }
+      if([st, kc].some(v => v != null && !(v >= 0 && v < 200000))){ er.textContent = EL('Số bước / calo không hợp lệ.', 'Invalid steps / calories.'); return; }
+      if(kg != null || pf != null){ const o = {d: dd}; const k2 = kg != null ? kg : b.kg, p2 = pf != null ? pf : b.pbf; if(k2 != null) o.kg = k2; if(p2 != null) o.pbf = p2; bodyPut(o); }
+      if(st != null || kc != null){ const o = {d: dd}; const s2 = st != null ? st : a.st, c2 = kc != null ? kc : a.kc; if(s2 != null) o.st = s2; if(c2 != null) o.kc = c2; actPut(o); }
+      sbFlush(); ov.remove(); ANIM = ''; const y = scrollY; render(); scrollTo(0, y);
+      const nb = newBadges(), bx = nb.length && BADGES.find(x => x[0] === nb[0]);
+      toast(bx ? `<b>${bx[1]} ${EL('Huy hiệu mới', 'New badge')}: ${esc(bx[2])}</b><span>${esc(bx[3])}</span>` : `<b>${EL('Đã lưu', 'Saved')}</b>`); };
+    trTree(ov);
+  };
+  draw(d0 || today); document.body.appendChild(ov); requestAnimationFrame(() => ov.classList.add('on'));
+  ov.onclick = ev => { if(ev.target === ov) ov.remove(); };
+}
+function openBadges(){
+  const ov = document.createElement('div'); ov.className = 'cele acc pxov'; const keep = BADGEALL; BADGEALL = true;
+  ov.innerHTML = `<div class="cbox pgx px2" role="dialog" aria-label="${EL('Huy hiệu', 'Badges')}"><button class="x" data-x aria-label="${EL('Đóng', 'Close')}">✕</button>${achHtml()}</div>`; BADGEALL = keep;
+  ov.querySelector('[data-x]').onclick = () => ov.remove(); ov.onclick = e => { if(e.target === ov) ov.remove(); };
+  ov.querySelectorAll('[data-bdi]').forEach(b => b.onclick = () => { const x = BADGES.find(y => y[0] === b.dataset.bdi); if(!x) return; const c = x[4](badgeStats()) || 0;
+    toast(`<b>${x[1]} ${esc(x[2])}</b><span>${esc(x[3])}${c >= x[5] ? ' · ✓' : ' · ' + esc(bRem({b: x, c}))}</span>`); });
+  ov.querySelectorAll('[data-login]').forEach(b => b.onclick = () => { ov.remove(); openSettings(); });
+  trTree(ov); document.body.appendChild(ov); requestAnimationFrame(() => ov.classList.add('on'));
 }
 function openMus(){
   const ov = document.createElement('div'); ov.className = 'cele acc';
   ov.innerHTML = `<div class="cbox" role="dialog" aria-label="${EL('Nhóm cơ tuần này', 'Muscles this week')}"><button class="x" data-x aria-label="${EL('Đóng', 'Close')}">✕</button>${musWeekHtml()}</div>`;
   ov.querySelector('[data-x]').onclick = () => ov.remove(); ov.onclick = e => { if(e.target === ov) ov.remove(); };
+  trTree(ov); document.body.appendChild(ov); requestAnimationFrame(() => ov.classList.add('on'));
+}
+const ICH = '<svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/><path d="M12 7v5l3 2"/></svg>';
+const ICP = '<svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>';
+function bodyTab(){
+  const B = bodyList(), A = actList(), M = {}; A.forEach(e => M[e.d] = e);
+  const today = isoDay(), g = actGoal(), t = M[today], dd = d => `${+d.slice(8)}/${+d.slice(5,7)}`;
+  const lastOf = k => { for(let i = B.length - 1; i >= 0; i--) if(B[i][k] != null) return i; return -1; };
+  const prevOf = (i, k) => { for(let j = i - 1; j >= 0; j--) if(B[j][k] != null) return j; return -1; };
+  if(!['kg', 'pbf', 'st', 'kc'].includes(BMK)) BMK = 'kg';
+  const tile = (k, lab, val, unit, sub) => `<button class="bt4 ${BMK === k ? 'on' : ''}" data-bk="${k}"><span>${lab}</span><b>${val}${unit && val !== '–' ? `<small>${unit}</small>` : ''}</b>${sub}</button>`;
+  const bodyT = (k, lab, unit, good) => { const i = lastOf(k); if(i < 0) return tile(k, lab, '–', '', `<em>${EL('Chưa nhập', 'No data')}</em>`);
+    const j = prevOf(i, k), v = B[i][k], df = j < 0 ? 0 : Math.round((v - B[j][k]) * 10) / 10, cls = !df || !good ? '' : (df * good > 0 ? 'g' : 'b');
+    return tile(k, lab, nfmt(v), unit, j < 0 ? `<em>${dd(B[i].d)}</em>` : `<em class="${cls}">${df ? (df > 0 ? '▲ ' : '▼ ') + nfmt(Math.abs(df)) : '='}</em>`); };
+  const st = t && t.st != null ? +t.st : null, kc = t && t.kc != null ? +t.kc : null;
+  let h = `<div class="sec"><div class="bt4g">${bodyT('kg', EL('Cân nặng', 'Weight'), 'kg', 0)}${bodyT('pbf', EL('Mỡ cơ thể', 'Body fat'), '%', -1)}
+    ${tile('st', EL('Bước hôm nay', 'Steps today'), st != null ? kfmt(st) : '–', '', `<span class="bt4b"><i style="width:${Math.min(100, Math.round((st || 0) / g * 100))}%"></i></span><em class="${st >= g ? 'g' : ''}">${st >= g ? '✓ ' + EL('Đạt', 'Done') + ' ' : ''}${EL('mục tiêu', 'goal')} ${kfmt(g)}</em>`)}
+    ${tile('kc', EL('Calo hôm nay', 'Calories today'), kc != null ? kfmt(kc) : '–', 'cal', `<em>${EL('vận động', 'active')}</em>`)}</div>`;
+  const NM = {kg: EL('Cân nặng', 'Weight'), pbf: EL('Mỡ cơ thể', 'Body fat'), st: EL('Số bước · 7 ngày', 'Steps · 7 days'), kc: EL('Calo vận động · 7 ngày', 'Active calories · 7 days')};
+  h += `<div class="panel pgp bchart"><div class="bch"><b>${NM[BMK]}</b><span><button class="bic" data-bh="${BMK}" aria-label="${EL('Lịch sử', 'History')}">${ICH}</button><button class="bic" data-badd="${BMK}" aria-label="${EL('Nhập', 'Log')}">${ICP}</button></span></div>`;
+  if(BMK === 'kg' || BMK === 'pbf'){
+    const u = BMK === 'kg' ? 'kg' : '%', pts = B.filter(e => e[BMK] != null).slice(-12);
+    if(pts.length >= 2){
+      const W = 320, H = 120, pl = 8, pr = 8, pt = 22, pb = 18, ys = pts.map(e => e[BMK]), mn = Math.min(...ys), mx = Math.max(...ys), sp = (mx - mn) || 1;
+      const X = i => pl + (W - pl - pr) * i / (pts.length - 1), Y = v => pt + (H - pt - pb) * (1 - (v - mn) / sp);
+      h += `<svg viewBox="0 0 ${W} ${H}" class="pchart" role="img" aria-label="${NM[BMK]}"><line x1="${pl}" x2="${W-pr}" y1="${H-pb}" y2="${H-pb}" class="base"/>
+        <path d="${pts.map((e,i) => `${i ? 'L' : 'M'}${X(i).toFixed(1)},${Y(e[BMK]).toFixed(1)}`).join('')}" class="ln"/>${pts.map((e,i) => `<circle cx="${X(i)}" cy="${Y(e[BMK])}" r="4" class="dot"/>`).join('')}
+        <text x="${X(0)}" y="${Y(ys[0])-9}" class="vl">${nfmt(ys[0])}</text><text x="${X(pts.length-1)}" y="${Y(ys[ys.length-1])-9}" text-anchor="end" class="vl">${nfmt(ys[ys.length-1])}${u}</text>
+        <text x="${pl}" y="${H-4}" class="ax">${dd(pts[0].d)}</text><text x="${W-pr}" y="${H-4}" text-anchor="end" class="ax">${dd(pts[pts.length-1].d)}</text></svg>`;
+    } else h += `<button class="bemp" data-badd="${BMK}">${pts.length ? EL('Nhập thêm 1 lần đo để vẽ biểu đồ', 'Log one more to see a chart') : EL('Chưa có số liệu · bấm để nhập', 'No data yet · tap to log')}</button>`;
+    const li = lastOf(BMK); if(BMK === 'kg') h += rateLine();
+    if(li >= 0){ const ago = Math.round((new Date(today + 'T00:00:00') - new Date(B[li].d + 'T00:00:00')) / 864e5);
+      h += `<p class="pgmeta">${EL('Lần đo gần nhất', 'Last measured')} ${dd(B[li].d)} · ${ago > 0 ? EL(`${ago} ngày trước`, `${ago}d ago`) : EL('hôm nay', 'today')}${ago >= 14 ? ` · <span class="w">${EL('đến lúc đo lại', 'time to re-measure')}</span>` : ''}</p>`; }
+  } else {
+    const k = BMK, days = Array.from({length: 7}, (_, i) => dAdd(today, i - 6)), vals = days.map(d => M[d] && M[d][k] != null ? +M[d][k] : 0);
+    if(vals.some(Boolean)){
+      const W = 320, H = 120, pt = 16, pb = 18, gl = k === 'st' ? g : 0, mx = Math.max(gl, ...vals) * 1.08, bw = 30, gap = (W - 7 * bw) / 6, Y = v => pt + (H - pt - pb) * (1 - v / mx);
+      const wd = EL(['CN','T2','T3','T4','T5','T6','T7'], ['Su','Mo','Tu','We','Th','Fr','Sa']), sh = v => v >= 1000 ? (Math.round(v / 100) / 10).toString().replace('.', ',') + 'k' : v;
+      h += `<svg viewBox="0 0 ${W} ${H}" class="wchart actc" role="img" aria-label="${NM[k]}">${days.map((d, i) => { const x = i * (bw + gap), v = vals[i];
+        return `<g data-act="${d}"><rect class="hit" x="${x - gap/2}" y="0" width="${bw + gap}" height="${H}"/>${v ? `<rect class="acb ${k === 'kc' || v >= g ? 'ok' : ''}" x="${x}" y="${Y(v)}" width="${bw}" height="${H - pb - Y(v)}" rx="5"/><text x="${x + bw/2}" y="${Y(v) - 4}" text-anchor="middle" class="vl">${sh(v)}</text>` : `<rect class="acb none" x="${x}" y="${H - pb - 3}" width="${bw}" height="3" rx="1.5"/>`}
+          <text x="${x + bw/2}" y="${H - 4}" text-anchor="middle" class="ax ${d === today ? 'td' : ''}">${wd[new Date(d + 'T00:00:00').getDay()]}</text></g>`; }).join('')}${gl ? `<line x1="0" x2="${W}" y1="${Y(gl)}" y2="${Y(gl)}" class="gl"/>` : ''}</svg>`;
+    } else h += `<button class="bemp" data-badd="${k}">${EL('7 ngày qua chưa có số liệu · bấm để nhập', 'No data in the last 7 days · tap to log')}</button>`;
+    const wk = days.map(d => M[d]).filter(e => e && +e[k] > 0), avg = wk.length ? wk.reduce((x, e) => x + +e[k], 0) / wk.length : 0;
+    if(avg) h += `<p class="pgmeta">${EL('TB 7 ngày', '7-day avg')}: <b>${kfmt(avg)}</b> ${k === 'st' ? EL('bước', 'steps') : 'cal'}${k === 'st' ? ` · ${EL('mục tiêu', 'goal')} ${kfmt(g)} · ${EL('chuỗi đạt', 'streak')} <b>${actRun().cur}</b> ${EL('ngày', 'd')}` : ''}</p>`;
+  }
+  h += `</div></div>` + calLine();
+  return h;
+}
+function openHist(k){
+  const ov = document.createElement('div'), isB = k === 'kg' || k === 'pbf', dd = d => `${+d.slice(8)}/${+d.slice(5,7)}/${d.slice(0,4)}`; ov.className = 'cele acc';
+  const L = (isB ? bodyList() : actList()).slice().reverse();
+  const rows = L.map(e => `<button class="bdr" data-hd="${e.d}"><b>${dd(e.d)}</b><span>${isB ? BM.filter(([q]) => e[q] != null).map(([q, lab, u]) => `${nfmt(e[q])}${u}`).join(' · ') : [e.st != null ? kfmt(e.st) + ' ' + EL('bước', 'steps') : '', e.kc ? kfmt(e.kc) + ' cal' : ''].filter(Boolean).join(' · ')}</span></button>`).join('');
+  ov.innerHTML = `<div class="cbox" role="dialog" aria-label="${EL('Lịch sử', 'History')}"><button class="x" data-x aria-label="${EL('Đóng', 'Close')}">✕</button>
+    <h2 style="font-size:20px;margin:2px 40px 4px 0">${isB ? EL('Lịch sử đo', 'Measurements') : EL('Lịch sử hoạt động', 'Activity history')}</h2><p class="pgmeta" style="margin:0 0 10px">${EL('Bấm 1 dòng để sửa hoặc xoá', 'Tap a row to edit or delete')}</p>
+    <div class="hlist">${rows || `<p class="pgmeta">${EL('Chưa có số liệu', 'No data yet')}</p>`}</div></div>`;
+  ov.querySelector('[data-x]').onclick = () => ov.remove(); ov.onclick = e => { if(e.target === ov) ov.remove(); };
+  ov.querySelectorAll('[data-hd]').forEach(b => b.onclick = () => { ov.remove(); isB ? openBody(b.dataset.hd) : openAct(b.dataset.hd); });
   trTree(ov); document.body.appendChild(ov); requestAnimationFrame(() => ov.classList.add('on'));
 }
 function rateLine(){
@@ -2224,17 +2560,22 @@ function rateLine(){
   return `<p class="pgmeta">${EL('Tốc độ', 'Rate')}: <b>${sg}${nfmt(Math.abs(r.wk))} kg/${EL('tuần', 'wk')}</b> (${sg}${nfmt(Math.round(Math.abs(pc) * 100) / 100)}%)${w ? ` · <span class="w">${w}</span>` : ''}</p>`;
 }
 function calLine(){
-  const c = getJ('calprof', null), r = c && calCalc(Object.assign({}, c, calBody()));
-  return `<div class="sec"><button class="pgrow" data-cal><div><span class="pgl">${EL('Calo mục tiêu', 'Calorie target')}</span><p>${r ? `<b>${fnum(r.tgt)} cal</b> · ${EL(CGOAL[c.goal][1], CGOAL[c.goal][2])} · ${r.pro}g protein` : EL('Chưa tính · bấm để tính theo cân nặng', 'Not set · tap to calculate')}</p></div><em>›</em></button></div>`;
+  const c = getJ('calprof', null), r = c && calCalc(Object.assign({}, c, calBody(), c.usePbf === false ? {pbf: null} : {}));
+  if(!r) return `<div class="sec"><button class="pgrow" data-cal><div><span class="pgl">${EL('Calo mục tiêu', 'Calorie target')}</span><p>${EL('Chưa tính · bấm để tính theo cân nặng', 'Not set · tap to calculate')}</p></div><em>›</em></button></div>`;
+  return `<div class="sec"><button class="ctg2" data-cal><span class="ctl">${EL('Calo mục tiêu mỗi ngày', 'Daily calorie target')}</span><em class="cted">${EL('Sửa', 'Edit')} ›</em>
+    <b class="ctv">${fnum(r.tgt)}<small>cal</small></b><span class="ctg">${EL(CGOAL[c.goal][1], CGOAL[c.goal][2])}</span>
+    <span class="cts">Protein ~${r.pro}g · ${EL('duy trì', 'maintenance')} ${fnum(r.tdee)} cal</span></button></div>`;
 }
 function achHtml(){
-  const got = new Set(earnedBadges()), bst = badgeStats(), nx = badgeNext(bst, 3);
-  let h = `<div class="sec"><div class="bhd"><div class="mdh">${EL('Huy hiệu', 'Badges')}</div><span>${got.size}/${BADGES.length}</span></div>`;
+  const got = new Set(earnedBadges()), bst = badgeStats(), nx = badgeNext(bst, 3), seen = getJ('badges', []), B = id => BADGES.find(b => b[0] === id);
+  const order = [...seen.filter(id => got.has(id)).reverse(), ...[...got].filter(id => !seen.includes(id))];
+  const list = BADGEALL ? [...order.map(B), ...BADGES.filter(b => !got.has(b[0]))].filter(Boolean) : order.slice(0, 5).map(B).filter(Boolean);
+  let h = `<div class="sec">${pxHead(EL('Huy hiệu', 'Badges'), `<span class="pxr">${got.size}/${BADGES.length}</span>`)}`;
   if(nx.length) h += `<div class="bnext"><div class="bnh">${EL('Sắp đạt', 'Almost there')}</div>${nx.map(x => `<div class="bnx"><span class="bi">${x.b[1]}</span><div class="bnt"><b>${esc(x.b[2])}</b><span class="bpb"><u style="width:${Math.max(3, Math.round(x.r * 100))}%"></u></span></div><em>${esc(bRem(x))}</em></div>`).join('')}</div>`;
-  const shown = BADGEALL ? BADGES : BADGES.filter(b => got.has(b[0]));
-  h += shown.length ? `<div class="bgr2">${shown.map(([id, ic, nm]) => `<button class="bd2 ${got.has(id) ? 'on' : ''}" data-bdi="${id}"><span>${ic}</span><b>${esc(nm)}</b></button>`).join('')}</div>` : `<p class="pgmeta">${EL('Chưa có huy hiệu nào. Tập xong buổi đầu tiên là có.', 'No badges yet. Finish your first workout to earn one.')}</p>`;
-  h += `<button class="qsw" id="ball">${BADGEALL ? EL('Chỉ xem huy hiệu đã có', 'Show earned only') : EL(`Xem tất cả ${BADGES.length} huy hiệu ›`, `See all ${BADGES.length} badges ›`)}</button></div>`;
-  h += getJ('sbauth', null) ? `<div class="sec"><div class="mdh">${EL('Bảng xếp hạng tháng', 'Monthly leaderboard')}</div>${renderBoard(true)}</div>`
+  h += list.length ? `<div class="pxbl">${list.map(([id, ic, nm, ds]) => `<button class="pxb ${got.has(id) ? '' : 'off'}" data-bdi="${id}"><span class="pxbi">${ic}</span><span><b>${esc(nm)}</b><small>${esc(ds)}</small></span></button>`).join('')}</div>`
+    : `<p class="pgmeta">${EL('Chưa có huy hiệu nào. Tập xong buổi đầu tiên là có.', 'No badges yet. Finish your first workout to earn one.')}</p>`;
+  h += `<button class="qsw" id="ball">${BADGEALL ? EL('Thu gọn', 'Show less') : EL(`Xem tất cả ${BADGES.length} huy hiệu ›`, `See all ${BADGES.length} badges ›`)}</button></div>`;
+  h += getJ('sbauth', null) ? `<div class="sec">${pxHead(EL('Bảng xếp hạng tháng', 'Monthly leaderboard'))}${renderBoard(true)}</div>`
     : `<div class="sec"><button class="pgrow" data-login><div><span class="pgl">${EL('Bảng xếp hạng tháng', 'Monthly leaderboard')}</span><p>${EL('Đăng nhập để so số buổi tập với mọi người', 'Log in to compare workouts with others')}</p></div><em>›</em></button></div>`;
   return h;
 }
@@ -2244,7 +2585,7 @@ function renderStats(){
   const list = Object.values(L).filter(e => e.d.slice(0,7) === CALM), done = list.filter(e => e.k >= e.of && e.of > 0);
   const cnt = {}; done.forEach(e => { cnt[e.w] = (cnt[e.w]||0) + 1; }); const ks = Object.keys(cnt).sort((x,y) => cnt[y] - cnt[x]);
   const seg = pseg('stv', [['over', EL('Tổng quan', 'Overview')], ['body', EL('Cơ thể', 'Body')], ['ach', EL('Thành tích', 'Achievements')]], STV);
-  let h = `<div class="sec"><h2>Tiến bộ</h2>${seg}`;
+  let h = `<div class="sec"><h2>${EL('Tiến bộ', 'Progress')}</h2>${seg}`;
   let ov = ovHtml();
   h += '</div>';
   const board = `<div class="sec"><div class="mdh">Bảng xếp hạng tháng</div>${renderBoard(true)}</div>`;
@@ -2255,7 +2596,7 @@ function renderStats(){
   const shown = BADGEALL ? BADGES : BADGES.filter(b => got.has(b[0]));
   ach += shown.length ? `<div class="bgrid">${shown.map(([id, ic, nm, ds]) => `<div class="bdg ${got.has(id) ? 'on' : ''}" title="${esc(ds)}"><span class="bi">${ic}</span><b>${esc(nm)}</b><small>${esc(ds)}</small>${got.has(id) ? '' : (() => { const b = BADGES.find(x => x[0] === id), c = b[4](bst) || 0; return `<span class="bpb"><u style="width:${Math.round(Math.min(1, c / b[5]) * 100)}%"></u></span>`; })()}</div>`).join('')}</div>` : '<p class="none">Chưa có huy hiệu nào. Xong buổi đầu tiên để nhận huy hiệu đầu.</p>';
   ach += `<button class="qsw" id="ball">${BADGEALL ? 'Chỉ xem huy hiệu đã có' : `Xem tất cả ${BADGES.length} huy hiệu ›`}</button></div>`;
-  h += STV === 'body' ? bodyHtml() + calLine() + actHtml() : STV === 'ach' ? achHtml() : ov;
+  h += '<div class="pgx px2">' + (STV === 'ach' ? achHtml() : progPage(STV)) + '</div>';
   main.innerHTML = h; setAnim(); bindPseg(main);
   bindAcct(); bindBody(main);
   main.querySelectorAll('[data-mm]').forEach(b => b.onclick = () => { const [y,m] = CALM.split('-').map(Number); const d = new Date(y, m-1 + +b.dataset.mm, 1); CALM = isoDay(d).slice(0,7); ANIM = +b.dataset.mm > 0 ? 'l' : 'r'; render(); });
@@ -2265,6 +2606,12 @@ function renderStats(){
   const ba = main.querySelector('#ball'); if(ba) ba.onclick = () => { BADGEALL = !BADGEALL; const y = scrollY; ANIM = ''; render(); scrollTo(0, y); };
   main.querySelectorAll('[data-info]').forEach(b => b.onclick = () => { const x = PGINFO()[b.dataset.info]; toast(`<b>${x[0]}</b><span>${x[1]}</span>`); });
   main.querySelectorAll('[data-mus]').forEach(b => b.onclick = openMus);
+  main.querySelectorAll('[data-met]').forEach(b => b.onclick = () => openMetric(b.dataset.met));
+  main.querySelectorAll('[data-allb]').forEach(b => b.onclick = openBadges);
+  main.querySelectorAll('[data-log]').forEach(b => b.onclick = () => openAdd());
+  main.querySelectorAll('[data-add2]').forEach(b => b.onclick = () => openAdd2('a'));
+  main.querySelectorAll('[data-bh]').forEach(b => b.onclick = () => openHist(b.dataset.bh));
+  main.querySelectorAll('[data-badd]').forEach(b => b.onclick = () => { const k = b.dataset.badd; k === 'st' || k === 'kc' ? openAct() : openBody(); });
   main.querySelectorAll('[data-login]').forEach(b => b.onclick = () => openSettings());
   main.querySelectorAll('[data-bdi]').forEach(b => b.onclick = () => { const x = BADGES.find(y => y[0] === b.dataset.bdi); if(!x) return; const c = x[4](badgeStats()) || 0;
     toast(`<b>${x[1]} ${esc(x[2])}</b><span>${esc(x[3])}${c >= x[5] ? ' · ✓' : ' · ' + esc(bRem({b: x, c}))}</span>`); });
