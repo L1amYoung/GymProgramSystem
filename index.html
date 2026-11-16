@@ -373,7 +373,7 @@ function openSettings(){
         ${tg(`<div class="lmode"><button data-sm="0" aria-selected="${!LOGW()}">Đơn giản</button><button data-sm="1" aria-selected="${LOGW()}">Chi tiết</button></div>`, 0, 'Nhập set', 'Chi tiết = ghi tạ và rep từng set')}
         ${tg('<span class="gch">›</span>', 0, `<a class="gdl" href="guide.html">${ICO.book} ${EL('Hướng dẫn sử dụng', 'User guide')}</a>`, 'Cách dùng toàn bộ app, có ảnh minh hoạ')}
         ${WLOK ? tg(`<label class="lwt"><input type="checkbox" id="swk" ${WAKE ? 'checked' : ''}><span></span></label>`, 0, 'Giữ màn hình sáng', 'Khi đang ở trang Hôm nay') : ''}
-      </div><p class="appv">${LANG === 'en' ? 'Version' : 'Phiên bản'} 76011628ad</p></div>`;
+      </div><p class="appv">${LANG === 'en' ? 'Version' : 'Phiên bản'} 6510a6296c</p></div>`;
     ov.querySelector('[data-x]').onclick = () => ov.remove();
     bindAcct(ov);
     ov.querySelectorAll('[data-sl]').forEach(b => b.onclick = () => { LANG = b.dataset.sl; store.set('lang', LANG); document.documentElement.lang = LANG; tabs.innerHTML = ''; renderNow(); if(!sheet.hidden){ sheet.innerHTML = ''; renderSheet(); } draw(); trTree(ov); });
@@ -1599,7 +1599,7 @@ async function aiRun(btn){
   const t0 = btn.innerHTML; btn.disabled = true; btn.classList.add('busy'); btn.innerHTML = btn.dataset.ai === 'q' ? '…' : `<span>✨</span><span><b>${EL('AI đang đọc số liệu…', 'AI is reading your data…')}</b></span>`;
   try{ const a = await sbAuth(), r = await fetch(SB.url + '/functions/v1/ai-coach', {method: 'POST', headers: {apikey: SB.key, Authorization: 'Bearer ' + a.token, 'Content-Type': 'application/json'}, body: JSON.stringify(Object.assign({lang: LANG === 'en' ? 'en' : 'vi', data: aiFit(aiData())}, btn.dataset.ai === 'q' ? {q: aiQ} : {}))});
     const j = await r.json().catch(() => ({}));
-    if(!r.ok || !j.text) throw new Error(r.status === 404 ? EL('AI chưa được cài trên máy chủ.', 'AI is not set up on the server.') : j.error === 'nokey' ? EL('Máy chủ chưa có khóa API AI.', 'The server has no AI key yet.') : r.status === 429 || j.error === 'quota' ? EL('Hết lượt miễn phí lúc này, thử lại sau.', 'Free quota used up, try later.') : (j.error || 'HTTP ' + r.status));
+    if(!r.ok || !j.text) throw new Error(r.status === 404 ? EL('AI chưa được cài trên máy chủ.', 'AI is not set up on the server.') : j.error === 'nokey' ? EL('Máy chủ chưa có khóa API AI.', 'The server has no AI key yet.') : r.status === 429 || j.error === 'quota' ? EL('Hết lượt miễn phí lúc này, thử lại sau.', 'Free quota used up, try later.') : j.error === 'busy' ? EL('AI của Google đang quá tải, thử lại sau vài phút.', 'Google AI is overloaded, try again in a few minutes.') : (j.error || 'HTTP ' + r.status));
     if(btn.dataset.ai === 'q') store.set('aiq', JSON.stringify({q: aiQ, a: String(j.text).slice(0, 4000), d: isoDay()})); else store.set('aiwk', JSON.stringify({wk: monOf(isoDay()), d: isoDay(), text: String(j.text).slice(0, 4000)})); const inS = btn.closest('.cele'); if(inS) inS.remove(); const y = scrollY; ANIM = ''; render(); scrollTo(0, y); openAdvAll();
   }catch(e){ btn.disabled = false; btn.classList.remove('busy'); btn.innerHTML = t0; toast(`<b>${EL('AI chưa trả lời được', 'AI didn’t answer')}</b><span>${esc(e.message === 'auth' ? EL('Phiên đăng nhập hết hạn, đăng nhập lại.', 'Session expired, sign in again.') : e.message)}</span>`); }
 }
