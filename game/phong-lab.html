@@ -1,0 +1,722 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<link rel="icon" type="image/png" sizes="192x192" href="../img/icons/icon-192.png">
+<title>Phòng Lab Probably Stolen</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Silkscreen&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap">
+<style>
+/* Layout: one column lab notebook; each calculator is a "bench" card with inputs left, readouts right, stacking on phones */
+:root{
+  --bg:#eef1f0; --panel:#ffffff; --panel2:#e3e9e8; --line:#cdd6d4; --fg:#16201f; --sub:#566664; --faint:#83918f;
+  --acc:#0e7480; --acc-ink:#ffffff; --acc-soft:#d5ecee;
+  --ok:#1f8a4c; --warn:#b26a00; --bad:#c23b33;
+  --g-lab:#2fae6b; --g-pharma:#6cc48f; --g-near:#a9d27f; --g-street:#c9cdc9; --g-cut:#f2b45a; --g-junk:#ee8a5e; --g-starch:#e05a4f;
+  --f-display:"Silkscreen",ui-monospace,monospace;
+  --f-body:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --f-mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0f1514; --panel:#172120; --panel2:#1f2b2a; --line:#2c3a39; --fg:#e7eeed; --sub:#a1b0ae; --faint:#6f7f7d;
+  --acc:#4cc2cd; --acc-ink:#062022; --acc-soft:#173638;
+  --ok:#55d08a; --warn:#f0a83a; --bad:#ff7a70;
+  --g-street:#8d9593; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0f1514; --panel:#172120; --panel2:#1f2b2a; --line:#2c3a39; --fg:#e7eeed; --sub:#a1b0ae; --faint:#6f7f7d;
+  --acc:#4cc2cd; --acc-ink:#062022; --acc-soft:#173638;
+  --ok:#55d08a; --warn:#f0a83a; --bad:#ff7a70;
+  --g-street:#8d9593; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font-family:var(--f-body);font-size:15px;line-height:1.55;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:20px 48px}
+.wrap{max-width:980px;margin:0 auto;display:flex;flex-direction:column;gap:22px}
+h1,h2{font-family:var(--f-display);font-weight:400;letter-spacing:.02em;text-wrap:balance;margin:0}
+h1{font-size:clamp(24px,5vw,34px);line-height:1.15}
+h2{font-size:18px;display:flex;align-items:center;gap:10px}
+h3{font-size:15px;margin:0}
+p{margin:0}
+.lead{color:var(--sub);max-width:68ch}
+.note{font-size:13px;color:var(--sub)}
+.px{image-rendering:pixelated;image-rendering:crisp-edges;object-fit:contain}
+.mono,.num{font-family:var(--f-mono);font-variant-numeric:tabular-nums}
+header{display:flex;flex-direction:column;gap:10px}
+.eyebrow{font-family:var(--f-mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--acc)}
+.src{font-size:12.5px;color:var(--faint)}
+.src a{color:var(--acc)}
+nav.jump{display:flex;flex-wrap:wrap;gap:6px}
+nav.jump a{font-size:13px;font-weight:600;color:var(--fg);text-decoration:none;padding:6px 11px;border:1px solid var(--line);border-radius:999px;background:var(--panel)}
+nav.jump a:hover,nav.jump a:focus-visible{border-color:var(--acc);color:var(--acc);outline:none}
+section{display:flex;flex-direction:column;gap:12px}
+.sec-ic{width:30px;height:30px;background:var(--panel2);border-radius:6px;padding:3px}
+/* comparison */
+.tw{overflow-x:auto;border:1px solid var(--line);border-radius:10px;background:var(--panel)}
+table{border-collapse:collapse;width:100%;font-size:13.5px;min-width:760px}
+th,td{padding:9px 10px;border-bottom:1px solid var(--line);text-align:left;vertical-align:middle}
+th{font-size:12px;color:var(--sub);font-weight:600;background:var(--panel2);white-space:nowrap}
+tr:last-child td{border-bottom:0}
+td.prod{display:flex;align-items:center;gap:10px;font-weight:700;white-space:nowrap}
+td.prod img{width:34px;height:34px;background:var(--panel2);border-radius:6px;padding:4px;flex:none}
+.pill{display:inline-block;font-size:11.5px;font-weight:700;padding:2px 8px;border-radius:999px;white-space:nowrap}
+.p-none{background:color-mix(in srgb,var(--ok) 16%,transparent);color:var(--ok)}
+.p-med{background:color-mix(in srgb,var(--warn) 18%,transparent);color:var(--warn)}
+.p-high{background:color-mix(in srgb,var(--bad) 16%,transparent);color:var(--bad)}
+.p-story{background:var(--acc-soft);color:var(--acc)}
+.ing{display:flex;gap:4px;align-items:center}
+.ing img{width:24px;height:24px;background:var(--panel2);border-radius:4px;padding:2px}
+.bar{display:flex;align-items:center;gap:6px}
+.bar i{display:block;height:8px;border-radius:4px;background:var(--acc);min-width:2px}
+/* flow */
+.flow{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:8px}
+.st{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:10px 8px;display:flex;flex-direction:column;align-items:center;gap:4px;text-align:center;min-width:0}
+.st img{width:44px;height:44px}
+.st b{font-size:13px}
+.st small{font-size:11.5px;color:var(--sub);line-height:1.3}
+.st .k{font-family:var(--f-mono);font-size:11px;color:var(--acc)}
+@media (max-width:720px){.flow{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media (max-width:420px){.flow{grid-template-columns:repeat(2,minmax(0,1fr))}}
+figure{margin:0;display:flex;flex-direction:column;gap:6px}
+figure img{width:100%;max-width:100%;border-radius:10px;border:1px solid var(--line);display:block}
+figcaption{font-size:12px;color:var(--faint)}
+/* temperature chart */
+.temp{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:12px 14px;display:flex;flex-direction:column;gap:8px}
+.trow{display:grid;grid-template-columns:150px minmax(0,1fr);gap:10px;align-items:center;font-size:12.5px}
+.trow>span{font-weight:600;line-height:1.25}
+.track{position:relative;height:20px;background:var(--panel2);border-radius:5px;overflow:hidden}
+.track i{position:absolute;top:0;bottom:0}
+.track .ok{background:color-mix(in srgb,var(--ok) 55%,transparent)}
+.track .bad{background:color-mix(in srgb,var(--bad) 40%,transparent)}
+.track .warn{background:color-mix(in srgb,var(--warn) 40%,transparent)}
+.track em{position:absolute;top:2px;font-style:normal;font-size:11px;font-weight:700;color:var(--fg);white-space:nowrap}
+.track .m99{position:absolute;top:0;bottom:0;width:2px;background:var(--acc)}
+.axis{display:grid;grid-template-columns:150px minmax(0,1fr);gap:10px;font-family:var(--f-mono);font-size:11px;color:var(--faint)}
+.axis div:last-child{position:relative;height:14px}
+.axis b{position:absolute;font-weight:500;transform:translateX(-50%)}
+@media (max-width:520px){.trow,.axis{grid-template-columns:96px minmax(0,1fr)}}
+/* bench (calculator) */
+.bench{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);gap:18px}
+@media (max-width:760px){.bench{grid-template-columns:minmax(0,1fr)}}
+.inputs{display:flex;flex-direction:column;gap:10px}
+.field{display:flex;flex-direction:column;gap:4px}
+.field label{font-size:12.5px;font-weight:600;color:var(--sub)}
+.field small{font-size:11.5px;color:var(--faint)}
+input,select{font:500 15px var(--f-mono);font-variant-numeric:tabular-nums;color:var(--fg);background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:8px 10px;width:100%;min-width:0}
+input:focus-visible,select:focus-visible{outline:2px solid var(--acc);outline-offset:1px;border-color:var(--acc)}
+.row2{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:10px}
+.seg{display:flex;gap:4px;flex-wrap:wrap}
+.seg button{font:600 13px var(--f-body);color:var(--fg);background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:6px 10px;cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--acc);border-color:var(--acc);color:var(--acc-ink)}
+.seg button:focus-visible{outline:2px solid var(--acc);outline-offset:1px}
+.out{display:flex;flex-direction:column;gap:8px;min-width:0}
+.read{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:8px}
+.r{background:var(--panel2);border-radius:8px;padding:8px 10px;display:flex;flex-direction:column;gap:2px;min-width:0}
+.r span{font-size:11.5px;color:var(--sub)}
+.r b{font:600 20px var(--f-mono);font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
+.r b small{font-size:12px;color:var(--sub);font-weight:500}
+.r.hl{background:var(--acc-soft)}
+.r.hl b{color:var(--acc)}
+.grade{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:8px;background:var(--panel2)}
+.grade .chip{font-weight:700;font-size:13px;padding:4px 10px;border-radius:6px;color:#14201f}
+.grade .mult{margin-left:auto;font:600 14px var(--f-mono)}
+.msg{font-size:13px;padding:8px 10px;border-radius:8px;border:1px solid var(--line)}
+.msg.warn{border-color:color-mix(in srgb,var(--warn) 50%,transparent);background:color-mix(in srgb,var(--warn) 10%,transparent)}
+.msg.bad{border-color:color-mix(in srgb,var(--bad) 50%,transparent);background:color-mix(in srgb,var(--bad) 10%,transparent)}
+.msg.ok{border-color:color-mix(in srgb,var(--ok) 50%,transparent);background:color-mix(in srgb,var(--ok) 10%,transparent)}
+.steps{margin:0;padding-left:20px;font-size:13.5px;display:flex;flex-direction:column;gap:3px}
+.steps b{font-family:var(--f-mono);font-weight:600}
+.ladder{display:flex;flex-direction:column;gap:3px}
+.lad{display:grid;grid-template-columns:64px 1fr 56px;gap:8px;align-items:center;font-size:12.5px}
+.lad .nm{padding:4px 8px;border-radius:5px;font-weight:700;color:#14201f}
+.lad .pc{color:var(--sub);font-family:var(--f-mono)}
+.lad .ef{text-align:right;font-family:var(--f-mono);font-weight:600}
+.lad.on .nm{outline:2px solid var(--fg);outline-offset:1px}
+.formula{font:500 12.5px var(--f-mono);background:var(--panel2);border-radius:8px;padding:8px 10px;overflow-x:auto;white-space:nowrap}
+footer{font-size:12px;color:var(--faint);border-top:1px solid var(--line);padding-top:12px}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+
+.recipes{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,430px),1fr));gap:12px}
+.rc{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px;display:flex;flex-direction:column;gap:10px;min-width:0}
+.rc-hd{display:flex;align-items:center;gap:10px}
+.rc-hd img{width:40px;height:40px;background:var(--panel2);border-radius:8px;padding:5px;flex:none}
+.rc-hd h3{font-size:16px}
+.rc-hd .pill{margin-left:auto}
+.rc h4{font-size:12px;font-weight:700;color:var(--acc);text-transform:uppercase;letter-spacing:.06em;margin:4px 0 0}
+.items{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px}
+.items li{display:grid;grid-template-columns:32px minmax(0,1fr) auto;gap:10px;align-items:center;font-size:13.5px}
+.items li img{width:32px;height:32px;background:var(--panel2);border-radius:6px;padding:3px}
+.items li .nm{min-width:0}
+.items li .nm small{display:block;font-size:12px;color:var(--sub);line-height:1.35}
+.items li .amt{font:600 12.5px var(--f-mono);text-align:right;max-width:130px}
+.tools-row{display:flex;flex-wrap:wrap;gap:6px}
+.tool{display:flex;align-items:center;gap:6px;font-size:12.5px;background:var(--panel2);border-radius:999px;padding:3px 10px 3px 3px}
+.tool img{width:24px;height:24px}
+.vids{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:12px}
+.vd{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px;display:flex;flex-direction:column;gap:8px;min-width:0}
+.vd a.t{font-weight:700;color:var(--fg);text-decoration:none;line-height:1.35}
+.vd a.t:hover,.vd a.t:focus-visible{color:var(--acc);text-decoration:underline}
+.vd .ch{font-size:12px;color:var(--sub);font-family:var(--f-mono)}
+.vd ul{margin:0;padding-left:18px;font-size:13.5px;display:flex;flex-direction:column;gap:3px}
+.vd .res{font-size:12.5px;font-weight:600;color:var(--acc)}
+.conflict{display:flex;flex-direction:column;gap:6px}
+
+.temp2{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px;display:flex;flex-direction:column;gap:14px}
+.legend{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:12.5px;color:var(--sub)}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.legend i{width:14px;height:10px;border-radius:3px;display:inline-block}
+.lg-ok{background:color-mix(in srgb,var(--ok) 60%,transparent)}
+.lg-bad{background:color-mix(in srgb,var(--bad) 45%,transparent)}
+.lg-warn{background:color-mix(in srgb,var(--warn) 45%,transparent)}
+.lg-idle{background:var(--panel2);border:1px solid var(--line)}
+.tr2{display:flex;flex-direction:column;gap:6px}
+.tr2-hd{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 10px}
+.tr2-hd b{font-size:14px}
+.tr2-hd .do{font:600 13px var(--f-mono);color:var(--ok);background:color-mix(in srgb,var(--ok) 14%,transparent);padding:2px 8px;border-radius:6px}
+.tr2-hd small{font-size:12.5px;color:var(--sub)}
+.bar2{position:relative;height:22px;background:var(--panel2);border-radius:6px;overflow:hidden;border:1px solid var(--line)}
+.bar2 i{position:absolute;top:0;bottom:0}
+.bar2 .z-ok{background:color-mix(in srgb,var(--ok) 60%,transparent)}
+.bar2 .z-bad{background:color-mix(in srgb,var(--bad) 45%,transparent)}
+.bar2 .z-warn{background:color-mix(in srgb,var(--warn) 45%,transparent)}
+.ticks{position:relative;height:16px;font:500 11px var(--f-mono);color:var(--sub)}
+.ticks b{position:absolute;top:0;font-weight:600;transform:translateX(-50%);white-space:nowrap}
+.ticks b.tl{transform:none}
+.ticks b.tr{transform:translateX(-100%)}
+.plate99{font-size:12.5px;color:var(--sub);border-top:1px dashed var(--line);padding-top:10px}
+
+.tw td img.ic{width:24px;height:24px;vertical-align:middle;background:var(--panel2);border-radius:4px;padding:2px;margin-right:4px}
+.tw td.k{font-weight:700;white-space:nowrap}
+.tw .no{color:var(--bad);font-weight:700}
+.tw .yes{color:var(--ok);font-weight:700}
+.sub-h{font-size:15px;font-weight:700;margin:6px 0 0}
+.how{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,280px),1fr));gap:10px}
+.how .st2{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:12px;display:flex;flex-direction:column;gap:6px}
+.how .st2 b{font-size:14px}
+.how .st2 ol{margin:0;padding-left:18px;font-size:13.5px;display:flex;flex-direction:column;gap:3px}
+.mistakes{margin:0;padding-left:0;list-style:none;display:flex;flex-direction:column;gap:5px;font-size:13.5px}
+.mistakes li:before{content:"✗ ";color:var(--bad);font-weight:800}
+
+.vids{grid-template-columns:minmax(0,1fr)!important}
+.vd .about{font-size:13.5px;color:var(--fg)}
+.vd h5{font-size:12px;font-weight:700;color:var(--acc);text-transform:uppercase;letter-spacing:.06em;margin:4px 0 0}
+.vd ol.ts{margin:0;padding-left:0;list-style:none;display:flex;flex-direction:column;gap:6px;font-size:13.5px}
+.vd ol.ts li{display:grid;grid-template-columns:52px minmax(0,1fr);gap:8px;align-items:baseline}
+.vd ol.ts a{font:600 12px var(--f-mono);color:var(--acc);text-decoration:none;background:var(--acc-soft);border-radius:5px;padding:1px 6px;text-align:center}
+.vd ol.ts a:hover,.vd ol.ts a:focus-visible{text-decoration:underline}
+.vd .why{font-size:13px;color:var(--sub);background:var(--panel2);border-radius:8px;padding:8px 10px}
+.vd .why b{color:var(--fg)}
+.vd .meta{display:flex;flex-wrap:wrap;gap:6px 12px;align-items:center}
+
+.dd{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,420px),1fr));gap:12px}
+.ill{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px;display:flex;flex-direction:column;gap:10px;min-width:0}
+.ill h3{font-size:15px}
+.ill p{font-size:13.5px}
+.pair{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:8px}
+@media (max-width:460px){.pair{grid-template-columns:minmax(0,1fr)}}
+.side{border-radius:10px;padding:10px;display:flex;flex-direction:column;gap:8px;min-width:0}
+.side.bad{background:color-mix(in srgb,var(--bad) 9%,transparent);border:1px solid color-mix(in srgb,var(--bad) 40%,transparent)}
+.side.good{background:color-mix(in srgb,var(--ok) 9%,transparent);border:1px solid color-mix(in srgb,var(--ok) 40%,transparent)}
+.side .lbl{font-size:12px;font-weight:800;letter-spacing:.04em}
+.side.bad .lbl{color:var(--bad)}
+.side.good .lbl{color:var(--ok)}
+.side small{font-size:12.5px;line-height:1.4}
+.scene{display:flex;align-items:center;justify-content:center;gap:6px;flex-wrap:wrap;min-height:64px}
+.spr{width:40px;height:40px;background:var(--panel);border-radius:8px;padding:4px;position:relative}
+.spr.big{width:52px;height:52px}
+.op{font:700 16px var(--f-mono);color:var(--sub)}
+.badge{font:700 10.5px var(--f-mono);padding:2px 6px;border-radius:5px;white-space:nowrap}
+.badge.r{background:color-mix(in srgb,var(--bad) 20%,transparent);color:var(--bad)}
+.badge.g{background:color-mix(in srgb,var(--ok) 20%,transparent);color:var(--ok)}
+.badge.n{background:var(--panel2);color:var(--fg)}
+.stack{display:flex;flex-direction:column;align-items:center;gap:3px}
+.tag-lbl{font:700 10.5px var(--f-mono);background:var(--acc-soft);color:var(--acc);padding:1px 6px;border-radius:4px}
+.seq{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}
+@media (max-width:460px){.seq{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.seq .s{background:var(--panel2);border-radius:8px;padding:8px 6px;display:flex;flex-direction:column;align-items:center;gap:4px;text-align:center;font-size:12px}
+.seq .s b{font:700 11px var(--f-mono);color:var(--acc)}
+.knob{font:700 11px var(--f-mono);padding:2px 7px;border-radius:5px;border:1px solid var(--line);background:var(--panel)}
+.knob.on{background:color-mix(in srgb,var(--warn) 30%,transparent);border-color:var(--warn)}
+.therm-mini{width:100%;height:8px;border-radius:4px;background:linear-gradient(90deg,var(--panel) 0 25%,color-mix(in srgb,var(--ok) 60%,transparent) 25% 31%,color-mix(in srgb,var(--bad) 45%,transparent) 31% 100%);border:1px solid var(--line)}
+.drops{display:flex;gap:3px;justify-content:center;flex-wrap:wrap}
+.drops i{width:12px;height:16px;border-radius:50% 50% 50% 50%/60% 60% 40% 40%;display:inline-block}
+.drops i.a{background:var(--bad)}
+.drops i.w{background:color-mix(in srgb,var(--acc) 55%,transparent)}
+.ph-steps{display:flex;flex-direction:column;gap:10px}
+.ph{display:grid;grid-template-columns:44px minmax(0,1fr);gap:12px;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:12px}
+.ph .n{font:700 13px var(--f-mono);color:var(--acc-ink);background:var(--acc);border-radius:8px;display:grid;place-items:center;height:44px}
+.ph h4{font-size:14.5px;margin:0 0 4px}
+.ph p,.ph li{font-size:13.5px}
+.ph ul{margin:4px 0 0;padding-left:18px;display:flex;flex-direction:column;gap:2px}
+.ph .src{font-size:12px;color:var(--faint);margin-top:4px}
+.res-tbl td.num{white-space:nowrap}
+
+.gl{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,230px),1fr));gap:8px}
+.gl>div{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:10px 12px;font-size:13.5px;line-height:1.45;min-width:0}
+.gl>div>b:first-child{display:block;font-size:14px;margin-bottom:2px}
+.gl>div i{color:var(--sub)}
+.kid{background:var(--acc-soft);border-radius:12px;padding:12px 14px;font-size:14px;line-height:1.5}
+.kid b{color:var(--acc)}
+.big5{display:flex;flex-direction:column;gap:6px;margin:0;padding-left:22px;font-size:14px}
+.drops i.b{background:#8a63d2}
+.drops.lg i{width:18px;height:24px}
+.drip-tbl{min-width:0;width:100%}
+.drip-tbl .drops{justify-content:flex-start;flex-wrap:nowrap;gap:2px}
+.drip-tbl .drops i{width:8px;height:11px}
+#nho-giot .badge{white-space:normal;text-align:center}
+</style><style>.topbar{max-width:980px;margin:0 auto 4px}.topbar a{display:inline-block;font-weight:600;font-size:13px;color:var(--fg);text-decoration:none;padding:6px 12px;border:1px solid var(--line);border-radius:999px;background:var(--panel)}</style>
+</head>
+<body>
+<div class="topbar"><a href="./">‹ Game</a></div>
+
+
+<div class="wrap">
+<header>
+  <span class="eyebrow">Probably Stolen · Chemist · bản 1.0</span>
+  <h1>Phòng Lab Probably Stolen</h1>
+  <p class="lead">So sánh các sản phẩm hoá chất và bộ máy tính cho từng mẻ: cần bao nhiêu cồn, axit, Reducing Agent, ra được mấy lọ/viên, đạt hạng nào, cần bao nhiêu chất độn và bán được giá bao nhiêu. Gõ số máy quét (Composition Spectrometer) hiển thị vào ô, kết quả tự tính.</p>
+  <p class="src">Công thức lấy từ guide Steam <a href="https://steamcommunity.com/sharedfiles/filedetails/?id=3830313918" target="_blank" rel="noopener">The Complete Chemist Guide</a> (số liệu từ file game, bản 1.0), đối chiếu probablystolencodex.com, probablystolen.gamertw.com, probablystolenguide.app, probably-stolen.guide. Ảnh vật phẩm từ probablystolenguides.com, ảnh máy là ảnh chính thức trên Steam. Bản cập nhật game có thể đổi số liệu.</p>
+  <nav class="jump" aria-label="Mục">
+    <a href="#nguoi-moi">Cho người mới</a><a href="#so-sanh">So sánh</a><a href="#nguyen-lieu">Nguyên liệu</a><a href="#tap-chat">Tạp chất &amp; nước</a><a href="#nho-giot">Nhỏ từng chút</a><a href="#quy-trinh">Quy trình</a><a href="#dream">Máy tính Dream/Nightmare</a><a href="#phanta">Máy tính Phanta</a><a href="#hang">Dự đoán hạng</a><a href="#don">Chất độn</a><a href="#gia">Giá bán</a><a href="#cartel">Chỉ tiêu Cartel</a><a href="#hinh-minh-hoa">Hình đúng / sai</a><a href="#phanta-chi-tiet">Phanta chi tiết</a><a href="#youtube">Mẹo YouTube</a>
+  </nav>
+</header>
+
+<section id="nguoi-moi"><h2>Cho người mới: đọc cái này trước</h2>
+<div class="kid">Pha chế trong game giống <b>nấu một nồi canh</b>: <b>nguyên liệu chính</b> là thứ bạn muốn bán. Mọi thứ khác lọt vào nồi (cát, bụi, xương vụn, dầu mỡ) là <b>rác</b>. Càng ít rác thì canh càng ngon, bán càng đắt. Cả trang này chỉ dạy 2 việc: <b>làm ra nhiều nguyên liệu chính</b> và <b>vớt hết rác ra</b>.</div>
+<p class="sub-h">Từ khó, giải thích dễ</p>
+<div class="gl">
+<div><b>Mẻ</b>Cái bình bạn đang pha. Mọi thứ đổ vào bình đều thuộc về mẻ.</div>
+<div><b>Hoạt chất</b>Thứ bạn muốn bán (Dream Cap Extract, Phanta…). <i>= nguyên liệu chính của nồi canh.</i></div>
+<div><b>Tạp chất</b>Mọi thứ khác trong bình: protein, vi sinh, cặn, kim loại… <i>= rác trong nồi canh.</i></div>
+<div><b>Độ tinh khiết (%)</b>Trong bình có bao nhiêu phần là hoạt chất. 99% = gần như sạch hoàn toàn, bán giá cao nhất.</div>
+<div><b>Protein</b>Một loại rác có sẵn trong nấm. Không lọc được, phải cho axit hoặc bazơ vào để biến nó thành cặn rồi mới lọc.</div>
+<div><b>Axit / Bazơ</b>Hai loại “thuốc tẩy” có trong chai hoá chất. Cả hai đều biến protein thành cặn. Cho dư thì phần dư lại thành rác.</div>
+<div><b>Axit + bazơ gặp nhau</b>Triệt tiêu nhau, thành nước. Dùng để sửa khi lỡ cho dư, nhưng mỗi chai lại đem thêm chút rác.</div>
+<div><b>mL và µL</b>1 mL = 1000 µL. Game ghi µL khi lượng rất nhỏ. <b>20 µL = 0,02 mL</b>, nhỏ hơn một giọt.</div>
+<div><b>Pha loãng</b>Trộn với nước để cái “mạnh” thành “yếu”. Như pha si-rô: 1 muỗng si-rô + 4 muỗng nước thì nhạt hơn.</div>
+<div><b>Lọc (Filter)</b>Cho bình chạy qua vải/lọc nước để giữ cặn lại. Chỉ bắt được rác dạng cục (cặn, vi sinh).</div>
+<div><b>Bay hơi (Evaporator)</b>Đun cho nước và cồn bay đi, còn lại bột. Nhờ vậy nước bạn thêm vào lúc pha loãng không làm hỏng gì.</div>
+<div><b>Máy quét (Scanner)</b>Cầm lên bấm vào bình/chai là thấy trong đó có gì, bao nhiêu. <b>Quét trước khi đổ bất cứ thứ gì.</b></div>
+</div>
+<p class="sub-h">Cả quy trình trong 5 câu</p>
+<ol class="big5">
+<li><b>Xay</b> nguyên liệu thành bột nhão (Blender).</li>
+<li><b>Ngâm cồn và đun nhẹ</b> để rút hoạt chất ra (Heating Plate, không quá nóng).</li>
+<li><b>Tẩy protein</b> bằng axit hoặc bazơ, cho vừa đủ, đừng dư (xem mục <a href="#nho-giot">Nhỏ từng chút</a>).</li>
+<li><b>Lọc</b> bỏ cặn, rồi <b>bay hơi</b> bỏ nước và cồn.</li>
+<li><b>Đóng gói</b> ở Chem Finisher và bán.</li>
+</ol>
+</section>
+
+<section id="so-sanh">
+  <h2>Bảng so sánh sản phẩm</h2>
+  <div class="tw"><table>
+    <thead><tr><th>Sản phẩm</th><th>Nguyên liệu</th><th>Dịch chiết / đơn vị</th><th>Giá gốc</th><th>Giá trị / mL</th><th>Hàng cấm</th><th>Nhiệt độ</th><th>Hạng tốt nhất (cách thường)</th><th>Lời / lần mua*</th></tr></thead>
+    <tbody>
+    <tr><td class="prod"><img class="px" src="img/items/dream_dust.webp" alt="">Dream Dust</td><td><span class="ing"><img class="px" src="img/items/dream_cap.webp" alt="Dream Cap" title="Dream Cap"><img class="px" src="img/items/common_chemical.webp" alt="Gói Common" title="Chemical Supplies (Common)"></span></td><td class="num">2 mL</td><td class="num">18</td><td><span class="bar"><i style="width:22px"></i><span class="num">9</span></span></td><td><span class="pill p-med">Trung bình +70%</span></td><td class="num">40–49°C</td><td>Lab Pure, chắc chắn</td><td class="num">~505 / nấm</td></tr>
+    <tr><td class="prod"><img class="px" src="img/items/nightmare_dust.webp" alt="">Nightmare Dust</td><td><span class="ing"><img class="px" src="img/items/nightmare_cap.webp" alt="Nightmare Cap" title="Nightmare Cap"><img class="px" src="img/items/common_chemical.webp" alt="Gói Common" title="Chemical Supplies (Common)"></span></td><td class="num">4 mL</td><td class="num">36</td><td><span class="bar"><i style="width:22px"></i><span class="num">9</span></span></td><td><span class="pill p-high">Cao +100%</span></td><td class="num">40–49°C</td><td>Lab Pure</td><td class="note">giá trị cao mỗi lọ, dễ hỏng do nhiệt</td></tr>
+    <tr><td class="prod"><img class="px" src="img/items/fanta_pill.webp" alt="">Phanta Pill</td><td><span class="ing"><img class="px" src="img/items/restricted_chemical.webp" alt="Gói Restricted" title="Chemical Supplies (Restricted)"><img class="px" src="img/items/med_bottle_violet.webp" alt="N-Methylol" title="N-Methylol Base"><img class="px" src="img/items/med_bottle_orange.webp" alt="Reducing Agent" title="Reducing Agent"></span></td><td class="num">0,5 mL</td><td class="num">12</td><td><span class="bar"><i style="width:58px"></i><span class="num">24</span></span></td><td><span class="pill p-high">Cao +100%</span></td><td class="num">120–129°C</td><td>Near-Pharma ~86% (68–95%)</td><td class="num">~1.550 / gói</td></tr>
+    <tr><td class="prod"><img class="px" src="img/items/caffeine_pill.webp" alt="">Caffeine Pill</td><td><span class="ing"><img class="px" src="img/items/coffee_bean.webp" alt="Hạt cà phê" title="Coffee Beans"><img class="px" src="img/items/med_bottle_small_pink.webp" alt="Lipobond" title="Lipobond Agent"></span></td><td class="num">5 mL</td><td class="num">10</td><td><span class="bar"><i style="width:5px"></i><span class="num">2</span></span></td><td><span class="pill p-none">Hợp pháp</span></td><td class="num">50–78°C</td><td>Lab Pure</td><td class="note">thấp, không tạo bằng chứng</td></tr>
+    <tr><td class="prod"><img class="px" src="img/items/pink_alt_injector.webp" alt="">Nomore Injector</td><td><span class="ing"><img class="px" src="img/items/dream_cap.webp" alt="Dream Cap" title="Dream Cap"><img class="px" src="img/items/med_bottle_orange.webp" alt="Reducing Agent" title="Reducing Agent"></span></td><td class="num">4 mL <small class="note">(≈6,7 mL dịch chiết)</small></td><td class="num">50</td><td><span class="bar"><i style="width:30px"></i><span class="num">12,5</span></span></td><td><span class="pill p-story">Hợp pháp · cốt truyện</span></td><td class="num">50–55°C</td><td>Dưới Lab Pure (do Reducing bẩn)</td><td class="note">mở công thức qua Li Bei Wen</td></tr>
+    </tbody>
+  </table></div>
+  <p class="note">*Lời theo guide Steam: 4 module Finisher, Blender nâng đủ, cho nấm theo từng phần, mua giá gốc +15%, bán +15% bán lẻ. Giá trị / mL = giá gốc ÷ lượng dịch chiết mỗi đơn vị, chưa tính hạng. Phanta lời nhiều nhất mỗi lần mua, Dream Dust ổn định nhất.</p>
+</section>
+
+<section id="nguyen-lieu"><h2>Cần nguyên liệu gì</h2><p class="note">Số lượng tính cho một mẻ ví dụ. Nguồn mua theo guide Steam (lấy từ file game) và các video ở mục Mẹo YouTube. Dụng cụ dùng chung cho mọi công thức:</p><div class="tools-row"><span class="tool"><img class="px" src="img/items/blender.webp" alt="">Blender</span><span class="tool"><img class="px" src="img/items/heating-plate.webp" alt="">Heating Plate</span><span class="tool"><img class="px" src="img/items/evaporator.webp" alt="">Evaporator + pin</span><span class="tool"><img class="px" src="img/items/chem-finisher.webp" alt="">Chem Finisher</span><span class="tool"><img class="px" src="img/items/chem-scanner.webp" alt="">Composition Spectrometer</span><span class="tool"><img class="px" src="img/items/water_pitcher.webp" alt="">Pitcher</span><span class="tool"><img class="px" src="img/items/1ml-dropper.png" alt="">Ống nhỏ 1 mL</span><span class="tool"><img class="px" src="img/items/5ml-dropper.webp" alt="">Ống nhỏ 5 mL</span><span class="tool"><img class="px" src="img/items/25ml-cylinder.webp" alt="">Ống đong 25/50/100 mL</span></div><div class="recipes"><div class="rc"><div class="rc-hd"><img class="px" src="img/items/dream_dust.webp" alt=""><h3>Dream Dust</h3><span class="pill p-med">Hàng cấm TB</span></div><h4>Nguyên liệu</h4><ul class="items"><li><img class="px" src="img/items/dream_cap.webp" alt=""><span class="nm">Dream Cap<small>Shady Farmer 2 lần/tuần, Cartel (nghề Chemist), hoặc tự trồng từ Dream Cap Spores</small></span><span class="amt">3 nấm ≈ 40–45 mL nấm xay</span></li><li><img class="px" src="img/items/common_chemical.webp" alt=""><span class="nm">Mini Alcohol (trong gói Common)<small>70% cồn, 30% nước. Gói Common: Retired Chemist, scavenger, Thief</small></span><span class="amt">≥ 5× nấm mỗi lần đổ</span></li><li><img class="px" src="img/items/med_bottle_red.webp" alt=""><span class="nm">Dung dịch axit (hoặc bazơ)<small>Trong gói Common. Quét chọn chai ít kim loại nặng nhất</small></span><span class="amt">= lượng protein</span></li><li><img class="px" src="img/items/bottled_water.webp" alt=""><span class="nm">Nước chất lượng cao / Pure Water<small>Để pha loãng axit 1:9 khi protein gần về 0</small></span><span class="amt">vài mL</span></li><li><img class="px" src="img/items/kotton_fabric.webp" alt=""><span class="nm">Kotton Fabric<small>Lọc lần 1, bền 1000</small></span><span class="amt">1 lần lọc</span></li><li><img class="px" src="img/items/water_filter.webp" alt=""><span class="nm">Water Filter<small>Lọc lần 2 (và lần 3 cho chắc), bền 400</small></span><span class="amt">1–2 lần lọc</span></li></ul><h4>Muốn Lab Pure thêm</h4><ul class="items"><li><img class="px" src="img/items/chem-module.webp" alt=""><span class="nm">4 Chem Module trong Chem Finisher<small>Retired Chemist, Dr. Jackson; Cartel thưởng 1 cái mỗi tuần đạt chỉ tiêu</small></span><span class="amt">4 cái</span></li><li><img class="px" src="img/items/module_extractor_advanced.webp" alt=""><span class="nm">Module Extractor (Advanced)<small>Gỡ module không bị mòn, để chuyển module giữa các máy</small></span><span class="amt">tuỳ chọn</span></li><li><img class="px" src="img/items/turbo_booster_adv.webp" alt=""><span class="nm">Advanced Turbo Booster<small>Chạy Evaporator ngay, khỏi chờ qua đêm</small></span><span class="amt">tuỳ chọn</span></li></ul></div><div class="rc"><div class="rc-hd"><img class="px" src="img/items/fanta_pill.webp" alt=""><h3>Phanta Pill</h3><span class="pill p-high">Hàng cấm cao</span></div><h4>Nguyên liệu</h4><ul class="items"><li><img class="px" src="img/items/restricted_chemical.webp" alt=""><span class="nm">Chemical Supplies (Restricted)<small>Giá gốc 100. Retired Chemist có khoảng ½ số lần ghé; đôi khi Revolution Raider</small></span><span class="amt">1 gói</span></li><li><img class="px" src="img/items/med_bottle_violet.webp" alt=""><span class="nm">N-Methylol Base (trong gói)<small>Lẫn Stabilizing Agent, phải khử bằng axit</small></span><span class="amt">2 chai ≈ 250 mL</span></li><li><img class="px" src="img/items/med_bottle_orange.webp" alt=""><span class="nm">Reducing Agent (trong gói)<small>Vừa đủ cho Methylol của gói, dùng luôn dù bẩn</small></span><span class="amt">¾ lượng Methylol</span></li><li><img class="px" src="img/items/med_bottle_red.webp" alt=""><span class="nm">Axit<small>Khử Stabilizing Agent về 0</small></span><span class="amt">~30% thể tích Methylol, từng đợt</span></li><li><img class="px" src="img/items/med_bottle_blue.webp" alt=""><span class="nm">Bazơ<small>Trung hoà axit dư</small></span><span class="amt">ít</span></li><li><img class="px" src="img/items/water_filter.webp" alt=""><span class="nm">Kotton + Water Filter<small>Lọc cặn sau khi khử Stabilizing</small></span><span class="amt">1 lần</span></li><li><img class="px" src="img/items/water_tablet.webp" alt=""><span class="nm">Viên lọc nước + chút nước<small>Khử tạp chất hoá học; trong bình phải có nước</small></span><span class="amt">1 viên hoặc viên 0,1 mL</span></li><li><img class="px" src="img/items/nutrifruit.webp" alt=""><span class="nm">Chất độn (tinh bột từ Nutrifruit)<small>Hạ viên xuống ~62% để không độc</small></span><span class="amt">xem máy tính</span></li></ul><h4>Bắt buộc</h4><ul class="items"><li><img class="px" src="img/items/chem-module.webp" alt=""><span class="nm">1 Chem Module trong Heating Plate<small>Bếp thường chỉ lên 99°C, Phanta cần 120–129°C</small></span><span class="amt">1 cái</span></li></ul></div><div class="rc"><div class="rc-hd"><img class="px" src="img/items/nightmare_dust.webp" alt=""><h3>Nightmare Dust</h3><span class="pill p-high">Hàng cấm cao · độc</span></div><h4>Nguyên liệu</h4><ul class="items"><li><img class="px" src="img/items/nightmare_cap.webp" alt=""><span class="nm">Nightmare Cap<small>Shady Farmer, hoặc trồng Dream Cap Spores với module Nightmare</small></span><span class="amt">tuỳ mẻ</span></li><li><img class="px" src="img/items/common_chemical.webp" alt=""><span class="nm">Cồn, axit/bazơ, Kotton, Water Filter<small>Giống Dream Dust</small></span><span class="amt">≥ 5× nấm</span></li><li><img class="px" src="img/items/dream-cap-nightmare-hydroponic-module.png" alt=""><span class="nm">Dream Cap Nightmare Hydroponic Module<small>Giá 150, biến Dream Cap thành Nightmare Cap khi trồng</small></span><span class="amt">tuỳ chọn</span></li></ul><p class="note">Giữ dưới 50°C suốt quá trình. Bán khó hơn: Odin mua mọi loại thuốc độc.</p></div><div class="rc"><div class="rc-hd"><img class="px" src="img/items/caffeine_pill.webp" alt=""><h3>Caffeine Pill</h3><span class="pill p-none">Hợp pháp</span></div><h4>Nguyên liệu</h4><ul class="items"><li><img class="px" src="img/items/coffee_bean.webp" alt=""><span class="nm">Hạt cà phê<small>Có trong kit Chemist; Farmer; tự trồng</small></span><span class="amt">tuỳ mẻ</span></li><li><img class="px" src="img/items/med_bottle_small_pink.webp" alt=""><span class="nm">Lipobond Agent<small>Khử mỡ, cho vào trước khi đun</small></span><span class="amt">≈ ⅛ lượng mỡ, ~1 mL mỗi hạt</span></li><li><img class="px" src="img/items/common_chemical.webp" alt=""><span class="nm">Cồn<small>Cần ít hơn nấm nhiều</small></span><span class="amt">≥ 0,75× bột cà phê</span></li><li><img class="px" src="img/items/med_bottle_red.webp" alt=""><span class="nm">Axit (hoặc bazơ)<small>Khử protein</small></span><span class="amt">= protein</span></li><li><img class="px" src="img/items/water_filter.webp" alt=""><span class="nm">Kotton + Water Filter<small>Lọc 2 lần</small></span><span class="amt">1 lần</span></li></ul><p class="note">Đun 50–78°C. Có module bếp thì đun trên 100°C cho bay hết nước và cồn, khỏi cần Evaporator.</p></div><div class="rc"><div class="rc-hd"><img class="px" src="img/items/nutrifruit.webp" alt=""><h3>Chất độn (tinh bột)</h3><span class="pill p-story">Pha loãng</span></div><h4>Cách làm (video The Lost Noob)</h4><ul class="items"><li><img class="px" src="img/items/nutrifruit.webp" alt=""><span class="nm">Nutrifruit<small>Xay bằng Blender, ra chủ yếu nước và tinh bột</small></span><span class="amt">1 quả</span></li><li><img class="px" src="img/items/med_bottle_red.webp" alt=""><span class="nm">Axit / bazơ<small>Khử protein trước khi bay hơi</small></span><span class="amt">= protein</span></li><li><img class="px" src="img/items/evaporator.webp" alt=""><span class="nm">Evaporator<small>Bay hơi qua đêm, được ~82% tinh bột</small></span><span class="amt">1 đêm</span></li><li><img class="px" src="img/items/water_filter.webp" alt=""><span class="nm">Water Filter<small>Lọc tiếp, được ~95% tinh bột</small></span><span class="amt">1 lần</span></li></ul><p class="note">Ví dụ: 25 mL dịch chiết 99% + 15 mL tinh bột = 40 mL ở ~62%. Cartel cần 20 lọ 50%: chỉ tốn 26 mL dịch chiết thay vì 40 mL.</p></div></div></section>
+
+<section id="tap-chat"><h2>Tạp chất và nước</h2><p class="lead">Mọi thứ trong mẻ không phải hoạt chất đều kéo độ tinh khiết xuống. Mỗi dụng cụ chỉ diệt được một số loại tạp chất: dùng sai thì tạp chất vẫn nằm đó.</p><div class="msg warn">Mỗi chai axit, bazơ, Lipobond lẫn <b>2–8% tạp chất ngẫu nhiên</b>. Vi sinh và tạp chất vật lý diệt được sau; tạp chất hoá học chỉ diệt được ở công thức có viên lọc (Dream Dust không có); <b>kim loại nặng không bao giờ diệt được</b>. Gói Common cho thừa chai: quét từng chai, vứt chai có kim loại nặng.</div><p class="sub-h">Bảng tạp chất: diệt bằng gì</p><div class="tw"><table><thead><tr><th>Tạp chất</th><th>Hay đến từ đâu</th><th>Diệt bằng</th><th>Lưu ý</th></tr></thead><tbody><tr><td class="k">Nước, cồn, Lipobond</td><td>Mini Alcohol (30% nước), nước pha loãng, dung môi</td><td><img class="px ic" src="img/items/evaporator.webp" alt=""><b>Evaporator</b> qua đêm (300 mL/đêm)</td><td>Mẻ phải khô: tổng ≤ 0,1 mL mới vào được Finisher. Lắp Solvent Recovery và đặt bình rỗng ở khe Distillate để thu lại cồn.</td></tr><tr><td class="k">Bã thực vật, bột nấm thừa, cặn</td><td>Bước đun; sau khi khử protein / Stabilizing</td><td><img class="px ic" src="img/items/kotton_fabric.webp" alt=""><b>Kotton Fabric</b> (bền 1000)</td><td>Lõi lọc cũng bắt được nhưng mau mòn hơn. Mẻ đã khô vẫn lọc được.</td></tr><tr><td class="k">Tạp chất vật lý, khoáng chất</td><td>Chai hoá chất bẩn; Finisher chưa đủ module</td><td><img class="px ic" src="img/items/water_filter.webp" alt=""><b>Water Filter</b> (bền 400)</td><td>Kotton quá thô, không bắt được. Luôn lọc Kotton trước rồi mới Water Filter.</td></tr><tr><td class="k">Vi sinh vật</td><td>Nước bẩn, chai bẩn</td><td><img class="px ic" src="img/items/uv_filter.webp" alt=""><b>Đèn UV</b> (không hết), <b>axit/bazơ</b> (diệt tới 20× thể tích), <b>cồn ≥ 40%</b> thể tích, hoặc <b>nhiệt</b> (từ 70°C mất 20%/tick, 100°C sạch hết)</td><td><b>Lõi lọc KHÔNG bắt vi sinh</b> (từ bản 1.0). Dream Dust: cồn 5× nấm và axit đã tự diệt.</td></tr><tr><td class="k">Protein</td><td>Nấm, cà phê, Nutrifruit</td><td><img class="px ic" src="img/items/med_bottle_red.webp" alt=""><b>Axit hoặc bazơ 1:1</b></td><td>Protein thành cặn rồi lọc ra. Chỉ dùng <b>một trong hai</b>: phản ứng chỉ chạy khi một chất đang dư.</td></tr><tr><td class="k">Mỡ</td><td>Cà phê</td><td><img class="px ic" src="img/items/med_bottle_small_pink.webp" alt=""><b>Lipobond ≈ ⅛ lượng mỡ</b></td><td>Mọi nhiệt độ, vài tick là xong. Lipobond bay hơi trên 55°C.</td></tr><tr><td class="k">Stabilizing Agent</td><td>Chai N-Methylol (Phanta)</td><td><img class="px ic" src="img/items/med_bottle_red.webp" alt=""><b>Axit hoặc bazơ</b></td><td>Thành cặn rồi lọc ra.</td></tr><tr><td class="k">Axit hoặc bazơ dư</td><td>Nhỏ quá tay</td><td><img class="px ic" src="img/items/med_bottle_blue.webp" alt=""><b>Chất còn lại, 1:1</b></td><td>Cả hai cùng mất. Chỉ đáng làm khi dư trên 0,5 mL, hoặc khi đã pha loãng.</td></tr><tr><td class="k">Tạp chất hoá học</td><td>Chai hoá chất, nước bẩn</td><td><img class="px ic" src="img/items/water_tablet.webp" alt=""><b>Viên lọc nước + phải có nước</b></td><td>Chỉ hạ xuống <b>0,7%</b> tổng thể tích. Chờ chlorine về 0 rồi mới bay hơi.</td></tr><tr><td class="k">Kim loại nặng</td><td>Chai axit/bazơ/Lipobond/Reducing bẩn, <b>nước thường</b>, Nudka, rượu vang</td><td><span class="no">Trong lab không có cách nào</span></td><td>Đừng để nó vào mẻ: chọn chai sạch. Cá Gutter Tilapia làm sạch chai <b>trước</b> khi dùng.</td></tr><tr><td class="k">Tinh bột, đường</td><td>Nutrifruit, thuốc mua về</td><td><span class="no">Không loại được</span></td><td>Chỉ cố ý thêm vào làm chất độn.</td></tr></tbody></table></div><p class="sub-h">Nên dùng nước nào</p><div class="tw"><table><thead><tr><th>Loại nước</th><th>Độ tinh khiết</th><th>Dùng pha chế?</th><th>Vì sao</th></tr></thead><tbody><tr><td class="k"><img class="px ic" src="img/items/bottled_water.webp" alt="">Pure Water</td><td>99,9%</td><td><span class="yes">Tốt nhất</span></td><td>Gần như không có tạp chất</td></tr><tr><td class="k"><img class="px ic" src="img/items/bottled_water.webp" alt="">High-Quality</td><td>99–99,9%</td><td><span class="yes">Được</span></td><td>Recreational Suffering dùng loại này vẫn ra Lab Pure</td></tr><tr><td class="k"><img class="px ic" src="img/items/common_chemical.webp" alt="">Cồn thu hồi</td><td>100% cồn</td><td><span class="yes">Được, thay nước</span></td><td>Bay hơi hết, không để lại gì</td></tr><tr><td class="k"><img class="px ic" src="img/items/small_bottled_water.webp" alt="">Basewater (nước thường, Sealed Water Ration)</td><td>dưới 99%</td><td><span class="no">Không</span></td><td>Mang 1–2 mL <b>kim loại nặng không loại được</b></td></tr><tr><td class="k"><img class="px ic" src="img/items/nudka.webp" alt="">Nudka, rượu vang</td><td>45% / 20% cồn</td><td><span class="no">Không đổ thẳng</span></td><td>Phần còn lại là Basewater. Chưng qua Evaporator rồi dùng cồn thu hồi.</td></tr><tr><td class="k">Ghostwater, Rustwater, Gutterflow</td><td>thấp hơn</td><td><span class="no">Không</span></td><td>Rất bẩn</td></tr></tbody></table></div><p class="sub-h">Tự làm nước sạch cho lab</p><div class="how"><div class="st2"><b><img class="px ic" src="img/items/water_tablet.webp" alt="">Lên High-Quality (rẻ)</b><ol><li>Thả <b>viên lọc nước</b> để diệt vi sinh (hoặc dùng đèn UV).</li><li>Rót qua <b>pitcher có Water Filter</b> để bỏ hữu cơ, khoáng, tạp chất vật lý.</li><li>Thử bằng que thử. Thường lên High-Quality.</li><li>Vẫn Basewater: còn kim loại nặng / tạp chất hoá học, viên và lõi lọc không xử lý được.</li></ol></div><div class="st2"><b><img class="px ic" src="img/items/evaporator.webp" alt="">Lên Pure (ổn định)</b><ol><li>Mua <b>Water Purifier</b>, lắp module cho <b>Quality ≥ 100%</b>.</li><li>Bỏ nước High-Quality vào, qua 1 đêm ra 99,9%.</li><li>Máy loại được cả kim loại nặng và tạp chất hoá học.</li><li><b>Chỉ cho nước vào, không cho mẻ hoá chất.</b></li></ol></div><div class="st2"><b><img class="px ic" src="img/items/bottled_water.webp" alt="">Moisture Farm</b><ol><li>Nâng cấp Water Trader của Wild (300).</li><li>Quality 100 ra High-Quality, Quality 150 ra Pure.</li><li>Giữ sẵn vài chai Pure / High-Quality chỉ để pha loãng axit, bazơ.</li></ol></div></div><p class="sub-h">Dream Dust: từng bước, tạp chất nào, diệt bằng gì</p><div class="tw"><table><thead><tr><th>Bước</th><th>Làm gì</th><th>Tạp chất xuất hiện</th><th>Diệt bằng</th><th>Kiểm tra trước khi đi tiếp</th></tr></thead><tbody><tr><td class="k">0. Chuẩn bị</td><td>Quét mọi chai, ống nhỏ, cốc đong</td><td>Kim loại nặng trong chai; đồ bẩn sót trong dụng cụ</td><td>Vứt chai có kim loại nặng; thay dụng cụ bẩn</td><td>Chai axit gần như không có kim loại nặng</td></tr><tr><td class="k">1. Xay</td><td>Blender, <b>chai rỗng hoàn toàn</b></td><td>Protein, bã có sẵn trong nấm</td><td>Chưa xử lý</td><td>Đọc số Dream Cap Mush</td></tr><tr><td class="k">2. Thêm cồn</td><td>Cồn ≥ 5× nấm, cho nấm từng phần</td><td>Nước (Mini Alcohol có 30% nước)</td><td>Bay hơi ở bước 6</td><td>Cồn ≥ 5× nấm đang có trong bình</td></tr><tr><td class="k">3. Đun 40–44°C</td><td>Low / Off tới khi nấm về 0</td><td><b>Bã thực vật</b>; quá 50°C bã càng nhiều</td><td>Kotton ở bước 5</td><td>Mush = 0, có Dream Cap Extract</td></tr><tr><td class="k">4. Khử protein</td><td>Axit (hoặc bazơ) = protein; gần 0 thì <b>pha loãng với nước sạch</b> (<a href="#nho-giot">cách pha</a>)</td><td>Protein thành cặn; axit dư</td><td>Cặn thì lọc; axit dư &gt; 0,5 mL thì thêm 1 mL bazơ</td><td><b>Protein và axit dư dưới 20 µL</b></td></tr><tr><td class="k">5. Lọc</td><td>Kotton → Water Filter → Water Filter lần nữa</td><td>Cặn, bã, tạp chất vật lý, khoáng</td><td>Kotton (thô) + Water Filter (mịn)</td><td>Chỉ còn dịch chiết + nước + cồn</td></tr><tr><td class="k">6. Bay hơi</td><td>Evaporator qua đêm (≤ 300 mL)</td><td>Nước, cồn</td><td>Evaporator</td><td>Nước + cồn + Lipobond ≤ 0,1 mL</td></tr><tr><td class="k">7. Ra hàng</td><td>Chem Finisher chọn Dream Dust, <b>4 module</b></td><td>Finisher cộng 12/6/3/1/0% tạp chất vật lý</td><td>Đủ 4 module</td><td>Dịch chiết ≥ 99,01% → Lab Pure</td></tr></tbody></table></div><p class="note">Vi sinh: cồn 5× nấm (hơn 40% thể tích) và axit đã tự diệt, nên Dream Dust không cần đèn UV hay viên lọc. Tạp chất hoá học: không có bước viên lọc, nên phải chọn chai axit ít tạp chất hoá học từ đầu.</p><p class="sub-h">Phanta: từng bước</p><div class="tw"><table><thead><tr><th>Bước</th><th>Làm gì</th><th>Tạp chất xuất hiện</th><th>Diệt bằng</th><th>Kiểm tra</th></tr></thead><tbody><tr><td class="k">0. Chuẩn bị</td><td>Quét 2 chai Methylol + 1 chai Reducing</td><td><b>Kim loại nặng ngẫu nhiên</b></td><td>Muốn Lab Pure: làm sạch chai bằng cá Gutter Tilapia trước</td><td>Biết trước mẻ ra khoảng bao nhiêu %</td></tr><tr><td class="k">1. Khử Stabilizing</td><td>Methylol sang bình lớn, nhỏ axit từ từ (gần hết thì axit pha loãng)</td><td>Stabilizing thành cặn; axit dư</td><td>Cặn thì lọc ở bước 2</td><td><b>Stabilizing = 0</b></td></tr><tr><td class="k">2. Lọc + trung hoà</td><td>Kotton → Water Filter, rồi bazơ pha loãng cho axit dư</td><td>Cặn, axit dư</td><td>Lọc; bazơ 1:1</td><td>Axit dư gần 0</td></tr><tr><td class="k">3. Thêm Reducing</td><td>Đúng <b>¾ lượng Methylol</b>; mấy mL cuối dùng viên 0,1 mL từ Finisher</td><td>Reducing dư</td><td><span class="no">Không loại được</span></td><td>Đong thiếu chút rồi bù dần</td></tr><tr><td class="k">4. Đun 120–129°C</td><td>Bếp có module, tới khi Methylol = 0</td><td>Tạp chất hoá học</td><td>Bước 5</td><td>Methylol = 0, không chạm 130°C</td></tr><tr><td class="k">5. Khử tạp chất hoá học</td><td>Thêm chút <b>nước sạch</b> + viên lọc (mẻ nhỏ: viên chlorine 0,1 mL)</td><td>Chlorine</td><td>Tự hết khi có nước</td><td><b>Chlorine = 0</b>, hoá học còn ~0,7%</td></tr><tr><td class="k">6. Làm khô</td><td>Evaporator, hoặc đun bay nước dưới 130°C</td><td>Nước</td><td>Evaporator / nhiệt</td><td>≤ 0,1 mL chất lỏng</td></tr><tr><td class="k">7. Pha loãng + ra hàng</td><td>Trộn tinh bột xuống ~62% rồi vào Finisher</td><td>Tinh bột (cố ý)</td><td>Không cần</td><td>Viên <b>dưới 75%</b> để khỏi độc</td></tr></tbody></table></div><p class="sub-h">Lỗi hay gặp về tạp chất</p><ul class="mistakes"><li>Lọc mà vẫn còn vi sinh: Water Filter không bắt vi sinh. Dùng đèn UV, viên lọc, hoặc đun.</li><li>Thả viên lọc vào mẻ khô: không có tác dụng, phải có nước trong bình.</li><li>Hoà tan viên lọc vào nước trước: toàn bộ chlorine phản ứng hết trong một tick, phí viên.</li><li>Nhỏ axit rồi bazơ qua lại nhiều lần: mỗi lần thêm 2–8% tạp chất từ chai.</li><li>Dùng nước thường hoặc Nudka để pha loãng: mang kim loại nặng vào, không gỡ ra được.</li><li><b>Cho mẻ hoá chất vào Water Purifier:</b> máy biến mọi thứ không phải nước thành nước, dịch chiết mất trước tiên.</li><li>Mẻ đã khô mà quên lọc: vẫn lọc được sau khi bay hơi.</li></ul><p class="note">Nguồn: bảng "Cleaning a Batch" trong guide Steam The Complete Chemist Guide (số liệu từ file game) và trang Water của probablystolenwiki.com.</p></section>
+
+<section id="nho-giot"><h2>Nhỏ từng chút: pha loãng axit/bazơ</h2>
+<div class="kid"><b>Vì sao phải pha loãng?</b> Ống nhỏ giọt trong game giống <b>một cái muỗng to</b>: mỗi lần lấy ra ít nhất khoảng 1 mL. Khi protein chỉ còn 0,3 mL mà bạn nhỏ cả 1 mL bazơ thì <b>dư 0,7 mL</b>, và phần dư đó lại thành rác.<br><br>Mẹo: <b>hoà bazơ vào nước sạch trước</b>. Như vậy mỗi “muỗng” chỉ có một chút bazơ, phần còn lại là nước. Nước thì vô hại vì máy bay hơi sẽ đuổi nó đi sau.</div>
+
+<div class="ill"><h3>Nhìn hình: 1 phần bazơ + 4 phần nước</h3>
+<div class="pair">
+<div class="side bad"><span class="lbl">✗ Nhỏ thẳng bazơ</span><div class="scene"><div class="drops lg"><i class="b"></i><i class="b"></i><i class="b"></i><i class="b"></i><i class="b"></i></div></div><div class="scene"><span class="badge n">1,5 mL toàn bazơ</span><span class="badge r">protein còn 0,3 → dư 1,2 mL</span></div><small>Cần có một tí mà đổ cả muỗng. Bazơ dư nằm lại, kéo tụt hạng.</small></div>
+<div class="side good"><span class="lbl">✓ Pha loãng rồi mới nhỏ</span><div class="scene"><div class="drops lg"><i class="b"></i><i class="w"></i><i class="w"></i><i class="w"></i><i class="w"></i></div></div><div class="scene"><span class="badge n">1,5 mL hỗn hợp</span><span class="badge n">= 0,3 bazơ + 1,2 nước</span><span class="badge g">protein về ~0</span></div><small>Tím = bazơ, xanh = nước. Chỉ 1 trong 5 phần là bazơ, nên nhỏ vào vừa đủ.</small></div>
+</div></div>
+
+<p class="sub-h">Làm từng bước (theo John Kunkle, <a href="https://www.youtube.com/watch?v=QGoWkoAhqpM&amp;t=251s" target="_blank" rel="noopener">4:11</a>–<a href="https://www.youtube.com/watch?v=QGoWkoAhqpM&amp;t=376s" target="_blank" rel="noopener">6:16</a>)</p>
+<div class="seq">
+<div class="s"><b>BƯỚC 1</b><img class="px spr" src="img/items/chem-scanner.webp" alt=""><span>Quét bình, xem <strong>protein còn bao nhiêu</strong>. Còn nhiều thì nhỏ thẳng trước cho gần hết.</span></div>
+<div class="s"><b>BƯỚC 2</b><img class="px spr" src="img/items/bottled_water.webp" alt=""><span>Ống nhỏ giọt: hút <strong>4 phần nước tinh khiết</strong> trước (vd 4,8 mL).</span></div>
+<div class="s"><b>BƯỚC 3</b><img class="px spr" src="img/items/med_bottle_violet.webp" alt=""><span>Hút thêm <strong>1 phần bazơ</strong> (vd 1,2 mL). Tổng 6 mL, 1/5 là bazơ.</span></div>
+<div class="s"><b>BƯỚC 4</b><img class="px spr" src="img/items/chem-scanner.webp" alt=""><span>Nhỏ ~1,5 mL hỗn hợp vào bình, <strong>chờ số đứng yên</strong>, quét lại.</span></div>
+</div>
+<div class="msg ok"><b>Khi nào dừng?</b> Protein (hoặc bazơ dư) còn <b>dưới 20 µL</b> (= 0,02 mL) là dừng. Thế là đủ đạt 99% Lab Pure. Đừng cố về đúng 0 vì phản ứng lệch khoảng ±5%, càng cố càng dễ dư.</div>
+
+<p class="sub-h">Bảng chọn độ loãng</p>
+<p class="note">Protein còn càng ít thì pha càng loãng. Bảng tính cho mỗi lần nhỏ ~1,5 mL hỗn hợp.</p>
+<div class="tw"><table class="drip-tbl"><thead><tr><th>Protein còn</th><th>Hình</th><th>Pha</th><th>1 lần nhỏ đưa vào</th></tr></thead><tbody>
+<tr><td>≥ 1,5 mL</td><td><div class="drops"><i class="b"></i></div></td><td>Không pha, nhỏ thẳng</td><td>1,5 mL</td></tr>
+<tr><td>~0,5 mL</td><td><div class="drops"><i class="b"></i><i class="w"></i><i class="w"></i></div></td><td>1 chất : 2 nước</td><td>~0,5 mL</td></tr>
+<tr><td>~0,3 mL</td><td><div class="drops"><i class="b"></i><i class="w"></i><i class="w"></i><i class="w"></i><i class="w"></i></div></td><td><b>1 chất : 4 nước</b> (như video)</td><td>~0,3 mL</td></tr>
+<tr><td>~0,15 mL</td><td><div class="drops"><i class="b"></i><i class="w"></i><i class="w"></i><i class="w"></i><i class="w"></i><i class="w"></i><i class="w"></i><i class="w"></i><i class="w"></i><i class="w"></i></div></td><td>1 chất : 9 nước</td><td>~0,15 mL</td></tr>
+<tr><td>&lt; 20 µL</td><td>✓</td><td><b>Dừng</b></td><td>Đủ 99%</td></tr>
+</tbody></table></div>
+
+<p class="sub-h">Máy tính: pha bao nhiêu?</p>
+<div class="bench">
+<div class="inputs">
+<div class="row2">
+<div class="field"><label for="n-prot">Protein còn lại (mL)</label><input id="n-prot" type="number" min="0" step="0.01" value="0.3"><small>Quét bình rồi điền. 20 µL = 0,02</small></div>
+<div class="field"><label for="n-drop">Mỗi lần nhỏ (mL hỗn hợp)</label><input id="n-drop" type="number" min="0.1" step="0.1" value="1.5"><small>Lượng bạn nhỏ vào bình mỗi lần</small></div>
+</div>
+<div class="formula">Chất đưa vào = lượng nhỏ ÷ (1 + phần nước)</div>
+</div>
+<div class="out">
+<div class="read">
+<div class="r hl"><span>Tỉ lệ (chất : nước)</span><b id="n-ratio">–</b></div>
+<div class="r"><span>Ống 5 mL (mL chất + nước)</span><b id="n-mix">–</b></div>
+<div class="r"><span>1 lần nhỏ đưa vào</span><b id="n-per">–</b></div>
+</div>
+<div class="scene"><div class="drops lg" id="n-drops"></div></div>
+<div class="msg" id="n-msg"></div>
+</div>
+</div>
+
+<p class="sub-h">Nhớ 5 điều</p>
+<ul class="big5">
+<li><b>Chỉ dùng nước tinh khiết</b> (Pure Water). Nước bẩn mang thêm rác vào bình.</li>
+<li><b>Axit hay bazơ đều được.</b> Quét và chọn chai ít rác hơn. Với Dream Dust nên ưu tiên chai có ít <b>tạp chất hoá học</b> và <b>kim loại nặng</b>, vì hai loại này không lọc được. ProbablyNotMee nhận ra chai axit thường nhiều tạp chất hoá học hơn bazơ (<a href="https://www.youtube.com/watch?v=HbUXkaY1Uro&amp;t=788s" target="_blank" rel="noopener">13:08</a>).</li>
+<li><b>Nước thêm vào không sao:</b> máy bay hơi đuổi hết cùng cồn.</li>
+<li><b>Đừng sửa qua sửa lại.</b> Dư bazơ thì thêm axit, dư axit lại thêm bazơ… mỗi chai lại thêm rác. Thà dư chút xíu còn hơn.</li>
+<li><b>Quét ống nhỏ giọt và cốc trước khi dùng.</b> Ống còn dính axit cũ sẽ làm hỏng hỗn hợp.</li>
+</ul>
+</section>
+
+<section id="quy-trinh">
+  <h2>Quy trình và nhiệt độ</h2>
+  <div class="flow">
+    <div class="st"><img class="px" src="img/items/blender.webp" alt=""><span class="k">1 · XAY</span><b>Blender</b><small>Chai rỗng hoàn toàn</small></div>
+    <div class="st"><img class="px" src="img/items/heating-plate.webp" alt=""><span class="k">2 · ĐUN</span><b>Heating Plate</b><small>Cồn ≥ 5× nấm, cho từng phần</small></div>
+    <div class="st"><img class="px" src="img/items/med_bottle_red.webp" alt=""><span class="k">3 · LÀM SẠCH</span><b>Axit / bazơ</b><small>Bằng lượng protein</small></div>
+    <div class="st"><img class="px" src="img/items/kotton_fabric.webp" alt=""><span class="k">4 · LỌC</span><b>Kotton → lõi lọc</b><small>Kotton bền 1000, lõi 400</small></div>
+    <div class="st"><img class="px" src="img/items/evaporator.webp" alt=""><span class="k">5 · QUA ĐÊM</span><b>Evaporator</b><small>300 mL/đêm, khô ≤ 0,1 mL</small></div>
+    <div class="st"><img class="px" src="img/items/chem-finisher.webp" alt=""><span class="k">6 · RA HÀNG</span><b>Chem Finisher</b><small>Chọn công thức, đo hạng</small></div>
+  </div>
+  <div class="temp2"><div class="legend"><span><i class="lg-ok"></i>Đun / giữ trong vùng này</span><span><i class="lg-bad"></i>Hỏng: nguyên liệu hoặc thành phẩm bị phá</span><span><i class="lg-warn"></i>Mất dung môi (bay hơi)</span><span><i class="lg-idle"></i>Chưa phản ứng / không có tác dụng</span></div><div class="tr2"><div class="tr2-hd"><b>Bước chiết nấm (Dream / Nightmare Cap + cồn)</b><span class="do">Đun 40–49°C</span><small>Dưới 40°C chưa chiết. Từ 50°C nấm hoá bã, mất nguyên liệu.</small></div><div class="bar2" aria-hidden="true"><i class="z-ok" style="left:25.00%;width:6.25%"></i><i class="z-bad" style="left:31.25%;width:68.75%"></i></div><div class="ticks" aria-hidden="true"><b class="tl" style="left:0.00%">0°C</b><b style="left:31.25%">50°C</b><b class="tr" style="left:100.00%">160°C</b></div></div><div class="tr2"><div class="tr2-hd"><b>Dịch chiết Dream Cap (đã chiết xong)</b><span class="do">Giữ dưới 60°C</span><small>Từ 60°C dịch chiết bị phân huỷ.</small></div><div class="bar2" aria-hidden="true"><i class="z-ok" style="left:0.00%;width:37.50%"></i><i class="z-bad" style="left:37.50%;width:62.50%"></i></div><div class="ticks" aria-hidden="true"><b class="tl" style="left:0.00%">0°C</b><b style="left:37.50%">60°C</b><b class="tr" style="left:100.00%">160°C</b></div></div><div class="tr2"><div class="tr2-hd"><b>Dịch chiết Nightmare Cap</b><span class="do">Giữ dưới 50°C</span><small>Từ 50°C phân huỷ, tới 60°C mất khoảng nửa mỗi tick.</small></div><div class="bar2" aria-hidden="true"><i class="z-ok" style="left:0.00%;width:31.25%"></i><i class="z-bad" style="left:31.25%;width:68.75%"></i></div><div class="ticks" aria-hidden="true"><b class="tl" style="left:0.00%">0°C</b><b style="left:31.25%">50°C</b><b class="tr" style="left:100.00%">160°C</b></div></div><div class="tr2"><div class="tr2-hd"><b>Cà phê (Caffeine)</b><span class="do">Đun 50–78°C</span><small>Dưới 50°C cồn chưa chiết được. Trên 78°C cồn bay hơi mất.</small></div><div class="bar2" aria-hidden="true"><i class="z-ok" style="left:31.25%;width:17.50%"></i><i class="z-warn" style="left:48.75%;width:51.25%"></i></div><div class="ticks" aria-hidden="true"><b class="tl" style="left:0.00%">0°C</b><b style="left:31.25%">50°C</b><b style="left:48.75%">78°C</b><b class="tr" style="left:100.00%">160°C</b></div></div><div class="tr2"><div class="tr2-hd"><b>Lipobond Agent (cà phê, Nomore)</b><span class="do">Giữ dưới 55°C</span><small>Trên 55°C Lipobond bay hơi mất.</small></div><div class="bar2" aria-hidden="true"><i class="z-ok" style="left:0.00%;width:34.38%"></i><i class="z-warn" style="left:34.38%;width:65.62%"></i></div><div class="ticks" aria-hidden="true"><b class="tl" style="left:0.00%">0°C</b><b style="left:34.38%">55°C</b><b class="tr" style="left:100.00%">160°C</b></div></div><div class="tr2"><div class="tr2-hd"><b>Phản ứng Phanta</b><span class="do">Đun 120–129°C</span><small>Phản ứng từ khoảng 110°C. Từ 130°C Phanta phân huỷ. Bếp phải có module.</small></div><div class="bar2" aria-hidden="true"><i class="z-ok" style="left:68.75%;width:12.50%"></i><i class="z-bad" style="left:81.25%;width:18.75%"></i></div><div class="ticks" aria-hidden="true"><b class="tl" style="left:0.00%">0°C</b><b style="left:68.75%">110°C</b><b style="left:81.25%">130°C</b><b class="tr" style="left:100.00%">160°C</b></div></div><p class="plate99"><b>Bếp chưa có module</b> chỉ nhắm cố định 99°C, nên muốn giữ 40–49°C phải tự <b>bật Low rồi tắt Off</b> khi nhiệt lên tới mức, nhìn nhiệt kế để bật lại. Có 1 module thì bếp lên được 160°C (đủ cho Phanta); có 2 module thì đặt được đúng nhiệt độ mong muốn.</p></div>
+  <figure><img src="img/shots/machines.jpg" alt="Giao diện các máy hoá chất trong game" loading="lazy"><figcaption>Giao diện máy trong game (ảnh chính thức trên Steam): Chem Finisher, Evaporator, Heating Plate, Cryptographic Desequencer.</figcaption></figure>
+</section>
+
+<section id="dream">
+  <h2><img class="px sec-ic" src="img/items/dream_dust.webp" alt="">Máy tính Dream / Nightmare Dust</h2>
+  <div class="bench">
+    <div class="inputs">
+      <div class="field"><label>Sản phẩm</label><div class="seg" id="d-prod"><button type="button" data-v="dream" aria-pressed="true">Dream Dust</button><button type="button" data-v="night" aria-pressed="false">Nightmare Dust</button></div></div>
+      <div class="row2">
+        <div class="field"><label for="d-mush">Nấm xay (mL)</label><input id="d-mush" type="number" min="0" step="0.1" value="130"><small>Số "Mush" trên máy quét</small></div>
+        <div class="field"><label for="d-portion">Đổ nấm từng lần bao nhiêu (mL)</label><input id="d-portion" type="number" min="0.1" step="0.1" value="25"><small>Chia nấm thành nhiều lần đổ vào cùng 1 bình cồn. Nhập bằng tổng nấm nếu đổ hết 1 lần.</small></div>
+      </div>
+      <div class="row2">
+        <div class="field"><label for="d-protein">Protein (mL)</label><input id="d-protein" type="number" min="0" step="0.1" value="6"><small>Đọc sau khi đun xong</small></div>
+        <div class="field"><label for="d-alc">Nguồn cồn</label><select id="d-alc"><option value="mini">Mini Alcohol (70% cồn)</option><option value="pure">Cồn thu hồi (100%)</option><option value="nudka">Nudka (45%, nên chưng lại)</option></select></div>
+      </div>
+      <div class="msg" style="font-size:12.5px"><b>Đổ từng phần là gì?</b> Phản ứng chỉ cần cồn gấp 5 lần lượng nấm <i>đang nằm trong bình</i>, và cồn không bị tiêu hao. Đổ 25 mL nấm → đun tới khi nấm về 0 → đổ tiếp 25 mL vào chính bình đó → lặp lại. Bình chỉ cần đủ cồn cho 25 mL thay vì cho cả 130 mL. Phần càng nhỏ càng đỡ cồn, nhưng phải đổ và đun nhiều lần hơn.</div><div class="field"><label>Module Blender (nếu nhập lượng nấm trước khi xay)</label><div class="seg" id="d-blend"><button type="button" data-v="-1" aria-pressed="true">Đã xay</button><button type="button" data-v="0" aria-pressed="false">0</button><button type="button" data-v="1" aria-pressed="false">1</button><button type="button" data-v="2" aria-pressed="false">2</button><button type="button" data-v="3" aria-pressed="false">3</button><button type="button" data-v="4" aria-pressed="false">4</button></div><small>Blender hao 35% / 20% / 10% / 5% / 0% theo số module</small></div>
+    </div>
+    <div class="out">
+      <div class="read">
+        <div class="r hl"><span>Thành phẩm</span><b id="d-units">0</b></div>
+        <div class="r"><span>Dịch chiết thu được</span><b id="d-extract">0</b></div>
+        <div class="r"><span>Cồn cần (đổ vào)</span><b id="d-alcneed">0</b></div>
+        <div class="r"><span>Axit (hoặc bazơ)</span><b id="d-acid">0</b></div>
+      </div>
+      <ol class="steps" id="d-steps"></ol>
+      <div class="msg" id="d-msg"></div>
+    </div>
+  </div>
+</section>
+
+<section id="phanta">
+  <h2><img class="px sec-ic" src="img/items/fanta_pill.webp" alt="">Máy tính Phanta</h2>
+  <div class="bench">
+    <div class="inputs">
+      <div class="row2">
+        <div class="field"><label for="p-meth">N-Methylol (mL)</label><input id="p-meth" type="number" min="0" step="0.1" value="250"><small>1 gói Restricted ≈ 2 chai × 125 mL</small></div>
+        <div class="field"><label for="p-stab">Stabilizing Agent (mL)</label><input id="p-stab" type="number" min="0" step="0.1" value="250"><small>Số trên máy quét. 1 gói ≈ 2 × 125 mL</small></div>
+      </div>
+      <div class="row2">
+        <div class="field"><label for="p-pur">Độ tinh khiết mẻ khô (%)</label><input id="p-pur" type="number" min="1" max="100" step="0.1" value="86"><small>Đo sau khi khô, trước Finisher. TB ~86%</small></div>
+        <div class="field"><label for="p-target">Pha loãng xuống (%)</label><input id="p-target" type="number" min="1" max="100" step="0.1" value="62"><small>Guide khuyên ~62% để không độc</small></div>
+      </div>
+      <div class="field"><label>Module Chem Finisher</label><div class="seg" id="p-fin"><button type="button" data-v="0" aria-pressed="false">0</button><button type="button" data-v="1" aria-pressed="false">1</button><button type="button" data-v="2" aria-pressed="false">2</button><button type="button" data-v="3" aria-pressed="false">3</button><button type="button" data-v="4" aria-pressed="true">4</button></div></div>
+    </div>
+    <div class="out">
+      <div class="read">
+        <div class="r"><span>Axit khử Stabilizing (ước lượng)</span><b id="p-acid">0</b></div>
+        <div class="r hl"><span>Reducing Agent (¾ Methylol)</span><b id="p-red">0</b></div>
+        <div class="r"><span>Phanta thu được</span><b id="p-phanta">0</b></div>
+        <div class="r"><span>Viên nếu không pha</span><b id="p-pills">0</b></div>
+      </div>
+      <div class="grade" id="p-grade"></div>
+      <div class="read">
+        <div class="r"><span>Chất độn cần thêm</span><b id="p-filler">0</b></div>
+        <div class="r hl"><span>Viên sau khi pha loãng</span><b id="p-pills2">0</b></div>
+      </div>
+      <div class="msg" id="p-msg"></div>
+      <ol class="steps">
+        <li>Nhỏ axit <b>từng đợt</b> (ước lượng ~30% thể tích Methylol), chờ phản ứng, tới khi Stabilizing Agent về <b>0</b>.</li>
+        <li>Lọc bằng Water Filter, trung hoà axit dư bằng bazơ.</li>
+        <li>Thêm Reducing Agent đúng số ở trên. Mấy mL cuối đong bằng "viên" 0,1 mL từ Finisher.</li>
+        <li>Đun <b>120–129°C</b> tới khi Methylol về 0. Không chạm 130°C.</li>
+        <li>Thêm nước + viên lọc, chờ chlorine về 0. Làm khô dưới 130°C.</li>
+        <li>Trộn chất độn khô (tinh bột) rồi mới vào Finisher.</li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+<section id="hang">
+  <h2><img class="px sec-ic" src="img/items/chem-scanner.webp" alt="">Dự đoán hạng</h2>
+  <div class="bench">
+    <div class="inputs">
+      <div class="row2">
+        <div class="field"><label for="g-act">Hoạt chất (mL)</label><input id="g-act" type="number" min="0" step="0.01" value="64"><small>Dream Cap Extract, Phanta…</small></div>
+        <div class="field"><label for="g-imp">Tạp chất còn lại (mL)</label><input id="g-imp" type="number" min="0" step="0.01" value="0.4"><small>Tổng các thứ khác trong mẻ khô</small></div>
+      </div>
+      <div class="field"><label>Module Chem Finisher</label><div class="seg" id="g-fin"><button type="button" data-v="0" aria-pressed="false">0</button><button type="button" data-v="1" aria-pressed="false">1</button><button type="button" data-v="2" aria-pressed="false">2</button><button type="button" data-v="3" aria-pressed="false">3</button><button type="button" data-v="4" aria-pressed="true">4</button></div><small>Finisher cộng tạp chất 12% / 6% / 3% / 1% / 0%</small></div>
+      <div class="formula">độ tinh khiết = hoạt chất ÷ (hoạt chất + tạp chất) × (1 − tạp chất của Finisher)</div>
+    </div>
+    <div class="out">
+      <div class="read">
+        <div class="r hl"><span>Độ tinh khiết thành phẩm</span><b id="g-pur">0</b></div>
+        <div class="r"><span>Hệ số giá</span><b id="g-mult">0</b></div>
+      </div>
+      <div class="ladder" id="g-ladder"></div>
+      <div class="msg" id="g-msg"></div>
+    </div>
+  </div>
+</section>
+
+<section id="don">
+  <h2><img class="px sec-ic" src="img/items/chem-finisher.webp" alt="">Tính chất độn (pha loãng)</h2>
+  <div class="bench">
+    <div class="inputs">
+      <div class="row2">
+        <div class="field"><label for="f-ext">Hoạt chất (mL)</label><input id="f-ext" type="number" min="0" step="0.01" value="36"></div>
+        <div class="field"><label for="f-tot">Tổng mẻ hiện có (mL)</label><input id="f-tot" type="number" min="0" step="0.01" value="38"></div>
+      </div>
+      <div class="row2">
+        <div class="field"><label for="f-target">Độ tinh khiết muốn đạt (%)</label><input id="f-target" type="number" min="1" max="100" step="0.1" value="79"><small>Cartel: mục tiêu + 9. Phanta: ~62</small></div>
+        <div class="field"><label for="f-unit">Mỗi đơn vị (mL)</label><select id="f-unit"><option value="2">Dream Dust · 2</option><option value="4">Nightmare Dust · 4</option><option value="0.5">Phanta · 0,5</option><option value="5">Caffeine · 5</option></select></div>
+      </div>
+      <div class="field"><label>Module Chem Finisher</label><div class="seg" id="f-fin"><button type="button" data-v="0" aria-pressed="false">0</button><button type="button" data-v="1" aria-pressed="false">1</button><button type="button" data-v="2" aria-pressed="false">2</button><button type="button" data-v="3" aria-pressed="false">3</button><button type="button" data-v="4" aria-pressed="true">4</button></div></div>
+      <div class="formula">mL độn = hoạt chất × (1 − tạp chất Finisher) ÷ % muốn đạt − tổng hiện có</div>
+    </div>
+    <div class="out">
+      <div class="read">
+        <div class="r hl"><span>Thêm chất độn</span><b id="f-fill">0</b></div>
+        <div class="r"><span>Số đơn vị ra được</span><b id="f-units">0</b></div>
+        <div class="r"><span>Độ tinh khiết hiện tại</span><b id="f-now">0</b></div>
+      </div>
+      <div class="msg" id="f-msg"></div>
+      <p class="note">Chất độn khô: tinh bột/đường từ Nutrifruit đã xay, lọc và bay hơi; Gutterflow đun cạn; hoặc chai axit/bazơ bẩn bỏ đi (đừng trộn axit với bazơ). Chỉ pha loãng hàng nộp Cartel hoặc Phanta; hàng để bán thì hạng càng cao giá càng cao.</p>
+    </div>
+  </div>
+</section>
+
+<section id="gia">
+  <h2><img class="px sec-ic" src="img/items/card_chem.webp" alt="">Giá bán và độ nghi ngờ</h2>
+  <div class="bench">
+    <div class="inputs">
+      <div class="row2">
+        <div class="field"><label for="s-prod">Sản phẩm</label><select id="s-prod"><option value="dream">Dream Dust · 18</option><option value="night">Nightmare Dust · 36</option><option value="phanta">Phanta Pill · 12</option><option value="caff">Caffeine Pill · 10</option><option value="nomore">Nomore Injector · 50</option></select></div>
+        <div class="field"><label for="s-grade">Hạng</label><select id="s-grade"><option value="1.35">Lab Pure +135%</option><option value="0.85" selected>Pharma +85%</option><option value="0.40">Near-Pharma +40%</option><option value="0">Street ±0</option><option value="-0.45">Cut −45%</option><option value="-0.75">Junk −75%</option><option value="-0.95">Starch −95%</option></select></div>
+      </div>
+      <div class="row2">
+        <div class="field"><label for="s-market">Thị trường</label><select id="s-market"><option value="0.15">Bán lẻ +15%</option><option value="-0.15">Thanh lý cả lô −15% (Dealer)</option><option value="0">Không</option></select></div>
+        <div class="field"><label for="s-bargain">Bạn giảm giá (%)</label><input id="s-bargain" type="number" min="0" max="90" step="1" value="10"><small>Giảm giá được thêm danh tiếng</small></div>
+      </div>
+      <div class="row2">
+        <div class="field"><label for="s-qty">Số lượng</label><input id="s-qty" type="number" min="1" step="1" value="10"></div>
+        <div class="field"><label for="s-buyer">Người mua</label><select id="s-buyer"><option value="0">Cartel · 0</option><option value="0.3333">Cách mạng · ⅓</option><option value="0.5" selected>Chợ Đen / Dealer · ½</option><option value="0.5">Tầng Dưới có Tight Lips · ½</option><option value="1">Người khác · toàn bộ</option></select></div>
+      </div>
+      <div class="formula">Giá = gốc × (1 + hạng) × (1 + hàng cấm + thị trường) × (1 − giảm giá)</div>
+    </div>
+    <div class="out">
+      <div class="read">
+        <div class="r hl"><span>Giá mỗi đơn vị</span><b id="s-each">0</b></div>
+        <div class="r"><span>Tổng thu</span><b id="s-total">0</b></div>
+        <div class="r"><span>Cộng vào giá trị vụ án</span><b id="s-case">0</b></div>
+      </div>
+      <div class="msg" id="s-msg"></div>
+      <div class="tw" style="border-radius:8px"><table style="min-width:0;font-size:12.5px">
+        <thead><tr><th>Giá trị vụ án</th><th>Tiến độ điều tra mỗi đêm</th></tr></thead>
+        <tbody id="s-inv"><tr><td>dưới 100</td><td>0</td></tr><tr><td>100–299</td><td>+2</td></tr><tr><td>300–849</td><td>+6</td></tr><tr><td>850–1199</td><td>+9</td></tr><tr><td>1200–1499</td><td>+12</td></tr><tr><td>1500–2499</td><td>+20</td></tr></tbody>
+      </table></div>
+      <p class="note">Mỗi đêm mỗi loại tội tự giảm 20 nếu tiến độ điều tra dưới 80. Chất lỏng không bao giờ là hàng cấm: giữ hàng ở dạng dịch chiết, sắp bán mới ra lọ.</p>
+    </div>
+  </div>
+</section>
+
+<section id="cartel">
+  <h2><img class="px sec-ic" src="img/items/dream_cap.webp" alt="">Chỉ tiêu Cartel (nghề Chemist)</h2>
+  <div class="bench">
+    <div class="inputs">
+      <div class="field"><label for="c-week">Tuần thứ</label><input id="c-week" type="number" min="1" step="1" value="3"></div>
+      <div class="field"><label for="c-ext">Dịch chiết sẵn có cho Cartel (mL, độ tinh khiết 100%)</label><input id="c-ext" type="number" min="0" step="0.1" value="40"><small>Để tính cần thêm bao nhiêu độn cho đủ số lọ</small></div>
+      <p class="note">Mỗi tuần: +150 Credits, 3 Dream Cap, 1 gói Common. Nộp 0 lọ hoặc độ tinh khiết TB ≤ ¼ mục tiêu là thua. Danh tiếng −100 cũng thua. Module Chem Finisher thưởng khi đủ số lọ và độ tinh khiết không thấp hơn mục tiêu quá 5 điểm.</p>
+    </div>
+    <div class="out">
+      <div class="read">
+        <div class="r"><span>Số lọ cần</span><b id="c-count">0</b></div>
+        <div class="r"><span>Độ tinh khiết mục tiêu</span><b id="c-pur">0</b></div>
+        <div class="r hl"><span>Nên nộp ở</span><b id="c-aim">0</b></div>
+        <div class="r"><span>Lọ làm được từ dịch chiết</span><b id="c-make">0</b></div>
+      </div>
+      <div class="msg" id="c-msg"></div>
+    </div>
+  </div>
+</section>
+
+<section id="hinh-minh-hoa"><h2>Hình minh hoạ: làm đúng / làm sai</h2><p class="note">Những mẹo hay gặp trong video, vẽ lại thành hình. Bên đỏ là cách các youtuber đã làm hỏng mẻ, bên xanh là cách làm đúng.</p><div class="dd"><div class="ill"><h3>1. Quét mọi thứ trước khi đụng vào</h3><div class="pair"><div class="side bad"><span class="lbl">✗ SAI: dùng luôn, không quét</span><div class="scene"><img class="px spr" src="img/items/med_bottle_red.webp" alt=""><span class="op">→</span><img class="px spr" src="img/items/1ml-dropper.png" alt=""><span class="op">→</span><img class="px spr" src="img/items/dream_dust.webp" alt=""></div><div class="scene"><span class="badge r">caffeine 0,4 mL</span><span class="badge r">cồn 1,2 mL</span><span class="badge r">dầu mỡ</span></div><small>Lỡ nhỏ ngược hỗn hợp vào chai axit. Từ đó mọi mẻ Dream Dust đều lẫn caffeine, cồn, mỡ mà không biết vì sao.</small></div><div class="side good"><span class="lbl">✓ ĐÚNG: máy quét → Equip → bấm từng thứ</span><div class="scene"><img class="px spr" src="img/items/chem-scanner.webp" alt=""><span class="op">→</span><span class="stack"><img class="px spr" src="img/items/med_bottle_red.webp" alt=""><span class="badge g">sạch</span></span><span class="stack"><img class="px spr" src="img/items/1ml-dropper.png" alt=""><span class="badge g">rỗng</span></span><span class="stack"><img class="px spr" src="img/items/25ml-cylinder.webp" alt=""><span class="badge g">rỗng</span></span></div><small>Chai, ống nhỏ, cốc đong đều phải sạch hoặc rỗng. Chai nào lẫn thứ lạ thì vứt, mở chai mới.</small></div></div><p class="note">Nguồn: Recreational Suffering, Make Lab Pure Drugs Every Time (2:04).</p></div><div class="ill"><h3>2. Bếp: tắt trước khi đặt bình</h3><div class="pair"><div class="side bad"><span class="lbl">✗ SAI: đặt bình lên bếp đang nóng</span><div class="scene"><img class="px spr" src="img/items/heating-plate.webp" alt=""><span class="knob on">99°C</span><span class="op">+</span><img class="px spr" src="img/items/dream_cap.webp" alt=""></div><div class="scene"><span class="badge r">nấm hoá bã</span><span class="badge r">&gt;55°C cồn bay hơi</span></div><small>Bếp chưa có module luôn nhắm 99°C. Đặt bình lên lúc bếp đang bật là nấm cháy và cồn bay mất ngay.</small></div><div class="side good"><span class="lbl">✓ ĐÚNG: tắt → đặt → bật Low → tắt</span><div class="seq"><div class="s"><b>1</b><span class="knob">OFF</span>Tắt bếp</div><div class="s"><b>2</b><img class="px spr" src="img/items/heating-plate.webp" alt="">Đặt bình</div><div class="s"><b>3</b><span class="knob on">LOW</span>Nhìn nhiệt kế</div><div class="s"><b>4</b><span class="knob">OFF</span>Ở 44°C thì tắt</div></div><div class="therm-mini" aria-hidden="true"></div><small>Vạch xanh là 40–49°C. Nguội dưới 40°C thì bật Low lại. Xong việc nhớ tắt bếp.</small></div></div><p class="note">Nguồn: Recreational Suffering (4:13), John Kunkle (2:06).</p></div><div class="ill"><h3>3. Không để lẫn dịch chiết Nightmare vào bình Dream</h3><div class="pair"><div class="side bad"><span class="lbl">✗ SAI: dùng chung bình, chung dụng cụ</span><div class="scene"><img class="px spr" src="img/items/nightmare_dust.webp" alt=""><span class="op">→</span><img class="px spr" src="img/items/dream_dust.webp" alt=""><span class="op">=</span><span class="badge r">mẻ hỏng</span></div><small>John Kunkle lỡ đổ dịch chiết Nightmare vào bình Dream: mất Lab Pure, ra một thứ lai thuốc độc. ProbablyNotMee lỡ nhỏ bột Nightmare vào chai axit, phải mở gói mới.</small></div><div class="side good"><span class="lbl">✓ ĐÚNG: dán nhãn, bình riêng</span><div class="scene"><span class="stack"><img class="px spr" src="img/items/dream_dust.webp" alt=""><span class="tag-lbl">DREAM</span></span><span class="stack"><img class="px spr" src="img/items/nightmare_dust.webp" alt=""><span class="tag-lbl">NIGHTMARE</span></span><span class="stack"><img class="px spr" src="img/items/water_pitcher.webp" alt=""><span class="tag-lbl">LỌC #1</span></span></div><small>Dùng Labeler đặt tên cho bình. Mỗi loại một bình lọc, một ống nhỏ riêng (NeRdYViKiN: dán nhãn bình lọc theo nguyên liệu).</small></div></div><p class="note">Nguồn: John Kunkle (10:25), ProbablyNotMee, NeRdYViKiN (2:49).</p></div><div class="ill"><h3>4. Pha loãng axit 1:9 để nhỏ cho đúng</h3><div class="pair"><div class="side bad"><span class="lbl">✗ SAI: protein còn 0,4 mL mà nhỏ 1 mL axit</span><div class="scene"><div class="drops"><i class="a"></i></div><span class="op">→</span><span class="badge n">protein 0</span><span class="badge r">axit dư 0,6 mL</span></div><small>Ống nhỏ mỗi lần lấy khoảng 1 mL. Axit dư nằm lại trong mẻ và là tạp chất, kéo tụt hạng.</small></div><div class="side good"><span class="lbl">✓ ĐÚNG: 1 phần axit + 9 phần nước sạch</span><div class="scene"><div class="drops"><i class="a"></i><i class="w"></i><i class="w"></i><i class="w"></i><i class="w"></i><i class="w"></i><i class="w"></i><i class="w"></i><i class="w"></i><i class="w"></i></div></div><div class="scene"><span class="badge g">1 mL hỗn hợp = 0,1 mL axit</span></div><small>Nhỏ từng mL hỗn hợp, chờ phản ứng. Gần về 0 thì pha loãng thêm lần nữa. Nước thừa bay hơi ở Evaporator. <a href="#nho-giot">Bảng chọn độ loãng</a>.</small></div></div><p class="note">Nguồn: Recreational Suffering (7:24), John Kunkle (5:14), guide Steam.</p></div><div class="ill"><h3>5. Đừng kéo bình mới vào Finisher đang có bình</h3><div class="pair"><div class="side bad"><span class="lbl">✗ SAI: kéo bình B đè lên bình A</span><div class="scene"><img class="px spr" src="img/items/chem-finisher.webp" alt=""><span class="badge n">bình A</span><span class="op">←</span><span class="badge n">bình B</span></div><div class="scene"><span class="badge r">B đổ trộn vào A</span></div><small>Máy không đổi chỗ hai bình mà đổ bình mới vào bình cũ, trộn lẫn hai mẻ.</small></div><div class="side good"><span class="lbl">✓ ĐÚNG: lấy bình A ra trước</span><div class="scene"><img class="px spr" src="img/items/chem-finisher.webp" alt=""><span class="op">→</span><span class="badge g">trống</span><span class="op">→</span><span class="badge n">bình B</span></div><small>Rút bình cũ ra kho, ô trống rồi mới đặt bình mới vào.</small></div></div><p class="note">Nguồn: The Lost Noob, How to Make Phanta Pills (11:59).</p></div><div class="ill"><h3>6. Lọc: Kotton trước, Water Filter sau</h3><div class="pair"><div class="side bad"><span class="lbl">✗ SAI: chỉ dùng Water Filter</span><div class="scene"><img class="px spr" src="img/items/water_filter.webp" alt=""><span class="badge r">bền 400, mòn nhanh</span></div><small>Cặn to làm mòn lõi lọc đắt tiền. Còn chỉ dùng Kotton thì không bắt được tạp chất vật lý và khoáng.</small></div><div class="side good"><span class="lbl">✓ ĐÚNG: 2–3 lượt lọc</span><div class="scene"><img class="px spr" src="img/items/kotton_fabric.webp" alt=""><span class="op">→</span><img class="px spr" src="img/items/water_filter.webp" alt=""><span class="op">→</span><img class="px spr" src="img/items/water_filter.webp" alt=""></div><div class="scene"><span class="badge n">bắt cặn to</span><span class="badge n">bắt hạt mịn</span><span class="badge n">lọc lại cho chắc</span></div><small>Kotton bền 1000, chịu phần nặng. Lõi lọc không bắt vi sinh.</small></div></div><p class="note">Nguồn: guide Steam, Recreational Suffering (12:00), The Lost Noob.</p></div></div></section>
+<section id="phanta-chi-tiet"><h2><img class="px px sec-ic" src="img/items/fanta_pill.webp" alt="">Phanta chi tiết</h2><p class="lead">Tổng hợp từ guide Steam, bảng phản ứng của probablystolen.gamertw.com và 6 video có làm Phanta: The Lost Noob, NeRdYViKiN, John Kunkle, ProbablyNotMee (1 giờ 19 phút), TheNeomare và Tiozão Arcade (tiếng Bồ Đào Nha).</p><div class="tw"><table><thead><tr><th>Trong 1 gói Chemical Supplies (Restricted)</th><th>Lượng</th><th>Ghi chú</th></tr></thead><tbody><tr><td><img class="px px ic" src="img/items/med_bottle_violet.webp" alt="">2 chai N-Methylol Base</td><td class="num">mỗi chai 125 mL Methylol + <b>125 mL Stabilizing Agent</b></td><td>Chỉ phần Methylol vượt quá Stabilizing mới phản ứng, nên phải khử hết Stabilizing trước.</td></tr><tr><td><img class="px px ic" src="img/items/med_bottle_orange.webp" alt="">1 chai Reducing Agent</td><td class="num">250 mL</td><td>Vừa đủ cho 250 mL Methylol (dùng 187,5 mL). Lẫn kim loại nặng ngẫu nhiên.</td></tr><tr><td>Mỗi chai</td><td class="num">2–8% tạp chất ngẫu nhiên</td><td>Hai chai cùng loại không giống nhau. Quét để chọn.</td></tr></tbody></table></div><div class="ph-steps"><div class="ph"><div class="n">0</div><div><h4>Chọn chai: axit hay bazơ đều khử được Stabilizing</h4><ul><li>Cả axit lẫn bazơ đều biến Stabilizing thành cặn không tan (ProbablyNotMee đã thử cả hai, 37:45–38:19).</li><li>ProbablyNotMee nhận ra <b>chai axit thường nhiều tạp chất hoá học hơn</b>, còn chai bazơ chủ yếu tạp chất vật lý (lọc được). Quét các chai, chọn chai <b>ít kim loại nặng và ít tạp chất hoá học</b> nhất.</li><li>Tiozão chọn chai Methylol có ít kim loại nặng nhất trước khi bắt đầu.</li></ul><p class="src">ProbablyNotMee (13:08, 36:40), Tiozão Arcade (13:59)</p></div></div><div class="ph"><div class="n">1</div><div><h4>Khử Stabilizing Agent: thêm axit theo từng đợt, chờ</h4><ul><li>Đổ Methylol sang bình lớn hơn (chai gốc đã đầy).</li><li>Axit không phản ứng 1:1: theo bảng phản ứng, axit/bazơ <b>hao dần khoảng 0,1 mL hoặc 5% mỗi giây</b> trong lúc biến Stabilizing thành cặn. Vì vậy cho từng đợt, chờ số trên máy quét dừng rồi mới thêm.</li><li>The Lost Noob và Tiozão đều ước lượng axit <b>khoảng 30% thể tích</b> Methylol (Tiozão: ~35 mL cho 116 mL); John Kunkle thấy ~1,4 lần lượng Stabilizing. Coi đây là con số khởi đầu, cuối cùng vẫn nhìn máy quét.</li><li>Gần hết thì dùng axit pha loãng (pha bằng cồn hoặc nước sạch).</li><li><b>Stabilizing phải về 0.</b> Còn bao nhiêu thì bấy nhiêu Methylol không phản ứng.</li></ul><p class="src">The Lost Noob (1:02–3:20), Tiozão (14:33), John Kunkle (4:11), probablystolen.gamertw.com</p></div></div><div class="ph"><div class="n">2</div><div><h4>Lọc cặn rồi trung hoà axit dư</h4><ul><li>Lọc Kotton: cặn Stabilizing rất nhiều (The Lost Noob: 251 mL còn 130 mL), rồi Water Filter (130 còn 129 mL).</li><li>Axit còn dư: nhỏ bazơ pha loãng. Tiozão dư 1,75 mL axit thì cho khoảng 1,75 mL bazơ.</li></ul><p class="src">The Lost Noob (3:20–4:25), Tiozão (16:17)</p></div></div><div class="ph"><div class="n">3</div><div><h4>Thêm Reducing Agent = ¾ lượng Methylol</h4><ul><li>Công thức: <b>0,75 mL Reducing cho 1 mL Methylol → 0,1 mL Phanta</b>.</li><li>Ví dụ: 120 mL Methylol cần 90 mL (The Lost Noob); 116 mL cần ~87 mL (Tiozão).</li><li><b>Cho thiếu trước, bù sau</b>: Reducing dư không gỡ ra được. ProbablyNotMee lúc đầu không biết tỉ lệ, cho thử một nửa rồi bù dần.</li></ul><p class="src">Guide Steam, The Lost Noob (5:31), Tiozão (18:44), ProbablyNotMee (40:00)</p></div></div><div class="ph"><div class="n">4</div><div><h4>Đun 120–129°C tới khi Methylol về 0</h4><ul><li>Phản ứng bắt đầu khoảng <b>110°C</b>, nhanh hơn nhiều ở 120–130°C. Bếp phải có ít nhất 1 Chem Module.</li><li><b>Không chạm 130°C.</b> ProbablyNotMee để quá nhiệt, mất mẻ Phanta, phải chơi lại ngày đó.</li><li>Bếp có thể đứng ở 129°C mà Methylol vẫn còn: không phải do nhiệt, mà do thiếu Reducing hoặc còn Stabilizing.</li><li>Còn sót Methylol thì thêm 1 mL Reducing, đun tiếp.</li></ul><p class="src">ProbablyNotMee (34:24, 38:52, 40:37), The Lost Noob (6:36, 8:44)</p></div></div><div class="ph"><div class="n">5</div><div><h4>Thêm chút nước + viên lọc để khử tạp chất hoá học</h4><ul><li>Sau phản ứng, tạp chất hoá học rất cao. ProbablyNotMee: mẻ chỉ <b>63%</b> trước bước này.</li><li>Viên lọc chỉ chạy khi có nước. Thêm chút nước sạch (hoặc cồn Mini như The Lost Noob), thả viên, chờ chlorine về 0.</li><li>Viên lọc chỉ hạ tạp chất hoá học xuống 0,7% tổng thể tích. Kim loại nặng vẫn còn.</li></ul><p class="src">ProbablyNotMee (41:11), The Lost Noob (9:00), Tiozão (20:05)</p></div></div><div class="ph"><div class="n">6</div><div><h4>Làm khô, pha loãng, ra viên</h4><ul><li>Evaporator qua đêm, hoặc đun bay nước dưới 130°C.</li><li>Mỗi viên 0,5 mL: 12 mL ra 24 viên; ProbablyNotMee ra ~52 viên từ 2 chai.</li><li><b>Pha tinh bột xuống ~62%</b> để viên không độc (xem mục độc tính bên dưới).</li></ul><p class="src">The Lost Noob (11:59), ProbablyNotMee (46:50), guide Steam</p></div></div></div><p class="sub-h">Kết quả thực tế của từng nguồn</p><div class="tw res-tbl"><table><thead><tr><th>Nguồn</th><th>Kết quả</th><th>Vì sao chưa cao hơn</th></tr></thead><tbody><tr><td>Guide Steam</td><td class="num">TB ~86% (68–95%)</td><td>Kim loại nặng ngẫu nhiên trong chai; muốn Lab Pure phải làm sạch chai bằng cá Gutter Tilapia</td></tr><tr><td>The Lost Noob</td><td class="num">90,5% (Near-Pharma)</td><td>Finisher thiếu 1 module (+1%), Reducing đong chưa chuẩn (3% tạp chất)</td></tr><tr><td>ProbablyNotMee</td><td class="num">63% → Pharma ~90,6%</td><td>Kim loại nặng; anh nghĩ Phanta Lab Pure là không thể nếu không gỡ được kim loại nặng</td></tr><tr><td>Tiozão Arcade</td><td class="num">Street Standard (lần đầu)</td><td>Lần đầu làm, chưa tinh chỉnh</td></tr><tr><td>NeRdYViKiN</td><td class="num">tới 99,5% (theo lời tác giả)</td><td>Dùng hoá chất đã làm sạch bằng bể cá và cồn chưng cất</td></tr></tbody></table></div><div class="msg bad"><b>Độc tính có thật</b><br>Phanta từ 75% trở lên là độc. ProbablyNotMee bán Phanta Pharma: hôm sau khách quay lại "Viên Phanta anh bán suýt giết tôi", đòi hoàn tiền và bồi thường, và anh mất danh tiếng Tầng Dưới. TheNeomare bán Phanta cũng mất danh tiếng Tầng Trên vì khách suýt chết. Guide Steam khuyên pha tinh bột xuống ~62%: được khoảng 80 viên mỗi gói, thu gần bằng mà không bị phàn nàn.</div><p class="note">Người mua: Odin và khách mua hàng cấm (ProbablyNotMee), Dealer, khách phe Cách mạng / Chợ Đen (cộng ít vào giá trị vụ án hơn).</p></section>
+
+<section id="youtube"><h2>Mẹo từ YouTube</h2><p class="note">Tổng hợp từ phụ đề 9 video hướng dẫn (đọc ngày 18/11/2026). Mỗi video: tóm tắt video dạy gì, các bước theo thứ tự (bấm mốc thời gian để mở đúng đoạn), lý do vì sao làm vậy và kết quả youtuber đạt được. Mốc thời gian lấy từ phụ đề nên có thể lệch vài giây.</p><div class="vids"><div class="vd"><div class="meta"><a class="t" href="https://www.youtube.com/watch?v=Q_nhd_A_CD4" target="_blank" rel="noopener">Make Lab Pure Drugs Every Time</a><span class="ch">Recreational Suffering · 18:06</span></div><p class="about">Video hay nhất để hiểu <b>vì sao mẻ hay hụt Lab Pure</b>. Tác giả cố tình gỡ hết module ở bếp và Blender để chứng minh chỉ cần 4 module ở Chem Finisher, kỹ thuật cẩn thận và dụng cụ sạch là đủ, không cần cá rô phi.</p><h5>Làm theo video</h5><ol class="ts"><li><a href="https://www.youtube.com/watch?v=Q_nhd_A_CD4&amp;t=0s" target="_blank" rel="noopener">0:00</a><span>Chem Finisher phải có <b>đủ 4 module</b>. Thử với 2 module: máy cộng 3% tạp chất vào mỗi lọ, nên mẻ 99% ra chỉ còn ~96%.</span></li><li><a href="https://www.youtube.com/watch?v=Q_nhd_A_CD4&amp;t=63s" target="_blank" rel="noopener">1:03</a><span>Lab Pure là <b>99,01% trở lên</b>. Đúng 99,00% vẫn tính là Pharma. Bếp và Blender không cần module để đạt Lab Pure.</span></li><li><a href="https://www.youtube.com/watch?v=Q_nhd_A_CD4&amp;t=124s" target="_blank" rel="noopener">2:04</a><span><b>Mở máy quét, chọn Equip, rồi bấm vào từng chai, ống nhỏ, cốc đong</b> sắp dùng. Anh phát hiện chai axit của mình có lẫn caffeine, cồn, dầu mỡ vì lỡ nhỏ ngược vào, khiến mọi mẻ Dream Dust đều bẩn. Chai như vậy vứt luôn.</span></li><li><a href="https://www.youtube.com/watch?v=Q_nhd_A_CD4&amp;t=188s" target="_blank" rel="noopener">3:08</a><span>Xem kim loại nặng trong từng chai axit. Chai anh dùng có 4,1 mL kim loại nặng (1,64%), bẩn nhất trong số chai anh có, mà vẫn ra Lab Pure.</span></li><li><a href="https://www.youtube.com/watch?v=Q_nhd_A_CD4&amp;t=253s" target="_blank" rel="noopener">4:13</a><span>Xay 3 Dream Cap. <b>Tắt bếp trước khi đặt bình lên</b>, nhất là khi bếp chưa có module, nếu không nấm cháy ngay.</span></li><li><a href="https://www.youtube.com/watch?v=Q_nhd_A_CD4&amp;t=290s" target="_blank" rel="noopener">4:50</a><span>Tính cồn: nấm × 5 (43 mL nấm thì cần 215 mL cồn). Kiểm tra chai cồn sạch rồi mới đổ.</span></li><li><a href="https://www.youtube.com/watch?v=Q_nhd_A_CD4&amp;t=315s" target="_blank" rel="noopener">5:15</a><span>Đun lên 44–45°C rồi tắt. Chờ nấm về 0, đừng vội: làm nhanh thường hỏng.</span></li><li><a href="https://www.youtube.com/watch?v=Q_nhd_A_CD4&amp;t=377s" target="_blank" rel="noopener">6:17</a><span>Protein còn 3,9 mL: nhỏ 2 lần × 1 mL axit sạch.</span></li><li><a href="https://www.youtube.com/watch?v=Q_nhd_A_CD4&amp;t=444s" target="_blank" rel="noopener">7:24</a><span>Protein còn 996 µL (dưới 1 mL): nhỏ thêm 1 mL nữa sẽ dư axit. Cách làm: <b>pha axit 1 phần + 9 phần nước</b> (dùng Pure Water nếu có, High-Quality cũng được) trong ống đong 25 mL.</span></li><li><a href="https://www.youtube.com/watch?v=Q_nhd_A_CD4&amp;t=571s" target="_blank" rel="noopener">9:31</a><span>Nhỏ từng giọt axit pha loãng, chờ phản ứng sau mỗi giọt. Gần về 0 thì pha loãng thêm lần nữa (1 giọt axit vào 25 mL nước) để nhỏ chính xác hơn.</span></li><li><a href="https://www.youtube.com/watch?v=Q_nhd_A_CD4&amp;t=634s" target="_blank" rel="noopener">10:34</a><span>Kết quả: protein còn <b>1 µL</b>, gần như bằng 0 mà không dư axit.</span></li><li><a href="https://www.youtube.com/watch?v=Q_nhd_A_CD4&amp;t=697s" target="_blank" rel="noopener">11:37</a><span>Tạp chất hoá học chỉ 0,04% nên <b>không cần viên lọc</b>; viên lọc chỉ có ích với mẻ lớn bẩn hơn.</span></li><li><a href="https://www.youtube.com/watch?v=Q_nhd_A_CD4&amp;t=720s" target="_blank" rel="noopener">12:00</a><span>Lọc Kotton trước (chịu mòn), rồi Water Filter, rồi <b>Water Filter thêm lần nữa</b> vì đôi khi một lần không bắt hết.</span></li><li><a href="https://www.youtube.com/watch?v=Q_nhd_A_CD4&amp;t=827s" target="_blank" rel="noopener">13:47</a><span>Dùng Advanced Turbo Booster (sạc 3 ngày) để chạy Evaporator ngay; còn chút nước nên dùng thêm cái nữa. Dịch chiết đạt 99,08%.</span></li><li><a href="https://www.youtube.com/watch?v=Q_nhd_A_CD4&amp;t=890s" target="_blank" rel="noopener">14:50</a><span>Vào Finisher chọn Dream Dust: ra Lab Pure 99,10%.</span></li><li><a href="https://www.youtube.com/watch?v=Q_nhd_A_CD4&amp;t=954s" target="_blank" rel="noopener">15:54</a><span>Mẹo từ người xem (Warblux): chai axit ít kim loại nặng nhưng nhiều tạp chất hoá học thì rút bỏ 1 mL, thay bằng 1 mL nước High-Quality để hạ tỉ lệ tạp chất hoá học.</span></li></ol><div class="why"><b>Vì sao hiệu quả:</b> khoảng cách giữa Pharma và Lab Pure chỉ vài phần trăm. Mỗi chút axit dư hay tạp chất từ dụng cụ bẩn đều đủ làm tụt hạng. Pha loãng axit cho phép đưa protein về gần 0 mà không để lại axit thừa, mà axit thừa cũng là tạp chất.</div><span class="res">Kết quả: Dream Dust Lab Pure 99,10%</span></div><div class="vd"><div class="meta"><a class="t" href="https://www.youtube.com/watch?v=QGoWkoAhqpM" target="_blank" rel="noopener">Probably Stolen Lab pure "Dream Dust"</a><span class="ch">John Kunkle · 12:39</span></div><p class="about">Một mẻ Dream Dust Lab Pure từ nấm tự trồng bằng thuỷ canh, nói nhiều về <b>độ lệch khi khử protein</b> và cách dùng bazơ pha loãng để chỉnh cho khớp.</p><h5>Làm theo video</h5><ol class="ts"><li><a href="https://www.youtube.com/watch?v=QGoWkoAhqpM&amp;t=1s" target="_blank" rel="noopener">0:01</a><span>Xay nấm tự trồng; Blender đã đủ module nên không hao nguyên liệu.</span></li><li><a href="https://www.youtube.com/watch?v=QGoWkoAhqpM&amp;t=62s" target="_blank" rel="noopener">1:02</a><span>Sổ tay ghi cồn 3–6 lần nấm; anh nhắm khoảng giữa: 88 mL nấm dùng ~350–400 mL cồn thu hồi (cồn sạch).</span></li><li><a href="https://www.youtube.com/watch?v=QGoWkoAhqpM&amp;t=126s" target="_blank" rel="noopener">2:06</a><span>Chuyển module sang bếp để đặt được nhiệt độ. <b>Không bao giờ đặt đồ lên bếp đang bật</b>; tắt bếp mỗi khi xong việc.</span></li><li><a href="https://www.youtube.com/watch?v=QGoWkoAhqpM&amp;t=160s" target="_blank" rel="noopener">2:40</a><span>Giữ nhiệt thấp: trên khoảng 55°C cồn bắt đầu bay hơi mất.</span></li><li><a href="https://www.youtube.com/watch?v=QGoWkoAhqpM&amp;t=210s" target="_blank" rel="noopener">3:30</a><span>Protein 8 mL: nhỏ bazơ tới gần 8 mL. Tỉ lệ gần 1:1 nhưng <b>lệch khoảng 5%</b> nên không bao giờ khớp hoàn toàn.</span></li><li><a href="https://www.youtube.com/watch?v=QGoWkoAhqpM&amp;t=314s" target="_blank" rel="noopener">5:14</a><span>Gần hết protein thì <b>pha loãng</b>: 4 phần nước tinh khiết + 1 phần bazơ trong ống nhỏ giọt, nhỏ ~1,5 mL hỗn hợp (chỉ ~0,3 mL là bazơ). Xem hình và máy tính ở mục <a href="#nho-giot">Nhỏ từng chút</a>.</span></li><li><a href="https://www.youtube.com/watch?v=QGoWkoAhqpM&amp;t=360s" target="_blank" rel="noopener">6:00</a><span>Mục tiêu: bazơ hoặc protein dư <b>dưới 20 µL</b> là đủ Lab Pure.</span></li><li><a href="https://www.youtube.com/watch?v=QGoWkoAhqpM&amp;t=376s" target="_blank" rel="noopener">6:16</a><span>Lọc vải rồi lõi lọc; chỉ còn dịch chiết, nước và cồn.</span></li><li><a href="https://www.youtube.com/watch?v=QGoWkoAhqpM&amp;t=440s" target="_blank" rel="noopener">7:20</a><span>Evaporator chỉ chạy ~300–320 mL mỗi đêm, nên chia bớt mẻ cho kịp xong trong một đêm.</span></li><li><a href="https://www.youtube.com/watch?v=QGoWkoAhqpM&amp;t=502s" target="_blank" rel="noopener">8:22</a><span>Finisher phải đủ module. Ra Dream Dust Lab Pure.</span></li><li><a href="https://www.youtube.com/watch?v=QGoWkoAhqpM&amp;t=563s" target="_blank" rel="noopener">9:23</a><span>Khi có sự kiện thiếu thuốc y tế, một lô Dream Dust bán được gần 1.000 Credits. Nhớ theo dõi hồ sơ An ninh vì bán nhiều thì bị điều tra nhanh.</span></li><li><a href="https://www.youtube.com/watch?v=QGoWkoAhqpM&amp;t=625s" target="_blank" rel="noopener">10:25</a><span>Lỡ đổ dịch chiết Nightmare vào bình Dream nên hỏng mẻ. <b>Dán nhãn, đừng để lẫn.</b></span></li><li><a href="https://www.youtube.com/watch?v=QGoWkoAhqpM&amp;t=688s" target="_blank" rel="noopener">11:28</a><span>Đừng nhỏ qua lại axit rồi bazơ nhiều lần: axit/bazơ gốc chỉ ~98,7% sạch, mỗi lần nhỏ thêm tạp chất.</span></li></ol><div class="why"><b>Vì sao hiệu quả:</b> phản ứng axit/bazơ với protein không hoàn toàn 1:1, nên luôn cần bước "tinh chỉnh" cuối bằng dung dịch pha loãng. Dùng nước tinh khiết để pha vì nó bay hơi hết, không để lại tạp chất.</div><span class="res">Kết quả: Dream Dust Lab Pure</span></div><div class="vd"><div class="meta"><a class="t" href="https://www.youtube.com/watch?v=eytOB_L31KM" target="_blank" rel="noopener">How to Make Phanta Pills</a><span class="ch">The Lost Noob · 12:34</span></div><p class="about">Hướng dẫn Phanta theo sổ tay Chemistry 101, kèm những <b>tỉ lệ sổ tay không ghi</b> (lượng Reducing Agent) mà tác giả tự mò ra.</p><h5>Làm theo video</h5><ol class="ts"><li><a href="https://www.youtube.com/watch?v=eytOB_L31KM&amp;t=0s" target="_blank" rel="noopener">0:00</a><span>Cần 2 thứ: 1 Chem Module cho Heating Plate (để lên ~120°C) và gói Chemical Supplies (Restricted) giá 100 (mua của Retired Chemist).</span></li><li><a href="https://www.youtube.com/watch?v=eytOB_L31KM&amp;t=62s" target="_blank" rel="noopener">1:02</a><span>Chai N-Methylol lẫn Stabilizing Agent, phải khử bằng axit. Đổ sang bình lớn hơn vì chai gốc đã đầy.</span></li><li><a href="https://www.youtube.com/watch?v=eytOB_L31KM&amp;t=100s" target="_blank" rel="noopener">1:40</a><span>Thêm axit <b>từ từ</b> và chờ phản ứng. Lần trước anh cho dư 2 mL là quá nhiều.</span></li><li><a href="https://www.youtube.com/watch?v=eytOB_L31KM&amp;t=137s" target="_blank" rel="noopener">2:17</a><span>Gần hết Stabilizing thì pha loãng axit (2 phần cồn Mini + 1 phần axit) rồi nhỏ tiếp tới khi về 0. Còn sót Stabilizing là Methylol không phản ứng được.</span></li><li><a href="https://www.youtube.com/watch?v=eytOB_L31KM&amp;t=200s" target="_blank" rel="noopener">3:20</a><span>Lọc Kotton (251 còn 130 mL), rồi Water Filter (130 còn 129 mL).</span></li><li><a href="https://www.youtube.com/watch?v=eytOB_L31KM&amp;t=265s" target="_blank" rel="noopener">4:25</a><span>Trung hoà axit dư bằng bazơ pha loãng. Nên pha bằng nước tinh khiết hoặc cồn vì cả hai bay hơi hết.</span></li><li><a href="https://www.youtube.com/watch?v=eytOB_L31KM&amp;t=331s" target="_blank" rel="noopener">5:31</a><span>Reducing Agent = <b>75%</b> lượng Methylol: 120 mL Methylol thì cần 90 mL. Đong dần, kiểm tra từng chút.</span></li><li><a href="https://www.youtube.com/watch?v=eytOB_L31KM&amp;t=396s" target="_blank" rel="noopener">6:36</a><span>Đặt bếp mục tiêu 125°C (dưới 130°C, ở 130°C Phanta phân huỷ). Nên cho thiếu Reducing trước, vì thiếu thì bù được, dư thì không gỡ ra được.</span></li><li><a href="https://www.youtube.com/watch?v=eytOB_L31KM&amp;t=524s" target="_blank" rel="noopener">8:44</a><span>Methylol còn sót: thêm 1 mL Reducing. Methylol về 0 là xong phản ứng.</span></li><li><a href="https://www.youtube.com/watch?v=eytOB_L31KM&amp;t=540s" target="_blank" rel="noopener">9:00</a><span>Tạp chất hoá học rất cao: thêm chút nước (anh dùng cồn Mini vì không thêm tạp chất) rồi thả viên lọc. Viên chỉ tác dụng khi có nước.</span></li><li><a href="https://www.youtube.com/watch?v=eytOB_L31KM&amp;t=655s" target="_blank" rel="noopener">10:55</a><span>Bay hơi qua đêm: Phanta 90,5%. Thiếu 1 module Finisher nên bị cộng thêm 1%, và Reducing đong chưa thật chuẩn nên còn 3% tạp chất.</span></li><li><a href="https://www.youtube.com/watch?v=eytOB_L31KM&amp;t=719s" target="_blank" rel="noopener">11:59</a><span><b>Đừng kéo bình mới vào Finisher khi trong máy đang có bình</b>: nó không đổi chỗ mà đổ trộn vào bình cũ. 12 mL Phanta ÷ 0,5 = 24 viên.</span></li></ol><div class="why"><b>Vì sao hiệu quả:</b> Phanta có ba chỗ không gỡ lại được: Stabilizing còn sót (giữ Methylol lại), Reducing dư, và kim loại nặng. Nên thêm axit và Reducing từ từ, thiếu thì bù dần.</div><span class="res">Kết quả: Phanta 90,5% (Near-Pharma), 24 viên</span></div><div class="vd"><div class="meta"><a class="t" href="https://www.youtube.com/watch?v=_kQ3oeVDVlc" target="_blank" rel="noopener">How to Make Dream Dust</a><span class="ch">The Lost Noob · 9:56</span></div><p class="about">Mẻ Dream Dust đầu tiên cho người mới, đi từng bước theo sổ tay. Giải thích rõ <b>vì sao chia nấm từng phần</b> và vì sao Finisher chưa nâng cấp làm tụt hạng.</p><h5>Làm theo video</h5><ol class="ts"><li><a href="https://www.youtube.com/watch?v=_kQ3oeVDVlc&amp;t=0s" target="_blank" rel="noopener">0:00</a><span>Blender không module hao 35% nguyên liệu; lắp 1 module còn 20%. Gắn một bình đủ lớn rồi bấm Start.</span></li><li><a href="https://www.youtube.com/watch?v=_kQ3oeVDVlc&amp;t=62s" target="_blank" rel="noopener">1:02</a><span>Sổ tay ghi cồn 3–6 lần, lý tưởng là 5 lần. Đổ nhiều cồn thì tốn, nên đầu game <b>chia nấm thành từng phần 25 mL</b>.</span></li><li><a href="https://www.youtube.com/watch?v=_kQ3oeVDVlc&amp;t=127s" target="_blank" rel="noopener">2:07</a><span>Phần 25 mL có 17 mL nấm, cần 85 mL cồn. Chai Mini Alcohol chỉ có 70% cồn, 30% nước, nên đổ theo số cồn trên máy quét.</span></li><li><a href="https://www.youtube.com/watch?v=_kQ3oeVDVlc&amp;t=192s" target="_blank" rel="noopener">3:12</a><span>Đun ở khoảng 40°C, bấm Low rồi Off, giữ dưới 50°C. Nấm về 0 thì đổ phần tiếp theo vào cùng bình.</span></li><li><a href="https://www.youtube.com/watch?v=_kQ3oeVDVlc&amp;t=256s" target="_blank" rel="noopener">4:16</a><span>Khử protein bằng axit (không có gì để trung hoà nên axit hay bazơ đều được). Dùng ống nhỏ 5 mL cho nhanh lúc đầu.</span></li><li><a href="https://www.youtube.com/watch?v=_kQ3oeVDVlc&amp;t=385s" target="_blank" rel="noopener">6:25</a><span>Lọc Kotton trước (bắt đồ to, rẻ, bền), rồi Water Filter bắt tạp chất vật lý mà Kotton không bắt được (200 còn 189 mL).</span></li><li><a href="https://www.youtube.com/watch?v=_kQ3oeVDVlc&amp;t=449s" target="_blank" rel="noopener">7:29</a><span>Evaporator qua đêm; đầu game chưa có module nên cồn bay đi mất, sau này lắp module thì thu lại được.</span></li><li><a href="https://www.youtube.com/watch?v=_kQ3oeVDVlc&amp;t=512s" target="_blank" rel="noopener">8:32</a><span>Dịch chiết đạt 99,2%, nhưng Finisher chưa module cộng 12% nên lọ ra chỉ còn 87% (Near-Pharma). Lắp 1 module (còn 6%) là lên Pharma.</span></li></ol><div class="why"><b>Vì sao hiệu quả:</b> cồn không bị tiêu hao, phản ứng chỉ cần cồn gấp 5 lần lượng nấm đang có trong bình. Đổ từng phần thì một lượng cồn nhỏ dùng được cho cả mẻ.</div><span class="res">Kết quả: dịch chiết 99,2%; Finisher 0 module ra 87% (Near-Pharma)</span></div><div class="vd"><div class="meta"><a class="t" href="https://www.youtube.com/watch?v=A32ehNZXies" target="_blank" rel="noopener">Crafting the HARD-TO-GET NIGHTMARE "dust"</a><span class="ch">Stolen4Days · 13:48</span></div><p class="about">Làm Nightmare Dust (thuốc độc, hàng cấm cao) lên Lab Pure với máy đã nâng cấp hết. Có so sánh Nightmare với Dream Dust và cách trồng Nightmare Cap.</p><h5>Làm theo video</h5><ol class="ts"><li><a href="https://www.youtube.com/watch?v=A32ehNZXies&amp;t=66s" target="_blank" rel="noopener">1:06</a><span>Lắp đủ 4 Chem Module cho mọi máy. Dùng Module Extractor (Advanced), loại gỡ vô hạn lần, để chuyển module giữa các máy.</span></li><li><a href="https://www.youtube.com/watch?v=A32ehNZXies&amp;t=130s" target="_blank" rel="noopener">2:10</a><span>Evaporator để bình rỗng ở khe thu thì lấy lại được cồn.</span></li><li><a href="https://www.youtube.com/watch?v=A32ehNZXies&amp;t=193s" target="_blank" rel="noopener">3:13</a><span>Xay hết nấm, cho lên bếp với cồn gấp 4–5 lần. Tích trữ nhiều gói Chemical Supplies để có cồn.</span></li><li><a href="https://www.youtube.com/watch?v=A32ehNZXies&amp;t=261s" target="_blank" rel="noopener">4:21</a><span>Đun ở nhiệt thấp hơn Dream Dust (dịch chiết Nightmare hỏng từ 50°C). Chờ nhiệt hạ về khoảng 40°C rồi mới làm bước sau.</span></li><li><a href="https://www.youtube.com/watch?v=A32ehNZXies&amp;t=290s" target="_blank" rel="noopener">4:50</a><span>Quét các chai, chọn chai bazơ có tỉ lệ bazơ cao nhất; chai có tạp chất lạ thì bỏ.</span></li><li><a href="https://www.youtube.com/watch?v=A32ehNZXies&amp;t=325s" target="_blank" rel="noopener">5:25</a><span>Protein còn ít, không đủ để nhỏ cả 1 mL bazơ: pha bazơ với cồn để ra bản loãng.</span></li><li><a href="https://www.youtube.com/watch?v=A32ehNZXies&amp;t=391s" target="_blank" rel="noopener">6:31</a><span>Pha loãng thêm nữa tới khi bazơ (47) vừa khớp protein (48), không để dư.</span></li><li><a href="https://www.youtube.com/watch?v=A32ehNZXies&amp;t=455s" target="_blank" rel="noopener">7:35</a><span>Lọc Kotton, rồi Advanced Water Filter, rồi viên lọc nếu cần.</span></li><li><a href="https://www.youtube.com/watch?v=A32ehNZXies&amp;t=519s" target="_blank" rel="noopener">8:39</a><span>Qua đêm: Evaporator thu lại nhiều cồn tinh khiết; dịch chiết Nightmare 99,60%.</span></li><li><a href="https://www.youtube.com/watch?v=A32ehNZXies&amp;t=649s" target="_blank" rel="noopener">10:49</a><span>Ra Nightmare Dust Lab Pure. Là thuốc độc nên khó bán cho khách thường; Odin mua mọi loại thuốc độc.</span></li><li><a href="https://www.youtube.com/watch?v=A32ehNZXies&amp;t=713s" target="_blank" rel="noopener">11:53</a><span>So sánh: Dream Dust là thuốc y tế, dễ bán, bán được cho cả Tầng Trên; Nightmare là hàng cấm cao, giá cao nhất.</span></li><li><a href="https://www.youtube.com/watch?v=A32ehNZXies&amp;t=777s" target="_blank" rel="noopener">12:57</a><span>Module biến Dream Cap thành Nightmare Cap khi trồng: 2 ngày ra 6 Nightmare Cap.</span></li></ol><div class="why"><b>Vì sao hiệu quả:</b> quy trình giống Dream Dust, chỉ khác giữ nhiệt thấp hơn. Pha bazơ cho thật khớp với protein là chỗ quyết định Lab Pure.</div><span class="res">Kết quả: dịch chiết 99,60%, Nightmare Dust Lab Pure</span></div><div class="vd"><div class="meta"><a class="t" href="https://www.youtube.com/watch?v=Knf7F1PF_0M" target="_blank" rel="noopener">Stop Ruining Batches: Advanced Chemist Guide</a><span class="ch">NeRdYViKiN · 6:24</span></div><p class="about">Video ngắn, nhiều thông tin: từ cơ bản tới <b>làm sạch hoá chất bằng cá rô phi</b> và công thức Phanta chính xác.</p><h5>Làm theo video</h5><ol class="ts"><li><a href="https://www.youtube.com/watch?v=Knf7F1PF_0M&amp;t=0s" target="_blank" rel="noopener">0:00</a><span>Perk gợi ý: Colorful Character, Banned from Commissary, Minimalist, Diplomatic, Short Sleeper, Lucky, Wild's Favorite.</span></li><li><a href="https://www.youtube.com/watch?v=Knf7F1PF_0M&amp;t=33s" target="_blank" rel="noopener">0:33</a><span>Xay Dream Cap và cà phê riêng từng loại vào chai riêng. Cồn = nấm × 3 tới 6, mới làm thì × 4.</span></li><li><a href="https://www.youtube.com/watch?v=Knf7F1PF_0M&amp;t=55s" target="_blank" rel="noopener">0:55</a><span>Axit: 1 mL loại 1 mL protein. Dư thì dùng bazơ cân lại; có nước thì pha loãng để đong chính xác.</span></li><li><a href="https://www.youtube.com/watch?v=Knf7F1PF_0M&amp;t=80s" target="_blank" rel="noopener">1:20</a><span>Dream Cap khử protein xong là đun được. Cà phê phải khử thêm dầu mỡ bằng Lipobond.</span></li><li><a href="https://www.youtube.com/watch?v=Knf7F1PF_0M&amp;t=101s" target="_blank" rel="noopener">1:41</a><span>Dream Cap không quá 50°C; cà phê 60–70°C. Bột chuyển hết thành dịch chiết là xong.</span></li><li><a href="https://www.youtube.com/watch?v=Knf7F1PF_0M&amp;t=140s" target="_blank" rel="noopener">2:20</a><span>Evaporator lắp 2 module Solvent Recovery để thu tối đa cồn. Quan trọng nhất là Finisher đủ module.</span></li><li><a href="https://www.youtube.com/watch?v=Knf7F1PF_0M&amp;t=169s" target="_blank" rel="noopener">2:49</a><span>Mẹo: xay nguyên liệu cấm vào chai thì không còn tính là hàng cấm. Dán nhãn bình lọc riêng cho từng loại nguyên liệu để khỏi nhiễm chéo.</span></li><li><a href="https://www.youtube.com/watch?v=Knf7F1PF_0M&amp;t=190s" target="_blank" rel="noopener">3:10</a><span>Mua nâng cấp Water Trader và Aquaculture của Wild. Cho axit + nước vào bể <b>Gutter Tilapia</b>, chờ cá lớn và hút hết kim loại nặng. Làm tương tự với bazơ rồi Lipobond.</span></li><li><a href="https://www.youtube.com/watch?v=Knf7F1PF_0M&amp;t=235s" target="_blank" rel="noopener">3:55</a><span>Làm sạch cồn: Evaporator có 2 module Solvent Recovery, bình rỗng ở khe chưng cất. Hoá chất sạch cho mẻ 88% tới 99,5%. Advanced filter nhanh hơn nhưng chỉ 90–95%.</span></li><li><a href="https://www.youtube.com/watch?v=Knf7F1PF_0M&amp;t=269s" target="_blank" rel="noopener">4:29</a><span>Khi hoá chất đã sạch: cồn 5 lần, đèn UV kiểm tra vi sinh, viên lọc nước, rồi đun, lọc, bay hơi.</span></li><li><a href="https://www.youtube.com/watch?v=Knf7F1PF_0M&amp;t=300s" target="_blank" rel="noopener">5:00</a><span>Phanta: làm sạch Methylol và Reducing trong bể cá, nhỏ axit từng giọt tới khi hết Stabilizing, lọc, Reducing = 75% Methylol (100 mL cần 75 mL), đun 110–130°C tới khi Methylol về 0, thả viên lọc, bay hơi.</span></li></ol><div class="why"><b>Vì sao hiệu quả:</b> kim loại nặng trong chai không có cách gỡ trong lab; cá Gutter Tilapia là cách duy nhất làm sạch chai trước khi dùng. Chủ yếu cần cho Phanta.</div></div><div class="vd"><div class="meta"><a class="t" href="https://www.youtube.com/watch?v=uBE3XTJC1WU" target="_blank" rel="noopener">How to Be a Master Chemist to Beat the Cartel</a><span class="ch">Recreational Suffering · 13:50</span></div><p class="about">Chiến lược <b>tuần đầu với nghề Chemist</b>: luật của Cartel, ai ghé ngày nào, công thức Dream Dust và Caffeine.</p><h5>Làm theo video</h5><ol class="ts"><li><a href="https://www.youtube.com/watch?v=uBE3XTJC1WU&amp;t=47s" target="_blank" rel="noopener">0:47</a><span>Perk Well Connected (+15 mọi phe, gồm Cartel) và Savings (+150 Credits).</span></li><li><a href="https://www.youtube.com/watch?v=uBE3XTJC1WU&amp;t=95s" target="_blank" rel="noopener">1:35</a><span>Nộp 0 lọ cho Cartel là thua. Ông ta lấy mọi lọ trên quầy, nên chỉ để ra số lọ muốn nộp.</span></li><li><a href="https://www.youtube.com/watch?v=uBE3XTJC1WU&amp;t=142s" target="_blank" rel="noopener">2:22</a><span>Ngày 2: đừng báo Cartel cho An ninh (mất 20 danh tiếng). Mua Water Filter của Retired Chemist.</span></li><li><a href="https://www.youtube.com/watch?v=uBE3XTJC1WU&amp;t=240s" target="_blank" rel="noopener">4:00</a><span>Dream Dust: cồn ≥ 5 lần, đun Low tới ~46°C rồi tắt, không quá 50°C. Axit bằng lượng protein.</span></li><li><a href="https://www.youtube.com/watch?v=uBE3XTJC1WU&amp;t=336s" target="_blank" rel="noopener">5:36</a><span>Lọc Kotton trước rồi Water Filter để lõi lọc đỡ mòn.</span></li><li><a href="https://www.youtube.com/watch?v=uBE3XTJC1WU&amp;t=384s" target="_blank" rel="noopener">6:24</a><span>Ngày 3: mua hết Dream Cap của Shady Farmer; bán Dream Dust cho Street Dealer (~39 mỗi lọ) để trả tiền thuê.</span></li><li><a href="https://www.youtube.com/watch?v=uBE3XTJC1WU&amp;t=481s" target="_blank" rel="noopener">8:01</a><span>Caffeine: cồn ≥ ¾ lượng bột cà phê, đun ~75°C, Lipobond ~1 mL mỗi hạt. Evaporator chỉ 300 mL mỗi đêm.</span></li><li><a href="https://www.youtube.com/watch?v=uBE3XTJC1WU&amp;t=671s" target="_blank" rel="noopener">11:11</a><span>Tuần đầu nộp hết cho Cartel để tăng danh tiếng và trợ cấp; sau đó chỉ nộp vừa đủ.</span></li></ol><div class="why"><b>Vì sao hiệu quả:</b> danh tiếng Cartel từ 25 tăng trợ cấp, từ 50 nguyên liệu rẻ hơn. Đẩy danh tiếng sớm thì cả lượt chơi được lợi.</div></div><div class="vd"><div class="meta"><a class="t" href="https://www.youtube.com/watch?v=5ZvboN_OfO0" target="_blank" rel="noopener">How to Cut Dream Dust for Cartel Demands</a><span class="ch">The Lost Noob · 5:23</span></div><p class="about">Cách <b>pha loãng</b> dịch chiết Dream Dust cao cấp bằng tinh bột để nộp Cartel, đỡ tốn dịch chiết.</p><h5>Làm theo video</h5><ol class="ts"><li><a href="https://www.youtube.com/watch?v=5ZvboN_OfO0&amp;t=0s" target="_blank" rel="noopener">0:00</a><span>Cartel cần 20 lọ ở 50%. Dùng dịch chiết 99% thì tốn 40 mL; trộn tinh bột từ Nutrifruit để tiết kiệm.</span></li><li><a href="https://www.youtube.com/watch?v=5ZvboN_OfO0&amp;t=63s" target="_blank" rel="noopener">1:03</a><span>Xay Nutrifruit (chủ yếu nước + tinh bột), khử protein bằng axit rồi trung hoà bằng chút bazơ.</span></li><li><a href="https://www.youtube.com/watch?v=5ZvboN_OfO0&amp;t=127s" target="_blank" rel="noopener">2:07</a><span>Bay hơi qua đêm: 82% tinh bột; lọc thêm Water Filter: 95%.</span></li><li><a href="https://www.youtube.com/watch?v=5ZvboN_OfO0&amp;t=160s" target="_blank" rel="noopener">2:40</a><span>Không trộn 50/50 vì sẽ dưới 50%. Trộn 25 mL dịch chiết + 15 mL tinh bột: 40 mL ở 62%.</span></li><li><a href="https://www.youtube.com/watch?v=5ZvboN_OfO0&amp;t=191s" target="_blank" rel="noopener">3:11</a><span>Vào Finisher làm 20 lọ. Thiếu chút cho lọ cuối thì đổ thêm 1 mL thứ gì đó.</span></li><li><a href="https://www.youtube.com/watch?v=5ZvboN_OfO0&amp;t=255s" target="_blank" rel="noopener">4:15</a><span>Giữ Ctrl + bấm để đặt nhanh nhiều lọ lên quầy. Cartel nhận lô 58%, cần 50%. Tốn 26 mL dịch chiết thay vì 40 mL.</span></li></ol><div class="why"><b>Vì sao hiệu quả:</b> Cartel chỉ cần đạt mục tiêu, danh tiếng không tăng thêm khi vượt quá mục tiêu + 10%. Giữ dịch chiết xịn để bán giá cao.</div><span class="res">Kết quả: 20 lọ 58%, tiết kiệm 14 mL dịch chiết</span></div><div class="vd"><div class="meta"><a class="t" href="https://www.youtube.com/watch?v=D8_TqJmr5Ng" target="_blank" rel="noopener">Nomore Injector &amp; Chemistry guide</a><span class="ch">John Kunkle · 6:32</span></div><p class="about">Ghi chú thực nghiệm về Nomore, cách <b>làm sạch chai hoá chất</b> và cách pha loãng cho đúng số.</p><h5>Làm theo video</h5><ol class="ts"><li><a href="https://www.youtube.com/watch?v=D8_TqJmr5Ng&amp;t=1s" target="_blank" rel="noopener">0:01</a><span>Nomore: anh chỉ lên được Pharma vì không gỡ được kim loại nặng.</span></li><li><a href="https://www.youtube.com/watch?v=D8_TqJmr5Ng&amp;t=64s" target="_blank" rel="noopener">1:04</a><span>Làm sạch chai axit/bazơ/Lipobond: nhỏ 1 giọt nước vào chai, thả viên chlorine để khử tạp chất hoá học, rồi lọc như bình thường.</span></li><li><a href="https://www.youtube.com/watch?v=D8_TqJmr5Ng&amp;t=125s" target="_blank" rel="noopener">2:05</a><span>Gói Restricted (có N-Methylol và Reducing) theo anh chỉ có khi đã mua nhiều của người bán (~1.000), khoảng 50% mỗi lần. Đây là nhận định cá nhân.</span></li><li><a href="https://www.youtube.com/watch?v=D8_TqJmr5Ng&amp;t=188s" target="_blank" rel="noopener">3:08</a><span>Pha loãng bằng Pure Water để lấy đúng lượng cần: ống nhỏ mỗi lần hút gần 1 mL, pha loãng thì mỗi lần chỉ đưa vào chút ít.</span></li><li><a href="https://www.youtube.com/watch?v=D8_TqJmr5Ng&amp;t=251s" target="_blank" rel="noopener">4:11</a><span>Phanta: anh thấy axit cần ~1,4 lần lượng Stabilizing; anh nói Reducing 1:1, nhưng các nguồn khác đều nói 75% (xem khung bên dưới).</span></li><li><a href="https://www.youtube.com/watch?v=D8_TqJmr5Ng&amp;t=314s" target="_blank" rel="noopener">5:14</a><span>Caffeine đưa protein và mỡ về gần 0 đạt 99,7%. Nấm trồng bằng thuỷ canh ra nhiều dịch chiết hơn, ít tạp chất hơn.</span></li></ol><div class="why"><b>Lưu ý:</b> đây là video thực nghiệm, vài con số là cảm nhận cá nhân. Tin máy quét trong game.</div></div></div><div class="msg warn conflict"><b>Chỗ các nguồn nói khác nhau</b><span><b>Reducing Agent cho Phanta:</b> guide Steam, NeRdYViKiN và The Lost Noob đều ghi <b>75%</b> lượng Methylol. John Kunkle nói 1:1, có lẽ nhầm với Nomore (Nomore mới là 1:1). Dùng 75%.</span><span><b>Lượng cồn:</b> sổ tay trong game ghi 3–6 lần; guide Steam và hầu hết video dùng <b>5 lần</b> để đạt sản lượng tối đa 50%.</span><span><b>Pha loãng bằng nước hay cồn:</b> cả hai đều bay hơi hết. Dùng nước tinh khiết / chất lượng cao hoặc cồn thu hồi; tránh nước thường vì có kim loại nặng.</span><span><b>Cá rô phi:</b> Recreational Suffering đạt Lab Pure Dream Dust không cần cá. Cá chỉ thật sự cần cho Phanta (kim loại nặng trong chai Restricted).</span></div></section>
+
+<footer>Trang tham khảo cá nhân do người chơi tự tổng hợp, không liên quan Questing Goose Studio hay tinyBuild. Số liệu là báo cáo cộng đồng ở bản 1.0; cứ tin máy quét trong game khi có chênh lệch.</footer>
+</div>
+
+<script>
+(function(){
+const $=id=>document.getElementById(id);
+const nf=(v,d=1)=>Number.isFinite(v)?v.toLocaleString('vi-VN',{maximumFractionDigits:d,minimumFractionDigits:0}):'–';
+const num=id=>{const v=parseFloat($(id).value);return Number.isFinite(v)?v:0};
+const FIN=[0.12,0.06,0.03,0.01,0];
+const BLEND=[0.35,0.20,0.10,0.05,0];
+const GR=[{n:'Lab Pure',min:99,m:1.35,c:'var(--g-lab)'},{n:'Pharma Grade',min:90,m:0.85,c:'var(--g-pharma)'},{n:'Near-Pharma',min:80,m:0.40,c:'var(--g-near)'},{n:'Street Standard',min:60,m:0,c:'var(--g-street)'},{n:'Cut Product',min:45,m:-0.45,c:'var(--g-cut)'},{n:'Junk Grade',min:30,m:-0.75,c:'var(--g-junk)'},{n:'Starch Grade',min:-1,m:-0.95,c:'var(--g-starch)'}];
+const grade=p=>GR.find(g=>p>=g.min);
+const pct=m=>(m>0?'+':m<0?'−':'±')+Math.abs(Math.round(m*100))+'%';
+function seg(id,cb){const el=$(id);el.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;[...el.children].forEach(x=>x.setAttribute('aria-pressed',x===b?'true':'false'));cb()});}
+const segv=id=>$(id).querySelector('[aria-pressed="true"]').dataset.v;
+function msg(id,cls,html){const m=$(id);m.className='msg '+cls;m.innerHTML=html;}
+function gradeChip(el,p){const g=grade(p);el.innerHTML='<span class="chip" style="background:'+g.c+'">'+g.n+'</span><span class="num">'+nf(p,2)+'%</span><span class="mult">giá '+pct(g.m)+'</span>';}
+
+/* Dream / Nightmare */
+function dream(){
+  const prod=segv('d-prod'), per=prod==='dream'?2:4;
+  let mush=num('d-mush'); const portion=Math.max(num('d-portion'),0.1), protein=num('d-protein');
+  const b=+segv('d-blend'); if(b>=0) mush=mush*(1-BLEND[b]);
+  const extract=mush*0.5, units=Math.floor(extract/per+1e-9);
+  const pureAlc=5*Math.min(portion,mush||portion);
+  const src=$('d-alc').value, share=src==='mini'?0.7:src==='nudka'?0.45:1;
+  const pour=pureAlc/share;
+  $('d-units').innerHTML=nf(units,0)+' <small>'+(prod==='dream'?'lọ Dream':'lọ Nightmare')+'</small>';
+  $('d-extract').innerHTML=nf(extract)+' <small>mL</small>';
+  $('d-alcneed').innerHTML=nf(pour)+' <small>mL</small>';
+  $('d-acid').innerHTML=nf(protein)+' <small>mL</small>';
+  const bottles=src==='mini'?Math.ceil(pour/250):null;
+  const allAtOnce=5*mush/share;
+  $('d-steps').innerHTML=
+    (b>=0?'<li>Xay: hao '+Math.round(BLEND[b]*100)+'% → còn <b>'+nf(mush)+' mL</b> nấm xay.</li>':'')+
+    '<li>Đổ <b>'+nf(pour)+' mL</b> '+(src==='mini'?'Mini Alcohol (≈'+bottles+' chai)':src==='nudka'?'Nudka':'cồn thu hồi')+' vào bình riêng.</li>'+
+    '<li>Đổ nấm vào bình cồn mỗi lần <b>'+nf(Math.min(portion,mush))+' mL</b>, đun <b>40–44°C</b> tới khi hết nấm rồi mới thêm phần tiếp. Tổng '+Math.max(1,Math.ceil(mush/portion))+' phần.</li>'+
+    '<li>Nhỏ <b>'+nf(protein)+' mL</b> axit (hoặc bazơ), chờ protein về 0. Dư hơn 0,5 mL thì thêm 1 mL chất còn lại.</li>'+
+    '<li>Lọc Kotton → Water Filter, bay hơi tới khi nước + cồn ≤ 0,1 mL, rồi ra <b>'+units+'</b> lọ.</li>';
+  const left=extract-units*per;
+  if(src==='nudka') msg('d-msg','warn','Nudka mang theo kim loại nặng không loại được. Nên chưng qua Evaporator có Solvent Recovery rồi dùng cồn thu hồi.');
+  else msg('d-msg','ok','Cho từng phần tiết kiệm được <b>'+nf(allAtOnce-pour,0)+' mL</b> so với đổ hết nấm một lần ('+nf(allAtOnce,0)+' mL).'+(left>0.05?' Còn dư '+nf(left)+' mL dịch chiết, chưa đủ một lọ.':''));
+}
+seg('d-prod',dream);seg('d-blend',dream);['d-mush','d-portion','d-protein','d-alc'].forEach(i=>$(i).addEventListener('input',dream));
+
+/* Phanta */
+function phanta(){
+  const meth=num('p-meth'), stab=num('p-stab'), pur=Math.min(Math.max(num('p-pur'),1),100), target=Math.min(Math.max(num('p-target'),1),100);
+  const c=FIN[+segv('p-fin')];
+  const red=meth*0.75, ph=meth*0.1, pills=Math.floor(ph/0.5+1e-9);
+  const total=ph/(pur/100);
+  const finalPur=pur*(1-c);
+  $('p-acid').innerHTML='≈'+nf(meth*0.3,0)+' <small>mL, thêm từng đợt</small>';
+  $('p-red').innerHTML=nf(red)+' <small>mL</small>';
+  $('p-phanta').innerHTML=nf(ph)+' <small>mL</small>';
+  $('p-pills').innerHTML=nf(pills,0)+' <small>viên</small>';
+  gradeChip($('p-grade'),finalPur);
+  const filler=ph*(1-c)/(target/100)-total;
+  if(filler>0){
+    $('p-filler').innerHTML=nf(filler)+' <small>mL</small>';
+    $('p-pills2').innerHTML=nf(Math.floor((total+filler)/0.5+1e-9),0)+' <small>viên</small>';
+  }else{$('p-filler').innerHTML='0 <small>mL</small>';$('p-pills2').innerHTML=nf(Math.floor(total/0.5+1e-9),0)+' <small>viên</small>';}
+  if(finalPur>=75&&filler>0&&target<75) msg('p-msg','ok','Không pha thì viên ra <b>'+nf(finalPur)+'%</b> (từ 75% là <b>độc</b>, khách quay lại đòi bồi thường). Thêm <b>'+nf(filler)+' mL</b> độn thì viên còn <b>'+nf(target)+'%</b>, hạng '+grade(target).n+', an toàn.');
+  else if(finalPur>=75) msg('p-msg','bad','Viên ra <b>'+nf(finalPur)+'%</b>, từ 75% trở lên là <b>độc</b>: khách quay lại giận dữ đòi bồi thường, mất danh tiếng. Đặt mức pha loãng dưới 75% (khuyên ~62%).');
+  else if(finalPur<60) msg('p-msg','warn','Dưới 60% là hạng Cut, giá giảm 45%. Mục tiêu hợp lý là 60–62%.');
+  else msg('p-msg','ok','Viên ở mức an toàn (dưới 75%), hạng '+grade(finalPur).n+'.');
+}
+seg('p-fin',phanta);['p-meth','p-stab','p-pur','p-target'].forEach(i=>$(i).addEventListener('input',phanta));
+
+/* Grade */
+function gradeCalc(){
+  const a=num('g-act'), im=num('g-imp'), c=FIN[+segv('g-fin')];
+  const p=a+im>0?a/(a+im)*(1-c)*100:0, g=grade(p);
+  $('g-pur').innerHTML=nf(p,2)+' <small>%</small>';
+  $('g-mult').innerHTML='×'+nf(1+g.m,2);
+  $('g-ladder').innerHTML=GR.map((x,i)=>{const hi=i===0?'≥ 99%':(x.min<0?'< 30%':x.min+'–'+GR[i-1].min+'%');return '<div class="lad'+(x===g?' on':'')+'"><span class="pc">'+hi+'</span><span class="nm" style="background:'+x.c+'">'+x.n+'</span><span class="ef">'+pct(x.m)+'</span></div>'}).join('');
+  const need99=a>0?a*(1-c)/0.99-a:0;
+  if(c>0&&p<99) msg('g-msg','warn','Finisher còn cộng '+Math.round(c*100)+'% tạp chất, nên trần tối đa là '+nf((1-c)*100,0)+'%. Lab Pure cần đủ 4 module.');
+  else if(p<99) msg('g-msg','warn','Cần tạp chất tối đa <b>'+nf(Math.max(need99,0),2)+' mL</b> để đạt Lab Pure. Kiểm tra axit/bazơ dư, kim loại nặng và độ khô.');
+  else msg('g-msg','ok','Đạt Lab Pure.');
+}
+seg('g-fin',gradeCalc);['g-act','g-imp'].forEach(i=>$(i).addEventListener('input',gradeCalc));
+
+/* Filler */
+function filler(){
+  const e=num('f-ext'), t=num('f-tot'), target=Math.min(Math.max(num('f-target'),1),100), per=parseFloat($('f-unit').value), c=FIN[+segv('f-fin')];
+  const now=t>0?e/t*(1-c)*100:0;
+  const f=e*(1-c)/(target/100)-t;
+  $('f-now').innerHTML=nf(now,2)+' <small>%</small>';
+  if(f>0){$('f-fill').innerHTML=nf(f,2)+' <small>mL</small>';$('f-units').innerHTML=nf(Math.floor((t+f)/per+1e-9),0);msg('f-msg','ok','Thêm tối đa '+nf(f,2)+' mL. Nên thêm ít hơn một chút vì làm tròn.');}
+  else{$('f-fill').innerHTML='0 <small>mL</small>';$('f-units').innerHTML=nf(Math.floor(t/per+1e-9),0);msg('f-msg','warn','Mẻ hiện tại đã thấp hơn hoặc bằng mức muốn đạt, không cần thêm độn.');}
+}
+seg('f-fin',filler);['f-ext','f-tot','f-target','f-unit'].forEach(i=>$(i).addEventListener('input',filler));
+
+/* Sale */
+const PROD={dream:{b:18,cb:0.70},night:{b:36,cb:1.00},phanta:{b:12,cb:1.00},caff:{b:10,cb:0},nomore:{b:50,cb:0}};
+function sale(){
+  const p=PROD[$('s-prod').value], g=parseFloat($('s-grade').value), m=parseFloat($('s-market').value), bg=Math.min(Math.max(num('s-bargain'),0),90)/100, q=Math.max(Math.floor(num('s-qty')),1), buyer=parseFloat($('s-buyer').value);
+  const each=p.b*(1+g)*(1+p.cb+m)*(1-bg), total=each*q, cv=p.cb>0?total*buyer:0;
+  $('s-each').innerHTML=nf(each,1)+' <small>cr</small>';
+  $('s-total').innerHTML=nf(total,0)+' <small>cr</small>';
+  $('s-case').innerHTML=nf(cv,0);
+  const rows=[[0,100],[100,300],[300,850],[850,1200],[1200,1500],[1500,2500]];
+  [...$('s-inv').children].forEach((tr,i)=>{tr.style.fontWeight=(cv>=rows[i][0]&&cv<rows[i][1])?'700':'';tr.style.background=(cv>=rows[i][0]&&cv<rows[i][1])?'var(--acc-soft)':'';});
+  if(p.cb===0) msg('s-msg','ok','Hàng hợp pháp, không cộng vào vụ án.');
+  else if(cv>=300) msg('s-msg','bad','Lô này cộng <b>'+nf(cv,0)+'</b> vào giá trị vụ án. Chia nhỏ qua nhiều đêm, hoặc bán cho Cartel / Cách mạng / Chợ Đen để cộng ít hơn.');
+  else msg('s-msg','warn','Hàng cấm: cộng '+nf(cv,0)+' vào giá trị vụ án. Từ khoảng 50 là bắt đầu có rủi ro bị kiểm tra.');
+}
+['s-prod','s-grade','s-market','s-bargain','s-qty','s-buyer'].forEach(i=>$(i).addEventListener('input',sale));
+
+/* Cartel */
+function cartel(){
+  const w=Math.max(Math.floor(num('c-week')),1), ext=num('c-ext');
+  const count=10+5*(w-1), target=Math.min(40+5*(w-1),70), aim=target+9;
+  $('c-count').innerHTML=count+' <small>lọ</small>';
+  $('c-pur').innerHTML=target+' <small>%</small>';
+  $('c-aim').innerHTML=aim+' <small>%</small>';
+  const totalAt=ext/(aim/100), make=Math.floor(totalAt/2+1e-9);
+  $('c-make').innerHTML=nf(make,0)+' <small>lọ</small>';
+  const extNeed=count*2*aim/100;
+  if(make>=count) msg('c-msg','ok','Đủ. Pha '+nf(ext)+' mL dịch chiết với '+nf(totalAt-ext)+' mL độn để ra mẻ '+aim+'% (cần '+nf(extNeed)+' mL dịch chiết cho '+count+' lọ). Đừng vượt '+(target+10)+'%, danh tiếng không tăng thêm.');
+  else msg('c-msg','bad','Thiếu '+(count-make)+' lọ. Cần khoảng <b>'+nf(extNeed)+' mL</b> dịch chiết cho '+count+' lọ ở '+aim+'%. Có thể mua thêm Dream Dust hạng Street từ Ashish (nâng cấp Chemist network, 250).');
+}
+['c-week','c-ext'].forEach(i=>$(i).addEventListener('input',cartel));
+
+dream();phanta();gradeCalc();filler();sale();cartel();
+function drip(){
+  const p=num('n-prot'),d=Math.max(num('n-drop'),0.1),dr=$('n-drops');
+  const set=(a,b,c)=>{$('n-ratio').innerHTML=a;$('n-mix').innerHTML=b;$('n-per').innerHTML=c;};
+  if(p<=0.02){set('Dừng','–','–');dr.innerHTML='';msg('n-msg','ok','Còn <b>'+nf(p*1000,0)+' µL</b>, dưới 20 µL: <b>dừng lại</b>, đủ đạt 99%. Cho thêm chỉ làm dư.');return;}
+  if(p>=d){set('Nhỏ thẳng','–',nf(d,2)+' <small>mL</small>');dr.innerHTML='<i class="b"></i>';msg('n-msg','warn','Protein còn nhiều hơn 1 lần nhỏ: <b>chưa cần pha</b>. Nhỏ thẳng từng '+nf(d,2)+' mL, chờ số đứng yên rồi quét lại.');return;}
+  const N=Math.max(1,Math.round(d/p)-1),per=d/(N+1),chat=5/(N+1);
+  set('1 : '+N,nf(chat,2)+' <small>+ '+nf(5-chat,2)+'</small>',nf(per,3)+' <small>mL</small>');
+  dr.innerHTML='<i class="b"></i>'+'<i class="w"></i>'.repeat(Math.min(N,19))+(N>19?' …':'');
+  const left=Math.max(0,p-per);
+  msg('n-msg','ok','Hút <b>'+nf(5-chat,2)+' mL nước sạch</b> trước, rồi <b>'+nf(chat,2)+' mL axit/bazơ</b>. Nhỏ '+nf(d,2)+' mL hỗn hợp vào bình. Sau 1 lần, protein còn khoảng <b>'+nf(left*1000,0)+' µL</b>'+(left<=0.02?': đủ, dừng.':'. Quét lại rồi điền số mới để tính tiếp.'));
+}
+['n-prot','n-drop'].forEach(i=>$(i).addEventListener('input',drip));
+drip();
+
+})();
+</script>
+
+</body>
+</html>

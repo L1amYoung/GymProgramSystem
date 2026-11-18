@@ -26,7 +26,7 @@ self.addEventListener('fetch', e => {
   if(u.origin === location.origin && (r.mode === 'navigate' || u.pathname.endsWith('.html') || u.pathname.endsWith('/'))){
     // mở ngay bản đã lưu, tải bản mới ngầm cho lần mở sau
     const net = fetch(r).then(res => { if(res.ok){ const cp = res.clone(); caches.open(V).then(c => c.put(r, cp)); } return res; });
-    e.respondWith(caches.open(V).then(c => c.match(r, {ignoreSearch: true}).then(hit => hit || c.match('./'))).then(hit => hit || net).catch(() => net));
+    e.respondWith(caches.open(V).then(c => c.match(r, {ignoreSearch: true}).then(hit => hit || net.catch(() => c.match('./')))).catch(() => net));   // trang chưa lưu: tải trang thật, chỉ dùng app khi mất mạng
     e.waitUntil(net.catch(() => {}));
   }
 });

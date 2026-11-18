@@ -1,0 +1,797 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<link rel="icon" type="image/png" sizes="192x192" href="../img/icons/icon-192.png">
+<title>Nghề Probably Stolen</title>
+<meta name="description" content="9 nghề khởi đầu trong Probably Stolen: được cho gì, kiếm tiền từng bước, rủi ro, perk nên chọn, máy tính Heat và tiền nhà.">
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Silkscreen&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap">
+<style>
+/* Layout: one column lab notebook; each calculator is a "bench" card with inputs left, readouts right, stacking on phones */
+:root{
+  --bg:#eef1f0; --panel:#ffffff; --panel2:#e3e9e8; --line:#cdd6d4; --fg:#16201f; --sub:#566664; --faint:#83918f;
+  --acc:#0e7480; --acc-ink:#ffffff; --acc-soft:#d5ecee;
+  --ok:#1f8a4c; --warn:#b26a00; --bad:#c23b33;
+  --g-lab:#2fae6b; --g-pharma:#6cc48f; --g-near:#a9d27f; --g-street:#c9cdc9; --g-cut:#f2b45a; --g-junk:#ee8a5e; --g-starch:#e05a4f;
+  --f-display:"Silkscreen",ui-monospace,monospace;
+  --f-body:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --f-mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0f1514; --panel:#172120; --panel2:#1f2b2a; --line:#2c3a39; --fg:#e7eeed; --sub:#a1b0ae; --faint:#6f7f7d;
+  --acc:#4cc2cd; --acc-ink:#062022; --acc-soft:#173638;
+  --ok:#55d08a; --warn:#f0a83a; --bad:#ff7a70;
+  --g-street:#8d9593; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0f1514; --panel:#172120; --panel2:#1f2b2a; --line:#2c3a39; --fg:#e7eeed; --sub:#a1b0ae; --faint:#6f7f7d;
+  --acc:#4cc2cd; --acc-ink:#062022; --acc-soft:#173638;
+  --ok:#55d08a; --warn:#f0a83a; --bad:#ff7a70;
+  --g-street:#8d9593; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font-family:var(--f-body);font-size:15px;line-height:1.55;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:20px 48px}
+.wrap{max-width:980px;margin:0 auto;display:flex;flex-direction:column;gap:22px}
+h1,h2{font-family:var(--f-display);font-weight:400;letter-spacing:.02em;text-wrap:balance;margin:0}
+h1{font-size:clamp(24px,5vw,34px);line-height:1.15}
+h2{font-size:18px;display:flex;align-items:center;gap:10px}
+h3{font-size:15px;margin:0}
+p{margin:0}
+.lead{color:var(--sub);max-width:68ch}
+.note{font-size:13px;color:var(--sub)}
+.px{image-rendering:pixelated;image-rendering:crisp-edges;object-fit:contain}
+.mono,.num{font-family:var(--f-mono);font-variant-numeric:tabular-nums}
+header{display:flex;flex-direction:column;gap:10px}
+.eyebrow{font-family:var(--f-mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--acc)}
+.src{font-size:12.5px;color:var(--faint)}
+.src a{color:var(--acc)}
+nav.jump{display:flex;flex-wrap:wrap;gap:6px}
+nav.jump a{font-size:13px;font-weight:600;color:var(--fg);text-decoration:none;padding:6px 11px;border:1px solid var(--line);border-radius:999px;background:var(--panel)}
+nav.jump a:hover,nav.jump a:focus-visible{border-color:var(--acc);color:var(--acc);outline:none}
+section{display:flex;flex-direction:column;gap:12px}
+.sec-ic{width:30px;height:30px;background:var(--panel2);border-radius:6px;padding:3px}
+/* comparison */
+.tw{overflow-x:auto;border:1px solid var(--line);border-radius:10px;background:var(--panel)}
+table{border-collapse:collapse;width:100%;font-size:13.5px;min-width:760px}
+th,td{padding:9px 10px;border-bottom:1px solid var(--line);text-align:left;vertical-align:middle}
+th{font-size:12px;color:var(--sub);font-weight:600;background:var(--panel2);white-space:nowrap}
+tr:last-child td{border-bottom:0}
+td.prod{display:flex;align-items:center;gap:10px;font-weight:700;white-space:nowrap}
+td.prod img{width:34px;height:34px;background:var(--panel2);border-radius:6px;padding:4px;flex:none}
+.pill{display:inline-block;font-size:11.5px;font-weight:700;padding:2px 8px;border-radius:999px;white-space:nowrap}
+.p-none{background:color-mix(in srgb,var(--ok) 16%,transparent);color:var(--ok)}
+.p-med{background:color-mix(in srgb,var(--warn) 18%,transparent);color:var(--warn)}
+.p-high{background:color-mix(in srgb,var(--bad) 16%,transparent);color:var(--bad)}
+.p-story{background:var(--acc-soft);color:var(--acc)}
+.ing{display:flex;gap:4px;align-items:center}
+.ing img{width:24px;height:24px;background:var(--panel2);border-radius:4px;padding:2px}
+.bar{display:flex;align-items:center;gap:6px}
+.bar i{display:block;height:8px;border-radius:4px;background:var(--acc);min-width:2px}
+/* flow */
+.flow{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:8px}
+.st{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:10px 8px;display:flex;flex-direction:column;align-items:center;gap:4px;text-align:center;min-width:0}
+.st img{width:44px;height:44px}
+.st b{font-size:13px}
+.st small{font-size:11.5px;color:var(--sub);line-height:1.3}
+.st .k{font-family:var(--f-mono);font-size:11px;color:var(--acc)}
+@media (max-width:720px){.flow{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media (max-width:420px){.flow{grid-template-columns:repeat(2,minmax(0,1fr))}}
+figure{margin:0;display:flex;flex-direction:column;gap:6px}
+figure img{width:100%;max-width:100%;border-radius:10px;border:1px solid var(--line);display:block}
+figcaption{font-size:12px;color:var(--faint)}
+/* temperature chart */
+.temp{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:12px 14px;display:flex;flex-direction:column;gap:8px}
+.trow{display:grid;grid-template-columns:150px minmax(0,1fr);gap:10px;align-items:center;font-size:12.5px}
+.trow>span{font-weight:600;line-height:1.25}
+.track{position:relative;height:20px;background:var(--panel2);border-radius:5px;overflow:hidden}
+.track i{position:absolute;top:0;bottom:0}
+.track .ok{background:color-mix(in srgb,var(--ok) 55%,transparent)}
+.track .bad{background:color-mix(in srgb,var(--bad) 40%,transparent)}
+.track .warn{background:color-mix(in srgb,var(--warn) 40%,transparent)}
+.track em{position:absolute;top:2px;font-style:normal;font-size:11px;font-weight:700;color:var(--fg);white-space:nowrap}
+.track .m99{position:absolute;top:0;bottom:0;width:2px;background:var(--acc)}
+.axis{display:grid;grid-template-columns:150px minmax(0,1fr);gap:10px;font-family:var(--f-mono);font-size:11px;color:var(--faint)}
+.axis div:last-child{position:relative;height:14px}
+.axis b{position:absolute;font-weight:500;transform:translateX(-50%)}
+@media (max-width:520px){.trow,.axis{grid-template-columns:96px minmax(0,1fr)}}
+/* bench (calculator) */
+.bench{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);gap:18px}
+@media (max-width:760px){.bench{grid-template-columns:minmax(0,1fr)}}
+.inputs{display:flex;flex-direction:column;gap:10px}
+.field{display:flex;flex-direction:column;gap:4px}
+.field label{font-size:12.5px;font-weight:600;color:var(--sub)}
+.field small{font-size:11.5px;color:var(--faint)}
+input,select{font:500 15px var(--f-mono);font-variant-numeric:tabular-nums;color:var(--fg);background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:8px 10px;width:100%;min-width:0}
+input:focus-visible,select:focus-visible{outline:2px solid var(--acc);outline-offset:1px;border-color:var(--acc)}
+.row2{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:10px}
+.seg{display:flex;gap:4px;flex-wrap:wrap}
+.seg button{font:600 13px var(--f-body);color:var(--fg);background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:6px 10px;cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--acc);border-color:var(--acc);color:var(--acc-ink)}
+.seg button:focus-visible{outline:2px solid var(--acc);outline-offset:1px}
+.out{display:flex;flex-direction:column;gap:8px;min-width:0}
+.read{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:8px}
+.r{background:var(--panel2);border-radius:8px;padding:8px 10px;display:flex;flex-direction:column;gap:2px;min-width:0}
+.r span{font-size:11.5px;color:var(--sub)}
+.r b{font:600 20px var(--f-mono);font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
+.r b small{font-size:12px;color:var(--sub);font-weight:500}
+.r.hl{background:var(--acc-soft)}
+.r.hl b{color:var(--acc)}
+.grade{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:8px;background:var(--panel2)}
+.grade .chip{font-weight:700;font-size:13px;padding:4px 10px;border-radius:6px;color:#14201f}
+.grade .mult{margin-left:auto;font:600 14px var(--f-mono)}
+.msg{font-size:13px;padding:8px 10px;border-radius:8px;border:1px solid var(--line)}
+.msg.warn{border-color:color-mix(in srgb,var(--warn) 50%,transparent);background:color-mix(in srgb,var(--warn) 10%,transparent)}
+.msg.bad{border-color:color-mix(in srgb,var(--bad) 50%,transparent);background:color-mix(in srgb,var(--bad) 10%,transparent)}
+.msg.ok{border-color:color-mix(in srgb,var(--ok) 50%,transparent);background:color-mix(in srgb,var(--ok) 10%,transparent)}
+.steps{margin:0;padding-left:20px;font-size:13.5px;display:flex;flex-direction:column;gap:3px}
+.steps b{font-family:var(--f-mono);font-weight:600}
+.ladder{display:flex;flex-direction:column;gap:3px}
+.lad{display:grid;grid-template-columns:64px 1fr 56px;gap:8px;align-items:center;font-size:12.5px}
+.lad .nm{padding:4px 8px;border-radius:5px;font-weight:700;color:#14201f}
+.lad .pc{color:var(--sub);font-family:var(--f-mono)}
+.lad .ef{text-align:right;font-family:var(--f-mono);font-weight:600}
+.lad.on .nm{outline:2px solid var(--fg);outline-offset:1px}
+.formula{font:500 12.5px var(--f-mono);background:var(--panel2);border-radius:8px;padding:8px 10px;overflow-x:auto;white-space:nowrap}
+footer{font-size:12px;color:var(--faint);border-top:1px solid var(--line);padding-top:12px}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+
+.recipes{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,430px),1fr));gap:12px}
+.rc{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px;display:flex;flex-direction:column;gap:10px;min-width:0}
+.rc-hd{display:flex;align-items:center;gap:10px}
+.rc-hd img{width:40px;height:40px;background:var(--panel2);border-radius:8px;padding:5px;flex:none}
+.rc-hd h3{font-size:16px}
+.rc-hd .pill{margin-left:auto}
+.rc h4{font-size:12px;font-weight:700;color:var(--acc);text-transform:uppercase;letter-spacing:.06em;margin:4px 0 0}
+.items{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px}
+.items li{display:grid;grid-template-columns:32px minmax(0,1fr) auto;gap:10px;align-items:center;font-size:13.5px}
+.items li img{width:32px;height:32px;background:var(--panel2);border-radius:6px;padding:3px}
+.items li .nm{min-width:0}
+.items li .nm small{display:block;font-size:12px;color:var(--sub);line-height:1.35}
+.items li .amt{font:600 12.5px var(--f-mono);text-align:right;max-width:130px}
+.tools-row{display:flex;flex-wrap:wrap;gap:6px}
+.tool{display:flex;align-items:center;gap:6px;font-size:12.5px;background:var(--panel2);border-radius:999px;padding:3px 10px 3px 3px}
+.tool img{width:24px;height:24px}
+.vids{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:12px}
+.vd{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px;display:flex;flex-direction:column;gap:8px;min-width:0}
+.vd a.t{font-weight:700;color:var(--fg);text-decoration:none;line-height:1.35}
+.vd a.t:hover,.vd a.t:focus-visible{color:var(--acc);text-decoration:underline}
+.vd .ch{font-size:12px;color:var(--sub);font-family:var(--f-mono)}
+.vd ul{margin:0;padding-left:18px;font-size:13.5px;display:flex;flex-direction:column;gap:3px}
+.vd .res{font-size:12.5px;font-weight:600;color:var(--acc)}
+.conflict{display:flex;flex-direction:column;gap:6px}
+
+.temp2{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px;display:flex;flex-direction:column;gap:14px}
+.legend{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:12.5px;color:var(--sub)}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.legend i{width:14px;height:10px;border-radius:3px;display:inline-block}
+.lg-ok{background:color-mix(in srgb,var(--ok) 60%,transparent)}
+.lg-bad{background:color-mix(in srgb,var(--bad) 45%,transparent)}
+.lg-warn{background:color-mix(in srgb,var(--warn) 45%,transparent)}
+.lg-idle{background:var(--panel2);border:1px solid var(--line)}
+.tr2{display:flex;flex-direction:column;gap:6px}
+.tr2-hd{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 10px}
+.tr2-hd b{font-size:14px}
+.tr2-hd .do{font:600 13px var(--f-mono);color:var(--ok);background:color-mix(in srgb,var(--ok) 14%,transparent);padding:2px 8px;border-radius:6px}
+.tr2-hd small{font-size:12.5px;color:var(--sub)}
+.bar2{position:relative;height:22px;background:var(--panel2);border-radius:6px;overflow:hidden;border:1px solid var(--line)}
+.bar2 i{position:absolute;top:0;bottom:0}
+.bar2 .z-ok{background:color-mix(in srgb,var(--ok) 60%,transparent)}
+.bar2 .z-bad{background:color-mix(in srgb,var(--bad) 45%,transparent)}
+.bar2 .z-warn{background:color-mix(in srgb,var(--warn) 45%,transparent)}
+.ticks{position:relative;height:16px;font:500 11px var(--f-mono);color:var(--sub)}
+.ticks b{position:absolute;top:0;font-weight:600;transform:translateX(-50%);white-space:nowrap}
+.ticks b.tl{transform:none}
+.ticks b.tr{transform:translateX(-100%)}
+.plate99{font-size:12.5px;color:var(--sub);border-top:1px dashed var(--line);padding-top:10px}
+
+.tw td img.ic{width:24px;height:24px;vertical-align:middle;background:var(--panel2);border-radius:4px;padding:2px;margin-right:4px}
+.tw td.k{font-weight:700;white-space:nowrap}
+.tw .no{color:var(--bad);font-weight:700}
+.tw .yes{color:var(--ok);font-weight:700}
+.sub-h{font-size:15px;font-weight:700;margin:6px 0 0}
+.how{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,280px),1fr));gap:10px}
+.how .st2{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:12px;display:flex;flex-direction:column;gap:6px}
+.how .st2 b{font-size:14px}
+.how .st2 ol{margin:0;padding-left:18px;font-size:13.5px;display:flex;flex-direction:column;gap:3px}
+.mistakes{margin:0;padding-left:0;list-style:none;display:flex;flex-direction:column;gap:5px;font-size:13.5px}
+.mistakes li:before{content:"✗ ";color:var(--bad);font-weight:800}
+
+.vids{grid-template-columns:minmax(0,1fr)!important}
+.vd .about{font-size:13.5px;color:var(--fg)}
+.vd h5{font-size:12px;font-weight:700;color:var(--acc);text-transform:uppercase;letter-spacing:.06em;margin:4px 0 0}
+.vd ol.ts{margin:0;padding-left:0;list-style:none;display:flex;flex-direction:column;gap:6px;font-size:13.5px}
+.vd ol.ts li{display:grid;grid-template-columns:52px minmax(0,1fr);gap:8px;align-items:baseline}
+.vd ol.ts a{font:600 12px var(--f-mono);color:var(--acc);text-decoration:none;background:var(--acc-soft);border-radius:5px;padding:1px 6px;text-align:center}
+.vd ol.ts a:hover,.vd ol.ts a:focus-visible{text-decoration:underline}
+.vd .why{font-size:13px;color:var(--sub);background:var(--panel2);border-radius:8px;padding:8px 10px}
+.vd .why b{color:var(--fg)}
+.vd .meta{display:flex;flex-wrap:wrap;gap:6px 12px;align-items:center}
+
+.dd{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,420px),1fr));gap:12px}
+.ill{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px;display:flex;flex-direction:column;gap:10px;min-width:0}
+.ill h3{font-size:15px}
+.ill p{font-size:13.5px}
+.pair{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:8px}
+@media (max-width:460px){.pair{grid-template-columns:minmax(0,1fr)}}
+.side{border-radius:10px;padding:10px;display:flex;flex-direction:column;gap:8px;min-width:0}
+.side.bad{background:color-mix(in srgb,var(--bad) 9%,transparent);border:1px solid color-mix(in srgb,var(--bad) 40%,transparent)}
+.side.good{background:color-mix(in srgb,var(--ok) 9%,transparent);border:1px solid color-mix(in srgb,var(--ok) 40%,transparent)}
+.side .lbl{font-size:12px;font-weight:800;letter-spacing:.04em}
+.side.bad .lbl{color:var(--bad)}
+.side.good .lbl{color:var(--ok)}
+.side small{font-size:12.5px;line-height:1.4}
+.scene{display:flex;align-items:center;justify-content:center;gap:6px;flex-wrap:wrap;min-height:64px}
+.spr{width:40px;height:40px;background:var(--panel);border-radius:8px;padding:4px;position:relative}
+.spr.big{width:52px;height:52px}
+.op{font:700 16px var(--f-mono);color:var(--sub)}
+.badge{font:700 10.5px var(--f-mono);padding:2px 6px;border-radius:5px;white-space:nowrap}
+.badge.r{background:color-mix(in srgb,var(--bad) 20%,transparent);color:var(--bad)}
+.badge.g{background:color-mix(in srgb,var(--ok) 20%,transparent);color:var(--ok)}
+.badge.n{background:var(--panel2);color:var(--fg)}
+.stack{display:flex;flex-direction:column;align-items:center;gap:3px}
+.tag-lbl{font:700 10.5px var(--f-mono);background:var(--acc-soft);color:var(--acc);padding:1px 6px;border-radius:4px}
+.seq{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}
+@media (max-width:460px){.seq{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.seq .s{background:var(--panel2);border-radius:8px;padding:8px 6px;display:flex;flex-direction:column;align-items:center;gap:4px;text-align:center;font-size:12px}
+.seq .s b{font:700 11px var(--f-mono);color:var(--acc)}
+.knob{font:700 11px var(--f-mono);padding:2px 7px;border-radius:5px;border:1px solid var(--line);background:var(--panel)}
+.knob.on{background:color-mix(in srgb,var(--warn) 30%,transparent);border-color:var(--warn)}
+.therm-mini{width:100%;height:8px;border-radius:4px;background:linear-gradient(90deg,var(--panel) 0 25%,color-mix(in srgb,var(--ok) 60%,transparent) 25% 31%,color-mix(in srgb,var(--bad) 45%,transparent) 31% 100%);border:1px solid var(--line)}
+.drops{display:flex;gap:3px;justify-content:center;flex-wrap:wrap}
+.drops i{width:12px;height:16px;border-radius:50% 50% 50% 50%/60% 60% 40% 40%;display:inline-block}
+.drops i.a{background:var(--bad)}
+.drops i.w{background:color-mix(in srgb,var(--acc) 55%,transparent)}
+.ph-steps{display:flex;flex-direction:column;gap:10px}
+.ph{display:grid;grid-template-columns:44px minmax(0,1fr);gap:12px;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:12px}
+.ph .n{font:700 13px var(--f-mono);color:var(--acc-ink);background:var(--acc);border-radius:8px;display:grid;place-items:center;height:44px}
+.ph h4{font-size:14.5px;margin:0 0 4px}
+.ph p,.ph li{font-size:13.5px}
+.ph ul{margin:4px 0 0;padding-left:18px;display:flex;flex-direction:column;gap:2px}
+.ph .src{font-size:12px;color:var(--faint);margin-top:4px}
+.res-tbl td.num{white-space:nowrap}
+
+.gl{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,230px),1fr));gap:8px}
+.gl>div{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:10px 12px;font-size:13.5px;line-height:1.45;min-width:0}
+.gl>div>b:first-child{display:block;font-size:14px;margin-bottom:2px}
+.gl>div i{color:var(--sub)}
+.kid{background:var(--acc-soft);border-radius:12px;padding:12px 14px;font-size:14px;line-height:1.5}
+.kid b{color:var(--acc)}
+.big5{display:flex;flex-direction:column;gap:6px;margin:0;padding-left:22px;font-size:14px}
+.drops i.b{background:#8a63d2}
+.drops.lg i{width:18px;height:24px}
+.drip-tbl{min-width:0;width:100%}
+.drip-tbl .drops{justify-content:flex-start;flex-wrap:nowrap;gap:2px}
+.drip-tbl .drops i{width:8px;height:11px}
+#nho-giot .badge{white-space:normal;text-align:center}
+
+.kicker{font:600 12px var(--f-mono);letter-spacing:.08em;text-transform:uppercase;color:var(--acc);margin:0}
+table.sm{min-width:0}
+.jn{white-space:nowrap;font-weight:600}
+.jn a,.srcs a,.pick a,.note a{color:var(--acc)}
+.stars{color:var(--warn);letter-spacing:1px;white-space:nowrap}
+.pick{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,280px),1fr));gap:8px}
+.pick>div{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:10px 12px;display:flex;flex-direction:column;gap:2px;font-size:14px}
+.job{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px;scroll-margin-top:12px}
+.job .tw{background:var(--bg)}
+.job .kid{background:var(--acc-soft)}
+.jh{display:flex;gap:12px;align-items:center}
+.jimg{width:64px;height:64px;object-fit:contain;background:var(--panel2);border-radius:12px;padding:6px;flex:none}
+.jh h2{font-size:17px}
+.chips{display:flex;flex-wrap:wrap;gap:5px;margin-top:6px}
+.facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:8px}
+.facts>div{background:var(--panel2);border-radius:10px;padding:10px 12px;font-size:13.5px;line-height:1.5}
+.facts>div>b{display:block;font-size:12px;color:var(--sub);text-transform:uppercase;letter-spacing:.05em;margin-bottom:2px}
+.tips{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:8px}
+.tips>div{border-left:3px solid var(--acc);background:var(--panel2);border-radius:0 8px 8px 0;padding:8px 10px;font-size:13.5px;line-height:1.5}
+.perk{font-size:13.5px;background:color-mix(in srgb,var(--warn) 12%,transparent);border:1px solid color-mix(in srgb,var(--warn) 40%,transparent);border-radius:10px;padding:9px 12px;margin:0}
+.heat{display:inline-block;min-width:64px;font:600 12px var(--f-mono);padding:2px 6px;border-radius:5px;color:var(--fg);background:linear-gradient(90deg,color-mix(in srgb,var(--bad) 55%,transparent) var(--h),var(--panel2) var(--h))}
+.dd2{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,250px),1fr));gap:8px}
+.big-link{display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:12px;background:var(--acc);color:var(--acc-ink);text-decoration:none}
+.big-link img{width:40px;height:40px;background:var(--panel);border-radius:8px;padding:4px}
+.big-link span{display:flex;flex-direction:column;flex:1;min-width:0}
+.big-link small{opacity:.85;font-size:12.5px}
+.big-link .arr{flex:none;font-size:22px}
+.grow{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,200px),1fr));gap:8px}
+.grow>div{background:var(--panel2);border-radius:10px;padding:10px;display:flex;flex-direction:column;gap:4px;font-size:13px}
+.grow i{display:block;height:10px;border-radius:5px;background:linear-gradient(90deg,var(--ok) var(--w),var(--panel) var(--w))}
+.grow i.dn{background:linear-gradient(90deg,var(--bad) var(--w),var(--panel) var(--w))}
+td.g100{color:var(--ok);font-weight:700}
+td.g0{color:var(--bad)}
+.bars{display:flex;flex-direction:column;gap:7px;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px}
+.bar{display:grid;grid-template-columns:minmax(0,190px) minmax(0,1fr) 70px;gap:10px;align-items:center;font-size:13px}
+.bar .t{min-width:0}
+.bar .t small{display:block;color:var(--faint);font-size:11.5px}
+.bar .v{height:16px;border-radius:4px;background:var(--acc);min-width:3px}
+.bar .v.cb{background:var(--bad)}
+.bar .n{font:600 13px var(--f-mono);text-align:right;white-space:nowrap}
+@media (max-width:520px){.bar{grid-template-columns:minmax(0,1fr) 64px}.bar .v{grid-column:1/-1;grid-row:2}}
+.row2.tight{gap:6px}
+.rent{display:flex;align-items:flex-end;gap:4px;height:120px;padding-top:16px}
+.rent div{flex:1;background:var(--acc);border-radius:4px 4px 0 0;position:relative;min-width:0}
+.rent div span{position:absolute;top:-16px;left:50%;transform:translateX(-50%);font:600 10px var(--f-mono);white-space:nowrap;color:var(--sub)}
+.rent div small{position:absolute;bottom:-17px;left:50%;transform:translateX(-50%);font-size:10px;color:var(--faint)}
+.rent-wrap{padding-bottom:18px}
+.srcs{margin:0;padding-left:18px;font-size:13px;display:flex;flex-direction:column;gap:4px}
+</style>
+
+<div class="wrap">
+<header>
+  <p class="kicker">Probably Stolen · bản 1.0</p>
+  <h1>9 nghề khởi đầu</h1>
+  <p class="lead">Mỗi nghề: được cho gì, kiếm tiền thế nào từng bước, con số quan trọng, cái gì làm bạn sạt nghiệp và perk nên chọn. Viết cho người mới chơi đọc cũng hiểu.</p>
+  <p class="src">Số liệu chính lấy từ probablystolen.gamertw.com (đọc từ file game bản 1.0.0.12, độ khó Mark Up / Normal), đối chiếu probablystolenwiki.com, QuestDuo, Probably Stolen DB, Probably Stolen Codex, Whisper of the House, Destructoid và guide Steam. Nguồn ở cuối trang. Bản vá sau có thể đổi số.</p>
+  <nav class="jump" aria-label="Mục">
+    <a href="#hieu">Nghề là gì</a><a href="#so-sanh">So sánh</a><a href="#chon">Chọn nghề nào</a><a href="#apprentice">Apprentice</a><a href="#water">Water Merchant</a><a href="#fence">Fence</a><a href="#rock">Rock Bottom</a><a href="#hydro">Hydroponic</a><a href="#gun">Gunsmith</a><a href="#chem">Chemist</a><a href="#rat">Rat Wrangler</a><a href="#aqua">Aquafarmer</a><a href="#mua">Mua thêm nghề</a><a href="#loi">Lời mỗi dây chuyền</a><a href="#kho">Độ khó</a><a href="#tinh">Máy tính</a><a href="#nguon">Nguồn</a>
+  </nav>
+</header>
+
+<section id="hieu"><h2>Nghề là gì? Đọc cái này trước</h2>
+<div class="kid">Bạn là chủ một <b>tiệm cầm đồ</b> trên trạm vũ trụ. Mỗi tuần (ngày 7, 14, 21…) phải <b>trả tiền thuê nhà</b>. Nghề khởi đầu giống như <b>món quà lúc mở tiệm</b>: chọn Thợ súng thì được cho súng, chọn Nuôi cá thì được cho bể cá.<br><br><b>Nghề không khoá bạn lại.</b> Khoảng ngày 7, ông <b>Joe Wild</b> đưa danh thiếp. Từ đó bạn mua thêm được bất kỳ nghề nào khác bằng tiền. Ai cũng có cùng mục tiêu cuối: <b>mua đứt cửa tiệm</b> (12.000 cr ở độ khó Normal).</div>
+<div class="gl">
+<div><b>cr (credits)</b>Tiền trong game.</div>
+<div><b>Tiền nhà</b>Trả mỗi 7 ngày, tăng 5% mỗi lần ở Normal. Không đủ tiền là thua.</div>
+<div><b>Tutorial (Mentor)</b>Ông thầy dạy chơi 2 tuần đầu. 4 nghề “nâng cao” (Fence, Gunsmith, Chemist, Rock Bottom) <b>bỏ qua</b> phần dạy này.</div>
+<div><b>Danh tiếng (reputation)</b>Điểm quý mến của từng phe: Security (cảnh sát), Black Market (chợ đen), Lower/Upper Levels (dân nghèo/giàu), Cartel, Revolution…</div>
+<div><b>Hàng cấm (contraband)</b>Đồ bán bị coi là phạm tội: thuốc, súng không giấy phép, thẻ từ… Bán được giá cao hơn nhưng bị kiểm tra.</div>
+<div><b>Đồ ăn cắp & Heat</b>Đồ khách ăn cắp đem bán cho bạn. Có “độ nóng” Heat, nguội dần 18 điểm mỗi đêm.</div>
+<div><b>Joe Wild’s Network</b>Danh bạ của Joe Wild: chỗ mua nghề mới, nâng cấp, nhà cung cấp.</div>
+<div><b>Display Case</b>Tủ kính trước tiệm. Bày gì thì khách mua loại đó tới.</div>
+</div>
+</section>
+
+<section id="so-sanh"><h2>So sánh 9 nghề</h2>
+<p class="note">Tiền khởi đầu và tiền nhà đầu tiên giống nhau ở mọi độ khó (theo file game). Lời mỗi đêm tính ở giá gốc, độ khó Normal.</p>
+<div class="tw"><table>
+<thead><tr><th>Nghề</th><th>Tiền đầu</th><th>Nhà tuần 1</th><th>Có dạy chơi</th><th>Độ khó</th><th>Kiếm tiền bằng</th><th>Cái làm bạn sạt nghiệp</th></tr></thead>
+<tbody>
+<tr><td class="jn"><img class="px ic" src="img/chars/the-mentor.png" alt=""><a href="#apprentice">Apprentice</a></td><td class="num">550</td><td class="num">200</td><td>Có</td><td><span class="stars">★☆☆☆☆</span></td><td>Mua rẻ bán đắt, thẩm định đồ</td><td>Không có rủi ro riêng</td></tr>
+<tr><td class="jn"><img class="px ic" src="img/items/bottled_water.webp" alt=""><a href="#water">Water Merchant</a></td><td class="num">400</td><td class="num">200</td><td>Có</td><td><span class="stars">★★☆☆☆</span></td><td>Lọc nước bẩn thành nước sạch</td><td>Dán nhãn sai bị bắt, mất danh tiếng</td></tr>
+<tr><td class="jn"><img class="px ic" src="img/items/rat.webp" alt=""><a href="#rat">Rat Wrangler</a></td><td class="num">600</td><td class="num">200</td><td>Có</td><td><span class="stars">★★☆☆☆</span></td><td>Nuôi chuột bán thịt</td><td>Dịch bệnh trong lồng</td></tr>
+<tr><td class="jn"><img class="px ic" src="img/items/hydroponic.webp" alt=""><a href="#hydro">Hydroponic Farmer</a></td><td class="num">450</td><td class="num">240</td><td>Có</td><td><span class="stars">★★☆☆☆</span></td><td>Trồng cây trong máy</td><td>Nước bẩn, khoáng sai thì cây còi</td></tr>
+<tr><td class="jn"><img class="px ic" src="img/items/tilapia.png" alt=""><a href="#aqua">Aquafarmer</a></td><td class="num">150</td><td class="num">240</td><td>Có</td><td><span class="stars">★★★☆☆</span></td><td>Nuôi cá, lấy trứng cá muối</td><td>Tuần đầu cạn tiền, cá chậm lớn</td></tr>
+<tr><td class="jn"><img class="px ic" src="img/items/dream_dust.webp" alt=""><a href="#chem">Chemist</a></td><td class="num">300</td><td class="num">200</td><td>Không</td><td><span class="stars">★★★☆☆</span></td><td>Pha chế Dream Dust, thuốc</td><td>Hàng cấm: điều tra, phạt</td></tr>
+<tr><td class="jn"><img class="px ic" src="img/items/shotgun.webp" alt=""><a href="#gun">Gunsmith</a></td><td class="num">150</td><td class="num">250</td><td>Không</td><td><span class="stars">★★★★☆</span></td><td>Bán và độ súng theo đơn</td><td>Ít tiền, mất giấy phép khi danh tiếng tụt</td></tr>
+<tr><td class="jn"><img class="px ic" src="img/items/smuggler_bay.webp" alt=""><a href="#fence">Fence</a></td><td class="num">450</td><td class="num">250</td><td>Không</td><td><span class="stars">★★★★☆</span></td><td>Buôn đồ ăn cắp, hàng cấm</td><td>Bị khám, tịch thu, bắt giam</td></tr>
+<tr><td class="jn"><img class="px ic" src="img/items/scrap_metal.webp" alt=""><a href="#rock">Rock Bottom</a></td><td class="num">0</td><td class="num">200</td><td>Không</td><td><span class="stars">★★★★★</span></td><td>Nhặt rác ban đêm bán lại</td><td>Không có gì cả, 1 tuần là phải trả nhà</td></tr>
+</tbody></table></div>
+</section>
+
+<section id="chon"><h2>Chọn nghề nào?</h2>
+<div class="pick">
+<div><b>Lần đầu chơi</b><span>→ <a href="#apprentice">Apprentice</a>, độ khó Mark Up (Normal). Game chỉ gắn nhãn “khuyên dùng cho người mới” cho nghề này.</span></div>
+<div><b>Lần 2, muốn học sản xuất</b><span>→ <a href="#water">Water Merchant</a> hoặc <a href="#hydro">Hydroponic</a>. An toàn, không dính hàng cấm.</span></div>
+<div><b>Muốn nhiều tiền đầu game</b><span>→ <a href="#rat">Rat Wrangler</a> (600 cr, nhà 200).</span></div>
+<div><b>Muốn lời cao nhất mỗi món</b><span>→ <a href="#chem">Chemist</a>. Dream Dust Lab Pure lời ~266 cr mỗi nấm, nhưng là hàng cấm.</span></div>
+<div><b>Thích mạo hiểm, chơi tối</b><span>→ <a href="#fence">Fence</a>. Đọc kỹ phần Heat trước.</span></div>
+<div><b>Săn thành tựu khó nhất</b><span>→ <a href="#rock">Rock Bottom</a> ở Thin Margins, khi đã sống sót được 1 tuần chỉ bằng nhặt rác.</span></div>
+</div>
+<p class="sub-h">Thứ tự chơi gợi ý (theo gamertw)</p>
+<ol class="big5">
+<li><b>Apprentice, Mark Up:</b> học tiền nhà, mặc cả, Heat, mua tiệm.</li>
+<li><b>Water Merchant hoặc Hydroponic, Mark Up:</b> học một dây chuyền sản xuất. Từ lần chơi thứ 2 mới mở perk.</li>
+<li><b>Chemist hoặc Fence:</b> học hệ thống điều tra của Security.</li>
+<li><b>Rock Bottom, Thin Margins:</b> thành tựu khó nhất.</li>
+</ol>
+</section>
+
+<!-- ============ APPRENTICE ============ -->
+<section id="apprentice" class="job">
+<div class="jh"><img class="px jimg" src="img/chars/the-mentor.png" alt=""><div><h2>Apprentice · Học việc</h2><div class="chips"><span class="badge n">550 cr</span><span class="badge n">nhà 200</span><span class="badge g">có dạy chơi</span><span class="badge g">dễ nhất</span></div></div></div>
+<div class="kid"><b>Nói dễ hiểu:</b> bạn là chủ tiệm tạp hoá bình thường. Mua đồ khách mang tới với giá rẻ, bán lại cho khách khác giá cao hơn. Ông Mentor dạy bạn từng bước trong 2 tuần đầu.</div>
+<div class="facts"><div><b>Được cho</b>Thêm tiền (550), Storage Bay (tủ chứa), một ít đồ ăn và đồ gia dụng để bán.</div><div><b>Mục tiêu tuần 1</b>Có 200 cr vào ngày 7. Mỗi sáng lấy tiền đang có trừ tiền nhà, phần còn lại mới được tiêu.</div></div>
+<p class="sub-h">Một ngày làm việc</p>
+<div class="seq"><div class="s"><b>1. SÁNG</b><span>Bày hàng vào <strong>Display Case</strong>, treo bảng neon. Bày gì thì khách mua loại đó tới.</span></div><div class="s"><b>2. MỞ CỬA</b><span>Tiếp từng khách: soi đồ, mặc cả, mua, bán.</span></div><div class="s"><b>3. ĐÓNG CỬA</b><span>Cất đồ “nóng” (đồ ăn cắp) khỏi quầy.</span></div><div class="s"><b>4. ĐÊM</b><span>Đi ngủ (máy chạy, đồ nguội) hoặc đi nhặt rác.</span></div></div>
+<p class="sub-h">Lịch 2 tuần đầu</p>
+<div class="tw"><table class="sm"><thead><tr><th>Ngày</th><th>Chuyện gì xảy ra</th><th>Bạn làm gì</th></tr></thead><tbody>
+<tr><td class="num">1</td><td>Mở tiệm</td><td>Bán cuộn giấy vệ sinh, kem đánh răng có sẵn với giá vừa phải.</td></tr>
+<tr><td class="num">4</td><td>Bảo hiểm xuất hiện</td><td><b>Mua ngay.</b> Đêm đầu không bảo hiểm có 38% bị trộm, mỗi đêm bỏ qua +5%. Phí = tổng giá hàng ÷ 400 + 3 (2.000 cr hàng ≈ 8 cr/đêm).</td></tr>
+<tr><td class="num">5</td><td>Mentor cho 2 bảng neon (Đồ ăn, Đồ gia dụng)</td><td>Để cả hai trong Display Case để người bán tự mang hàng tới.</td></tr>
+<tr><td class="num">6</td><td>Dr. Jackson ghé</td><td>Mua <b>Furnace 50 cr</b> (rẻ hơn 75%, sau này 200–230). 2 Metal Ore → 1 thỏi kim loại 50–75 cr.</td></tr>
+<tr><td class="num">7</td><td>Trả nhà 200</td><td>Có 1 lần được khất (Landlord grace) ở Normal, đừng trông vào nó.</td></tr>
+<tr><td class="num">~7</td><td>Joe Wild đưa danh thiếp</td><td>Xem thử, <b>trả nhà xong</b> mới mua nghề mới.</td></tr>
+<tr><td class="num">8</td><td>Hội đồng thẩm định mời vào (85 cr). Mentor dạy mặc cả</td><td><b>Tham gia.</b> Treo giấy chứng nhận trong Display Case. Đừng bấm “Don’t join”, nó không bao giờ quay lại.</td></tr>
+<tr><td class="num">10</td><td>Dịch vụ dọn rác (Sawyer)</td><td>Bật lên. Rác làm tiệm xấu đi, mất khách. <b>Đừng bắn Sawyer.</b></td></tr>
+<tr><td class="num">12–13</td><td>Mentor đưa shotgun. Aug đầu tiên tới ngày 13</td><td>Chỉ bắn khi chắc chắn là Aug (mua Aug Scanner của Dr. Jackson). Bắn nhầm người = tội ngộ sát, mất danh tiếng 4 phe.</td></tr>
+<tr><td class="num">14</td><td>Trả nhà 210</td><td>Từ đây mỗi lần +5%. Ngày 49 là 266.</td></tr>
+</tbody></table></div>
+<p class="sub-h">Kiếm tiền khi không có nghề riêng</p>
+<div class="tw"><table class="sm"><thead><tr><th>Cách</th><th>Lời khoảng</th><th>Ghi chú</th></tr></thead><tbody>
+<tr><td><img class="px ic" src="img/items/magnifier.webp" alt="">Thẩm định đồ</td><td>73 cr/ngày (Junior) → 130 → 190 → 300 (Master)</td><td>Không cần vốn. Đoán giá trong ±5% giá thật là “Perfect”, ăn nhiều nhất.</td></tr>
+<tr><td>Mua sỉ (Accept Wholesale)</td><td>+35% đến +72%</td><td>Thợ mỏ, người nhặt rác giảm 15–25%, người bán nước 15–40%. Phải có đủ tiền mua cả lô.</td></tr>
+<tr><td><img class="px ic" src="img/items/furnace.webp" alt="">Furnace</td><td>~32 cr/đêm</td><td>Nâng cấp module Blast + Flux: ~80/đêm.</td></tr>
+<tr><td>Sự kiện chợ</td><td>Tuỳ sự kiện</td><td>Đọc báo mỗi sáng. Bạo loạn: súng +50%, đồ ăn +30%. Đình công: nước, đồ ăn +40%. Mất điện: pin +66%.</td></tr>
+</tbody></table></div>
+<div class="msg warn"><b>Mặc cả:</b> giảm giá cho khách thì luôn thành công và tăng danh tiếng. Đòi thêm thì là đánh bạc: đòi 10% được nhận ~80%, đòi 25% chỉ ~50%, đòi 50% gần như luôn bị từ chối (trừ khi danh tiếng cao) và khách có thể bỏ đi. Quy tắc: chỉ đòi thêm 10% với món bạn biết rõ giá.</div>
+<div class="msg bad"><b>5 lỗi làm thua sớm:</b> mua máy vào thứ Bảy ngay trước ngày trả nhà · không mua bảo hiểm · bán đồ ăn cắp còn nóng · bắn nhầm khách · tiêu cả tiền nhà vì nghĩ “hàng tồn kho cũng là tiền”.</div>
+<p class="perk"><b>Perk nên chọn (từ lần chơi 2):</b> Vigilant (không bao giờ bị trộm, khỏi trả bảo hiểm) + Savings (+150 cr trước kỳ nhà đầu).</p>
+</section>
+
+<!-- ============ WATER ============ -->
+<section id="water" class="job">
+<div class="jh"><img class="px jimg" src="img/items/water-purifier.webp" alt=""><div><h2>Water Merchant · Buôn nước</h2><div class="chips"><span class="badge n">400 cr</span><span class="badge n">nhà 200</span><span class="badge g">có dạy chơi</span><span class="badge g">ít rủi ro</span></div></div></div>
+<div class="kid"><b>Nói dễ hiểu:</b> trên trạm, nước sạch đắt hơn vàng. Bạn mua nước bẩn giá rẻ (hoặc lấy từ vòi), lọc cho sạch, đóng chai, dán nhãn <b>đúng</b> loại rồi bán. Đây là cách kiếm tiền mạnh nhất ở bản 1.0.0.12.</div>
+<div class="facts"><div><b>Được cho</b>Sách Water Trading, bộ thử nước, viên lọc, 2 L Ghostwater, 6 L Rustwater, chai 3 cỡ, bình lọc 3 L có Water Filter, máy lọc mini HydraTech, máy in chai. Mở sẵn mục Water Trading ở Joe Wild.</div><div><b>Lời</b>Mỗi máy Water Purifier lọc Rustwater miễn phí: ~72 cr/đêm (ra nước High-Quality), ~120 cr/đêm (ra Pure).</div></div>
+<p class="sub-h">Các loại nước (giá tham khảo theo QuestDuo)</p>
+<div class="tw"><table class="sm"><thead><tr><th>Loại</th><th>Độ sạch</th><th>Giá</th><th>Ai mua</th></tr></thead><tbody>
+<tr><td><b>Pure Water</b></td><td>&gt; 99,9%</td><td class="num">200</td><td>Người giàu. Pha thêm vào nước kém để nâng độ sạch.</td></tr>
+<tr><td><b>High-Quality</b></td><td>99–99,9%</td><td class="num">100</td><td>Người giàu, Spacer</td></tr>
+<tr><td><b>Basewater</b></td><td>98–99%</td><td class="num">40</td><td>Dân nghèo</td></tr>
+<tr><td>Ghostwater</td><td>96–98%</td><td class="num">27</td><td>Đừng bán, lọc tiếp</td></tr>
+<tr><td>Rustwater</td><td>90–96%</td><td class="num">20</td><td>Nguyên liệu rẻ để lọc</td></tr>
+<tr><td>Gutterflow</td><td>&lt; 90%</td><td class="num">10</td><td>Chỉ dùng công nghiệp</td></tr>
+</tbody></table></div>
+<p class="sub-h">Lọc nước từng bước</p>
+<div class="seq"><div class="s"><b>1. THỬ</b><img class="px spr" src="img/items/water_test_strip.webp" alt=""><span>Nhúng que thử, xem nước sạch bao nhiêu %.</span></div><div class="s"><b>2. DIỆT VI SINH</b><img class="px spr" src="img/items/water_tablet.webp" alt=""><span>Dưới ~95%: đèn UV trước, rồi viên lọc <strong>từng viên một</strong>, chờ số đứng yên.</span></div><div class="s"><b>3. LỌC</b><img class="px spr" src="img/items/water_pitcher.webp" alt=""><span>Đổ qua bình có Water Filter, rót ra chai sạch.</span></div><div class="s"><b>4. LÊN PURE</b><img class="px spr" src="img/items/water-purifier.webp" alt=""><span>Water Purifier + pin, để qua đêm. Cần module Quality mới vượt 99,9%.</span></div></div>
+<div class="tw"><table class="sm"><thead><tr><th>Công thức cho 1 can 6 L (chưa có máy Purifier)</th><th>Ra</th></tr></thead><tbody>
+<tr><td>Rustwater + đèn UV + Water Filter + 2 viên lọc (từng viên)</td><td>~5,6 L Basewater · <b>rẻ nhất</b></td></tr>
+<tr><td>Rustwater + Water Filter + 3 viên lọc</td><td>~5,5 L Basewater (ngày nước bẩn có thể không đạt)</td></tr>
+<tr><td>Rustwater hoặc Gutterflow + máy HydraTech (60 độ bền) + 1 viên</td><td>~5,9 L Basewater · sạch nhất, tốn độ bền máy</td></tr>
+</tbody></table></div>
+<div class="tips">
+<div><b>Vì sao viên lọc phải thả từng viên?</b> Viên lọc yếu dần theo thời gian chờ. Thả 2 viên cùng lúc chỉ bằng ~1,8 viên, 3 viên chỉ bằng ~2,5.</div>
+<div><b>Vì sao UV trước?</b> UV biến hết vi sinh thành nước, không tốn thể tích. Viên lọc khỏi phải diệt vi sinh nên dồn sức diệt tạp chất hoá học.</div>
+<div><b>Mẹo pha đúng 99%:</b> nước 99,8% và 99,0% bán cùng giá High-Quality. Trộn nước sạch với Basewater cho ra đúng 99% là được thêm vài trăm mL để bán.</div>
+<div><b>Đừng cho Gutterflow qua Water Filter:</b> một can ăn hơn nửa độ bền lõi lọc.</div>
+<div><b>Nước vô tận:</b> mua Gutterflow on Tap (250) rồi Rustwater on Tap (350) ở Joe Wild. Rustwater miễn phí chạy vào máy Purifier (250) là dây chuyền mạnh nhất hiện nay.</div>
+<div><b>Nhớ dự trữ:</b> sự kiện Water Supply Crisis kéo tới khách ngân sách 450–500.</div>
+</div>
+<div class="msg bad"><b>Dán nhãn phải đúng.</b> Khách Lower Levels, Black Market và Security tự thử nước. Nhãn ghi cao hơn chất thật = tội “Lừa đảo” và “Gây nguy hiểm cho người tiêu dùng”, mất danh tiếng và lên hồ sơ cảnh sát. Quét lại sau khi lọc: nhãn cũ vẫn ghi loại trước khi lọc.</div>
+<p class="perk"><b>Perk nên chọn:</b> Working Pipes (Rustwater vô hạn cho máy lọc có sẵn) + Savings.</p>
+</section>
+
+<!-- ============ FENCE ============ -->
+<section id="fence" class="job">
+<div class="jh"><img class="px jimg" src="img/items/smuggler_bay.webp" alt=""><div><h2>Fence · Buôn đồ ăn cắp</h2><div class="chips"><span class="badge n">450 cr</span><span class="badge n">nhà 250</span><span class="badge r">không dạy chơi</span><span class="badge r">rủi ro cao</span></div></div></div>
+<div class="kid"><b>Nói dễ hiểu:</b> khách ăn cắp đồ rồi bán rẻ cho bạn. Bạn giấu đồ cho tới khi “nguội” rồi bán lại giá cao. Mua đồ ăn cắp <b>không phạm tội</b>; <b>bán</b> mới phạm tội. Cảnh sát (Security) có thể tới khám tiệm bất cứ lúc nào.</div>
+<div class="facts"><div><b>Được cho</b>Smuggler’s Bay (hầm bí mật cảnh sát không khám được), 2 lọ Dream Dust, 1 súng ngắn + đạn, 3 thẻ từ, Underground Exchange (đổi đồ qua thùng rác) từ ngày 1.</div><div><b>Cái giá</b>+30 Black Market nhưng <b>−30 Security</b>. Ở Normal bạn vào thẳng danh sách theo dõi (−20): điều tra nhanh gấp 1,2 lần, tiền hối lộ +60.</div></div>
+<p class="sub-h">Hiểu “Heat” (độ nóng) bằng hình</p>
+<div class="kid">Đồ ăn cắp giống <b>cục than nóng</b>: mỗi đêm nguội 18 điểm. Heat vừa là <b>% bị cảnh sát tìm thấy</b> khi khám, vừa là <b>% giá bán bị tính là tội</b>. Chờ nguội hẳn rồi bán = không tội gì.</div>
+<div class="tw"><table class="sm"><thead><tr><th>Giá gốc món đồ</th><th>Heat lúc mua</th><th>Số đêm để nguội</th><th>Giảm giá khi mua</th></tr></thead><tbody>
+<tr><td>≤ 17</td><td>Không tính là đồ ăn cắp</td><td>—</td><td>—</td></tr>
+<tr><td>18–49</td><td><span class="heat" style="--h:25%">25</span></td><td class="num">2</td><td>−10%</td></tr>
+<tr><td>50–84</td><td><span class="heat" style="--h:50%">50</span></td><td class="num">3</td><td>−15%</td></tr>
+<tr><td>85–139</td><td><span class="heat" style="--h:75%">75</span></td><td class="num">5</td><td>−20%</td></tr>
+<tr><td>≥ 140</td><td><span class="heat" style="--h:100%">100</span></td><td class="num">6</td><td>−25%</td></tr>
+</tbody></table></div>
+<p class="sub-h">Hàng cấm (contraband): 4 cấp</p>
+<div class="tw"><table class="sm"><thead><tr><th>Cấp</th><th>Bán được thêm</th><th>Bị khám ra thì</th><th>Ví dụ</th></tr></thead><tbody>
+<tr><td>Low</td><td>+35%</td><td>Cảnh cáo</td><td>Đạn 10mm</td></tr>
+<tr><td>Mid</td><td>+70%</td><td>Tịch thu</td><td>Dream Dust, súng Ironcraft 10, thẻ Security</td></tr>
+<tr><td>High</td><td>+100%</td><td>Tịch thu + phạt bằng giá trị, không trả được thì bị bắt</td><td>Shotgun Rampart, thẻ Command</td></tr>
+<tr><td>Critical</td><td>+150%</td><td><b>Bị bắt, đóng tiệm vĩnh viễn</b></td><td>Neural Core Module</td></tr>
+</tbody></table></div>
+<p class="sub-h">Quy trình an toàn mỗi ngày</p>
+<ol class="big5">
+<li><b>Lúc mua:</b> xem tooltip. Hàng cấm ghi cấp, đồ ăn cắp ghi “Stolen (X% Heat)”. Tính số đêm phải chờ (bảng trên hoặc máy tính cuối trang).</li>
+<li><b>Trước khi ngủ:</b> mọi hàng cấm và đồ còn Heat trên ~25 cho vào <b>Smuggler’s Bay</b> hoặc tủ khoá. Không để gì nóng trên quầy hay trong Display Case qua đêm.</li>
+<li><b>Hàng cấm để trong Display Case</b> = khách đầu tiên ngày hôm đó là thanh tra. Đừng bao giờ bày.</li>
+<li><b>Chọn người mua:</b> bán cho Cartel (không tính tội), Revolution (tính 1/3), Black Market (1/2). Bán cho người giàu thì tính đủ 100%.</li>
+<li><b>Giữ “Investigation Progress” dưới 80:</b> khi đó mỗi đêm mỗi tội trên hồ sơ giảm 20. Vượt 80 thì không tự giảm nữa, phải thuê Fixer của Joe Wild hoặc xoá bằng chứng trước khi tới 100.</li>
+</ol>
+<div class="tw"><table class="sm"><thead><tr><th>Tổng tội buôn bán + giữ đồ ăn cắp</th><th>Bao lâu bị khám 1 lần</th></tr></thead><tbody>
+<tr><td>dưới 50</td><td>Chưa bị khám định kỳ</td></tr><tr><td>50–149</td><td>3–5 ngày</td></tr><tr><td>150–299</td><td>3–4 ngày</td></tr><tr><td>300–449</td><td>3 ngày</td></tr><tr><td>450–749</td><td>2–3 ngày</td></tr><tr><td>750+</td><td>1–2 ngày</td></tr>
+</tbody></table></div>
+<div class="tips">
+<div><b>Hối lộ:</b> chỉ thanh tra “Shady” mới nhận. Giá = 100 + 2 × ngày − 2 × danh tiếng Security, trong khoảng 40–400.</div>
+<div><b>Danh tiếng Security +60:</b> khoảng cách giữa các lần khám dài thêm 2–4 ngày. <b>+100:</b> hết bị khám.</div>
+<div><b>Mẹo chia nhỏ:</b> tội trừ 20 mỗi đêm cho <b>từng</b> loại tội. 280 chia 4 loại giảm 80/đêm, 280 một loại chỉ giảm 20/đêm.</div>
+<div><b>Mua đồ nóng được thêm danh tiếng:</b> ×1,5 tới ×3 với phe của người bán. Hàng cấm Mid/High/Critical: ×2 / ×2,5 / ×3.</div>
+<div><b>Underground Exchange:</b> bỏ đồ vào thùng rác ban ngày, bật dịch vụ dọn rác, sáng hôm sau lấy phần thưởng. Đừng để đồ cần dùng trong thùng rác.</div>
+</div>
+<p class="perk"><b>Perk nên chọn:</b> Intimidating (mọi tội giảm 1/3) + Model Citizen (+30 Security, hối lộ rẻ hơn 60). Build đầy đủ: Intimidating + Model Citizen + Wild’s Favorite + Bad Lease.</p>
+</section>
+
+<!-- ============ ROCK BOTTOM ============ -->
+<section id="rock" class="job">
+<div class="jh"><img class="px jimg" src="img/items/scrap_metal.webp" alt=""><div><h2>Rock Bottom · Trắng tay</h2><div class="chips"><span class="badge n">0 cr</span><span class="badge n">nhà 200</span><span class="badge r">không dạy chơi</span><span class="badge r">khó nhất</span></div></div></div>
+<div class="kid"><b>Nói dễ hiểu:</b> không tiền, không đồ, không ai dạy. Ban đêm bạn ra bãi rác nhặt đồ, sáng đem bán. Sau 7 ngày phải có 200 cr trả nhà.</div>
+<div class="facts"><div><b>Được cho</b>Không có gì. Bù lại: 3 đêm đầu không bị trộm.</div><div><b>Thành tựu</b>From Nothing (thắng từ Rock Bottom). From Nothing, the Hard Way (thắng ở Thin Margins trở lên).</div></div>
+<p class="sub-h">Lộ trình của người thắng ngày 112 (TowerNumberNine, Thin Margins)</p>
+<div class="tw"><table class="sm"><thead><tr><th>Giai đoạn</th><th>Làm gì</th></tr></thead><tbody>
+<tr><td><b>Tuần 1</b></td><td>Đêm nào cũng đi nhặt rác (~44 cr hàng/đêm, 5 lần lục mỗi chuyến). Mang 1–2 băng gạc phòng bị thương. <b>Chưa trả tiền điện</b>, chưa có máy thì chưa cần.</td></tr>
+<tr><td><b>Ngày 5</b></td><td>Hội đồng thẩm định tới sớm (vì bỏ qua tutorial). Tham gia: thu nhập không cần vốn.</td></tr>
+<tr><td><b>Giữa game</b></td><td>Mua sỉ, canh sự kiện (mua lúc thừa, bán lúc thiếu), nhà cung cấp của Joe Wild, máy chế biến: tủ lạnh, Furnace, máy sạc pin (mua pin yếu rẻ, sạc đầy bán lại).</td></tr>
+<tr><td><b>Thu thêm</b></td><td>Bắn Aug lấy thưởng, báo cảnh sát tội phạm truy nã (Model Citizen +50% tiền thưởng).</td></tr>
+<tr><td><b>Kết quả</b></td><td>Thắng ngày 112 mà không đụng đồ ăn cắp hay hàng cấm.</td></tr>
+</tbody></table></div>
+<div class="msg warn"><b>Ở Thin Margins:</b> không có lãi bán lẻ mặc định (Normal có +15%), tiền nhà +10% mỗi tuần, bị khám thường xuyên, phạt nặng. Lời chỉ đến từ <b>mua rẻ</b> (sỉ, đồ ăn cắp), <b>sự kiện</b> và <b>chế biến bằng máy</b>.</div>
+<div class="msg bad"><b>Đi nhặt rác có giá:</b> mỗi đêm ra ngoài thì hôm sau mất 1 khách (trừ khi có perk Short Sleeper). Bị thương thì không đi được.</div>
+<p class="perk"><b>Perk nên chọn (build “Scavenger”):</b> Proficient Scavenger + Careful Scavenger (5 lần lục, không bị thương) + Short Sleeper (đi đêm không mất khách) + Handy (có dụng cụ từ ngày 1). Người thắng ngày 112 dùng: Aug Menace + Model Citizen + Short Sleeper.</p>
+</section>
+
+<!-- ============ HYDRO ============ -->
+<section id="hydro" class="job">
+<div class="jh"><img class="px jimg" src="img/items/hydroponic.webp" alt=""><div><h2>Hydroponic Farmer · Trồng cây thủy canh</h2><div class="chips"><span class="badge n">450 cr</span><span class="badge n">nhà 240</span><span class="badge g">có dạy chơi</span><span class="badge g">không hàng cấm</span></div></div></div>
+<div class="kid"><b>Nói dễ hiểu:</b> cây trồng trong máy, không cần đất. Bạn cho vào máy: <b>1 chai nước sạch + viên dinh dưỡng + pin + 1 hạt giống</b>. Qua vài đêm máy tự hái. Nước càng sạch, dinh dưỡng càng vừa thì quả càng to, bán càng đắt.</div>
+<div class="facts"><div><b>Được cho</b>2 máy (1 máy cũ + 1 máy thường), pin, 2 module Eco, 2 module hỏng, hạt Nutrifruit ×2, Fillerweed ×2, lọ viên dinh dưỡng, sách hướng dẫn, nước. Mở sẵn Retired Farmer (ghé mỗi thứ Sáu).</div><div><b>Lời</b>Kotton ~130 cr/đêm mỗi máy. Nutrifruit ~89 cr/đêm (chỉ 19 nếu cây yếu). Máy tốn 8 điện/đêm.</div></div>
+<p class="sub-h">Trồng từng bước</p>
+<div class="seq"><div class="s"><b>1. NƯỚC</b><img class="px spr" src="img/items/bottled_water.webp" alt=""><span>Cho 1 chai nước <strong>Pure hoặc High-Quality</strong> vào máy.</span></div><div class="s"><b>2. KHOÁNG</b><img class="px spr" src="img/items/hydroponic_nutrient_tablet.webp" alt=""><span>Thả viên dinh dưỡng theo bảng dưới. Nước sạch gần như không có khoáng.</span></div><div class="s"><b>3. PIN + HẠT</b><img class="px spr" src="img/items/nutrifruit_seed.webp" alt=""><span>Lắp pin, gieo 1 hạt. Mỗi máy 1 cây.</span></div><div class="s"><b>4. CHỜ</b><img class="px spr" src="img/items/nutrifruit.webp" alt=""><span>Đi ngủ. Chín thì máy tự hái ra khay.</span></div></div>
+<div class="tw"><table><thead><tr><th>Hạt</th><th>Số đêm</th><th>Thu</th><th>Nước/đêm</th><th>Khoáng đúng</th><th>Viên cho chai 2 L</th><th>Dùng để</th></tr></thead><tbody>
+<tr><td><img class="px ic" src="img/items/nutrifruit_seed.webp" alt="">Nutrifruit</td><td class="num">2</td><td>7 quả</td><td>100 mL</td><td>0,5–2,5%</td><td class="num">2</td><td>Đồ ăn, thức ăn chuột. Loại duy nhất to được “Huge”</td></tr>
+<tr><td><img class="px ic" src="img/items/kotton_seed.webp" alt="">Kotton</td><td class="num">6</td><td>13 sợi</td><td>250 mL</td><td>2–5%</td><td class="num">4,67</td><td>Đắt nhất, cần Pure Water</td></tr>
+<tr><td><img class="px ic" src="img/items/dream_cap_seed.webp" alt="">Dream Cap</td><td class="num">4</td><td>8 nấm</td><td>100 mL</td><td>1,75–3,25%</td><td class="num">3,33</td><td>Dream Dust (hàng cấm Low)</td></tr>
+<tr><td>Coffee</td><td class="num">3</td><td>8 hạt</td><td>100 mL</td><td>1,75–3,25%</td><td class="num">3,33</td><td>Viên Caffeine, hạt tự làm giống</td></tr>
+<tr><td><img class="px ic" src="img/items/fillerweed_seed.webp" alt="">Fillerweed</td><td class="num">1</td><td>5</td><td>451 mL</td><td>0–2%</td><td class="num">0</td><td>Đồ ăn rẻ, chịu nước bẩn</td></tr>
+<tr><td><img class="px ic" src="img/items/hydroreed_seed.webp" alt="">Hydroreed</td><td class="num">3</td><td>—</td><td>20 mL</td><td>0–2%</td><td class="num">0</td><td>Không ra gì, mà <b>lọc nước</b> (mỗi đêm diệt ~28% tạp chất)</td></tr>
+<tr><td><img class="px ic" src="img/items/bloomberry_seed.webp" alt="">BloomBerry</td><td class="num">3 → 2</td><td>6</td><td>100 mL</td><td>1,25–2,75%</td><td class="num">2,67</td><td>Làm rượu. Hái xong mọc lại</td></tr>
+</tbody></table></div>
+<p class="sub-h">Nước bẩn làm cây còi thế nào (Growth Score lúc hái, tối đa 100)</p>
+<div class="tw"><table class="sm"><thead><tr><th>Hạt</th><th>Pure 99,9%</th><th>99,5%</th><th>99%</th><th>Basewater 98%</th><th>Ghostwater 96%</th></tr></thead><tbody>
+<tr><td>Nutrifruit</td><td class="g100">100</td><td class="g100">100</td><td>92</td><td>73</td><td class="g0">42</td></tr>
+<tr><td>Kotton</td><td class="g100">100</td><td>68</td><td class="g0">11</td><td class="g0">0</td><td class="g0">0</td></tr>
+<tr><td>Dream Cap</td><td class="g100">100</td><td>95</td><td>79</td><td class="g0">21</td><td class="g0">0</td></tr>
+<tr><td>Coffee</td><td class="g100">100</td><td>96</td><td>84</td><td class="g0">40</td><td class="g0">0</td></tr>
+<tr><td>BloomBerry</td><td class="g100">100</td><td>97</td><td>88</td><td>58</td><td class="g0">0</td></tr>
+</tbody></table></div>
+<div class="tips">
+<div><b>Quả Nutrifruit “Huge”:</b> Pure Water, khoáng 0,5–2,5% (1 viên trong chai 2 L = 0,75%), giữ pin và nước đủ 2 đêm. Growth Score 100 = cả 7 quả Huge (32 cr mỗi quả thay vì 12). Lần đầu được thành tựu hiếm Green Thumb.</div>
+<div><b>Thiếu khoáng hại gấp đôi thừa khoáng.</b> Không chắc thì cho dư một chút.</div>
+<div><b>Khoáng tăng dần:</b> cây uống nước nhưng hầu như không ăn khoáng, nên % khoáng tăng khi chai cạn. Châm thêm nước sạch để kéo xuống. Dùng can to thì đỡ phải kiểm tra.</div>
+<div><b>Hết pin hay hết nước không mất gì:</b> máy chỉ tạm dừng, cây giữ nguyên tiến độ.</div>
+<div><b>Plant Analyzer:</b> soi cây trước đêm cuối để biết Growth Score.</div>
+<div><b>Module:</b> Dream Cap Neutralizer biến nấm thành đồ ăn hợp pháp; Nightmare module biến thành Nightmare Cap; Smuggler module xoá nhãn hàng cấm.</div>
+<div><b>Bước tiếp:</b> Plant Genetics (1.250 cr) để sửa gen hạt: lớn nhanh, ra nhiều quả.</div>
+</div>
+<p class="perk"><b>Perk nên chọn:</b> Tinkerer + Savings (nâng cấp máy là khoản chi lớn nhất).</p>
+</section>
+
+<!-- ============ GUNSMITH ============ -->
+<section id="gun" class="job">
+<div class="jh"><img class="px jimg" src="img/items/printer.webp" alt=""><div><h2>Gunsmith · Thợ súng</h2><div class="chips"><span class="badge n">150 cr</span><span class="badge n">nhà 250</span><span class="badge r">không dạy chơi</span><span class="badge r">nhiều phàn nàn nhất</span></div></div></div>
+<div class="kid"><b>Nói dễ hiểu:</b> khách đặt súng theo yêu cầu (“tôi cần súng bắn chính xác”). Bạn chọn súng trong kho, lắp thêm phụ kiện cho đạt chỉ số rồi bán. Cần <b>giấy phép</b>; giấy phép bị thu nếu cảnh sát hết quý bạn.</div>
+<div class="facts"><div><b>Được cho</b>Giấy phép Class I, kho súng + phụ kiện + đạn, máy in 3D cũ, Gunsmith Storage Bay, +25 Security. Khách Class I hẹn sẵn ngày 1 và ngày 4.</div><div><b>Vấn đề</b>Chỉ 150 cr mà nhà 250. <b>Tuần đầu phải bán bớt kho súng</b>, không giữ được.</div></div>
+<p class="sub-h">Giấy phép súng</p>
+<div class="tw"><table class="sm"><thead><tr><th>Giấy phép</th><th>Giá</th><th>Cần Security</th><th>Bị thu khi dưới</th><th>Khách tới</th><th>Khả năng khách tới mỗi ngày</th></tr></thead><tbody>
+<tr><td><img class="px ic" src="img/items/permit-gun-1.webp" alt="">Class I</td><td class="num">300</td><td class="num">+20</td><td class="num">0</td><td>Dân Lower Levels</td><td>50% → 75% → 100%</td></tr>
+<tr><td><img class="px ic" src="img/items/permit-gun-2.webp" alt="">Class II</td><td class="num">600</td><td class="num">+50</td><td class="num">+30</td><td>Lính đánh thuê</td><td>40% → 60% → 80% → 100%</td></tr>
+<tr><td><img class="px ic" src="img/items/permit-gun-3.webp" alt="">Class III</td><td class="num">900</td><td class="num">+80</td><td class="num">+60</td><td>Người giàu</td><td>35% → … → 100%</td></tr>
+</tbody></table></div>
+<p class="note">Phải mua theo thứ tự I → II → III. Mua xong còn phải đạt đủ Security thì sáng hôm sau mới nhận. <b>Treo giấy phép trong Display Case</b> thì khách loại đó mới tới. Ngày nào không có khách thì hôm sau khả năng tăng.</p>
+<p class="sub-h">Làm đơn súng: 3 luật dễ sai</p>
+<div class="dd2">
+<div class="side bad"><span class="lbl">✗ Firepower 17, đơn ghi “Firepower &gt; 17”</span><small>“&gt;” nghĩa là <b>lớn hơn</b>, không phải bằng. 17 là trượt, cần 18.</small></div>
+<div class="side bad"><span class="lbl">✗ Nhìn số trong ngoặc: “17 (20)”</span><small>Số trong ngoặc là chỉ số gốc khi súng còn mới. Đơn chỉ tính số <b>ngoài ngoặc</b> (17).</small></div>
+<div class="side good"><span class="lbl">✓ Thưởng cộng dồn</span><small>Accuracy 31 ăn cả 3 mốc &gt;20, &gt;24, &gt;30 (mỗi mốc +46 cr). Nhưng phải qua hết điều kiện <b>Required</b> trước thì thưởng mới tính.</small></div>
+</div>
+<div class="msg ok"><b>Ví dụ thật:</b> súng Nestfire Compact Firepower 17, Accuracy 25, Reliability 25. Đơn “súng chính xác” Class I bắt buộc Firepower &gt; 17 nên không bán được dù đạt 3 mốc thưởng. Nâng Firepower lên 18 là bán được <b>224–234 cr</b> (giá gốc 86–96 + 138 thưởng).</div>
+<p class="sub-h">Máy in 3D</p>
+<ol class="big5">
+<li>Cắm <b>chip</b> đúng món cần in (chip dùng lại được).</li>
+<li>Món kim loại cần <b>Metal Printer Module</b>; khung súng và Gun Parts cần thêm <b>CNC Module</b>. Từ bản 1.0.0.12, module phải nằm trong <b>ô module</b>, để ở ô nguyên liệu là máy không chạy.</li>
+<li>Cho nguyên liệu (nhựa in, sắt vụn, thỏi kim loại), lắp pin đầy, dọn trống khay ra.</li>
+<li>Đi ngủ. Nhiều món in mất vài đêm, giữ pin đủ.</li>
+</ol>
+<div class="tw"><table class="sm"><thead><tr><th>Nên in trước (không cần module)</th><th>Nguyên liệu</th><th>Ra</th><th>Giá mỗi cái</th></tr></thead><tbody>
+<tr><td>Băng đạn .22</td><td>1 nhựa</td><td>2 cái / 1 đêm</td><td class="num">15</td></tr>
+<tr><td>Băng .22 mở rộng</td><td>3 nhựa</td><td>2 cái / 2 đêm</td><td class="num">35</td></tr>
+<tr><td>Ống ngắm red dot tự chế</td><td>1 nhựa + 1 linh kiện</td><td>4 cái / 1 đêm</td><td class="num">25</td></tr>
+<tr><td>Súng Liberator (chip đôi)</td><td>3 nhựa</td><td>2 khẩu / 3 đêm</td><td class="num">40</td></tr>
+</tbody></table></div>
+<div class="tips">
+<div><b>Module khó kiếm:</b> Metal Printer (33% mỗi lần) và CNC (25%) chỉ có khi Retired Gunsmith ghé hàng tuần. Chưa có thì in đồ bằng nhựa.</div>
+<div><b>Súng cũ không dùng:</b> tháo bằng tua vít ra Gun Parts để sửa súng khác.</div>
+<div><b>Bán đúng lúc:</b> bạo loạn Lower Levels (súng +50%), Lynching (+33%). Lính đánh thuê mua súng, giáp, đạn từ ~ngày 12 (ngân sách 300–348).</div>
+<div><b>Súng không có giấy phép:</b> cất vào Smuggler’s Bay trước khi bị khám.</div>
+<div><b>Shotgun dưới quầy:</b> từ bản 1.0.0.12 không còn mất vĩnh viễn kể cả khi giấy phép bị thu.</div>
+</div>
+<p class="perk"><b>Perk nên chọn:</b> Savings + Vigilant (chỉ có 150 cr, phải giữ tiền và hàng).</p>
+</section>
+
+<!-- ============ CHEMIST ============ -->
+<section id="chem" class="job">
+<div class="jh"><img class="px jimg" src="img/items/chem-finisher.webp" alt=""><div><h2>Chemist · Nhà hoá học</h2><div class="chips"><span class="badge n">300 cr</span><span class="badge n">nhà 200</span><span class="badge r">không dạy chơi</span><span class="badge r">hàng cấm Mid</span></div></div></div>
+<div class="kid"><b>Nói dễ hiểu:</b> xay nấm, ngâm cồn, đun, lọc, sấy rồi đóng thành lọ bột Dream Dust. Càng tinh khiết càng đắt. Lời mỗi món cao nhất game, nhưng Dream Dust là hàng cấm.</div>
+<div class="facts"><div><b>Được cho</b>Cả phòng lab: Blender, Heating Plate, Evaporator, Chem Finisher, máy quét thành phần, dụng cụ đong, Mini Smuggler’s Bay. −15 Security.</div><div><b>Riêng nghề này</b>Có <b>Cartel Sector 13</b>: bảo vệ tiệm khỏi trộm nhưng đòi nộp Dream Dust hàng tuần (10 lọ 40% tuần đầu, mỗi tuần +5 lọ, +5%).</div></div>
+<div class="tw"><table class="sm"><thead><tr><th>Cách làm</th><th>Lời mỗi nấm Dream Cap</th></tr></thead><tbody>
+<tr><td>Không module → Near Pharma</td><td class="num">~89</td></tr>
+<tr><td>4 module Blender + 4 module Finisher → Lab Pure (~2.000 cr module)</td><td class="num">~266</td></tr>
+</tbody></table></div>
+<a class="big-link" href="phong-lab.html"><img class="px" src="img/items/dream_dust.webp" alt=""><span><b>Mở Phòng Lab</b><small>Máy tính Dream Dust / Phanta, cách khử tạp chất, pha loãng, chỉ tiêu Cartel, hình đúng / sai</small></span><span class="arr">→</span></a>
+<p class="perk"><b>Perk nên chọn:</b> Intimidating + Wild’s Favorite. <b>Đừng lấy Vigilant</b>: Cartel đã chặn trộm rồi. Đây là nghề để lấy thành tựu Say My Name.</p>
+</section>
+
+<!-- ============ RAT ============ -->
+<section id="rat" class="job">
+<div class="jh"><img class="px jimg" src="img/items/animal-cage.webp" alt=""><div><h2>Rat Wrangler · Nuôi chuột</h2><div class="chips"><span class="badge n">600 cr</span><span class="badge n">nhà 200</span><span class="badge g">có dạy chơi</span><span class="badge g">nhiều tiền nhất</span></div></div></div>
+<div class="kid"><b>Nói dễ hiểu:</b> nuôi chuột trong lồng, cho ăn, để chúng đẻ. Chuột lớn tới khoảng <b>400 g (ngày 10)</b> thì làm thịt bán (~159 cr). Ba điều cấm kỵ: lồng chật, lồng bẩn, và <b>cho chuột ăn thịt chuột</b>.</div>
+<div class="facts"><div><b>Được cho</b>Lồng cũ có máy cho ăn, 6 con chuột (1 đực + 1 cái mỗi tuổi 5, 3, 1 ngày, gen trung bình), dao chặt, bút đánh dấu, máy dán nhãn, 6 quả Nutrifruit, huyết thanh miễn dịch (2 lần). Có ngay thành tựu We Have Rats!</div><div><b>Lời</b>~149 cr mỗi con sau 10 đêm. Retired Rat Rancher ghé thứ Sáu, bán cặp chuột 120 cr/con.</div></div>
+<p class="sub-h">Chuột lớn thế nào (Growth Rate 1, cho ăn đủ)</p>
+<div class="grow">
+<div><b>Ngày 1–4</b><span>+75 g/đêm</span><i style="--w:75%"></i><small>~305 g ngày 4</small></div>
+<div><b>Ngày 5–10</b><span>+17 g/đêm</span><i style="--w:100%"></i><small><b>~407 g ngày 10: làm thịt</b></small></div>
+<div><b>Ngày 11+</b><span>−17 g/đêm</span><i class="dn" style="--w:85%"></i><small>Già, sụt cân</small></div>
+<div><b>Ngày 14+</b><span>75%/đêm chết già</span><i class="dn" style="--w:20%"></i><small>Hiếm sống tới ngày 17</small></div>
+</div>
+<p class="sub-h">5 luật giữ chuột sống</p>
+<div class="tips">
+<div><b>1. Lồng dưới 55%.</b> Lồng 10×3 ô: tối đa ~5 con nặng 180–599 g. Trên 55% thì khó đẻ; trên 70% chuột lớn <b>giết chuột nhỏ</b>. Mỗi thỏi kim loại mở rộng lồng thêm 1 hàng.</div>
+<div><b>2. Miễn dịch (Immunity) ≥ 50 thì không bao giờ tự ốm.</b> Dưới 25 thì kể cả khoẻ cũng mất máu mỗi đêm. Giữ con có Immunity cao để làm giống.</div>
+<div><b>3. Dọn phân mỗi sáng</b> hoặc mua Cleaner Robot (250). Phân + xác chuột phủ 25% lồng là bắt đầu ốm.</div>
+<div><b>4. KHÔNG cho ăn thịt chuột.</b> Chuột ăn thịt chuột bị bệnh Prion (con trung bình 70% bị), vĩnh viễn yếu đi. Lỡ cho thịt chuột vào máy cho ăn thì bấm <b>Empty</b> đổ hết.</div>
+<div><b>5. Đừng để đói 2 đêm.</b> 0 Hunger thì đêm sau chết. Chuột mang thai mà đói thì 75% sảy.</div>
+</div>
+<div class="tw"><table class="sm"><thead><tr><th>Thức ăn rẻ nhất</th><th>kcal</th><th>Giá</th><th>kcal mỗi cr</th></tr></thead><tbody>
+<tr><td>Pilk</td><td class="num">600</td><td class="num">16</td><td class="num">37,5</td></tr>
+<tr><td>Kem vani Bei’s</td><td class="num">1.500</td><td class="num">40</td><td class="num">37,5</td></tr>
+<tr><td>Puice</td><td class="num">450</td><td class="num">14</td><td class="num">32</td></tr>
+<tr><td>Peat (chỉ qua máy cho ăn)</td><td class="num">800</td><td class="num">25</td><td class="num">32</td></tr>
+<tr><td>Nutrifruit tự trồng</td><td class="num">240</td><td>chỉ tốn hạt</td><td>—</td></tr>
+</tbody></table></div>
+<div class="tips">
+<div><b>Máy cho ăn (Livestock Feed Dispenser, 300):</b> chứa 40.000 kcal. Đồ ăn to nên xay vào máy, vì chuột ăn đúng 1 món/đêm và phần trên 500 kcal bị phí.</div>
+<div><b>Bẫy chuột:</b> bẫy + 1 miếng phô mai = 50% mỗi đêm bắt được chuột hoang 3–7 ngày tuổi, gen ngẫu nhiên.</div>
+<div><b>Đẻ:</b> từ 3 ngày tuổi là giao phối được. Lứa trung bình 3 con. Gen con lấy mỗi bên một nửa, 15% đột biến nhỏ.</div>
+<div><b>Mua sau:</b> Ranching 750 cr ở Joe Wild (chuột gen ngẫu nhiên, không có huyết thanh).</div>
+</div>
+<p class="perk"><b>Gợi ý:</b> start nhiều tiền nhất, nhà thấp nhất, nên cùng Apprentice là lựa chọn tốt cho thành tựu mua tiệm trước ngày 50 (Prodigious).</p>
+</section>
+
+<!-- ============ AQUA ============ -->
+<section id="aqua" class="job">
+<div class="jh"><img class="px jimg" src="img/items/sturgeon.png" alt=""><div><h2>Aquafarmer · Nuôi cá</h2><div class="chips"><span class="badge n">150 cr</span><span class="badge n">nhà 240</span><span class="badge g">có dạy chơi</span><span class="badge r">tuần đầu rất kẹt tiền</span></div></div></div>
+<div class="kid"><b>Nói dễ hiểu:</b> nuôi cá rô phi trong bể, cá đẻ trứng, trứng nở thành cá con, 8 ngày thành cá lớn để làm phi lê bán. Sau này nuôi cá tầm lấy <b>trứng cá muối 240 cr/hũ</b>. Chậm lúc đầu, giàu về sau. Nhà phát triển nói nghề này nhẹ nhàng hơn nuôi chuột.</div>
+<div class="facts"><div><b>Được cho</b>2 hệ thống bể tuần hoàn (RAS), cá rô phi, trứng cá, thức ăn cá. Retired Aquafarmer ghé mỗi thứ Ba bán trứng và đồ.</div><div><b>Lời</b>Graft Tilapia: ~320 cr mỗi mẻ (6 con từ 1 túi trứng) sau 8–11 đêm.</div></div>
+<p class="sub-h">Dựng bể từng bước</p>
+<div class="seq"><div class="s"><b>1. NƯỚC</b><img class="px spr" src="img/items/ras-water-tank.png" alt=""><span>Đổ đầy bể <strong>12.000 mL</strong>. Pure là an toàn nhất.</span></div><div class="s"><b>2. PIN + LỌC</b><img class="px spr" src="img/items/water_filter.webp" alt=""><span>Lắp pin (5 vạch/đêm) và đủ <strong>4 lõi lọc</strong>. Ô trống làm bể xuống cấp.</span></div><div class="s"><b>3. THỨC ĂN</b><img class="px spr" src="img/items/livestock_feed_dispenser.webp" alt=""><span>Gắn máy cho ăn, đổ thức ăn cá vào.</span></div><div class="s"><b>4. THẢ CÁ</b><img class="px spr" src="img/items/tilapia-roe-fertilized.png" alt=""><span>Thả trứng đã thụ tinh. Sáng sau nở thành cá con.</span></div></div>
+<div class="tw"><table><thead><tr><th>Cá</th><th>Ăn gì</th><th>Nước</th><th>Đẻ được</th><th>Lớn lúc</th><th>Cần nước</th><th>Cho ra</th></tr></thead><tbody>
+<tr><td><img class="px ic" src="img/items/tilapia.png" alt="">Tilapia</td><td>Thức ăn cá</td><td>Bẩn cũng được</td><td>Có</td><td>Ngày 8</td><td>750 mL</td><td>Nhiều thịt</td></tr>
+<tr><td><img class="px ic" src="img/items/gutter-tilapia.png" alt="">Gutter Tilapia</td><td>Thức ăn cá</td><td>Bẩn cũng được</td><td>Có</td><td>Ngày 10</td><td>750 mL</td><td>Ít thịt hơn, <b>làm sạch bể</b></td></tr>
+<tr><td><img class="px ic" src="img/items/graft-tilapia.png" alt="">Graft Tilapia</td><td>Thức ăn cá</td><td><b>Phải sạch</b></td><td>Có</td><td>Ngày 8</td><td>750 mL</td><td>Miếng ghép da (đồ y tế), lời nhất</td></tr>
+<tr><td><img class="px ic" src="img/items/eel.png" alt="">Eel</td><td><b>Thịt</b></td><td>Sạch</td><td>Không</td><td>Ngày 10</td><td>1.200 mL</td><td>Thịt cao cấp + da</td></tr>
+<tr><td><img class="px ic" src="img/items/electric-eel.png" alt="">Electric Eel</td><td><b>Thịt</b></td><td>Sạch</td><td>Không</td><td>Ngày 10</td><td>1.200 mL</td><td>Sạc điện cho bể và pin</td></tr>
+<tr><td><img class="px ic" src="img/items/sturgeon.png" alt="">Sturgeon (cá tầm)</td><td><b>Thịt</b></td><td>High-Quality</td><td>Không</td><td>Ngày 18</td><td>3.000 mL</td><td><b>Trứng cá muối 240 cr/hũ</b></td></tr>
+</tbody></table></div>
+<div class="dd2">
+<div class="side bad"><span class="lbl">✗ Thả lươn / cá tầm chung bể rô phi</span><small>Cá ăn thịt sẽ ăn cá rô phi. Cá đói ăn bất kỳ con nào nặng tới 1/5 cân nặng của nó; rô phi đói ăn cả trứng và con của mình.</small></div>
+<div class="side good"><span class="lbl">✓ Hai bể riêng</span><small>Bể 1: rô phi (ăn thức ăn cá). Bể 2: lươn + cá tầm (ăn thịt, ví dụ phi lê rô phi từ bể 1).</small></div>
+</div>
+<div class="tips">
+<div><b>Đẻ:</b> cá cái no có 15% mỗi đêm đẻ trứng, cá đực cùng loại thụ tinh. Mỗi túi trứng 6 trứng. Chỉ 3 loại rô phi đẻ được.</div>
+<div><b>Trứng cá muối:</b> dùng Surgery Toolset trên cá tầm còn sống. Mỗi lần mổ mất máu; cá chỉ ra trứng lại khi máu ≥ 90%. 10 hũ đầu mỗi con là trứng cá muối, sau đó ra trứng cá tầm thường.</div>
+<div><b>Đừng cho ăn Gutterflow Pellets quá 25%:</b> thịt rô phi thành không ăn được.</div>
+<div><b>Mổ cá:</b> dao làm bếp, hoặc Auto Butcher (400 cr, không cần điện): đánh dấu cá ban ngày, sáng sau lấy khay.</div>
+<div><b>Mở rộng:</b> bể 8×4 lên tối đa 12×8, nhưng bể to tốn điện hơn. Aquaculture II (1.200 cr) mở lươn và cá tầm, tặng 2 con lươn non.</div>
+<div><b>Không chọn start này?</b> Chơi Water Merchant rồi mua Aquaculture 400 cr. Nuôi cá vốn cần dây chuyền nước sạch.</div>
+</div>
+<p class="perk"><b>Perk nên chọn:</b> Savings + Vigilant (chỉ có 150 cr).</p>
+</section>
+
+<section id="mua"><h2>Mua thêm nghề giữa chừng (Joe Wild, từ ~ngày 7)</h2>
+<p class="note">Giá ở Normal. Thin Margins đắt gấp 1,5, Red Ink gấp 2. Một phần giá trả được bằng “favor” (điểm ân tình) của Joe Wild, kiếm được khi giao dịch.</p>
+<div class="tw"><table class="sm"><thead><tr><th>Nghề</th><th>Giá</th><th>Cần có trước</th><th>Ghi chú</th></tr></thead><tbody>
+<tr><td><img class="px ic" src="img/items/wine_bottle.webp" alt="">Làm rượu (Retired Winemaker)</td><td class="num">200</td><td>—</td><td>Rẻ nhất, ít chỗ nhất. 750 mL nước + BloomBerry + men. 4 / 2 / 1 đêm (không men / men / siêu men). ~100 cr/chai. GloomBerry là hàng cấm, để lâu hỏng.</td></tr>
+<tr><td><img class="px ic" src="img/items/furnace.webp" alt="">Luyện kim (Furnace)</td><td class="num">50 / 200</td><td>—</td><td>Dr. Jackson ghé lần đầu bán 50. 2 sắt vụn = thỏi kém (−15%), 1+1 = thường, 2 quặng = tốt (+25%).</td></tr>
+<tr><td><img class="px ic" src="img/items/magnifier.webp" alt="">Thẩm định (Appraisal)</td><td class="num">85</td><td>—</td><td>Tới ngày 8 (ngày 5 nếu bỏ tutorial). Thu nhập không cần vốn.</td></tr>
+<tr><td><img class="px ic" src="img/items/bottled_water.webp" alt="">Buôn nước</td><td class="num">300</td><td>—</td><td>Dễ học nhất. Thêm vòi Gutterflow 250 + Rustwater 350.</td></tr>
+<tr><td><img class="px ic" src="img/items/hydroponic.webp" alt="">Trồng cây (Retired Farmer)</td><td class="num">350</td><td>—</td><td>Máy cũ + hạt. Máy mới thêm 300.</td></tr>
+<tr><td><img class="px ic" src="img/items/tilapia.png" alt="">Nuôi cá</td><td class="num">400</td><td>Buôn nước</td><td>Aquaculture II 1.200 (lươn, cá tầm).</td></tr>
+<tr><td><img class="px ic" src="img/items/printer.webp" alt="">Thợ súng (Retired Gunsmith)</td><td class="num">650</td><td>—</td><td>Cộng giấy phép 300 / 600 / 900.</td></tr>
+<tr><td><img class="px ic" src="img/items/rat.webp" alt="">Nuôi chuột (Ranching)</td><td class="num">750</td><td>—</td><td>Chuột gen ngẫu nhiên.</td></tr>
+<tr><td><img class="px ic" src="img/items/chem-finisher.webp" alt="">Hoá học (Retired Chemist)</td><td class="num">1.000</td><td>—</td><td>Đủ bộ lab.</td></tr>
+<tr><td>Sửa gen cây (Plant Genetics)</td><td class="num">1.250</td><td>Trồng cây</td><td>Máy quét gen + máy chỉnh DNA + 4 đĩa.</td></tr>
+<tr><td><img class="px ic" src="img/items/smuggler_bay.webp" alt="">Buôn lậu</td><td>Smuggler’s Bay</td><td>—</td><td>Mua Smuggler’s Bay ở Dr. Jackson.</td></tr>
+</tbody></table></div>
+<div class="msg warn"><b>Giấy phép kinh doanh (Business Permit):</b> từ ngày 38, quan chức thương mại ghé mỗi 7 ngày tới khi bạn mua. Normal 1.500 cr (500 / 1.500 / 2.000 / 3.000 theo độ khó). Lần đầu được xin hoãn miễn phí. Từ chối = tội “Kinh doanh không phép”. Chơi lâu thì nên để dành tiền mua.</div>
+</section>
+
+<section id="loi"><h2>Lời mỗi dây chuyền (1 máy, giá gốc, Normal)</h2>
+<p class="note">Thường thì giới hạn là <b>số khách mua</b>, không phải số làm ra được. Chưa tính lãi bán lẻ +15% và mặc cả.</p>
+<div class="bars" id="bars"></div>
+</section>
+
+<section id="kho"><h2>Độ khó thay đổi gì</h2>
+<div class="tw"><table><thead><tr><th></th><th>Price Gouge (dễ)</th><th>Mark Up (Normal)</th><th>Thin Margins (khó)</th><th>Red Ink (thử thách)</th></tr></thead><tbody>
+<tr><td>Lãi bán lẻ</td><td>+20%</td><td>+15%</td><td>0</td><td>0</td></tr>
+<tr><td>Tiền nhà tăng mỗi kỳ</td><td>+2,5%</td><td>+5%</td><td>+10%</td><td>+10%</td></tr>
+<tr><td>Được khất nhà 1 lần</td><td>Có</td><td>Có</td><td>Không</td><td>Không</td></tr>
+<tr><td>Giá mua tiệm (tới ngày 50)</td><td>12.000</td><td>12.000</td><td>24.000</td><td>36.000</td></tr>
+<tr><td>Giấy phép kinh doanh</td><td>500</td><td>1.500</td><td>2.000</td><td>3.000</td></tr>
+<tr><td>Danh tiếng: được / mất</td><td>×1,5 / ×0,5</td><td>×1 / ×1</td><td>×0,75 / ×1,25</td><td>×0,5 / ×2</td></tr>
+<tr><td>Giá Joe Wild</td><td>×1</td><td>×1</td><td>×1,5</td><td>×2</td></tr>
+</tbody></table></div>
+<p class="note">Ở Thin Margins và Red Ink còn mất trợ giúp cứu trợ của Joe Wild, lời nhắc, gợi ý Display Case, và để Aug lên 100% là thua.</p>
+</section>
+
+<section id="tinh"><h2>Máy tính</h2>
+<p class="sub-h">1. Đồ ăn cắp bao giờ bán được (Fence)</p>
+<div class="bench">
+<div class="inputs">
+<div class="row2">
+<div class="field"><label for="h-val">Giá gốc món đồ (cr)</label><input id="h-val" type="number" min="0" step="1" value="120"><small>Số trên tooltip, không phải giá khách đòi</small></div>
+<div class="field"><label for="h-price">Giá bạn định bán (cr)</label><input id="h-price" type="number" min="0" step="1" value="150"></div>
+</div>
+<div class="row2">
+<div class="field"><label for="h-buyer">Bán cho</label><select id="h-buyer"><option value="0">Cartel (không tính tội)</option><option value="0.3333">Revolution (1/3)</option><option value="0.5">Black Market (1/2)</option><option value="1" selected>Người khác (đủ 100%)</option></select></div>
+<div class="field"><label for="h-day">Ngày hiện tại · Security</label><div class="row2 tight"><input id="h-day" type="number" min="1" step="1" value="20" aria-label="Ngày hiện tại"><input id="h-sec" type="number" min="-200" max="200" step="1" value="0" aria-label="Danh tiếng Security"></div></div>
+</div>
+</div>
+<div class="out">
+<div class="read">
+<div class="r hl"><span>Heat lúc mua</span><b id="h-heat">–</b></div>
+<div class="r"><span>Nguội hẳn sau</span><b id="h-nights">–</b></div>
+<div class="r"><span>Giá hối lộ thanh tra Shady</span><b id="h-bribe">–</b></div>
+</div>
+<div class="tw"><table class="sm"><thead><tr><th>Bán sau</th><th>Heat</th><th>Bị khám thấy</th><th>Tính là tội</th></tr></thead><tbody id="h-rows"></tbody></table></div>
+</div>
+</div>
+<p class="sub-h">2. Tiền nhà các tuần tới</p>
+<div class="bench">
+<div class="inputs">
+<div class="row2">
+<div class="field"><label for="r-base">Tiền nhà tuần 1</label><input id="r-base" type="number" min="0" step="10" value="200"><small>Theo bảng nghề ở trên</small></div>
+<div class="field"><label for="r-inc">Độ khó</label><select id="r-inc"><option value="0.025">Price Gouge (+2,5%)</option><option value="0.05" selected>Mark Up (+5%)</option><option value="0.10">Thin Margins / Red Ink (+10%)</option></select></div>
+</div>
+<div class="field"><label for="r-lease">Perk Bad Lease (+40 nhà)</label><select id="r-lease"><option value="0" selected>Không</option><option value="40">Có</option></select></div>
+</div>
+<div class="out">
+<div class="read">
+<div class="r hl"><span>Ngày 49</span><b id="r-49">–</b></div>
+<div class="r"><span>Tổng 7 tuần đầu</span><b id="r-sum">–</b></div>
+</div>
+<div class="rent-wrap"><div class="rent" id="r-bars"></div></div>
+</div>
+</div>
+</section>
+
+<section id="nguon"><h2>Nguồn</h2>
+<ul class="srcs">
+<li><a href="https://probablystolen.gamertw.com/starting-scenarios" target="_blank" rel="noopener">gamertw: Starting Scenarios</a>, <a href="https://probablystolen.gamertw.com/money-making" target="_blank" rel="noopener">Money</a>, <a href="https://probablystolen.gamertw.com/contraband-heat-inspection" target="_blank" rel="noopener">Contraband &amp; Heat</a>, <a href="https://probablystolen.gamertw.com/hydroponics" target="_blank" rel="noopener">Hydroponics</a>, <a href="https://probablystolen.gamertw.com/rat-ranching" target="_blank" rel="noopener">Rat Ranching</a>, <a href="https://probablystolen.gamertw.com/water-guide" target="_blank" rel="noopener">Water</a>, <a href="https://probablystolen.gamertw.com/perks" target="_blank" rel="noopener">Perks</a>, <a href="https://probablystolen.gamertw.com/beginner-guide" target="_blank" rel="noopener">Beginner</a>, <a href="https://probablystolen.gamertw.com/underground-exchange" target="_blank" rel="noopener">Underground Exchange</a> (đọc từ file game v1.0.0.12)</li>
+<li><a href="https://probablystolenwiki.com/wiki/starting-scenarios" target="_blank" rel="noopener">probablystolenwiki: Starting Scenarios</a> (thông báo chính thức, Rock Bottom ngày 112 của TowerNumberNine), <a href="https://probablystolenwiki.com/guides/fish-farming" target="_blank" rel="noopener">Fish Farming</a></li>
+<li><a href="https://questduo.com/probably-stolen/how-to-unlock-all-trades/" target="_blank" rel="noopener">QuestDuo: Unlock All Trades</a>, <a href="https://questduo.com/probably-stolen/fish-farming-guide/" target="_blank" rel="noopener">Fish Farming</a></li>
+<li><a href="https://probablystolendb.wiki/guides/gunsmith/" target="_blank" rel="noopener">Probably Stolen DB: Gunsmith</a>, <a href="https://probablystolendb.wiki/guides/aquafarming/" target="_blank" rel="noopener">Aquafarming</a></li>
+<li><a href="https://www.whisperofthehouse.com/probably-stolen/gunsmith" target="_blank" rel="noopener">Whisper of the House: Custom Gun Orders</a>, <a href="https://probablystolencodex.com/gunsmith-guide" target="_blank" rel="noopener">Probably Stolen Codex: Gunsmith</a></li>
+<li><a href="https://tech.yahoo.com/gaming/articles/probably-stolen-aquaculture-guide-fish-174132005.html" target="_blank" rel="noopener">Destructoid: Aquaculture</a></li>
+</ul>
+</section>
+
+<footer>Trang tham khảo cá nhân do người chơi tự tổng hợp, không liên quan Questing Goose Studio hay tinyBuild. Các trang guide cộng đồng đôi khi lệch nhau; khi có chênh lệch, tin số trong game.</footer>
+</div>
+
+<script>
+(function(){
+const $=id=>document.getElementById(id);
+const nf=(v,d=0)=>Number.isFinite(v)?v.toLocaleString('vi-VN',{maximumFractionDigits:d}):'–';
+const num=id=>{const v=parseFloat($(id).value);return Number.isFinite(v)?v:0};
+const LINES=[
+ ['Dream Dust Lab Pure','mỗi nấm · hàng cấm Mid',266,1],
+ ['Graft Tilapia','mỗi mẻ 6 con · 8–11 đêm',320,0],
+ ['Nuôi chuột','mỗi con · 10 đêm',149,0],
+ ['Kotton Fiber','mỗi đêm · cần Pure Water',130,0],
+ ['Pure Water','mỗi đêm · 1 máy lọc',120,0],
+ ['Rượu Master Vintage','mỗi chai · 2 đêm',95,0],
+ ['Nutrifruit Huge','mỗi đêm',89,0],
+ ['Dream Dust thường','mỗi nấm · không module',89,1],
+ ['Furnace nâng cấp','mỗi đêm',80,0],
+ ['Nước High-Quality','mỗi đêm · Rustwater miễn phí',72,0],
+ ['Furnace thường','mỗi đêm',32,0],
+ ['Máy sạc pin','mỗi đêm',14,0]];
+LINES.sort((a,b)=>b[2]-a[2]);
+const mx=Math.max(...LINES.map(l=>l[2]));
+$('bars').innerHTML=LINES.map(l=>'<div class="bar"><span class="t">'+l[0]+'<small>'+l[1]+'</small></span><span class="v'+(l[3]?' cb':'')+'" style="width:'+(l[2]/mx*100)+'%"></span><span class="n">~'+l[2]+' cr</span></div>').join('')+'<p class="note" style="margin:4px 0 0">Đỏ = hàng cấm (bị khám, phạt). Số liệu: gamertw Money guide, giá gốc ở Normal. Đơn vị khác nhau (mỗi đêm / mỗi món / mỗi mẻ) nên chỉ so tương đối.</p>';
+
+function heat(){
+  const v=num('h-val'),p=num('h-price'),b=parseFloat($('h-buyer').value),day=num('h-day'),sec=num('h-sec');
+  const h0=v<=17?0:v<50?25:v<85?50:v<140?75:100;
+  $('h-heat').innerHTML=h0?h0+' <small>%</small>':'0 <small>không phải đồ nóng</small>';
+  $('h-nights').innerHTML=h0?Math.ceil(h0/18)+' <small>đêm</small>':'–';
+  $('h-bribe').innerHTML=nf(Math.min(400,Math.max(40,100+2*day-2*sec)))+' <small>cr</small>';
+  let rows='';
+  for(let n=0;n<=6;n++){const h=Math.max(0,h0-18*n);rows+='<tr'+(h===0?' style="color:var(--ok);font-weight:600"':'')+'><td>'+(n===0?'Bán ngay':n+' đêm')+'</td><td><span class="heat" style="--h:'+h+'%">'+h+'</span></td><td>'+h+'%</td><td>'+nf(p*h/100*b)+' cr</td></tr>';if(h===0)break;}
+  $('h-rows').innerHTML=rows;
+}
+['h-val','h-price','h-buyer','h-day','h-sec'].forEach(i=>$(i).addEventListener('input',heat));heat();
+
+function rent(){
+  const b=num('r-base')+parseFloat($('r-lease').value),r=parseFloat($('r-inc').value);
+  const w=[];for(let i=0;i<7;i++)w.push(Math.round(b*Math.pow(1+r,i)));
+  $('r-49').innerHTML=nf(w[6])+' <small>cr</small>';
+  $('r-sum').innerHTML=nf(w.reduce((a,c)=>a+c,0))+' <small>cr</small>';
+  const m=Math.max(...w);
+  $('r-bars').innerHTML=w.map((x,i)=>'<div style="height:'+(x/m*100)+'%"><span>'+x+'</span><small>N'+(7*(i+1))+'</small></div>').join('');
+}
+['r-base','r-inc','r-lease'].forEach(i=>$(i).addEventListener('input',rent));rent();
+})();
+</script>

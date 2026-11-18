@@ -1,0 +1,384 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0b0b0c">
+<title>Pha chế hoá chất · Probably Stolen</title>
+<link rel="icon" type="image/png" sizes="192x192" href="../img/icons/icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;600;700;800&display=swap">
+<style>
+:root{--bg:#0b0b0c;--card:#151517;--card2:#1e1e21;--line:#2a2a2f;--ink:#f4f4f6;--sub:#a3a3ab;--faint:#6c6c74;--acc:#8b5cf6;--acc2:#b9a1ff;--ok:#3ddc97;--warn:#ffb454;--bad:#ff6b6b;--blue:#5ab0ff;
+  --font:"Manrope",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:70px}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--font);font-size:16px;line-height:1.55;-webkit-font-smoothing:antialiased}
+.top{position:sticky;top:0;z-index:5;display:flex;align-items:center;gap:10px;padding:calc(10px + env(safe-area-inset-top,0px)) 16px 10px;background:rgba(11,11,12,.92);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+.top a{display:inline-flex;align-items:center;gap:6px;padding:8px 14px;border:1px solid var(--line);border-radius:999px;color:var(--ink);text-decoration:none;font-weight:800;font-size:14px;background:var(--card)}
+.top b{font-size:15px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.wrap{max-width:860px;margin:0 auto;padding:18px 16px calc(40px + env(safe-area-inset-bottom,0px))}
+.crumb{color:var(--faint);font-size:13px;font-weight:700;margin:4px 0 0}
+.crumb a{color:inherit}.crumb span{color:var(--acc2)}
+h1{font-size:28px;line-height:1.2;margin:6px 0 6px}
+.lead{color:var(--sub);margin:0 0 12px}
+.src{font-size:13px;color:var(--faint);border:1px solid var(--line);border-radius:14px;padding:10px 12px;margin:0 0 16px;background:var(--card)}
+.src a{color:var(--acc2)}
+.toc{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 22px}
+.toc a{padding:6px 11px;border:1px solid var(--line);border-radius:999px;background:var(--card);color:var(--sub);text-decoration:none;font-size:13px;font-weight:700}
+section{border-top:1px solid var(--line);padding:22px 0 8px}
+h2{font-size:21px;margin:0 0 10px;display:flex;align-items:center;gap:10px}
+h2 .n{display:inline-grid;place-items:center;min-width:30px;height:30px;border-radius:8px;background:var(--acc);color:#fff;font-size:15px;flex:none}
+h3{font-size:17px;margin:18px 0 6px}
+p,li{color:#d9d9de}
+ul,ol{padding-left:20px;margin:6px 0 10px}
+.note{font-size:13px;color:var(--sub)}
+.px{image-rendering:pixelated;image-rendering:crisp-edges;object-fit:contain}
+.tw{overflow-x:auto;margin:8px 0 14px;border:1px solid var(--line);border-radius:14px}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+th{color:var(--sub);font-size:13px;background:var(--card)}
+tr:last-child td{border-bottom:0}
+.box{border-radius:14px;padding:11px 14px;margin:10px 0;font-size:14px;border:1px solid var(--line);background:var(--card)}
+.box.warn{border-color:rgba(255,180,84,.45);background:rgba(255,180,84,.07)}
+.box.bad{border-color:rgba(255,107,107,.45);background:rgba(255,107,107,.07)}
+.box.ok{border-color:rgba(61,220,151,.4);background:rgba(61,220,151,.06)}
+.box b:first-child{display:block;margin-bottom:2px}
+/* kit grid */
+.kit{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px;margin:10px 0}
+.kit div{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:10px;display:flex;gap:10px;align-items:center}
+.kit img{width:44px;height:44px;flex:none;background:var(--card2);border-radius:8px;padding:4px}
+.kit b{display:block;font-size:13px;line-height:1.25}
+.kit small{display:block;font-size:12px;color:var(--sub);line-height:1.3}
+/* flow */
+.flow{display:flex;flex-wrap:wrap;align-items:stretch;gap:6px;margin:12px 0}
+.st{flex:1 1 110px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:10px 8px;text-align:center;position:relative}
+.st img{width:56px;height:56px;display:block;margin:0 auto 6px}
+.st .k{font-size:11px;font-weight:800;color:var(--acc2)}
+.st b{display:block;font-size:14px}
+.st small{display:block;font-size:12px;color:var(--sub);line-height:1.3;margin-top:2px}
+.st.opt{border-style:dashed}
+.ar{flex:none;align-self:center;color:var(--faint);font-weight:800;font-size:18px}
+@media(max-width:560px){.flow{flex-direction:column}.ar{transform:rotate(90deg);text-align:center}.st{flex:none;display:flex;align-items:center;gap:10px;text-align:left;padding:8px 12px}.st img{margin:0;width:44px;height:44px;flex:none}}
+figure{margin:12px 0}
+figure img{width:100%;border-radius:14px;border:1px solid var(--line);display:block}
+figcaption{font-size:12px;color:var(--faint);margin-top:6px}
+/* steps */
+.step{display:flex;gap:12px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px 14px;margin:10px 0}
+.step .ic{flex:none;width:52px;text-align:center}
+.step .ic img{width:48px;height:48px;background:var(--card2);border-radius:8px;padding:4px}
+.step .ic span{display:block;font-size:11px;font-weight:800;color:var(--acc2);margin-top:4px}
+.step h4{margin:0 0 4px;font-size:16px}
+.step p{margin:4px 0;font-size:14px}
+.do{color:var(--ok);font-weight:800}.dont{color:var(--bad);font-weight:800}
+/* thermometer */
+.therm{margin:12px 0;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px 14px}
+.trow{display:grid;grid-template-columns:118px 1fr;gap:8px;align-items:center;margin:9px 0;font-size:13px}
+.trow .lb{font-weight:700;line-height:1.25}
+.bar{position:relative;height:22px;background:var(--card2);border-radius:6px;overflow:hidden}
+.bar i{position:absolute;top:0;bottom:0;border-radius:4px}
+.bar i.g{background:rgba(61,220,151,.55)}.bar i.r{background:rgba(255,107,107,.45)}.bar i.y{background:rgba(255,180,84,.4)}
+.bar em{position:absolute;top:2px;font-style:normal;font-size:11px;font-weight:800;color:#fff;white-space:nowrap;text-shadow:0 1px 2px #000}
+.scale{display:grid;grid-template-columns:118px 1fr;gap:8px;font-size:11px;color:var(--faint)}
+.scale div:last-child{display:flex;justify-content:space-between}
+.mark99{position:absolute;top:0;bottom:0;width:2px;background:var(--blue)}
+/* modules */
+.mods{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:10px;margin:10px 0}
+.mod{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px 14px}
+.mod .hd{display:flex;gap:10px;align-items:center;margin-bottom:8px}
+.mod .hd img{width:40px;height:40px;background:var(--card2);border-radius:8px;padding:4px}
+.mod .hd b{font-size:15px}
+.lv{display:grid;grid-template-columns:62px 1fr 44px;gap:8px;align-items:center;font-size:12px;margin:4px 0;color:var(--sub)}
+.lv .b{height:10px;background:var(--card2);border-radius:5px;overflow:hidden}
+.lv .b i{display:block;height:100%;background:var(--bad);border-radius:5px}
+.lv .v{text-align:right;font-weight:800;color:var(--ink)}
+.heat li{font-size:13px;margin:3px 0}
+/* grades */
+.grades{margin:10px 0}
+.gr{display:grid;grid-template-columns:76px 1fr 64px;gap:8px;align-items:center;margin:5px 0;font-size:13px}
+.gr .pc{color:var(--sub);font-weight:700}
+.gr .nm{padding:7px 10px;border-radius:8px;font-weight:800;color:#0b0b0c}
+.gr .ef{text-align:right;font-weight:800}
+/* products */
+.prods{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:10px;margin:10px 0}
+.pd{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px 14px}
+.pd .hd{display:flex;gap:10px;align-items:center}
+.pd .hd img{width:48px;height:48px;background:var(--card2);border-radius:8px;padding:6px}
+.pd h4{margin:0;font-size:16px}
+.tag{display:inline-block;font-size:11px;font-weight:800;padding:2px 8px;border-radius:999px}
+.tag.l{background:rgba(61,220,151,.13);color:var(--ok)}.tag.c{background:rgba(255,107,107,.15);color:var(--bad)}.tag.s{background:rgba(185,161,255,.15);color:var(--acc2)}
+.pd dl{margin:8px 0 0;font-size:13px;display:grid;grid-template-columns:86px 1fr;gap:4px 8px}
+.pd dt{color:var(--faint);font-weight:700}.pd dd{margin:0;color:#d9d9de}
+.pd .ing{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px}
+.pd .ing img{width:28px;height:28px;background:var(--card2);border-radius:6px;padding:3px}
+/* timeline */
+.tl{position:relative;margin:12px 0;padding-left:26px}
+.tl:before{content:"";position:absolute;left:10px;top:6px;bottom:6px;width:2px;background:var(--line)}
+.tl div{position:relative;margin:0 0 14px}
+.tl div:before{content:attr(data-n);position:absolute;left:-26px;top:0;width:22px;height:22px;border-radius:50%;background:var(--acc);color:#fff;font-size:12px;font-weight:800;display:grid;place-items:center}
+.tl b{display:block}
+.tl p{margin:2px 0 0;font-size:14px}
+.chk li{list-style:none;margin:5px 0;font-size:14px}
+.chk{padding-left:0}
+.chk li:before{content:"✗ ";color:var(--bad);font-weight:800}
+</style>
+</head>
+<body>
+<div class="top"><a href="./">‹ Game</a><b>Pha chế hoá chất</b></div>
+<div class="wrap">
+<p class="crumb"><a href="./">Game</a> › <a href="probably-stolen.html">Probably Stolen</a> › <span>Pha chế hoá chất</span></p>
+<h1>Tutorial pha chế hoá chất cho người mới</h1>
+<p class="lead">Từ lúc có bộ máy tới khi ra viên thuốc hạng cao và đem bán: cần gì, làm theo thứ tự nào, giữ nhiệt độ bao nhiêu, nâng cấp gì trước, và bán thì ảnh hưởng danh tiếng ra sao.</p>
+<div class="src">Tổng hợp và dịch từ <a href="https://probablystolenwiki.com/guides/chemistry" target="_blank" rel="noopener">probablystolenwiki.com</a> và <a href="https://probablystolenguides.com/" target="_blank" rel="noopener">probablystolenguides.com</a> (trang fan), vốn tổng hợp từ các guide Steam "The Complete Chemist Guide", "Chemistry and You", "How to create high purity acid and base" và video 1.0 của CthuLuck, ProbablyNotMee. Số liệu là <b>báo cáo cộng đồng</b> (bản 1.0, đối chiếu tới 100-Rev5–Rev13), chưa được các trang này tự thử lại. Ảnh vật phẩm lấy từ probablystolenguides.com, ảnh máy là ảnh chính thức trên Steam.</div>
+<nav class="toc">
+<a href="#chuan-bi">1. Chuẩn bị</a><a href="#quy-trinh">2. Quy trình</a><a href="#tung-buoc">3. Từng bước</a><a href="#nhiet-do">4. Nhiệt độ</a><a href="#module">5. Module</a><a href="#tinh-khiet">6. Độ tinh khiết</a><a href="#san-pham">7. Sản phẩm</a><a href="#loi">8. Lỗi hay gặp</a><a href="#ban">9. Đem bán</a><a href="#lo-trinh">10. Lộ trình</a>
+</nav>
+
+<section id="chuan-bi">
+<h2><span class="n">1</span>Cần chuẩn bị gì</h2>
+<h3>Cách có bộ máy</h3>
+<ul>
+<li><b>Bắt đầu nghề Chemist</b> – được tặng sẵn bộ kit (một số máy ở tình trạng cũ "Shabby").</li>
+<li><b>Đang chơi tiệm thường:</b> gọi <b>Joe Wild</b>, mua giới thiệu <b>Retired Chemist</b> (giá gốc khoảng <b>1.000 Credits</b>, xem báo giá thật) → được giao bộ máy cũ kèm sổ <b>Chemistry 101</b>.</li>
+<li>Wild còn có thể giới thiệu <b>Lower Levels Chemist</b> – người bán thuốc rẻ nhưng phạm pháp. Mua thuốc làm sẵn về bán là <i>buôn hàng</i>, không phải tự sản xuất.</li>
+</ul>
+<h3>Bộ kit Chemist gồm</h3>
+<div class="kit">
+<div><img class="px" src="img/items/blender.webp" alt=""><span><b>Blender</b><small>Xay nguyên liệu rắn thành bột nhão</small></span></div>
+<div><img class="px" src="img/items/heating-plate.webp" alt=""><span><b>Heating Plate</b><small>Đun để chiết xuất / phản ứng</small></span></div>
+<div><img class="px" src="img/items/evaporator.webp" alt=""><span><b>Evaporator</b><small>Bay hơi chất lỏng qua đêm (cần điện)</small></span></div>
+<div><img class="px" src="img/items/chem-finisher.webp" alt=""><span><b>Chem Finisher</b><small>Ra thành phẩm, chấm hạng</small></span></div>
+<div><img class="px" src="img/items/chem-scanner.webp" alt=""><span><b>Composition Spectrometer</b><small>Đo thành phần – bắt buộc</small></span></div>
+<div><img class="px" src="img/items/100ml-cylinder.webp" alt=""><span><b>Ống đong</b><small>Đong sát lượng axit/bazơ</small></span></div>
+<div><img class="px" src="img/items/water_pitcher.webp" alt=""><span><b>Pitcher (bình rót)</b><small>Dùng để lọc</small></span></div>
+<div><img class="px" src="img/items/kotton_fabric.webp" alt=""><span><b>Kotton Fabric</b><small>Vải lọc hạt lớn</small></span></div>
+<div><img class="px" src="img/items/common_chemical.webp" alt=""><span><b>Chemical Supplies</b><small>Gói hoá chất – nhớ mở ra</small></span></div>
+<div><img class="px" src="img/items/coffee_bean.webp" alt=""><span><b>Cà phê</b><small>Nguyên liệu mẻ caffeine đầu tiên</small></span></div>
+<div><img class="px" src="img/items/chemistry-manual.png" alt=""><span><b>Chemistry Manual</b><small>Công thức trong game</small></span></div>
+</div>
+<div class="box warn"><b>Trước khi bắt đầu</b>Mở gói vật tư ra, tách bình rỗng khỏi nguyên liệu. Kiểm tra <b>pin</b> và giấy hướng dẫn gắn trong Evaporator. Giữ riêng tiền thuê nhà – tính cả nguyên liệu, hao mòn dụng cụ, điện và số đêm máy bị chiếm vào giá mẻ.</div>
+<h3>Trong gói Chemical Supplies có gì</h3>
+<div class="tw"><table>
+<tr><th>Gói</th><th>Bên trong (theo 1 guide)</th><th>Ghi chú</th></tr>
+<tr><td><img class="px" src="img/items/common_chemical.webp" alt="" style="width:28px;height:28px;vertical-align:middle"> <b>Common</b></td><td>2 chai cồn mini, Lipobond Agent, dung dịch axit, dung dịch bazơ</td><td>Giá gốc 50. Mua từ Retired Chemist, scavenger, Thief.</td></tr>
+<tr><td><img class="px" src="img/items/restricted_chemical.webp" alt="" style="width:28px;height:28px;vertical-align:middle"> <b>Restricted</b></td><td>2 chai tiền chất (N-Methylol + chất ổn định), 1 chai Reducing Agent</td><td>Nguyên liệu làm <b>Phanta</b>.</td></tr>
+</table></div>
+<div class="box bad"><b>Chai axit/bazơ có lẫn kim loại nặng</b>Trong lab không có gì loại bỏ được kim loại nặng. Đo <b>từng chai</b> bằng spectrometer và dùng chai sạch nhất – nếu không sẽ không bao giờ đạt Lab Pure.</div>
+</section>
+
+<section id="quy-trinh">
+<h2><span class="n">2</span>Sơ đồ quy trình</h2>
+<p>Mọi mẻ đều đi qua cùng một dây chuyền. Bình chứa đi theo mẻ từ máy này sang máy khác; đo bằng spectrometer sau mỗi bước.</p>
+<div class="flow">
+<div class="st"><img class="px" src="img/items/dream_cap.webp" alt=""><div><span class="k">ĐẦU VÀO</span><b>Nguyên liệu</b><small>Nấm, cà phê, hoá chất</small></div></div>
+<div class="ar">→</div>
+<div class="st"><img class="px" src="img/items/blender.webp" alt=""><div><span class="k">BƯỚC 1</span><b>Blender</b><small>Xay thành bột nhão</small></div></div>
+<div class="ar">→</div>
+<div class="st"><img class="px" src="img/items/heating-plate.webp" alt=""><div><span class="k">BƯỚC 2</span><b>Heating Plate</b><small>Đun với dung môi, canh nhiệt</small></div></div>
+<div class="ar">→</div>
+<div class="st opt"><img class="px" src="img/items/kotton_fabric.webp" alt=""><div><span class="k">BƯỚC 3 · NẾU CẦN</span><b>Lọc</b><small>Vải Kotton trong pitcher</small></div></div>
+<div class="ar">→</div>
+<div class="st"><img class="px" src="img/items/evaporator.webp" alt=""><div><span class="k">BƯỚC 4 · QUA ĐÊM</span><b>Evaporator</b><small>Bay hơi hết nước/cồn</small></div></div>
+<div class="ar">→</div>
+<div class="st"><img class="px" src="img/items/chem-finisher.webp" alt=""><div><span class="k">BƯỚC 5</span><b>Chem Finisher</b><small>Chọn công thức → thành phẩm</small></div></div>
+<div class="ar">→</div>
+<div class="st"><img class="px" src="img/items/chem-scanner.webp" alt=""><div><span class="k">KIỂM TRA</span><b>Spectrometer</b><small>Đo độ tinh khiết thật</small></div></div>
+</div>
+<figure><img src="img/shots/machines.jpg" alt="Giao diện các máy hoá chất trong game" loading="lazy"><figcaption>Giao diện máy trong game (ảnh chính thức trên Steam): Chem Finisher, Evaporator, Heating Plate và Cryptographic Desequencer. Số trên bảng có thể khác bản của bạn.</figcaption></figure>
+</section>
+
+<section id="tung-buoc">
+<h2><span class="n">3</span>Làm từng bước</h2>
+<div class="step"><div class="ic"><img class="px" src="img/items/blender.webp" alt=""><span>BƯỚC 1</span></div><div>
+<h4>Xay bằng Blender</h4>
+<p>Gắn một bình chứa vào máy, cho nguyên liệu rắn của công thức vào và xay thành bột nhão.</p>
+<p><span class="do">✓</span> Đo mẻ bằng spectrometer trước khi chuyển. <span class="dont">✗</span> Blender chưa có module hao mất <b>35%</b> nguyên liệu.</p>
+</div></div>
+<div class="step"><div class="ic"><img class="px" src="img/items/heating-plate.webp" alt=""><span>BƯỚC 2</span></div><div>
+<h4>Đun trên Heating Plate</h4>
+<p>Chuyển bình sang bếp, dùng đúng dung môi (cồn…) và nhiệt độ sổ tay ghi cho sản phẩm đó.</p>
+<p><span class="do">✓</span> Bếp chưa nâng cấp chỉ nhắm cố định 99°C → giữ nhiệt thấp bằng cách <b>bật/tắt giữa Low và Off</b> trong lúc nhìn nhiệt kế. <span class="dont">✗</span> Đừng để bếp chạy liên tục – xem bảng nhiệt độ ở mục 4.</p>
+</div></div>
+<div class="step"><div class="ic"><img class="px" src="img/items/water_pitcher.webp" alt=""><span>BƯỚC 3</span></div><div>
+<h4>Lọc (chỉ khi công thức yêu cầu)</h4>
+<p>Đặt <b>Kotton Fabric vào pitcher trống trước</b>, rồi mới rót hỗn hợp qua.</p>
+<p><span class="dont">✗</span> Nhét vải vào sau khi đã đổ đầy thì không lọc được gì.</p>
+</div></div>
+<div class="step"><div class="ic"><img class="px" src="img/items/evaporator.webp" alt=""><span>BƯỚC 4</span></div><div>
+<h4>Bay hơi bằng Evaporator (qua đêm)</h4>
+<p>Chuyển sang máy bay hơi đã có điện, để chạy qua đêm. Sáng ra đo xem còn sót nước, cồn hay Lipobond không.</p>
+<p><span class="dont">✗</span> Chem Finisher <b>không nhận mẻ còn ướt</b>. Bay hơi khô hẳn rồi mới đi tiếp. Máy này có thể lắp module thu hồi cồn (Solvent Recovery).</p>
+</div></div>
+<div class="step"><div class="ic"><img class="px" src="img/items/chem-finisher.webp" alt=""><span>BƯỚC 5</span></div><div>
+<h4>Ra thành phẩm ở Chem Finisher</h4>
+<p>Chọn đúng công thức đầu ra. Máy dùng một phần mẻ khô cho mỗi đơn vị (xem mục 7) và chấm hạng theo độ tinh khiết.</p>
+<p><span class="do">✓</span> Đo thành phẩm bằng spectrometer. Nhãn chỉ là lời tuyên bố, máy đo mới là kiểm tra thật. Để mẻ thử riêng, không trộn với hàng chưa đo.</p>
+</div></div>
+<div class="box"><b>Tạo viên thất bại? Kiểm tra theo thứ tự</b>Đã chọn đúng công thức chưa → còn chất lỏng dễ bay hơi sót lại không → đúng hoạt chất chưa → dung tích bình có đủ không. Đừng bấm Output liên tục hay mua thêm máy trước khi tìm ra bước bị kẹt; để lâu ở sai máy không bù được nguyên liệu thiếu.</div>
+</section>
+
+<section id="nhiet-do">
+<h2><span class="n">4</span>Nhiệt độ – chỗ hay hỏng mẻ nhất</h2>
+<p>Thang 0–160°C. <span style="color:var(--ok);font-weight:800">Xanh</span> = vùng an toàn, <span style="color:var(--bad);font-weight:800">đỏ</span> = hỏng/mất, vạch <span style="color:var(--blue);font-weight:800">xanh dương</span> = 99°C (giới hạn bếp chưa nâng cấp).</p>
+<div class="therm">
+<div class="trow"><div class="lb">Chiết nấm Dream/Nightmare Cap + cồn</div><div class="bar"><i class="g" style="left:25%;width:5.6%"></i><i class="r" style="left:31.25%;right:0"></i><em style="left:31%">&gt;50°C hoá bã</em><span class="mark99" style="left:61.9%"></span></div></div>
+<div class="trow"><div class="lb">Dịch chiết Dream Cap</div><div class="bar"><i class="g" style="left:0;width:37.5%"></i><i class="r" style="left:37.5%;right:0"></i><em style="left:38%">&gt;60°C phân huỷ</em><span class="mark99" style="left:61.9%"></span></div></div>
+<div class="trow"><div class="lb">Dịch chiết Nightmare Cap</div><div class="bar"><i class="g" style="left:0;width:31.25%"></i><i class="r" style="left:31.25%;right:0"></i><em style="left:32%">&gt;50°C phân huỷ</em><span class="mark99" style="left:61.9%"></span></div></div>
+<div class="trow"><div class="lb">Cồn (dung môi)</div><div class="bar"><i class="g" style="left:0;width:48.75%"></i><i class="y" style="left:48.75%;right:0"></i><em style="left:49.5%">&gt;78°C bay hơi</em><span class="mark99" style="left:61.9%"></span></div></div>
+<div class="trow"><div class="lb">Lipobond Agent</div><div class="bar"><i class="g" style="left:0;width:34.4%"></i><i class="y" style="left:34.4%;right:0"></i><em style="left:35%">&gt;55°C bay hơi</em><span class="mark99" style="left:61.9%"></span></div></div>
+<div class="trow"><div class="lb">Phản ứng Phanta</div><div class="bar"><i class="g" style="left:68.75%;width:12.5%"></i><i class="r" style="left:81.25%;right:0"></i><em style="left:2%">cần bếp có module</em><em style="left:82%">≥130°C</em><span class="mark99" style="left:61.9%"></span></div></div>
+<div class="scale"><div></div><div><span>0</span><span>40</span><span>80</span><span>120</span><span>160°C</span></div></div>
+</div>
+<div class="tw"><table>
+<tr><th>Bước / chất</th><th>Giữ ở</th><th>Vượt quá thì</th></tr>
+<tr><td>Nấm Dream/Nightmare Cap xay + cồn</td><td><b>40–49°C</b></td><td>Trên 50°C nấm biến thành bã thực vật</td></tr>
+<tr><td>Dịch chiết Dream Cap</td><td>&lt; 60°C</td><td>Phân huỷ</td></tr>
+<tr><td>Dịch chiết Nightmare Cap</td><td>&lt; 50°C</td><td>Phân huỷ</td></tr>
+<tr><td>Cồn</td><td>≤ 78°C</td><td>Bay hơi mất dung môi</td></tr>
+<tr><td>Lipobond Agent</td><td>≤ 55°C</td><td>Bay hơi mất</td></tr>
+<tr><td>Phanta</td><td><b>110–130°C</b> (nên 120–129°C)</td><td>Từ 130°C phân huỷ. Bếp thường chỉ lên 99°C → bắt buộc có module.</td></tr>
+</table></div>
+<div class="box warn"><b>Sổ tay nói 40–60°C, người chơi nói dưới 50°C</b>Chemistry 101 trong game ghi 40–60°C cho bước chiết nấm, nhưng hai guide Steam báo nấm hoá bã trên 50°C. Giữ <b>40–49°C</b>: vẫn nằm trong khoảng của sổ tay mà không mất nấm.</div>
+</section>
+
+<section id="module">
+<h2><span class="n">5</span>Chem Module – nâng cấp gì trước</h2>
+<p>Ba máy nhận Chem Module <img class="px" src="img/items/chem-module.webp" alt="" style="width:24px;height:24px;vertical-align:middle">, mỗi module thêm vào đổi một thứ:</p>
+<div class="mods">
+<div class="mod"><div class="hd"><img class="px" src="img/items/chem-finisher.webp" alt=""><b>Chem Finisher – tạp chất cộng vào</b></div>
+<div class="lv"><span>0 module</span><span class="b"><i style="width:100%"></i></span><span class="v">12%</span></div>
+<div class="lv"><span>1</span><span class="b"><i style="width:50%"></i></span><span class="v">6%</span></div>
+<div class="lv"><span>2</span><span class="b"><i style="width:25%"></i></span><span class="v">3%</span></div>
+<div class="lv"><span>3</span><span class="b"><i style="width:8.3%"></i></span><span class="v">1%</span></div>
+<div class="lv"><span>4</span><span class="b"><i style="width:0"></i></span><span class="v">0%</span></div>
+<p class="note">Không module thì mẻ sạch hoàn hảo cũng chỉ ra tối đa 88% (Near-Pharma).</p></div>
+<div class="mod"><div class="hd"><img class="px" src="img/items/blender.webp" alt=""><b>Blender – nguyên liệu bị hao</b></div>
+<div class="lv"><span>0 module</span><span class="b"><i style="width:100%"></i></span><span class="v">35%</span></div>
+<div class="lv"><span>1</span><span class="b"><i style="width:57%"></i></span><span class="v">20%</span></div>
+<div class="lv"><span>2</span><span class="b"><i style="width:28.6%"></i></span><span class="v">10%</span></div>
+<div class="lv"><span>3</span><span class="b"><i style="width:14.3%"></i></span><span class="v">5%</span></div>
+<div class="lv"><span>4</span><span class="b"><i style="width:0"></i></span><span class="v">0%</span></div></div>
+<div class="mod"><div class="hd"><img class="px" src="img/items/heating-plate.webp" alt=""><b>Heating Plate – kiểm soát nhiệt</b></div>
+<ul class="heat"><li><b>0 module:</b> nhắm cố định 99°C</li><li><b>1:</b> trần nhiệt lên 160°C (đủ cho Phanta)</li><li><b>2:</b> tự đặt nhiệt độ mục tiêu</li><li><b>3–4:</b> nóng nhanh hơn</li></ul></div>
+</div>
+<div class="box ok"><b>Thứ tự nên mua</b>1) Module cho <b>Chem Finisher</b> – quyết định hạng và giá. 2) <b>Heating Plate</b> – bắt buộc nếu làm Phanta, module thứ 2 giúp khỏi bật/tắt tay. 3) <b>Blender</b> – đỡ hao nguyên liệu. Chỉ nâng cấp khi mẻ trước đã bán được và còn tiền thuê.</div>
+</section>
+
+<section id="tinh-khiet">
+<h2><span class="n">6</span>Độ tinh khiết, hạng và giá</h2>
+<p>Độ tinh khiết = phần trăm hoạt chất trong phần mẻ máy dùng, <i>sau khi</i> cộng tạp chất của Finisher.</p>
+<div class="grades">
+<div class="gr"><span class="pc">≥ 99%</span><span class="nm" style="background:#3ddc97">Lab Pure</span><span class="ef" style="color:var(--ok)">+135%</span></div>
+<div class="gr"><span class="pc">90–99%</span><span class="nm" style="background:#7fe0b0">Pharma Grade</span><span class="ef" style="color:var(--ok)">+85%</span></div>
+<div class="gr"><span class="pc">80–90%</span><span class="nm" style="background:#b9e6a0">Near-Pharma</span><span class="ef" style="color:var(--ok)">+40%</span></div>
+<div class="gr"><span class="pc">60–80%</span><span class="nm" style="background:#d8d8d8">Street Standard</span><span class="ef">±0</span></div>
+<div class="gr"><span class="pc">45–60%</span><span class="nm" style="background:#ffc47a">Cut Product</span><span class="ef" style="color:var(--warn)">−45%</span></div>
+<div class="gr"><span class="pc">30–45%</span><span class="nm" style="background:#ff9a7a">Junk Grade</span><span class="ef" style="color:var(--bad)">−75%</span></div>
+<div class="gr"><span class="pc">&lt; 30%</span><span class="nm" style="background:#ff6b6b">Starch Grade</span><span class="ef" style="color:var(--bad)">−95%</span></div>
+</div>
+<h3>Muốn đạt Lab Pure</h3>
+<ul>
+<li>Lắp <b>đủ 4 module</b> ở Finisher. Có 3 module thì vẫn cộng 1% → mẻ phải sạch tuyệt đối mới vừa chạm 99%, lẫn chút tạp là tụt xuống Pharma.</li>
+<li>Chọn chai axit/bazơ <b>không có kim loại nặng</b>.</li>
+<li><b>Đong sát</b> lượng axit/bazơ cần – phần dư nằm lại trong mẻ và kéo độ tinh khiết xuống.</li>
+<li>Bay hơi <b>khô hẳn</b> trước khi vào Finisher.</li>
+</ul>
+<div class="box"><b>Mẹo cộng đồng: làm sạch axit/bazơ</b>Chuyển chai ít bẩn nhất sang bình lớn, thêm khoảng 1 mL nước chất lượng cao, thả viên lọc nước <img class="px" src="img/items/water_tablet.webp" alt="" style="width:20px;height:20px;vertical-align:middle"> từng chút một và xem chỉ số chất ô nhiễm hoá học. Không lọc ở bước này. Viên lọc <b>chỉ có tác dụng khi trong bình có nước</b> – thả vào hỗn hợp khô là vô ích. Đừng chép số viên cố định từ guide cũ.</div>
+<p class="note">Thành tựu <b>Say My Name</b>: cần một món thuốc gây nghiện hạng Lab Pure do chính bạn làm ra – hàng mua hay đổi tên không tính.</p>
+</section>
+
+<section id="san-pham">
+<h2><span class="n">7</span>Các sản phẩm</h2>
+<div class="prods">
+<div class="pd"><div class="hd"><img class="px" src="img/items/caffeine_pill.webp" alt=""><div><h4>Caffeine Pill</h4><span class="tag l">Hợp pháp · nên làm đầu tiên</span></div></div>
+<dl><dt>Cần / viên</dt><dd><b>5 mL</b> mẻ khô</dd><dt>Nguyên liệu</dt><dd>Cà phê – ví dụ trong Chemistry Manual</dd><dt>Quy trình</dt><dd>Blender → Hot Plate → Evaporator → Chem Finisher</dd></dl>
+<div class="ing"><img class="px" src="img/items/coffee_bean.webp" alt="" title="Coffee Beans"></div></div>
+<div class="pd"><div class="hd"><img class="px" src="img/items/dream_dust.webp" alt=""><div><h4>Dream Dust</h4><span class="tag c">Hàng cấm</span></div></div>
+<dl><dt>Cần / lọ</dt><dd><b>2 mL</b> mẻ khô</dd><dt>Nguyên liệu</dt><dd>Nấm Dream Cap + cồn</dd><dt>Nhiệt độ</dt><dd>Chiết 40–49°C, dịch chiết &lt; 60°C</dd></dl>
+<div class="ing"><img class="px" src="img/items/dream_cap.webp" alt="" title="Dream Cap"><img class="px" src="img/items/common_chemical.webp" alt="" title="Chemical Supplies (Common)"></div></div>
+<div class="pd"><div class="hd"><img class="px" src="img/items/nightmare_dust.webp" alt=""><div><h4>Nightmare Dust</h4><span class="tag c">Hàng cấm · độc</span></div></div>
+<dl><dt>Cần / lọ</dt><dd><b>4 mL</b> mẻ khô</dd><dt>Nguyên liệu</dt><dd>Nấm Nightmare Cap + cồn</dd><dt>Nhiệt độ</dt><dd>Giữ dưới 50°C cả lúc chiết lẫn dịch chiết</dd></dl>
+<div class="ing"><img class="px" src="img/items/nightmare_cap.webp" alt="" title="Nightmare Cap"></div></div>
+<div class="pd"><div class="hd"><img class="px" src="img/items/fanta_pill.webp" alt=""><div><h4>Phanta Pill</h4><span class="tag c">Hàng cấm · gây nghiện mạnh</span></div></div>
+<dl><dt>Cần / viên</dt><dd><b>0,5 mL</b> mẻ khô</dd><dt>Nguyên liệu</dt><dd>Gói Chemical Supplies (Restricted): N-Methylol + chất ổn định, Reducing Agent</dd><dt>Nhiệt độ</dt><dd>120–129°C · bếp phải có module</dd></dl>
+<div class="ing"><img class="px" src="img/items/restricted_chemical.webp" alt="" title="Chemical Supplies (Restricted)"><img class="px" src="img/items/med_bottle_violet.webp" alt="" title="N-Methylol Base"><img class="px" src="img/items/med_bottle_orange.webp" alt="" title="Reducing Agent"></div></div>
+<div class="pd"><div class="hd"><img class="px" src="img/items/pink_alt_injector.webp" alt=""><div><h4>Nomore Injector</h4><span class="tag s">Phần thưởng cốt truyện</span></div></div>
+<dl><dt>Cần / ống</dt><dd><b>4 mL</b> mẻ khô</dd><dt>Ghi chú</dt><dd>Thuốc giảm đau không gây nghiện. Cách mở công thức là spoiler cốt truyện nên nguồn không ghi.</dd></dl></div>
+</div>
+<p class="note">Chỉ những gì nguồn ghi rõ được đưa vào. Lượng dung môi, axit/bazơ và các bước chi tiết của từng sản phẩm hãy xem Chemistry Manual trong game – đừng thay công thức trong game bằng mẹo chưa kiểm chứng.</p>
+</section>
+
+<section id="loi">
+<h2><span class="n">8</span>Lỗi hay gặp</h2>
+<ul class="chk">
+<li>Theo mức 60°C trong sổ tay → nấm quá 50°C hoá bã.</li>
+<li>Để dịch chiết Nightmare (&gt;50°C) hoặc Phanta (≥130°C) quá nóng. Bật/tắt bếp, đừng để chạy liên tục.</li>
+<li>Đun mất dung môi: cồn bay hơi trên 78°C, Lipobond trên 55°C.</li>
+<li>Cho dư axit/bazơ – phần dư làm giảm độ tinh khiết.</li>
+<li>Lấy chai axit/bazơ đầu tiên vớ được mà không đo kim loại nặng.</li>
+<li>Cho mẻ còn ướt vào Finisher – máy không nhận.</li>
+<li>Thả viên lọc nước vào hỗn hợp khô – không có tác dụng.</li>
+<li>Nhét vải Kotton vào pitcher sau khi đã đổ đầy – không lọc được.</li>
+<li>Mua thêm máy trước khi tìm ra bước bị kẹt.</li>
+</ul>
+</section>
+
+<section id="ban">
+<h2><span class="n">9</span>Đem bán và ảnh hưởng danh tiếng</h2>
+<h3>Euphoria – vì sao khách quay lại</h3>
+<p>Mỗi chất cộng Euphoria và Độc tính theo lượng trong món bán ra:</p>
+<div class="tw"><table>
+<tr><th>Chất</th><th>Euphoria</th><th>Độc tính</th><th>Dung tích 1 món</th></tr>
+<tr><td><img class="px" src="img/items/dream_dust.webp" alt="" style="width:22px;height:22px;vertical-align:middle"> Dream Dust</td><td>1 / μl</td><td>–</td><td>lọ 1200–1599 μl</td></tr>
+<tr><td><img class="px" src="img/items/fanta_pill.webp" alt="" style="width:22px;height:22px;vertical-align:middle"> Phanta</td><td>10 / μl</td><td>2 / μl</td><td>viên 300–399 μl</td></tr>
+<tr><td>Zyanide</td><td>–</td><td>1,66 / μl</td><td>–</td></tr>
+</table></div>
+<div class="tw"><table>
+<tr><th>Tổng Euphoria</th><th>Kết quả khi bán trực tiếp</th><th>Tỉ lệ</th></tr>
+<tr><td>0–749</td><td>Khách phàn nàn</td><td>32%</td></tr>
+<tr><td>750–999</td><td>Khách phàn nàn</td><td>8%</td></tr>
+<tr><td>1000–1599</td><td>Khách nghiện</td><td>16%</td></tr>
+<tr><td>1600–2199</td><td>Khách nghiện</td><td>40%</td></tr>
+<tr><td>2200+</td><td>Khách nghiện</td><td>48%</td></tr>
+</table></div>
+<p>Khách nghiện thường quay lại <b>đầu ngày hôm sau</b> đòi đúng món đó với ngân sách khá cao. Nghiện một lần không có nghĩa họ quay lại mãi. Nhà cung cấp y tế không trở thành khách nghiện.</p>
+<div class="box bad"><b>Độc tính – rủi ro chết người</b>Tổng độc tính 750–999: 32% suýt chết. Từ 1000 trở lên: 40% chết. Một món độc trong cùng giao dịch có thể ảnh hưởng cả lô. Suýt chết có thể đòi hoàn tiền / để lại giấy: từ chối có thể mất <b>7 danh tiếng phe</b>. Chết: mất khoảng <b>17</b>.</div>
+<h3>An ninh (Security)</h3>
+<ul>
+<li>Bán hàng cấm tạo <b>bằng chứng</b> và cộng <b>giá trị vụ án</b> trong hồ sơ An ninh. Khoảng 50 là bắt đầu có rủi ro bị kiểm tra.</li>
+<li>Tiến độ điều tra tăng mỗi ngày theo giá trị vụ án: 100–299 → +2, 300–849 → +6, 850–1199 → +9, 1200–1499 → +12, 1500+ → +20. Hậu quả: phạt, tịch thu hoặc bị bắt.</li>
+<li>Danh tiếng An ninh quanh +60 làm điều tra chậm lại; −20/−60 làm nhanh hơn. +100 vẫn không miễn kiểm tra.</li>
+<li>Danh tiếng <b>Chợ Đen</b> cao mở thêm trộm/người bán, nhưng <b>không</b> giảm rủi ro bị An ninh kiểm tra – hai thang tách biệt.</li>
+<li>Sự kiện nghiện Oxymore: phát Naloxgone miễn phí +1 danh tiếng Tầng Dưới; đem bán giá thường mất khoảng 4.</li>
+</ul>
+<h3>Cách giảm rủi ro</h3>
+<div class="kit">
+<div><img class="px" src="img/items/smuggler_bay.webp" alt=""><span><b>Smuggler's Bay</b><small>Ngăn ngụy trang giấu hàng cấm</small></span></div>
+<div><img class="px" src="img/items/storage_bay_chem.webp" alt=""><span><b>Chemist Storage Bay</b><small>Cất đồ và vật tư hoá học riêng</small></span></div>
+<div><img class="px" src="img/items/card_chem.webp" alt=""><span><b>Wild's Fixers</b><small>Phí mỗi đêm, bằng chứng phân rã nhanh</small></span></div>
+</div>
+<ul>
+<li>Để hàng cấm ở thùng riêng, không trưng công khai. Giấu sau tấm áp phích Nutrifruit thì phải <b>hạ tấm áp phích xuống</b>.</li>
+<li>Dịch vụ của Wild: <b>Inspection Early Warning</b> báo trước kiểm tra định kỳ; <b>Rent Grace</b> một lần – bị bắt gặp hàng cấm chỉ bị cảnh cáo.</li>
+<li>Perk <b>Intimidating</b> −33% bằng chứng; tránh <b>Blabbermouth</b> (+33%).</li>
+<li>Muốn lấy thành tựu <b>Clean Hands</b> thì đừng bán Phanta hay Dream Dust.</li>
+</ul>
+</section>
+
+<section id="lo-trinh">
+<h2><span class="n">10</span>Lộ trình cho người mới</h2>
+<div class="tl">
+<div data-n="1"><b>Có bộ máy, giữ tiền thuê</b><p>Chọn nghề Chemist hoặc mua giới thiệu Retired Chemist qua Wild (~1.000 Credits). Mở gói, kiểm tra pin Evaporator.</p></div>
+<div data-n="2"><b>Làm một mẻ caffeine</b><p>Hàng hợp pháp, không lo An ninh. Đi trọn 5 bước, đo sau mỗi bước để quen máy.</p></div>
+<div data-n="3"><b>Bán xong mẻ đầu, giữ vật tư mẻ sau</b><p>Tính giá thành: nguyên liệu + hao mòn + điện + số đêm. Chỉ mở rộng khi còn đủ tiền thuê.</p></div>
+<div data-n="4"><b>Module cho Chem Finisher</b><p>Lên dần 4 module để hạng cao hơn (88% → 100% trần). Sau đó tới Heating Plate, rồi Blender.</p></div>
+<div data-n="5"><b>Nhắm Pharma rồi Lab Pure</b><p>Chai axit/bazơ sạch, đong sát, giữ đúng nhiệt, bay hơi khô hẳn.</p></div>
+<div data-n="6"><b>(Tuỳ chọn) Hàng cấm</b><p>Muốn thử Phanta/Dream Dust: làm mẻ nhỏ, cất riêng, có Fixers trước, theo dõi hồ sơ An ninh sau mỗi lần bán.</p></div>
+</div>
+</section>
+
+<p class="note" style="margin-top:24px">Bản tổng hợp phục vụ tham khảo cá nhân. Nội dung gốc thuộc probablystolenwiki.com, probablystolenguides.com và các tác giả guide Steam; Probably Stolen thuộc Questing Goose Studio / tinyBuild. Một bản cập nhật game có thể đổi mọi con số ở đây.</p>
+</div>
+</body>
+</html>
